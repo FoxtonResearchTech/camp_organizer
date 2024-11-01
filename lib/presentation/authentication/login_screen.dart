@@ -1,13 +1,14 @@
+import 'package:camp_organizer/widgets/bottom_navigation_bar/fluid_bottom_navigation_bar.dart';
 import 'package:camp_organizer/widgets/button/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-class HospitalLoginPage extends StatefulWidget {
+class CampOrganizerLoginPage extends StatefulWidget {
   @override
-  _HospitalLoginPageState createState() => _HospitalLoginPageState();
+  _CampOrganizerLoginPageState createState() => _CampOrganizerLoginPageState();
 }
 
-class _HospitalLoginPageState extends State<HospitalLoginPage>
+class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeInAnimation;
@@ -123,7 +124,13 @@ class _HospitalLoginPageState extends State<HospitalLoginPage>
                   SizedBox(height: 30),
 
                   // Login Button
-                  CustomButton(text: "Login", onPressed: () {}).animate().move(
+                  CustomButton(text: "Login", onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => CurvedBottomNavigationBar()),
+                          (Route<dynamic> route) => false, // Remove all previous routes
+                    );
+                  }).animate().move(
                       delay: const Duration(milliseconds: 400),
                       duration: const Duration(milliseconds: 1000),
                       curve: Curves.easeInOut),

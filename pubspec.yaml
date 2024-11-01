@@ -37,6 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   animations: ^2.0.11
   flutter_animate: ^4.5.0
+  curved_navigation_bar: ^1.0.6
+  timeline_tile: ^2.0.0
 
 dev_dependencies:
   flutter_test:
