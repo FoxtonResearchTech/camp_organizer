@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "805952168001",
+    "project_id": "bejan-singh-eye-hospital",
+    "storage_bucket": "bejan-singh-eye-hospital.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805952168001:android:d23d457a971ef8b75726c0",
+        "android_client_info": {
+          "package_name": "com.example.camp_organizer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhbQRG7WTef9myE6F5wkfKRyiy2DlO78I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

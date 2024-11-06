@@ -1,7 +1,11 @@
+import 'package:camp_organizer/bloc/auth/auth_bloc.dart';
 import 'package:camp_organizer/widgets/bottom_navigation_bar/fluid_bottom_navigation_bar.dart';
 import 'package:camp_organizer/widgets/button/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:lottie/lottie.dart';
 
 class CampOrganizerLoginPage extends StatefulWidget {
   @override
@@ -46,12 +50,56 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
     _controller.dispose();
     super.dispose();
   }
-
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthAuthenticated) {
+            if (state.role == 'doctor') {
+              Navigator.pushReplacementNamed(context, '/doctorHome');
+            } else {
+              Navigator.pushReplacementNamed(context, '/receptionHome');
+            }
+          } else if (state is AuthError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    Icon(Icons.error, color: Colors.white),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        state.message,
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
+                backgroundColor: Colors.redAccent,
+                behavior: SnackBarBehavior.floating,
+                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                duration: Duration(seconds: 3),
+              ),
+            );
+          }
+
+        },
+        builder: (context, state) {
+          if (state is AuthLoading) {
+            return Center(
+              child: Lottie.asset(
+               'assets/loading.json',
+              ),
+            );
+          }
+    return Center(
         child: FadeTransition(
           opacity: _fadeInAnimation,
           child: SlideTransition(
@@ -87,8 +135,10 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
 
                   // Username Field
                   TextField(
+                    controller: _emailController,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.person, color: Colors.blueAccent),
+
                       labelText: 'Username',
                       labelStyle: TextStyle(color: Colors.blueAccent),
                       filled: true,
@@ -105,6 +155,7 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
 
                   // Password Field
                   TextField(
+                    controller: _passwordController,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.lock, color: Colors.blueAccent),
                       labelText: 'Password',
@@ -125,11 +176,12 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
 
                   // Login Button
                   CustomButton(text: "Login", onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => CurvedBottomNavigationBar()),
-                          (Route<dynamic> route) => false, // Remove all previous routes
+                    final email = _emailController.text;
+                    final password = _passwordController.text;
+                    BlocProvider.of<AuthBloc>(context).add(
+                      SignInRequested(email, password),
                     );
+
                   }).animate().move(
                       delay: const Duration(milliseconds: 400),
                       duration: const Duration(milliseconds: 1000),
@@ -142,7 +194,9 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
             ),
           ),
         ),
-      ),
+      );
+  },
+),
     );
   }
 }

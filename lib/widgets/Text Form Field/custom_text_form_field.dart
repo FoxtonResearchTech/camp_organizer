@@ -8,6 +8,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final TextInputType keyboardType;
+  final VoidCallback? onTap; // Add onTap parameter
 
   const CustomTextFormField({
     Key? key,
@@ -17,6 +18,7 @@ class CustomTextFormField extends StatelessWidget {
     this.controller,
     this.validator,
     this.keyboardType = TextInputType.text,
+    this.onTap, // Initialize onTap
   }) : super(key: key);
 
   @override
@@ -26,11 +28,13 @@ class CustomTextFormField extends StatelessWidget {
       obscureText: isPassword,
       validator: validator,
       keyboardType: keyboardType,
+      onTap: onTap, // Set the onTap callback here
+      readOnly: onTap != null, // Make the field read-only if onTap is set
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: TextStyle(color: AppColors.textBlue), // Updated color for label
         prefixIcon: icon != null ? Icon(icon, color: AppColors.primaryBlue) : null, // Updated icon color
-        filled: true,
+        filled: false,
         fillColor: AppColors.lightBlue, // Updated background color
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
