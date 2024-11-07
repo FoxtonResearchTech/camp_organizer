@@ -1,3 +1,4 @@
+import 'package:camp_organizer/widgets/Text%20Form%20Field/custom_web_text_field.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/app_colors.dart';
@@ -114,7 +115,10 @@ class _addEmployeeState extends State<addEmployee> {
                                   children: [
                                     Text("Client:", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                                     SizedBox(width: 5),
-                                    Text("20210002", style: TextStyle(fontSize: 18, color: Colors.teal)),
+                                    SizedBox(
+                                      width: 200,
+                                        child: CustomWebTextField(hintText: 'Name', obscureText: false,),
+                                    )
                                   ],
                                 ),
                                 SizedBox(height: 10),
