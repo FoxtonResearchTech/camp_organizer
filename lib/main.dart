@@ -44,7 +44,6 @@ class MyApp extends StatelessWidget {
           create: (context) => RegistrationBloc(),
         ),
         BlocProvider<StatusBloc>(
-          // Add StatusBloc here
           create: (context) => StatusBloc(),
         ),
       ],
@@ -55,7 +54,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home: CampOrganizerLoginPage(), // Starting screen is the splash screen
+        home:
+            CurvedBottomNavigationBar(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),

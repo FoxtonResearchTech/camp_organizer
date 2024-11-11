@@ -1,6 +1,7 @@
 import 'package:camp_organizer/bloc/Status/status_bloc.dart';
 import 'package:camp_organizer/bloc/Status/status_event.dart';
 import 'package:camp_organizer/bloc/Status/status_state.dart';
+import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:camp_organizer/utils/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -95,143 +96,156 @@ class _DashboardScreenState extends State<DashboardScreen>
                     );
                     _controller.forward(); // Start the animation when building
 
-                    return FadeTransition(
-                      opacity: animation,
-                      child: SlideTransition(
-                        position: Tween<Offset>(
-                          begin: const Offset(0, 0.2), // Start slightly below
-                          end: Offset.zero, // End at original position
-                        ).animate(animation),
-                        child: Column(
-                          children: [
-                            // Information Container
-                            Container(
-                              height: screenHeight / 3, // Responsive height
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    spreadRadius: 2,
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.date_range,
-                                              size: screenWidth * 0.07,
-                                              // Responsive icon size
-                                              color:
-                                                  Colors.orange, // Icon color
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Text(
-                                              employees[index]['dob'],
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black54,
-                                                fontSize: screenWidth *
-                                                    0.05, // Responsive font size
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.watch_later,
-                                              size: screenWidth * 0.07,
-                                              // Responsive icon size
-                                              color:
-                                                  Colors.orange, // Icon color
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Text(
-                                              'Morning',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black54,
-                                                fontSize: screenWidth *
-                                                    0.05, // Responsive font size
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 5),
-                                    ..._buildInfoText(screenWidth, 'CSI Trust'),
-                                    ..._buildInfoText(screenWidth,
-                                        'Marthandam, near PPK Hospital'),
-                                    ..._buildInfoText(
-                                        screenWidth, 'test@gmail.com'),
-                                    ..._buildInfoText(
-                                        screenWidth, '65415874155'),
-
-                                    // Horizontal Timeline Container
-                                    Container(
-                                      height: screenHeight * 0.1,
-                                      // Increased height for timeline container
-                                      width: double.infinity,
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Row(
-                                          children: [
-                                            _buildTimelineTile(
-                                              isFirst: true,
-                                              color: Colors.yellow[700]!,
-                                              // Non-nullable color
-                                              icon: Icons.check,
-                                              text: 'Processing',
-                                              screenWidth: screenWidth,
-                                              lineBeforeColor: Colors.green,
-                                              lineAfterColor: Colors.green,
-                                            ),
-                                            _buildTimelineTile(
-                                              color: Colors.blue[600]!,
-                                              // Non-nullable color
-                                              icon: Icons.pending,
-                                              text: 'Confirmed',
-                                              screenWidth: screenWidth,
-                                              lineBeforeColor: Colors.green,
-                                              lineAfterColor: Colors.grey,
-                                            ),
-                                            _buildTimelineTile(
-                                              isLast: true,
-                                              color: Colors.grey[400]!,
-                                              // Non-nullable color
-                                              icon: Icons.circle,
-                                              text: 'Completed',
-                                              screenWidth: screenWidth,
-                                              lineBeforeColor: Colors.grey,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                    return GestureDetector(
+                      onTap: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                EventDetailsPage(employee: employees[index]),
+                          ),
+                        );
+                      },
+                      child: FadeTransition(
+                        opacity: animation,
+                        child: SlideTransition(
+                          position: Tween<Offset>(
+                            begin: const Offset(0, 0.2), // Start slightly below
+                            end: Offset.zero, // End at original position
+                          ).animate(animation),
+                          child: Column(
+                            children: [
+                              // Information Container
+                              Container(
+                                height: screenHeight / 3, // Responsive height
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      spreadRadius: 2,
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.date_range,
+                                                size: screenWidth * 0.07,
+                                                // Responsive icon size
+                                                color:
+                                                    Colors.orange, // Icon color
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Text(
+                                                employees[index]['dob'],
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.black54,
+                                                  fontSize: screenWidth *
+                                                      0.05, // Responsive font size
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.watch_later,
+                                                size: screenWidth * 0.07,
+                                                // Responsive icon size
+                                                color:
+                                                    Colors.orange, // Icon color
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Text(
+                                                'Morning',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.black54,
+                                                  fontSize: screenWidth *
+                                                      0.05, // Responsive font size
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 5),
+                                      ..._buildInfoText(
+                                          screenWidth, 'CSI Trust'),
+                                      ..._buildInfoText(screenWidth,
+                                          'Marthandam, near PPK Hospital'),
+                                      ..._buildInfoText(
+                                          screenWidth, 'test@gmail.com'),
+                                      ..._buildInfoText(
+                                          screenWidth, '65415874155'),
 
-                            const SizedBox(height: 20),
-                          ],
+                                      // Horizontal Timeline Container
+                                      Container(
+                                        height: screenHeight * 0.1,
+                                        // Increased height for timeline container
+                                        width: double.infinity,
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            children: [
+                                              _buildTimelineTile(
+                                                isFirst: true,
+                                                color: Colors.yellow[700]!,
+                                                // Non-nullable color
+                                                icon: Icons.check,
+                                                text: 'Processing',
+                                                screenWidth: screenWidth,
+                                                lineBeforeColor: Colors.green,
+                                                lineAfterColor: Colors.green,
+                                              ),
+                                              _buildTimelineTile(
+                                                color: Colors.blue[600]!,
+                                                // Non-nullable color
+                                                icon: Icons.pending,
+                                                text: 'Confirmed',
+                                                screenWidth: screenWidth,
+                                                lineBeforeColor: Colors.green,
+                                                lineAfterColor: Colors.grey,
+                                              ),
+                                              _buildTimelineTile(
+                                                isLast: true,
+                                                color: Colors.grey[400]!,
+                                                // Non-nullable color
+                                                icon: Icons.circle,
+                                                text: 'Completed',
+                                                screenWidth: screenWidth,
+                                                lineBeforeColor: Colors.grey,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                              const SizedBox(height: 20),
+                            ],
+                          ),
                         ),
                       ),
                     );
