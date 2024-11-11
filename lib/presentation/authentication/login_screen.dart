@@ -59,10 +59,15 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated) {
-            if (state.role == 'doctor') {
-              Navigator.pushReplacementNamed(context, '/doctorHome');
+            if (state.role == 'CampOrganizer') {
+
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => CurvedBottomNavigationBar()),
+                    (Route<dynamic> route) => false,  // This removes all previous routes
+              );
             } else {
-              Navigator.pushReplacementNamed(context, '/receptionHome');
+
             }
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(

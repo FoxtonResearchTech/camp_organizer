@@ -1,3 +1,6 @@
+import 'package:camp_organizer/bloc/AddEvent/event_bloc.dart';
+import 'package:camp_organizer/bloc/AddEvent/event_event.dart';
+import 'package:camp_organizer/bloc/AddEvent/event_state.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:camp_organizer/utils/app_colors.dart';
 import 'package:camp_organizer/widgets/Dropdown/custom_dropdown.dart';
@@ -5,6 +8,8 @@ import 'package:camp_organizer/widgets/Text%20Form%20Field/custom_text_form_fiel
 import 'package:camp_organizer/widgets/button/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 
 class AddEvent extends StatefulWidget {
@@ -14,15 +19,28 @@ class AddEvent extends StatefulWidget {
   State<AddEvent> createState() => _AddEventState();
 }
 
-class _AddEventState extends State<AddEvent> with SingleTickerProviderStateMixin {
+class _AddEventState extends State<AddEvent>
+    with SingleTickerProviderStateMixin {
   late TextEditingController _dateController;
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
   late Animation<Offset> _slideAnimation;
 
   final List<String> dropdownItems = ['Morning', 'Afternoon'];
-  final List<String> campPlanType = ['Main Event With Co-organized', 'Individual Campevent'];
-  final List<String> lastCampDone = ['below 1 month', '1 month above', '2 month above', '3 month above', '6 month above', '12 month above', '2 years above', '5 years above'];
+  final List<String> campPlanType = [
+    'Main Event With Co-organized',
+    'Individual Campevent'
+  ];
+  final List<String> lastCampDone = [
+    'below 1 month',
+    '1 month above',
+    '2 month above',
+    '3 month above',
+    '6 month above',
+    '12 month above',
+    '2 years above',
+    '5 years above'
+  ];
 
   String? selectedValue;
   String? campPlanselectedValue;
@@ -35,9 +53,13 @@ class _AddEventState extends State<AddEvent> with SingleTickerProviderStateMixin
   void initState() {
     super.initState();
     _dateController = TextEditingController();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
-    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
-    _slideAnimation = Tween<Offset>(begin: const Offset(0.0, 0.1), end: Offset.zero).animate(CurvedAnimation(
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
+    _opacityAnimation =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0.0, 0.1), end: Offset.zero)
+            .animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
     ));
@@ -62,18 +84,54 @@ class _AddEventState extends State<AddEvent> with SingleTickerProviderStateMixin
 
   @override
   void dispose() {
+    campNameController.dispose();
+    organizationController.dispose();
+    addressController.dispose();
+    cityController.dispose();
+    stateController.dispose();
+    pincodeController.dispose();
+    nameController.dispose();
+    phoneNumber1Controller.dispose();
+    phoneNumber2Controller.dispose();
+    name2Controller.dispose();
+    phoneNumber1_2Controller.dispose();
+    phoneNumber2_2Controller.dispose();
+    totalSquareFeetController.dispose();
+    noOfPatientExpectedController.dispose();
     _dateController.dispose();
     _controller.dispose();
+    timeController.dispose();
     super.dispose();
   }
+  TextEditingController timeController = TextEditingController();
+  final TextEditingController campNameController = TextEditingController();
+  final TextEditingController organizationController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController stateController = TextEditingController();
+  final TextEditingController pincodeController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneNumber1Controller = TextEditingController();
+  final TextEditingController phoneNumber2Controller = TextEditingController();
+  final TextEditingController name2Controller = TextEditingController();
+  final TextEditingController phoneNumber1_2Controller =
+      TextEditingController();
+  final TextEditingController phoneNumber2_2Controller =
+      TextEditingController();
+  final TextEditingController totalSquareFeetController =
+      TextEditingController();
+  final TextEditingController noOfPatientExpectedController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           'Add Event',
-          style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
         ),
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -91,7 +149,8 @@ class _AddEventState extends State<AddEvent> with SingleTickerProviderStateMixin
           IconButton(
             icon: Icon(Icons.notifications, color: Colors.white),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationPage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NotificationPage()));
             },
           ),
         ],
@@ -129,29 +188,38 @@ class _AddEventState extends State<AddEvent> with SingleTickerProviderStateMixin
                       Expanded(
                         child: AnimatedSize(
                           duration: const Duration(milliseconds: 300),
-                          child: CustomDropdownFormField(
-                            labelText: "Time",
-                            icon: Icons.watch_later,
-                            items: dropdownItems,
-                            value: selectedValue,
-                            onChanged: (newValue) {
-                              setState(() {
-                                selectedValue = newValue;
-                              });
+                          child: CustomTextFormField(
+                            controller: timeController,
+                            onTap: () async {
+                              // Open the time picker when the TextField is tapped
+                              TimeOfDay? pickedTime = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.now(), // Set the initial time to the current time
+                              );
+
+                              if (pickedTime != null) {
+                                // Format and set the selected time in the TextField
+                                timeController.text = pickedTime.format(context);
+                              }
                             },
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please select an option';
+                                return 'Please select a time';
                               }
                               return null;
                             },
+                            labelText: 'Date',
+                            icon: Icons.watch_later,
                           ),
                         ),
                       ),
+
+
                     ],
                   ),
                   SizedBox(height: 20),
-                  ..._buildFormFields(), // Method to build the rest of the form fields
+                  ..._buildFormFields(),
+                  // Method to build the rest of the form fields
                 ],
               ),
             ),
@@ -162,44 +230,45 @@ class _AddEventState extends State<AddEvent> with SingleTickerProviderStateMixin
   }
 
   List<Widget> _buildFormFields() {
+    final bloc = BlocProvider.of<EventFormBloc>(context);
     List<Widget> fields = [
-      _buildCustomTextFormField('Camp Name', Icons.location_city),
+      _buildCustomTextFormField('Camp Name', Icons.location_city, campNameController),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Organization', Icons.location_city),
+      _buildCustomTextFormField('Organization', Icons.location_city, organizationController),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Address', Icons.home),
+      _buildCustomTextFormField('Address', Icons.home, addressController),
       SizedBox(height: 20),
-      _buildCustomTextFormField('City', Icons.location_city),
+      _buildCustomTextFormField('City', Icons.location_city, cityController),
       SizedBox(height: 20),
-      _buildCustomTextFormField('State', Icons.location_city),
+      _buildCustomTextFormField('State', Icons.location_city, stateController),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Pincode', Icons.location_city),
+      _buildCustomTextFormField('Pincode', Icons.location_city, pincodeController),
       SizedBox(height: 20),
       Text(
         "Concern Person1 Details",
         style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
       ),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Name', Icons.location_city),
+      _buildCustomTextFormField('Name', Icons.location_city, nameController),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Position', Icons.location_city),
+      _buildCustomTextFormField('Position', Icons.location_city, phoneNumber1Controller), // Assuming Position field is here
       SizedBox(height: 20),
-      _buildCustomTextFormField('Phone Number 1', Icons.location_city),
+      _buildCustomTextFormField('Phone Number 1', Icons.location_city, phoneNumber1Controller),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Phone Number 2', Icons.location_city),
+      _buildCustomTextFormField('Phone Number 2', Icons.location_city, phoneNumber2Controller),
       SizedBox(height: 20),
       Text(
         "Concern Person2 Details",
         style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
       ),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Name', Icons.location_city),
+      _buildCustomTextFormField('Name', Icons.location_city, name2Controller),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Position', Icons.location_city),
+      _buildCustomTextFormField('Position', Icons.location_city, phoneNumber1_2Controller),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Phone Number 1', Icons.location_city),
+      _buildCustomTextFormField('Phone Number 1', Icons.location_city, phoneNumber1_2Controller),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Phone Number 2', Icons.location_city),
+      _buildCustomTextFormField('Phone Number 2', Icons.location_city, phoneNumber2_2Controller),
       SizedBox(height: 20),
       Text(
         "Event Planning",
@@ -230,7 +299,7 @@ class _AddEventState extends State<AddEvent> with SingleTickerProviderStateMixin
         });
       }),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Total Square Feet', Icons.area_chart_outlined),
+      _buildCustomTextFormField('Total Square Feet', Icons.area_chart_outlined, totalSquareFeetController),
       SizedBox(height: 20),
       _buildRadioOption('Water Availability:', _options, _selectedValue2, (value) {
         setState(() {
@@ -238,7 +307,7 @@ class _AddEventState extends State<AddEvent> with SingleTickerProviderStateMixin
         });
       }),
       SizedBox(height: 20),
-      _buildCustomTextFormField('No Of Patient Expected', Icons.person),
+      _buildCustomTextFormField('No Of Patient Expected', Icons.person, noOfPatientExpectedController),
       SizedBox(height: 20),
       CustomDropdownFormField(
         labelText: "Last Camp Done",
@@ -257,36 +326,90 @@ class _AddEventState extends State<AddEvent> with SingleTickerProviderStateMixin
           return null;
         },
       ),
-
       SizedBox(height: 30),
-
       // Login Button
       Center(
-        child: CustomButton(text: "Submit", onPressed: () {
+        child: BlocConsumer<EventFormBloc, EventFormState>(
+    listener: (context, state) {
+    if (state is FormSubmitFailure) {
+    // Show failure SnackBar
+    ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+    content: Text(state.error), // Display the error message
+    backgroundColor: Colors.red,
+    ),
+    );
+    } else if (state is FormSubmitDuplicate) {
+    // Show duplicate entry SnackBar
+    ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+    content:
+    Text('Patient with the same data already exists.'),
+    backgroundColor: Colors.orange,
+    ),
+    );
+    } else if (state is FormSubmitSuccess) {
+    // Show success SnackBar
+    ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+    content: Text('Patient registered successfully!'),
+    backgroundColor: Colors.green,
+    ),
+    );
 
-        }).animate().move(
-            delay: const Duration(milliseconds: 400),
-            duration: const Duration(milliseconds: 1000),
-            curve: Curves.easeInOut),
+    }
+    },
+    builder: (context, currentState) {
+    return currentState is FormSubmitting
+    ? Center(
+    child: SpinKitPumpingHeart(
+    color: Colors.blue,
+    size: 50.0,
+    ),
+    )
+        : CustomButton(
+    text: "Submit",
+    onPressed: () {
+    bloc.add(SubmitForm(
+    campName: campNameController.text,
+    organization: organizationController.text,
+    address: addressController.text,
+    city: cityController.text,
+    state: stateController.text,
+    pincode: pincodeController.text,
+    name: nameController.text,
+    phoneNumber1: phoneNumber1Controller.text,
+    phoneNumber2: phoneNumber2Controller.text,
+    name2: name2Controller.text,
+    phoneNumber1_2: phoneNumber1_2Controller.text,
+    phoneNumber2_2: phoneNumber2_2Controller.text,
+    totalSquareFeet: totalSquareFeetController.text,
+    noOfPatientExpected: noOfPatientExpectedController.text,
+    ));
+    },
+    );
+    },
+    ),
       ),
-
       // Forgot Password Link
       SizedBox(height: 20),
     ];
     return fields;
   }
 
-  Widget _buildCustomTextFormField(String label, IconData icon) {
+  Widget _buildCustomTextFormField(String label, IconData icon,TextEditingController controller) {
     return AnimatedSize(
       duration: const Duration(milliseconds: 300),
       child: CustomTextFormField(
         labelText: label,
+        controller:controller ,
         icon: icon,
       ),
     );
   }
 
-  Widget _buildRadioOption(String label, List<String> options, String? selectedValue, ValueChanged<String?> onChanged) {
+  Widget _buildRadioOption(String label, List<String> options,
+      String? selectedValue, ValueChanged<String?> onChanged) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -306,7 +429,6 @@ class _AddEventState extends State<AddEvent> with SingleTickerProviderStateMixin
             );
           }).toList(),
         ),
-
       ],
     );
   }
