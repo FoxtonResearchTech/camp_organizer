@@ -1,21 +1,14 @@
-import 'package:camp_organizer/bloc/AddEvent/event_bloc.dart';
-import 'package:camp_organizer/bloc/auth/auth_bloc.dart';
-import 'package:camp_organizer/firebase_options.dart';
-import 'package:camp_organizer/presentation/Event/add_event.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
-import 'package:camp_organizer/presentation/module/admin/add_employee.dart';
-import 'package:camp_organizer/presentation/module/admin/approvals.dart';
-import 'package:camp_organizer/presentation/module/admin/dashboard.dart';
-import 'package:camp_organizer/presentation/module/admin/edit_employee_account.dart';
-import 'package:camp_organizer/presentation/module/admin/manage_employee_account.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'admin_add_employee.dart';
+import 'bloc/AddEvent/event_bloc.dart';
+import 'bloc/Employee_registration/employee_registration_bloc.dart';
+import 'bloc/auth/auth_bloc.dart';
+import 'firebase_options.dart';
 import 'repository/auth_repository.dart';
-import 'widgets/bottom_navigation_bar/fluid_bottom_navigation_bar.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -44,6 +37,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => EventFormBloc(),
         ),
+        BlocProvider(
+          create: (context) => RegistrationBloc(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -52,7 +48,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home: ManageEmployeeAccount(), // Starting screen is the splash screen
+        home: CampOrganizerLoginPage(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),
