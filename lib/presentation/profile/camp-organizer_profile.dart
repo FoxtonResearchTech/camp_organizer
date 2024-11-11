@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-
 class UserProfilePage extends StatefulWidget {
   @override
   _UserProfilePageState createState() => _UserProfilePageState();
 }
 
-class _UserProfilePageState extends State<UserProfilePage> with TickerProviderStateMixin {
+class _UserProfilePageState extends State<UserProfilePage>
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
 
@@ -54,14 +54,18 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
               Navigator.push(
                 context,
                 PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => NotificationPage(),
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      NotificationPage(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
                     const begin = Offset(-1.0, 0.0); // Start from the left
                     const end = Offset.zero; // End at the original position
                     const curve = Curves.easeInOut;
-                    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                    var tween = Tween(begin: begin, end: end)
+                        .chain(CurveTween(curve: curve));
                     var offsetAnimation = animation.drive(tween);
-                    return SlideTransition(position: offsetAnimation, child: child);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
                   },
                 ),
               );
