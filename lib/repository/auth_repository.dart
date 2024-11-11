@@ -23,7 +23,7 @@ class AuthRepository {
 
   Future<String?> getUserRole(String uid) async {
     try {
-      DocumentSnapshot doc = await _firestore.collection('users').doc(uid).get();
+      DocumentSnapshot doc = await _firestore.collection('employees').doc(uid).get();
       return doc.get('role');
     } catch (e) {
       throw Exception('Failed to get role: $e');

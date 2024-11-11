@@ -2,6 +2,8 @@ import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:camp_organizer/widgets/Dropdown/custom_dropdown.dart';
 import 'package:camp_organizer/widgets/Text%20Form%20Field/custom_text_form_field.dart';
 import 'package:camp_organizer/widgets/button/custom_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -13,8 +15,29 @@ class AdminAddEmployee extends StatefulWidget {
 }
 
 class _AdminAddEmployeeState extends State<AdminAddEmployee> {
-  TextEditingController dobController = TextEditingController();
+  // Controllers for each input field
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController dobController = TextEditingController();
+  final TextEditingController positionController = TextEditingController();
+  final TextEditingController empCodeController = TextEditingController();
+  final TextEditingController lane1Controller = TextEditingController();
+  final TextEditingController lane2Controller = TextEditingController();
+  final TextEditingController stateController = TextEditingController();
+  final TextEditingController pinCodeController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController reEnterPasswordController = TextEditingController();
 
+  final List<String> gender = ['Male', 'Female'];
+  String? selectedValue;
+  final List<String> role = ['CampOrganizer', 'OnSiteManagement','SupportService','PostCampActivity','Opthamologist','Report',];
+  String? selectedrole;
+
+  // Firebase Authentication and Firestore instances
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // Date selection method
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -24,9 +47,69 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
     );
     if (pickedDate != null) {
       setState(() {
-        dobController.text = DateFormat('dd-MM-yyyy').format(pickedDate); // Format the selected date
+        dobController.text = DateFormat('dd-MM-yyyy').format(pickedDate);
       });
     }
+  }
+
+  // Dispose controllers
+  @override
+  void dispose() {
+    firstNameController.dispose();
+    lastNameController.dispose();
+    dobController.dispose();
+    positionController.dispose();
+    empCodeController.dispose();
+    lane1Controller.dispose();
+    lane2Controller.dispose();
+    stateController.dispose();
+    pinCodeController.dispose();
+    passwordController.dispose();
+    reEnterPasswordController.dispose();
+    super.dispose();
+  }
+
+  // Function to handle user registration
+  Future<void> _registerEmployee() async {
+    if (passwordController.text != reEnterPasswordController.text) {
+      _showSnackBar("Passwords do not match");
+      return;
+    }
+
+    try {
+      // Register with Firebase Authentication using empCode as email and password
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: empCodeController.text,  // empCode as email
+        password: passwordController.text,  // password as password
+      );
+
+      // Save employee data to Firestore
+      await _firestore.collection('employees').doc(userCredential.user?.uid).set({
+        'firstName': firstNameController.text,
+        'lastName': lastNameController.text,
+        'dob': dobController.text,
+        'gender': selectedValue,
+        'position': positionController.text,
+        'empCode': empCodeController.text,  // email (empCode)
+        'lane1': lane1Controller.text,
+        'lane2': lane2Controller.text,
+        'role':selectedrole,
+        'state': stateController.text,
+        'pinCode': pinCodeController.text,
+        'password': passwordController.text,  // (not recommended to store password this way, use hash)
+      });
+
+      _showSnackBar("Employee Registered Successfully!");
+    } catch (e) {
+      _showSnackBar("Error: ${e.toString()}");
+    }
+  }
+
+  // Function to show snackbar messages
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   @override
@@ -35,7 +118,8 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
       appBar: AppBar(
         title: const Text(
           'User Registration',
-          style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
         ),
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -53,7 +137,8 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
           IconButton(
             icon: Icon(Icons.notifications, color: Colors.white),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>NotificationPage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NotificationPage()));
             },
           ),
         ],
@@ -63,16 +148,29 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Text('Create Accounts',style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold), ),
-              SizedBox(height: 30,),
+              Text(
+                'Create Accounts',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 30),
               Row(
                 children: [
-                  Expanded(child: CustomTextFormField(labelText: 'First Name',),),
-                  SizedBox(width: 20,),
-                  Expanded(child: CustomTextFormField(labelText: 'Last Name',),),
+                  Expanded(
+                    child: CustomTextFormField(
+                      labelText: 'First Name',
+                      controller: firstNameController,
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: CustomTextFormField(
+                      labelText: 'Last Name',
+                      controller: lastNameController,
+                    ),
+                  ),
                 ],
               ),
-              SizedBox(height: 30,),
+              SizedBox(height: 30),
               Row(
                 children: [
                   Expanded(
@@ -84,85 +182,113 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
                         border: OutlineInputBorder(),
                         suffixIcon: IconButton(
                           icon: Icon(Icons.calendar_today),
-                          onPressed: () => _selectDate(context), // Show DatePicker on press
+                          onPressed: () => _selectDate(context),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 20,),
-                  Expanded(child: CustomDropdownFormField(labelText: 'Gender',items: ['Male','Female'],),)
-
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: CustomDropdownFormField(
+                      labelText: "Gender",
+                      items: gender,
+                      value: selectedValue,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedValue = newValue;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select an option';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
                 ],
               ),
-              SizedBox(height: 30,),
+              SizedBox(height: 30),
+              CustomDropdownFormField(
+                labelText: "Role",
+                items: role,
+                value: selectedrole,
+                onChanged: (newValue) {
+                  setState(() {
+                   selectedrole = newValue;
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select an option';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 30),
+              CustomTextFormField(
+                labelText: 'Position',
+                controller: positionController,
+              ),
+              SizedBox(height: 30),
+              CustomTextFormField(
+                labelText: 'Emp Code',
+                controller: empCodeController,
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Communication Address',
+                style: TextStyle(fontSize: 20),
+              ),
+              SizedBox(height: 20),
+              CustomTextFormField(
+                labelText: 'Lane 1',
+                controller: lane1Controller,
+              ),
+              SizedBox(height: 30),
+              CustomTextFormField(
+                labelText: 'Lane 2',
+                controller: lane2Controller,
+              ),
+              SizedBox(height: 30),
               Row(
                 children: [
-                  Expanded(child: CustomTextFormField(labelText: 'Position')),
+                  Expanded(
+                    child: CustomTextFormField(
+                      labelText: 'State',
+                      controller: stateController,
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: CustomTextFormField(
+                      labelText: 'PIN Code',
+                      controller: pinCodeController,
+                    ),
+                  ),
                 ],
               ),
-              SizedBox(height: 30,),
-              Row(
-                children: [
-                  Expanded(child: CustomTextFormField(labelText: 'Emp Code')),
-                ],
+              SizedBox(height: 20),
+              Text(
+                'Password',
+                style: TextStyle(fontSize: 20),
               ),
-              SizedBox(height: 20,),
-              Row(
-                children: [
-                  SizedBox(width: 20,),
-                  Expanded(child: Text('Communication Address',style: TextStyle(fontSize: 20),)),
-                ],
+              SizedBox(height: 20),
+              CustomTextFormField(
+                labelText: 'Enter New Password',
+                controller: passwordController,
+           //     obscureText: true,
               ),
-              SizedBox(height: 20,),
-              Row(
-                children: [
-                  Expanded(child: CustomTextFormField(labelText: 'Lane 1')),
-                ],
+              SizedBox(height: 30),
+              CustomTextFormField(
+                labelText: 'Re Enter Password',
+                controller: reEnterPasswordController,
+              //  obscureText: true,
               ),
-              SizedBox(height: 30,),
-              Row(
-                children: [
-                  Expanded(child: CustomTextFormField(labelText: 'Lane 2')),
-                ],
-              ),
-              SizedBox(height: 30,),
-              Row(
-                children: [
-                  Expanded(child: CustomTextFormField(labelText: 'State',),),
-                  SizedBox(width: 20,),
-                  Expanded(child: CustomTextFormField(labelText: 'PIN Code',),),
-                ],
-              ),
-              SizedBox(height: 30,),
-              Row(
-                children: [
-                  Expanded(child: CustomTextFormField(labelText: 'State')),
-                ],
-              ),
-              SizedBox(height: 20,),
-              Row(
-                children: [
-                  SizedBox(width: 20,),
-                  Expanded(child: Text('Password',style: TextStyle(fontSize: 20),)),
-                ],
-              ),
-              SizedBox(height: 20,),
-              Row(
-                children: [
-                  Expanded(child: CustomTextFormField(labelText: 'Enter New Password')),
-                ],
-              ),
-              SizedBox(height: 30,),
-              Row(
-                children: [
-                  Expanded(child: CustomTextFormField(labelText: 'Re Enter Password')),
-                ],
-              ),
-              SizedBox(height: 30,),
-              Row(
-                children: [
-                  Expanded(child: CustomButton(text: 'Create', onPressed: () {})),
-                ],
+              SizedBox(height: 30),
+              CustomButton(
+                text: 'Create',
+                onPressed: _registerEmployee,
               ),
             ],
           ),

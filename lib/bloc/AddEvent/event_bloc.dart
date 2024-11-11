@@ -23,30 +23,43 @@ class EventFormBloc extends Bloc<EventEvent, EventFormState> {
   }
 
   Future<void> submitEventData(SubmitForm event, Emitter<EventFormState> emit) async {
-    CollectionReference patientsCollection = _firestore.collection('AddEvent');
     User? user = FirebaseAuth.instance.currentUser;  // Get the current logged-in user
 
-    // Directly add the event data to Firestore with the updated field names
-    await patientsCollection.add({
-      'campName': event.campName,
-      'organization': event.organization,
-      'address': event.address,
-      'city': event.city,
-      'state': event.state,
-      'pincode': event.pincode,
-      'name': event.name,
-      'phoneNumber1': event.phoneNumber1,
-      'phoneNumber2': event.phoneNumber2,
-      'name2': event.name2,
-      'phoneNumber1_2': event.phoneNumber1_2,
-      'phoneNumber2_2': event.phoneNumber2_2,
-      'totalSquareFeet': event.totalSquareFeet,
-      'noOfPatientExpected': event.noOfPatientExpected,
-      'CreatedOn': DateTime.now(),
-      'EmployeeId': user?.email,
-    });
+    if (user == null) {
+      emit(FormSubmitFailure("No user is logged in"));
+      return;
+    }
 
-    emit(FormSubmitSuccess());  // Emit success state when data is saved
+    // Navigate to the current user's document in 'employees' collection
+    DocumentReference employeeDocRef = _firestore.collection('employees').doc(user.uid);
+
+    try {
+      // Create a subcollection under the employee document (e.g. 'events')
+      CollectionReference eventsCollection = employeeDocRef.collection('camps');
+
+      // Add the event data to the 'events' subcollection
+      await eventsCollection.add({
+        'campName': event.campName,
+        'organization': event.organization,
+        'address': event.address,
+        'city': event.city,
+        'state': event.state,
+        'pincode': event.pincode,
+        'name': event.name,
+        'phoneNumber1': event.phoneNumber1,
+        'phoneNumber2': event.phoneNumber2,
+        'name2': event.name2,
+        'phoneNumber1_2': event.phoneNumber1_2,
+        'phoneNumber2_2': event.phoneNumber2_2,
+        'totalSquareFeet': event.totalSquareFeet,
+        'noOfPatientExpected': event.noOfPatientExpected,
+        'CreatedOn': DateTime.now(),
+        'EmployeeId': user.email,  // Use the employee's email as reference
+      });
+
+      emit(FormSubmitSuccess());  // Emit success state when data is saved
+    } catch (e) {
+      emit(FormSubmitFailure("Error saving event: ${e.toString()}"));
+    }
   }
-
 }
