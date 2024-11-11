@@ -9,7 +9,6 @@ import 'bloc/Employee_registration/employee_registration_bloc.dart';
 import 'bloc/auth/auth_bloc.dart';
 import 'firebase_options.dart';
 import 'repository/auth_repository.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
