@@ -4,6 +4,7 @@ import 'package:camp_organizer/presentation/authentication/login_screen.dart';
 import 'package:camp_organizer/presentation/module/admin/add_employee.dart';
 import 'package:camp_organizer/presentation/module/admin/approvals.dart';
 import 'package:camp_organizer/presentation/module/admin/dashboard.dart';
+import 'package:camp_organizer/presentation/module/admin/edit_employee_account.dart';
 import 'package:camp_organizer/presentation/module/admin/manage_employee_account.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

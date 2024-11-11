@@ -1,3 +1,4 @@
+import 'package:camp_organizer/presentation/module/admin/edit_employee_account.dart';
 import 'package:flutter/material.dart';
 
 import '../../notification/notification.dart';
@@ -36,6 +37,24 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
   void _editEmployee(int index) {
     // You could navigate to a form to edit employee details
     // For now, it just shows a snackbar
+    final employee = employees[index];
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditEmployeeAccount(
+          employee: employee,
+          index: index,
+          onUpdate: (int index, Employee updatedEmployee) {
+            setState(() {
+              employees[index] = updatedEmployee;
+            });
+          },
+          onDelete: (int index) {
+            _deleteEmployee(index);
+          },
+        ),
+      ),
+    );
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Edit ${employees[index].name}')),
     );
