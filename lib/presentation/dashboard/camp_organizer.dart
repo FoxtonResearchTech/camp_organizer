@@ -1,7 +1,12 @@
+import 'package:camp_organizer/bloc/Status/status_bloc.dart';
+import 'package:camp_organizer/bloc/Status/status_event.dart';
+import 'package:camp_organizer/bloc/Status/status_state.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:camp_organizer/utils/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:bloc/bloc.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -10,6 +15,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen>
     with SingleTickerProviderStateMixin {
+  late StatusBloc _StatusBloc;
   late AnimationController _controller;
 
   @override
@@ -19,11 +25,13 @@ class _DashboardScreenState extends State<DashboardScreen>
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
+    _StatusBloc = StatusBloc()..add(FetchDataEvent());
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _StatusBloc.close();
     super.dispose();
   }
 
@@ -33,183 +41,210 @@ class _DashboardScreenState extends State<DashboardScreen>
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Status',
-          style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: false,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+    return BlocProvider(
+      create: (context) => _StatusBloc,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Status',
+            style: TextStyle(
+                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: false,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
           ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.notifications, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationPage()));
+              },
+            ),
+          ],
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationPage()));
-            },
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: 5,
-          itemBuilder: (BuildContext context, int index) {
-            Animation<double> animation = CurvedAnimation(
-              parent: _controller,
-              curve: Interval(
-                (1 / 5) * index, // Animate each item sequentially
-                1.0,
-                curve: Curves.easeOut,
-              ),
-            );
-            _controller.forward(); // Start the animation when building
-
-            return FadeTransition(
-              opacity: animation,
-              child: SlideTransition(
-                position: Tween<Offset>(
-                  begin: Offset(0, 0.2), // Start slightly below
-                  end: Offset.zero, // End at original position
-                ).animate(animation),
-                child: Column(
-                  children: [
-                    // Information Container
-                    Container(
-                      height: screenHeight /3, // Responsive height
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 2,
-                            blurRadius: 10,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
+        body: BlocBuilder<StatusBloc, StatusState>(
+          builder: (context, state) {
+            if (state is StatusLoading) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is StatusLoaded) {
+              final employees = state.employees;
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ListView.builder(
+                  itemCount: employees.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    Animation<double> animation = CurvedAnimation(
+                      parent: _controller,
+                      curve: Interval(
+                        (1 / 5) * index, // Animate each item sequentially
+                        1.0,
+                        curve: Curves.easeOut,
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.date_range,
-                                      size: screenWidth * 0.07,
-                                      // Responsive icon size
-                                      color: Colors.orange, // Icon color
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      '12-2-2024',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black54,
-                                        fontSize: screenWidth *
-                                            0.05, // Responsive font size
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.watch_later,
-                                      size: screenWidth * 0.07,
-                                      // Responsive icon size
-                                      color: Colors.orange, // Icon color
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      'Morning',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black54,
-                                        fontSize: screenWidth *
-                                            0.05, // Responsive font size
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 5),
-                            ..._buildInfoText(screenWidth, 'CSI Trust'),
-                            ..._buildInfoText(
-                                screenWidth, 'Marthandam, near PPK Hospital'),
-                            ..._buildInfoText(screenWidth, 'test@gmail.com'),
-                            ..._buildInfoText(screenWidth, '65415874155'),
+                    );
+                    _controller.forward(); // Start the animation when building
 
-                            // Horizontal Timeline Container
+                    return FadeTransition(
+                      opacity: animation,
+                      child: SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(0, 0.2), // Start slightly below
+                          end: Offset.zero, // End at original position
+                        ).animate(animation),
+                        child: Column(
+                          children: [
+                            // Information Container
                             Container(
-                              height: screenHeight * 0.1,
-                              // Increased height for timeline container
+                              height: screenHeight / 3, // Responsive height
                               width: double.infinity,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    spreadRadius: 2,
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    _buildTimelineTile(
-                                      isFirst: true,
-                                      color: Colors.yellow[700]!,
-                                      // Non-nullable color
-                                      icon: Icons.check,
-                                      text: 'Processing',
-                                      screenWidth: screenWidth,
-                                      lineBeforeColor: Colors.green,
-                                      lineAfterColor: Colors.green,
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.date_range,
+                                              size: screenWidth * 0.07,
+                                              // Responsive icon size
+                                              color:
+                                                  Colors.orange, // Icon color
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              employees[index]['dob'],
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.black54,
+                                                fontSize: screenWidth *
+                                                    0.05, // Responsive font size
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.watch_later,
+                                              size: screenWidth * 0.07,
+                                              // Responsive icon size
+                                              color:
+                                                  Colors.orange, // Icon color
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              'Morning',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.black54,
+                                                fontSize: screenWidth *
+                                                    0.05, // Responsive font size
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                    _buildTimelineTile(
-                                      color: Colors.blue[600]!,
-                                      // Non-nullable color
-                                      icon: Icons.pending,
-                                      text: 'Confirmed',
-                                      screenWidth: screenWidth,
-                                      lineBeforeColor: Colors.green,
-                                      lineAfterColor: Colors.grey,
-                                    ),
-                                    _buildTimelineTile(
-                                      isLast: true,
-                                      color: Colors.grey[400]!,
-                                      // Non-nullable color
-                                      icon: Icons.circle,
-                                      text: 'Completed',
-                                      screenWidth: screenWidth,
-                                      lineBeforeColor: Colors.grey,
+                                    const SizedBox(height: 5),
+                                    ..._buildInfoText(screenWidth, 'CSI Trust'),
+                                    ..._buildInfoText(screenWidth,
+                                        'Marthandam, near PPK Hospital'),
+                                    ..._buildInfoText(
+                                        screenWidth, 'test@gmail.com'),
+                                    ..._buildInfoText(
+                                        screenWidth, '65415874155'),
+
+                                    // Horizontal Timeline Container
+                                    Container(
+                                      height: screenHeight * 0.1,
+                                      // Increased height for timeline container
+                                      width: double.infinity,
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          children: [
+                                            _buildTimelineTile(
+                                              isFirst: true,
+                                              color: Colors.yellow[700]!,
+                                              // Non-nullable color
+                                              icon: Icons.check,
+                                              text: 'Processing',
+                                              screenWidth: screenWidth,
+                                              lineBeforeColor: Colors.green,
+                                              lineAfterColor: Colors.green,
+                                            ),
+                                            _buildTimelineTile(
+                                              color: Colors.blue[600]!,
+                                              // Non-nullable color
+                                              icon: Icons.pending,
+                                              text: 'Confirmed',
+                                              screenWidth: screenWidth,
+                                              lineBeforeColor: Colors.green,
+                                              lineAfterColor: Colors.grey,
+                                            ),
+                                            _buildTimelineTile(
+                                              isLast: true,
+                                              color: Colors.grey[400]!,
+                                              // Non-nullable color
+                                              icon: Icons.circle,
+                                              text: 'Completed',
+                                              screenWidth: screenWidth,
+                                              lineBeforeColor: Colors.grey,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
                             ),
+
+                            const SizedBox(height: 20),
                           ],
                         ),
                       ),
-                    ),
-
-                    SizedBox(height: 20),
-                  ],
+                    );
+                  },
                 ),
-              ),
+              );
+            } else if (state is StatusError) {
+              return Center(
+                child: Text('Error+${state.errorMessage}'),
+              );
+            }
+            return Center(
+              child: Text("No data available"),
             );
           },
         ),
