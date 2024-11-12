@@ -1,4 +1,5 @@
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
+import 'package:camp_organizer/widgets/bottom_navigation_bar/fluid_bottom_navigation_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,9 +7,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'admin_add_employee.dart';
 import 'bloc/AddEvent/event_bloc.dart';
 import 'bloc/Employee_registration/employee_registration_bloc.dart';
+import 'bloc/Status/status_bloc.dart';
 import 'bloc/auth/auth_bloc.dart';
 import 'firebase_options.dart';
 import 'repository/auth_repository.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -40,6 +43,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => RegistrationBloc(),
         ),
+        BlocProvider<StatusBloc>(
+          create: (context) => StatusBloc(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -48,7 +54,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home: CampOrganizerLoginPage(), // Starting screen is the splash screen
+        home:
+            CurvedBottomNavigationBar(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),

@@ -2,16 +2,17 @@ import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-
-
 class AnimatedRotatingPieChartWithGrid extends StatefulWidget {
   const AnimatedRotatingPieChartWithGrid({Key? key}) : super(key: key);
 
   @override
-  State<AnimatedRotatingPieChartWithGrid> createState() => _AnimatedRotatingPieChartWithGridState();
+  State<AnimatedRotatingPieChartWithGrid> createState() =>
+      _AnimatedRotatingPieChartWithGridState();
 }
 
-class _AnimatedRotatingPieChartWithGridState extends State<AnimatedRotatingPieChartWithGrid> with SingleTickerProviderStateMixin {
+class _AnimatedRotatingPieChartWithGridState
+    extends State<AnimatedRotatingPieChartWithGrid>
+    with SingleTickerProviderStateMixin {
   int touchedIndex = -1;
   late AnimationController _controller;
   double rotationAngle = 0;
@@ -24,7 +25,13 @@ class _AnimatedRotatingPieChartWithGridState extends State<AnimatedRotatingPieCh
     Colors.greenAccent,
     Colors.purpleAccent,
   ];
-  final List<String> titles = ['Total Camp Target', 'Total Camp Initiated', 'Total Camp Confirmed', 'Waiting Queue', 'Total Camp Rejected'];
+  final List<String> titles = [
+    'Total Camp Target',
+    'Total Camp Initiated',
+    'Total Camp Confirmed',
+    'Waiting Queue',
+    'Total Camp Rejected'
+  ];
 
   @override
   void initState() {
@@ -33,10 +40,10 @@ class _AnimatedRotatingPieChartWithGridState extends State<AnimatedRotatingPieCh
       vsync: this,
       duration: const Duration(seconds: 1),
     )..addListener(() {
-      setState(() {
-        rotationAngle = _controller.value * 360;
+        setState(() {
+          rotationAngle = _controller.value * 360;
+        });
       });
-    });
     _controller.forward();
   }
 
@@ -54,7 +61,8 @@ class _AnimatedRotatingPieChartWithGridState extends State<AnimatedRotatingPieCh
       appBar: AppBar(
         title: const Text(
           'Dashboard',
-          style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
         ),
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -72,10 +80,78 @@ class _AnimatedRotatingPieChartWithGridState extends State<AnimatedRotatingPieCh
           IconButton(
             icon: Icon(Icons.notifications, color: Colors.white),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>NotificationPage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NotificationPage()));
             },
           ),
         ],
+      ),
+      drawer: Drawer(
+        width: screenWidth / 1.5,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.blue,
+                    Colors.lightBlueAccent,
+                    Colors.lightBlue
+                  ],
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'Menu',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.manage_accounts),
+              title: Text('Manage Account'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.approval),
+              title: Text('New Camp Approval'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.approval),
+              title: Text('Onsite Team Approval'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.approval),
+              title: Text('Account Approval'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.approval),
+              title: Text('Camp Repects Approval'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.approval),
+              title: Text('Logestic Approval'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.pending),
+              title: Text('Pending Camp Data'),
+              onTap: () {},
+            ),
+          ],
+        ),
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -97,15 +173,18 @@ class _AnimatedRotatingPieChartWithGridState extends State<AnimatedRotatingPieCh
                           child: PieChart(
                             PieChartData(
                               pieTouchData: PieTouchData(
-                                touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                                touchCallback:
+                                    (FlTouchEvent event, pieTouchResponse) {
                                   setState(() {
                                     if (!event.isInterestedForInteractions ||
                                         pieTouchResponse == null ||
-                                        pieTouchResponse.touchedSection == null) {
+                                        pieTouchResponse.touchedSection ==
+                                            null) {
                                       touchedIndex = -1;
                                       return;
                                     }
-                                    touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
+                                    touchedIndex = pieTouchResponse
+                                        .touchedSection!.touchedSectionIndex;
                                   });
                                 },
                               ),
@@ -113,7 +192,8 @@ class _AnimatedRotatingPieChartWithGridState extends State<AnimatedRotatingPieCh
                               borderData: FlBorderData(show: false),
                               sectionsSpace: 2,
                               centerSpaceRadius: pieChartRadius - 60,
-                              sections: showingSections(fontSizeFactor, pieChartRadius),
+                              sections: showingSections(
+                                  fontSizeFactor, pieChartRadius),
                             ),
                           ),
                         ),
@@ -129,7 +209,10 @@ class _AnimatedRotatingPieChartWithGridState extends State<AnimatedRotatingPieCh
                   padding: EdgeInsets.all(20),
                   child: Text(
                     "Upcoming Event",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25,color: Colors.black54),
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 25,
+                        color: Colors.black54),
                   ),
                 ),
                 Padding(
@@ -160,7 +243,8 @@ class _AnimatedRotatingPieChartWithGridState extends State<AnimatedRotatingPieCh
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 20),
                               child: Container(
-                                height: MediaQuery.of(context).size.height * 0.25, // Set height to 25% of screen height
+                                height: MediaQuery.of(context).size.height *
+                                    0.25, // Set height to 25% of screen height
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
@@ -177,25 +261,32 @@ class _AnimatedRotatingPieChartWithGridState extends State<AnimatedRotatingPieCh
                                 child: Padding(
                                   padding: const EdgeInsets.all(12),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          _buildEventDetail(Icons.date_range, '12-2-2024', constraints),
-                                          _buildEventDetail(Icons.watch_later, 'Morning', constraints),
+                                          _buildEventDetail(Icons.date_range,
+                                              '12-2-2024', constraints),
+                                          _buildEventDetail(Icons.watch_later,
+                                              'Morning', constraints),
                                         ],
                                       ),
                                       const SizedBox(height: 5),
-                                      ..._buildInfoText(screenWidth, 'CSI Trust'),
-                                      ..._buildInfoText(screenWidth, 'Marthandam, near PPK Hospital'),
-                                      ..._buildInfoText(screenWidth, 'test@gmail.com'),
-                                      ..._buildInfoText(screenWidth, '65415874155'),
+                                      ..._buildInfoText(
+                                          screenWidth, 'CSI Trust'),
+                                      ..._buildInfoText(screenWidth,
+                                          'Marthandam, near PPK Hospital'),
+                                      ..._buildInfoText(
+                                          screenWidth, 'test@gmail.com'),
+                                      ..._buildInfoText(
+                                          screenWidth, '65415874155'),
                                     ],
                                   ),
                                 ),
-                              )
-                              ,
+                              ),
                             ),
                           ),
                         );
@@ -211,7 +302,8 @@ class _AnimatedRotatingPieChartWithGridState extends State<AnimatedRotatingPieCh
     );
   }
 
-  Widget _buildEventDetail(IconData icon, String text, BoxConstraints constraints) {
+  Widget _buildEventDetail(
+      IconData icon, String text, BoxConstraints constraints) {
     return Row(
       children: [
         Icon(icon, size: constraints.maxWidth * 0.07, color: Colors.orange),
@@ -227,6 +319,7 @@ class _AnimatedRotatingPieChartWithGridState extends State<AnimatedRotatingPieCh
       ],
     );
   }
+
   List<Widget> _buildInfoText(double screenWidth, String text) {
     return [
       Text(
@@ -239,7 +332,9 @@ class _AnimatedRotatingPieChartWithGridState extends State<AnimatedRotatingPieCh
       ),
     ];
   }
-  List<PieChartSectionData> showingSections(double fontSizeFactor, double radiusFactor) {
+
+  List<PieChartSectionData> showingSections(
+      double fontSizeFactor, double radiusFactor) {
     return List.generate(values.length, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = (isTouched ? 22.0 : 16.0) * fontSizeFactor;
@@ -284,7 +379,8 @@ class _AnimatedRotatingPieChartWithGridState extends State<AnimatedRotatingPieCh
             const SizedBox(width: 8),
             Text(
               titles[index],
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14 * fontSizeFactor),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 14 * fontSizeFactor),
             ),
           ],
         );
@@ -330,12 +426,15 @@ class _AnimatedRotatingPieChartWithGridState extends State<AnimatedRotatingPieCh
                   children: [
                     Text(
                       '${values[index]}',
-                      style: TextStyle(fontSize: 22 * fontSizeFactor, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 22 * fontSizeFactor,
+                          fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       titles[index],
-                      style: TextStyle(fontSize: 16 * fontSizeFactor, color: Colors.black54),
+                      style: TextStyle(
+                          fontSize: 16 * fontSizeFactor, color: Colors.black54),
                     ),
                   ],
                 ),
