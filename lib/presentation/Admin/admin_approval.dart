@@ -1,4 +1,3 @@
-import 'package:camp_organizer/bloc/Status/status_state.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:camp_organizer/utils/app_colors.dart';
 import 'package:camp_organizer/widgets/button/custom_button.dart';
@@ -8,6 +7,9 @@ import 'package:timeline_tile/timeline_tile.dart';
 
 import '../../bloc/Status/status_bloc.dart';
 import '../../bloc/Status/status_event.dart';
+import '../../bloc/approval/adminapproval_bloc.dart';
+import '../../bloc/approval/adminapproval_event.dart';
+import '../../bloc/approval/adminapproval_state.dart';
 import '../Event/admin_event_details.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
@@ -46,7 +48,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return BlocProvider(
-      create: (context) => _StatusBloc,
+      create: (context) => AdminApprovalBloc()..add(FetchDataEvents()),
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -78,16 +80,16 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
             ),
           ],
         ),
-        body: BlocBuilder<StatusBloc, StatusState>(
+        body: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
           builder: (context, state) {
-            if (state is StatusLoading) {
+            if (state is AdminApprovalLoading) {
               return Center(child: CircularProgressIndicator());
-            } else if (state is StatusLoaded) {
-              final employees = state.employees;
+            } else if (state is AdminApprovalLoaded) {
+              final camps = state.camps;
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ListView.builder(
-                  itemCount: employees.length,
+                  itemCount: camps.length,
                   itemBuilder: (BuildContext context, int index) {
                     Animation<double> animation = CurvedAnimation(
                       parent: _controller,
@@ -148,7 +150,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                             ),
                                             const SizedBox(width: 8),
                                             Text(
-                                              employees[index]['campDate'],
+                                              camps[index]['campDate'],
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 color: Colors.black54,
@@ -169,7 +171,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                             ),
                                             const SizedBox(width: 8),
                                             Text(
-                                              employees[index]['campTime'],
+                                              camps[index]['campTime'],
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 color: Colors.black54,
@@ -184,19 +186,19 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                     const SizedBox(height: 5),
                                     ..._buildInfoText(
                                       screenWidth,
-                                      employees[index]['campName'],
+                                      camps[index]['campName'],
                                     ),
                                     ..._buildInfoText(
                                       screenWidth,
-                                      employees[index]['address'],
+                                      camps[index]['address'],
                                     ),
                                     ..._buildInfoText(
                                       screenWidth,
-                                      employees[index]['name'],
+                                      camps[index]['name'],
                                     ),
                                     ..._buildInfoText(
                                       screenWidth,
-                                      employees[index]['phoneNumber1'],
+                                      camps[index]['phoneNumber1'],
                                     ),
                                     const SizedBox(height: 5),
                                     Container(
@@ -345,8 +347,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                                       builder: (context) =>
                                                           AdminEventDetailsPage(
                                                               employee:
-                                                                  employees[
-                                                                      index]),
+                                                                  camps[index]),
                                                     ),
                                                   );
                                                 },
@@ -390,7 +391,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                   },
                 ),
               );
-            } else if (state is StatusError) {
+            } else if (state is AdminApprovalError) {
               return Center(
                 child: Text('Error+${state.errorMessage}'),
               );

@@ -1,8 +1,13 @@
+import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/animation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/Status/status_bloc.dart';
+import '../../bloc/Status/status_event.dart';
+import '../../bloc/approval/adminapproval_event.dart';
 import '../../utils/app_colors.dart';
 
 class AdminEventDetailsPage extends StatefulWidget {
@@ -277,7 +282,19 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                 height: screenHeight / 17.5,
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.verified),
-                  onPressed: () {},
+                  onPressed: () {
+                    final documentId = widget.employee['documentId'] as String?;
+                    if (documentId != null && documentId.isNotEmpty) {
+                      context
+                          .read<AdminApprovalBloc>()
+                          .add(UpdateStatusEvent(documentId));
+                      print("Updated");
+                    } else {
+                      print("Error: documentId is null or empty");
+                    }
+                    // print("Employee data: ${widget.employee}");
+                    print("Document ID: ${widget.employee['documentId']}");
+                  },
                   style: ElevatedButton.styleFrom(
                     iconColor: Colors.green,
                     padding:
