@@ -2,12 +2,20 @@ abstract class EventEvent {}
 
 class SubmitForm extends EventEvent {
   final String campName;
+  final String campDate;
+  final String campTime;
   final String organization;
   final String address;
   final String city;
   final String state;
   final String pincode;
   final String name;
+  final String position;
+  final String position2;
+  final String campPlanType;
+  final String roadAccess;
+  final String waterAvailability;
+  final String lastCampDone;
   final String phoneNumber1;
   final String phoneNumber2;
   final String name2;
@@ -17,7 +25,15 @@ class SubmitForm extends EventEvent {
   final String noOfPatientExpected;
 
   SubmitForm({
+    required this.position2,
+    required this.campPlanType,
+    required this.roadAccess,
+    required this.waterAvailability,
+    required this.lastCampDone,
     required this.campName,
+    required this.campDate,
+    required this.campTime,
+    required this.position,
     required this.organization,
     required this.address,
     required this.city,

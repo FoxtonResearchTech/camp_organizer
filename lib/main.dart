@@ -11,6 +11,7 @@ import 'bloc/Status/status_bloc.dart';
 import 'bloc/auth/auth_bloc.dart';
 import 'firebase_options.dart';
 import 'repository/auth_repository.dart';
+import 'services/notification/email_notification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,8 +55,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home:
-            CurvedBottomNavigationBar(), // Starting screen is the splash screen
+        home: SendEmailPage(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),

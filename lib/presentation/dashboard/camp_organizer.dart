@@ -47,7 +47,7 @@ class _DashboardScreenState extends State<DashboardScreen>
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Status',
+            'Camp Status',
             style: TextStyle(
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
           ),
@@ -154,7 +154,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               ),
                                               const SizedBox(width: 8),
                                               Text(
-                                                employees[index]['dob'],
+                                                employees[index]['campDate'],
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.black54,
@@ -175,7 +175,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               ),
                                               const SizedBox(width: 8),
                                               Text(
-                                                'Morning',
+                                                employees[index]['campTime'],
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.black54,
@@ -189,13 +189,13 @@ class _DashboardScreenState extends State<DashboardScreen>
                                       ),
                                       const SizedBox(height: 5),
                                       ..._buildInfoText(
-                                          screenWidth, 'CSI Trust'),
+                                          screenWidth,  employees[index]['campName'],),
                                       ..._buildInfoText(screenWidth,
-                                          'Marthandam, near PPK Hospital'),
+                                        employees[index]['address'],),
                                       ..._buildInfoText(
-                                          screenWidth, 'test@gmail.com'),
+                                          screenWidth,  employees[index]['name'],),
                                       ..._buildInfoText(
-                                          screenWidth, '65415874155'),
+                                          screenWidth,  employees[index]['phoneNumber1'],),
 
                                       // Horizontal Timeline Container
                                       Container(

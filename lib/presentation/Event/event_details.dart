@@ -1,23 +1,67 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/animation.dart';
 
 import '../../utils/app_colors.dart';
 
-class EventDetailsPage extends StatelessWidget {
+class EventDetailsPage extends StatefulWidget {
   final Map<String, dynamic> employee;
 
   const EventDetailsPage({Key? key, required this.employee}) : super(key: key);
 
   @override
+  _EventDetailsPageState createState() => _EventDetailsPageState();
+}
+
+class _EventDetailsPageState extends State<EventDetailsPage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Offset> _slideAnimation;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _buttonScaleAnimation;
+  late Animation<double> _buttonFadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.1), // Slide from slightly below
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+
+    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+    _buttonScaleAnimation = Tween<double>(begin: 0.9, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+    _buttonFadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+
+    // Start the animation when the page loads
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _controller.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Screen size parameters
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Details',
+          'Camp Details',
           style: TextStyle(
               color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
         ),
@@ -28,10 +72,9 @@ class EventDetailsPage extends StatelessWidget {
           icon: const Icon(
             CupertinoIcons.back,
             color: Colors.white,
-          ), // iOS back button icon
+          ),
           onPressed: () {
-            Navigator.pop(
-                context); // Pop the current page from the navigation stack
+            Navigator.pop(context);
           },
         ),
         flexibleSpace: Container(
@@ -47,96 +90,75 @@ class EventDetailsPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Container(
-            padding: const EdgeInsets.all(16.0),
-            height: screenHeight, // Responsive height
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 2,
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.date_range,
-                          size: screenWidth * 0.07,
-                          // Responsive icon size
-                          color: Colors.orange, // Icon color
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '12-02-2024',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black54,
-                            fontSize:
-                                screenWidth * 0.05, // Responsive font size
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.watch_later,
-                          size: screenWidth * 0.07,
-                          // Responsive icon size
-                          color: Colors.orange, // Icon color
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Morning',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black54,
-                            fontSize:
-                                screenWidth * 0.05, // Responsive font size
-                          ),
-                        ),
-                      ],
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: SlideTransition(
+              position: _slideAnimation,
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 2,
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
-                _buildDetailRow('Camp Name', employee['campName'], screenWidth),
-                _buildDetailRow(
-                    'Organization', employee['organization'], screenWidth),
-                _buildDetailRow('Address', employee['address'], screenWidth),
-                _buildDetailRow('City', employee['city'], screenWidth),
-                _buildDetailRow('State', employee['state'], screenWidth),
-                _buildDetailRow('Pincode', employee['pincode'], screenWidth),
-                _buildDetailRow('Concern Person1 Details',
-                    employee['Concern Person1 Details'], screenWidth),
-                _buildDetailRow('Name', employee['Name'], screenWidth),
-                _buildDetailRow('Position', employee['Position'], screenWidth),
-                _buildDetailRow(
-                    'Phone Number 1', employee['Phone Number 1'], screenWidth),
-                _buildDetailRow(
-                    'Phone Number 2', employee['Phone Number 2'], screenWidth),
-                _buildDetailRow('Concern Person2 Details',
-                    employee['Concern Person2 Details'], screenWidth),
-                _buildDetailRow('Name', employee['Name'], screenWidth),
-                _buildDetailRow('Position', employee['Position'], screenWidth),
-                _buildDetailRow(
-                    'Phone Number 1', employee['Phone Number 1'], screenWidth),
-                _buildDetailRow(
-                    'Phone Number 2', employee['Phone Number 2'], screenWidth),
-              ],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.date_range,
+                              size: screenWidth * 0.07,
+                              color: Colors.orange,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              widget.employee['campDate'],
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black54,
+                                fontSize: screenWidth * 0.05,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.watch_later,
+                              size: screenWidth * 0.07,
+                              color: Colors.orange,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              widget.employee['campTime'],
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black54,
+                                fontSize: screenWidth * 0.05,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    ..._buildDetailRows(screenWidth),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -146,51 +168,53 @@ class EventDetailsPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SizedBox(
-              width: screenWidth / 3,
-              height: screenHeight / 15,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.edit),
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  iconColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  backgroundColor: AppColors.accentBlue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+            ScaleTransition(
+              scale: _buttonScaleAnimation,
+              child: FadeTransition(
+                opacity: _buttonFadeAnimation,
+                child: SizedBox(
+                  width: screenWidth / 3,
+                  height: screenHeight / 15,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.edit,color: Colors.white,),
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: widget.employee['campStatus'] == 'Waiting'
+                          ? AppColors.accentBlue
+                          : Colors.grey,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    label: const Text(
+                      "Edit",
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
                   ),
-                ),
-                label: const Text(
-                  " Edit",
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500),
                 ),
               ),
             ),
-            SizedBox(
-              width: screenWidth / 3,
-              height: screenHeight / 15,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.edit),
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  iconColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  backgroundColor: AppColors.accentBlue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+            ScaleTransition(
+              scale: _buttonScaleAnimation,
+              child: FadeTransition(
+                opacity: _buttonFadeAnimation,
+                child: SizedBox(
+                  width: screenWidth / 3,
+                  height: screenHeight / 15,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.edit,color: Colors.white,),
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.accentBlue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    label: const Text(
+                      "Edit",
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
                   ),
-                ),
-                label: const Text(
-                  " Edit",
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500),
                 ),
               ),
             ),
@@ -200,21 +224,48 @@ class EventDetailsPage extends StatelessWidget {
     );
   }
 
+  List<Widget> _buildDetailRows(double screenWidth) {
+    return [
+      _buildDetailRow('Camp Name', widget.employee['campName'], screenWidth),
+      _buildDetailRow('Organization', widget.employee['organization'], screenWidth),
+      _buildDetailRow('Address', widget.employee['address'], screenWidth),
+      _buildDetailRow('City', widget.employee['city'], screenWidth),
+      _buildDetailRow('State', widget.employee['state'], screenWidth),
+      _buildDetailRow('Pincode', widget.employee['pincode'], screenWidth),
+      _buildDetailRow('Concern Person1 Details', widget.employee['Concern Person1 Details'], screenWidth),
+      _buildDetailRow('Name', widget.employee['Name'], screenWidth),
+      _buildDetailRow('Position', widget.employee['Position'], screenWidth),
+      _buildDetailRow('Phone Number 1', widget.employee['Phone Number 1'], screenWidth),
+      _buildDetailRow('Phone Number 2', widget.employee['Phone Number 2'], screenWidth),
+      _buildDetailRow('Concern Person2 Details', widget.employee['Concern Person2 Details'], screenWidth),
+      _buildDetailRow('Name', widget.employee['Name'], screenWidth),
+      _buildDetailRow('Position', widget.employee['Position'], screenWidth),
+      _buildDetailRow('Phone Number 1', widget.employee['Phone Number 1'], screenWidth),
+      _buildDetailRow('Phone Number 2', widget.employee['Phone Number 2'], screenWidth),
+    ];
+  }
+
   Widget _buildDetailRow(String label, String? value, double screenWidth) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Row(
-        children: [
-          Text(
-            '$label: ',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Colors.black54,
-              fontSize: screenWidth * 0.05, // Responsive font size
-            ),
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: SlideTransition(
+        position: _slideAnimation,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Row(
+            children: [
+              Text(
+                '$label: ',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black54,
+                  fontSize: screenWidth * 0.05,
+                ),
+              ),
+              Text(value ?? 'N/A'),
+            ],
           ),
-          Text(value ?? 'N/A'),
-        ],
+        ),
       ),
     );
   }

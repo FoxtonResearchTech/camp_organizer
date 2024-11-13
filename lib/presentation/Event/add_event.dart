@@ -101,8 +101,12 @@ class _AddEventState extends State<AddEvent>
     _dateController.dispose();
     _controller.dispose();
     timeController.dispose();
+    position2Controller.dispose();
+    positionController.dispose();
+
     super.dispose();
   }
+
   TextEditingController timeController = TextEditingController();
   final TextEditingController campNameController = TextEditingController();
   final TextEditingController organizationController = TextEditingController();
@@ -116,6 +120,10 @@ class _AddEventState extends State<AddEvent>
   final TextEditingController name2Controller = TextEditingController();
   final TextEditingController phoneNumber1_2Controller =
       TextEditingController();
+  final TextEditingController positionController =
+  TextEditingController();
+  final TextEditingController position2Controller =
+  TextEditingController();
   final TextEditingController phoneNumber2_2Controller =
       TextEditingController();
   final TextEditingController totalSquareFeetController =
@@ -125,7 +133,6 @@ class _AddEventState extends State<AddEvent>
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -194,12 +201,14 @@ class _AddEventState extends State<AddEvent>
                               // Open the time picker when the TextField is tapped
                               TimeOfDay? pickedTime = await showTimePicker(
                                 context: context,
-                                initialTime: TimeOfDay.now(), // Set the initial time to the current time
+                                initialTime: TimeOfDay
+                                    .now(), // Set the initial time to the current time
                               );
 
                               if (pickedTime != null) {
                                 // Format and set the selected time in the TextField
-                                timeController.text = pickedTime.format(context);
+                                timeController.text =
+                                    pickedTime.format(context);
                               }
                             },
                             validator: (value) {
@@ -208,13 +217,11 @@ class _AddEventState extends State<AddEvent>
                               }
                               return null;
                             },
-                            labelText: 'Date',
+                            labelText: 'Time',
                             icon: Icons.watch_later,
                           ),
                         ),
                       ),
-
-
                     ],
                   ),
                   SizedBox(height: 20),
@@ -232,9 +239,11 @@ class _AddEventState extends State<AddEvent>
   List<Widget> _buildFormFields() {
     final bloc = BlocProvider.of<EventFormBloc>(context);
     List<Widget> fields = [
-      _buildCustomTextFormField('Camp Name', Icons.location_city, campNameController),
+      _buildCustomTextFormField(
+          'Camp Name', Icons.location_city, campNameController),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Organization', Icons.location_city, organizationController),
+      _buildCustomTextFormField(
+          'Organization', Icons.location_city, organizationController),
       SizedBox(height: 20),
       _buildCustomTextFormField('Address', Icons.home, addressController),
       SizedBox(height: 20),
@@ -242,7 +251,8 @@ class _AddEventState extends State<AddEvent>
       SizedBox(height: 20),
       _buildCustomTextFormField('State', Icons.location_city, stateController),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Pincode', Icons.location_city, pincodeController),
+      _buildCustomTextFormField(
+          'Pincode', Icons.location_city, pincodeController),
       SizedBox(height: 20),
       Text(
         "Concern Person1 Details",
@@ -251,11 +261,15 @@ class _AddEventState extends State<AddEvent>
       SizedBox(height: 20),
       _buildCustomTextFormField('Name', Icons.location_city, nameController),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Position', Icons.location_city, phoneNumber1Controller), // Assuming Position field is here
+      _buildCustomTextFormField(
+          'Position', Icons.location_city, positionController),
+      // Assuming Position field is here
       SizedBox(height: 20),
-      _buildCustomTextFormField('Phone Number 1', Icons.location_city, phoneNumber1Controller),
+      _buildCustomTextFormField(
+          'Phone Number 1', Icons.location_city, phoneNumber1Controller),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Phone Number 2', Icons.location_city, phoneNumber2Controller),
+      _buildCustomTextFormField(
+          'Phone Number 2', Icons.location_city, phoneNumber2Controller),
       SizedBox(height: 20),
       Text(
         "Concern Person2 Details",
@@ -264,11 +278,14 @@ class _AddEventState extends State<AddEvent>
       SizedBox(height: 20),
       _buildCustomTextFormField('Name', Icons.location_city, name2Controller),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Position', Icons.location_city, phoneNumber1_2Controller),
+      _buildCustomTextFormField(
+          'Position', Icons.location_city, position2Controller),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Phone Number 1', Icons.location_city, phoneNumber1_2Controller),
+      _buildCustomTextFormField(
+          'Phone Number 1', Icons.location_city, phoneNumber1_2Controller),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Phone Number 2', Icons.location_city, phoneNumber2_2Controller),
+      _buildCustomTextFormField(
+          'Phone Number 2', Icons.location_city, phoneNumber2_2Controller),
       SizedBox(height: 20),
       Text(
         "Event Planning",
@@ -299,15 +316,18 @@ class _AddEventState extends State<AddEvent>
         });
       }),
       SizedBox(height: 20),
-      _buildCustomTextFormField('Total Square Feet', Icons.area_chart_outlined, totalSquareFeetController),
+      _buildCustomTextFormField('Total Square Feet', Icons.area_chart_outlined,
+          totalSquareFeetController),
       SizedBox(height: 20),
-      _buildRadioOption('Water Availability:', _options, _selectedValue2, (value) {
+      _buildRadioOption('Water Availability:', _options, _selectedValue2,
+          (value) {
         setState(() {
           _selectedValue2 = value;
         });
       }),
       SizedBox(height: 20),
-      _buildCustomTextFormField('No Of Patient Expected', Icons.person, noOfPatientExpectedController),
+      _buildCustomTextFormField('No Of Patient Expected', Icons.person,
+          noOfPatientExpectedController),
       SizedBox(height: 20),
       CustomDropdownFormField(
         labelText: "Last Camp Done",
@@ -330,66 +350,72 @@ class _AddEventState extends State<AddEvent>
       // Login Button
       Center(
         child: BlocConsumer<EventFormBloc, EventFormState>(
-    listener: (context, state) {
-    if (state is FormSubmitFailure) {
-    // Show failure SnackBar
-    ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-    content: Text(state.error), // Display the error message
-    backgroundColor: Colors.red,
-    ),
-    );
-    } else if (state is FormSubmitDuplicate) {
-    // Show duplicate entry SnackBar
-    ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-    content:
-    Text('Patient with the same data already exists.'),
-    backgroundColor: Colors.orange,
-    ),
-    );
-    } else if (state is FormSubmitSuccess) {
-    // Show success SnackBar
-    ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-    content: Text('Patient registered successfully!'),
-    backgroundColor: Colors.green,
-    ),
-    );
-
-    }
-    },
-    builder: (context, currentState) {
-    return currentState is FormSubmitting
-    ? Center(
-    child: SpinKitPumpingHeart(
-    color: Colors.blue,
-    size: 50.0,
-    ),
-    )
-        : CustomButton(
-    text: "Submit",
-    onPressed: () {
-    bloc.add(SubmitForm(
-    campName: campNameController.text,
-    organization: organizationController.text,
-    address: addressController.text,
-    city: cityController.text,
-    state: stateController.text,
-    pincode: pincodeController.text,
-    name: nameController.text,
-    phoneNumber1: phoneNumber1Controller.text,
-    phoneNumber2: phoneNumber2Controller.text,
-    name2: name2Controller.text,
-    phoneNumber1_2: phoneNumber1_2Controller.text,
-    phoneNumber2_2: phoneNumber2_2Controller.text,
-    totalSquareFeet: totalSquareFeetController.text,
-    noOfPatientExpected: noOfPatientExpectedController.text,
-    ));
-    },
-    );
-    },
-    ),
+          listener: (context, state) {
+            if (state is FormSubmitFailure) {
+              // Show failure SnackBar
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.error), // Display the error message
+                  backgroundColor: Colors.red,
+                ),
+              );
+            } else if (state is FormSubmitDuplicate) {
+              // Show duplicate entry SnackBar
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Patient with the same data already exists.'),
+                  backgroundColor: Colors.orange,
+                ),
+              );
+            } else if (state is FormSubmitSuccess) {
+              // Show success SnackBar
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Patient registered successfully!'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            }
+          },
+          builder: (context, currentState) {
+            return currentState is FormSubmitting
+                ? Center(
+                    child: SpinKitPumpingHeart(
+                      color: Colors.blue,
+                      size: 50.0,
+                    ),
+                  )
+                : CustomButton(
+                    text: "Submit",
+                    onPressed: () {
+                      bloc.add(SubmitForm(
+                        campName: campNameController.text,
+                        organization: organizationController.text,
+                        address: addressController.text,
+                        city: cityController.text,
+                        state: stateController.text,
+                        pincode: pincodeController.text,
+                        name: nameController.text,
+                        phoneNumber1: phoneNumber1Controller.text,
+                        phoneNumber2: phoneNumber2Controller.text,
+                        name2: name2Controller.text,
+                        phoneNumber1_2: phoneNumber1_2Controller.text,
+                        phoneNumber2_2: phoneNumber2_2Controller.text,
+                        totalSquareFeet: totalSquareFeetController.text,
+                        noOfPatientExpected: noOfPatientExpectedController.text,
+                        position2: position2Controller.text,
+                        campPlanType: campPlanselectedValue.toString(),
+                        roadAccess: _selectedValue.toString(),
+                        waterAvailability: _selectedValue2.toString(),
+                        lastCampDone: lastselectedValue.toString(),
+                        campDate: _dateController.text,
+                        campTime: timeController.text,
+                        position: positionController.text,
+                      ));
+                    },
+                  );
+          },
+        ),
       ),
       // Forgot Password Link
       SizedBox(height: 20),
@@ -397,12 +423,13 @@ class _AddEventState extends State<AddEvent>
     return fields;
   }
 
-  Widget _buildCustomTextFormField(String label, IconData icon,TextEditingController controller) {
+  Widget _buildCustomTextFormField(
+      String label, IconData icon, TextEditingController controller) {
     return AnimatedSize(
       duration: const Duration(milliseconds: 300),
       child: CustomTextFormField(
         labelText: label,
-        controller:controller ,
+        controller: controller,
         icon: icon,
       ),
     );
