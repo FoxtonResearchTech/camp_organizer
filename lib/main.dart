@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home: CampOrganizerLoginPage(), // Starting screen is the splash screen
+        home: SendEmailPage(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),
