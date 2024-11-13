@@ -1,3 +1,6 @@
+import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
+import 'package:camp_organizer/camp_update/camp_update_bloc.dart';
+import 'package:camp_organizer/presentation/Admin/admin_approval.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
 import 'package:camp_organizer/widgets/bottom_navigation_bar/fluid_bottom_navigation_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -47,6 +50,12 @@ class MyApp extends StatelessWidget {
         BlocProvider<StatusBloc>(
           create: (context) => StatusBloc(),
         ),
+        BlocProvider(
+          create: (context) => AdminApprovalBloc(),
+        ),
+        BlocProvider(
+          create: (context) => CampUpdateBloc(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -55,7 +64,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home: SendEmailPage(), // Starting screen is the splash screen
+        home: AdminDashboardScreen(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),

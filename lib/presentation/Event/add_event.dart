@@ -136,7 +136,7 @@ class _AddEventState extends State<AddEvent>
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Add Event',
+          'Create Camp',
           style: TextStyle(
               color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
         ),
