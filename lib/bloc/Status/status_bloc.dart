@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'status_event.dart';
 import 'status_state.dart';
 
@@ -8,13 +9,27 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
     on<FetchDataEvent>((event, emit) async {
       emit(StatusLoading());
       try {
-        final querySnapshot =
-            await FirebaseFirestore.instance.collection('employees').get();
-        final employees = querySnapshot.docs.map((doc) => doc.data()).toList();
-        print("Fetched employees: $employees");
-        emit(StatusLoaded(employees));
+        // Get the current user's ID (uid) from FirebaseAuth
+        final user = FirebaseAuth.instance.currentUser;
+        if (user == null) {
+          emit(StatusError("User not logged in"));
+          return;
+        }
+
+        final userId = user.uid;
+
+        // Access the user's 'camps' sub-collection
+        final campsSnapshot = await FirebaseFirestore.instance
+            .collection('employees')
+            .doc(userId)
+            .collection('camps')
+            .get();
+
+        final camps = campsSnapshot.docs.map((doc) => doc.data()).toList();
+        print("Fetched camps: $camps");
+        emit(StatusLoaded(camps));
       } catch (e) {
-        print("Error is fetching");
+        print("Error in fetching camps");
         emit(StatusError(e.toString()));
       }
     });

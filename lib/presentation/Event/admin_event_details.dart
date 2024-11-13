@@ -5,17 +5,19 @@ import 'package:flutter/animation.dart';
 
 import '../../utils/app_colors.dart';
 
-class EventDetailsPage extends StatefulWidget {
+class AdminEventDetailsPage extends StatefulWidget {
   final Map<String, dynamic> employee;
 
-  const EventDetailsPage({Key? key, required this.employee}) : super(key: key);
+  const AdminEventDetailsPage({Key? key, required this.employee})
+      : super(key: key);
 
   @override
-  _EventDetailsPageState createState() => _EventDetailsPageState();
+  _AdminEventDetailsPageState createState() => _AdminEventDetailsPageState();
 }
 
-class _EventDetailsPageState extends State<EventDetailsPage>
+class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
     with SingleTickerProviderStateMixin {
+  late final TextEditingController _reason;
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _fadeAnimation;
@@ -25,6 +27,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
   @override
   void initState() {
     super.initState();
+    _reason = TextEditingController();
     _controller = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -50,6 +53,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
 
   @override
   void dispose() {
+    _reason.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -165,63 +169,130 @@ class _EventDetailsPageState extends State<EventDetailsPage>
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.only(
+            top: screenHeight / 35,
+            bottom: screenHeight / 25,
+            left: screenWidth / 25,
+            right: screenWidth / 25),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ScaleTransition(
-              scale: _buttonScaleAnimation,
-              child: FadeTransition(
-                opacity: _buttonFadeAnimation,
-                child: SizedBox(
-                  width: screenWidth / 3,
-                  height: screenHeight / 15,
-                  child: ElevatedButton.icon(
-                    icon: const Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          widget.employee['campStatus'] == 'Waiting'
-                              ? AppColors.accentBlue
-                              : Colors.grey,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    label: const Text(
-                      "Edit",
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
+            SizedBox(
+              width: screenWidth / 2.5,
+              height: screenHeight / 17.5,
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.cancel),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(
+                          'Reason',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black54,
+                              fontSize:
+                                  screenWidth * 0.05 // Responsive font size
+                              ),
+                        ),
+                        content: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Please provide a reason for rejection:',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black54,
+                                fontSize:
+                                    screenWidth * 0.04, // Responsive font size
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            TextField(
+                              controller: _reason,
+                              decoration: InputDecoration(
+                                hintText: 'Enter reason',
+                                suffixStyle: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black54,
+                                  fontSize: screenWidth *
+                                      0.10, // Responsive font size
+                                ),
+                                border: const OutlineInputBorder(),
+                              ),
+                              maxLines: null,
+                            ),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(color: AppColors.accentBlue),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              String reasonText = _reason.text;
+                              _reason.clear();
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text(
+                              'Submit',
+                              style: TextStyle(color: AppColors.accentBlue),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  iconColor: Colors.red,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  backgroundColor: AppColors.lightRed,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
+                ),
+                label: const Text(
+                  " Reject",
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500),
                 ),
               ),
             ),
-            ScaleTransition(
-              scale: _buttonScaleAnimation,
-              child: FadeTransition(
-                opacity: _buttonFadeAnimation,
-                child: SizedBox(
-                  width: screenWidth / 3,
-                  height: screenHeight / 15,
-                  child: ElevatedButton.icon(
-                    icon: const Icon(
-                      Icons.edit,
-                      color: Colors.white,
+            const SizedBox(width: 50),
+            Flexible(
+              child: SizedBox(
+                width: screenWidth / 2.5,
+                height: screenHeight / 17.5,
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.verified),
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    iconColor: Colors.green,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                    backgroundColor: AppColors.lightGreen,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.accentBlue,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    label: const Text(
-                      "Edit",
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
+                  ),
+                  label: const Text(
+                    " Accept",
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500),
                   ),
                 ),
               ),
