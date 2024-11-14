@@ -3,11 +3,9 @@ import 'package:camp_organizer/bloc/Status/status_event.dart';
 import 'package:camp_organizer/bloc/Status/status_state.dart';
 import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
-import 'package:camp_organizer/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:bloc/bloc.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -189,13 +187,21 @@ class _DashboardScreenState extends State<DashboardScreen>
                                       ),
                                       const SizedBox(height: 5),
                                       ..._buildInfoText(
-                                          screenWidth,  employees[index]['campName'],),
-                                      ..._buildInfoText(screenWidth,
-                                        employees[index]['address'],),
+                                        screenWidth,
+                                        employees[index]['campName'],
+                                      ),
                                       ..._buildInfoText(
-                                          screenWidth,  employees[index]['name'],),
+                                        screenWidth,
+                                        employees[index]['address'],
+                                      ),
                                       ..._buildInfoText(
-                                          screenWidth,  employees[index]['phoneNumber1'],),
+                                        screenWidth,
+                                        employees[index]['name'],
+                                      ),
+                                      ..._buildInfoText(
+                                        screenWidth,
+                                        employees[index]['phoneNumber1'],
+                                      ),
 
                                       // Horizontal Timeline Container
                                       Container(
