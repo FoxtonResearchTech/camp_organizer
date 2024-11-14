@@ -6,7 +6,10 @@ class StatusLoading extends StatusState {}
 
 class StatusLoaded extends StatusState {
   final List<Map<String, dynamic>> employees;
-  StatusLoaded(this.employees);
+  final String employeeDocId;
+  final String campDocId;
+
+  StatusLoaded(this.employees, this.employeeDocId, this.campDocId);
 }
 
 class StatusError extends StatusState {

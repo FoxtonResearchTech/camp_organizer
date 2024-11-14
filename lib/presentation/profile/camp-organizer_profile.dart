@@ -126,7 +126,10 @@ class _UserProfilePageState extends State<UserProfilePage>
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
-                          child: Text(employee['firstName'] ?? 'N/A'),
+                          child: Text(employee['firstName'] +
+                                  " " +
+                                  employee['lastName'] ??
+                              'N/A'),
                         ),
                         AnimatedDefaultTextStyle(
                           duration: Duration(milliseconds: 500),
@@ -167,9 +170,39 @@ class _UserProfilePageState extends State<UserProfilePage>
                                     slideAnimation: _slideAnimation,
                                   ),
                                   ProfileInfoTile(
+                                    icon: Icons.people,
+                                    title: 'Gender',
+                                    subtitle: employee['gender'] ?? 'N/A',
+                                    slideAnimation: _slideAnimation,
+                                  ),
+                                  ProfileInfoTile(
                                     icon: Icons.bloodtype,
                                     title: 'Blood Group',
                                     subtitle: employee['bloodGroup'] ?? 'N/A',
+                                    slideAnimation: _slideAnimation,
+                                  ),
+                                  ProfileInfoTile(
+                                    icon: Icons.place,
+                                    title: 'Lane 1',
+                                    subtitle: employee['lane1'] ?? 'N/A',
+                                    slideAnimation: _slideAnimation,
+                                  ),
+                                  ProfileInfoTile(
+                                    icon: Icons.place,
+                                    title: 'Lane 2',
+                                    subtitle: employee['lane2'] ?? 'N/A',
+                                    slideAnimation: _slideAnimation,
+                                  ),
+                                  ProfileInfoTile(
+                                    icon: Icons.location_city_outlined,
+                                    title: 'State',
+                                    subtitle: employee['state'] ?? 'N/A',
+                                    slideAnimation: _slideAnimation,
+                                  ),
+                                  ProfileInfoTile(
+                                    icon: Icons.my_location,
+                                    title: 'Pincode',
+                                    subtitle: employee['pincode'] ?? 'N/A',
                                     slideAnimation: _slideAnimation,
                                   ),
                                   ProfileInfoTile(

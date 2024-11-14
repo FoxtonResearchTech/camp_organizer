@@ -23,7 +23,7 @@ class _EventDetailsEditingPageState extends State<EventDetailsEditingPage>
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
-  bool _isEditing = false;
+  bool _isEditing = true;
   late Map<String, dynamic> _editableEmployee;
 
   @override
