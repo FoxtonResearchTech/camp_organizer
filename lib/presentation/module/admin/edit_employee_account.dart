@@ -1,6 +1,7 @@
-import 'package:camp_organizer/widgets/Text%20Form%20Field/custom_text_form_field.dart';
+
 import 'package:flutter/material.dart';
 
+import '../../../widgets/Text Form Field/custom_text_form_field.dart';
 import '../../notification/notification.dart';
 import 'manage_employee_account.dart';
 
@@ -21,8 +22,6 @@ class EditEmployeeAccount extends StatefulWidget {
   @override
   State<EditEmployeeAccount> createState() => _EditEmployeeAccountState();
 }
-
-
 
 class _EditEmployeeAccountState extends State<EditEmployeeAccount> {
   late TextEditingController nameController;
