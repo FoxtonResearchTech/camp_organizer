@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/animation.dart';
 
 import '../../utils/app_colors.dart';
+import 'EventDetailsEditingPage.dart';
 
 class EventDetailsPage extends StatefulWidget {
   final Map<String, dynamic> employee;
@@ -181,7 +183,20 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                       Icons.edit,
                       color: Colors.white,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      final eventDocRef = FirebaseFirestore.instance
+                          .collection('empolyees')
+                          .doc(widget.employee['empCode']);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EventDetailsEditingPage(
+                            employee: widget.employee,
+                            docRef: eventDocRef,
+                          ),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
                           widget.employee['campStatus'] == 'Waiting'
