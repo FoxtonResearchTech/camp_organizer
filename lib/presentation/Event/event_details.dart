@@ -185,8 +185,8 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                     ),
                     onPressed: () {
                       final eventDocRef = FirebaseFirestore.instance
-                          .collection('empolyees')
-                          .doc(widget.employee['empCode']);
+                          .collection('employees').doc('osVjMnYxkRdBZAK8gp7hSGsVr1o1').collection("camps")
+                          .doc('gXJPAMO0fMjObtqxlom5');
                       Navigator.push(
                         context,
                         MaterialPageRoute(
