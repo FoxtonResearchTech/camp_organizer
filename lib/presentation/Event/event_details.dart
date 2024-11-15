@@ -1,3 +1,4 @@
+import 'package:camp_organizer/presentation/Event/EventDetailsEditing.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,9 @@ class EventDetailsPage extends StatefulWidget {
   final Map<String, dynamic> employee;
   final String? employeedocId;
   final String? campId;
-  const EventDetailsPage({Key? key, required this.employee, this.employeedocId, this.campId}) : super(key: key);
+  const EventDetailsPage(
+      {Key? key, required this.employee, this.employeedocId, this.campId})
+      : super(key: key);
 
   @override
   _EventDetailsPageState createState() => _EventDetailsPageState();
@@ -187,12 +190,14 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                     ),
                     onPressed: () {
                       final eventDocRef = FirebaseFirestore.instance
-                          .collection('employees').doc(widget.employeedocId).collection("camps")
+                          .collection('employees')
+                          .doc(widget.employeedocId)
+                          .collection("camps")
                           .doc(widget.campId);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EventDetailsEditingPage(
+                          builder: (context) => EventDetailsEditing(
                             employee: widget.employee,
                             docRef: eventDocRef,
                             campId: widget.campId,

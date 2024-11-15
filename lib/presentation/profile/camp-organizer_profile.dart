@@ -113,7 +113,7 @@ class _UserProfilePageState extends State<UserProfilePage>
               child: BlocBuilder<ProfileBloc, ProfileState>(
                 builder: (context, state) {
                   if (state is ProfileLoading) {
-                    return Center(child: const CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else if (state is ProfileLoaded) {
                     final employee = state.employee;
                     return Column(
@@ -132,8 +132,8 @@ class _UserProfilePageState extends State<UserProfilePage>
                               'N/A'),
                         ),
                         AnimatedDefaultTextStyle(
-                          duration: Duration(milliseconds: 500),
-                          style: TextStyle(
+                          duration: const Duration(milliseconds: 500),
+                          style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
                               fontSize: 15),
@@ -242,7 +242,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                       child: Text('Error+${state.errorMessage}'),
                     );
                   }
-                  return Center(
+                  return const Center(
                     child: Text("No data available"),
                   );
                 },

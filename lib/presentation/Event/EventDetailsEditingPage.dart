@@ -7,11 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 class EventDetailsEditingPage extends StatefulWidget {
   final Map<String, dynamic> employee;
   final DocumentReference docRef;
-String? campId;
-  EventDetailsEditingPage({
-    required this.employee,
-    required this.docRef,this.campId
-  });
+  String? campId;
+  EventDetailsEditingPage(
+      {required this.employee, required this.docRef, this.campId});
 
   @override
   _EventDetailsEditingPageState createState() =>
