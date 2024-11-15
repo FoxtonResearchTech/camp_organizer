@@ -3,11 +3,9 @@ import 'package:camp_organizer/bloc/Status/status_event.dart';
 import 'package:camp_organizer/bloc/Status/status_state.dart';
 import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
-import 'package:camp_organizer/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:bloc/bloc.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -75,12 +73,13 @@ class _DashboardScreenState extends State<DashboardScreen>
             ),
           ],
         ),
-        body: BlocBuilder<StatusBloc, StatusState>(
+        body:BlocBuilder<StatusBloc, StatusState>(
           builder: (context, state) {
             if (state is StatusLoading) {
               return Center(child: CircularProgressIndicator());
             } else if (state is StatusLoaded) {
               final employees = state.employees;
+
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ListView.builder(
@@ -98,11 +97,19 @@ class _DashboardScreenState extends State<DashboardScreen>
 
                     return GestureDetector(
                       onTap: () async {
+                        // Add debug logs to check the employee data and IDs being passed
+                        print('Employee: ${employees[index]}');
+                        print('Employee Doc ID: ${state.employeeDocId[index]}');
+                        print('Camp Doc ID: ${state.campDocId[index]}');
+
                         await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                EventDetailsPage(employee: employees[index]),
+                            builder: (context) => EventDetailsPage(
+                              employee: employees[index],
+                              employeedocId: state.employeeDocId[index],
+                              campId: state.campDocId[index],
+                            ),
                           ),
                         );
                       },
@@ -134,23 +141,19 @@ class _DashboardScreenState extends State<DashboardScreen>
                                 child: Padding(
                                   padding: const EdgeInsets.all(12),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: [
                                           Row(
                                             children: [
                                               Icon(
                                                 Icons.date_range,
                                                 size: screenWidth * 0.07,
-                                                // Responsive icon size
-                                                color:
-                                                    Colors.orange, // Icon color
+                                                color: Colors.orange,
                                               ),
                                               const SizedBox(width: 8),
                                               Text(
@@ -158,8 +161,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.black54,
-                                                  fontSize: screenWidth *
-                                                      0.05, // Responsive font size
+                                                  fontSize: screenWidth * 0.05,
                                                 ),
                                               ),
                                             ],
@@ -169,9 +171,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               Icon(
                                                 Icons.watch_later,
                                                 size: screenWidth * 0.07,
-                                                // Responsive icon size
-                                                color:
-                                                    Colors.orange, // Icon color
+                                                color: Colors.orange,
                                               ),
                                               const SizedBox(width: 8),
                                               Text(
@@ -179,8 +179,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.black54,
-                                                  fontSize: screenWidth *
-                                                      0.05, // Responsive font size
+                                                  fontSize: screenWidth * 0.05,
                                                 ),
                                               ),
                                             ],
@@ -189,19 +188,25 @@ class _DashboardScreenState extends State<DashboardScreen>
                                       ),
                                       const SizedBox(height: 5),
                                       ..._buildInfoText(
-                                          screenWidth,  employees[index]['campName'],),
-                                      ..._buildInfoText(screenWidth,
-                                        employees[index]['address'],),
+                                        screenWidth,
+                                        employees[index]['campName'],
+                                      ),
                                       ..._buildInfoText(
-                                          screenWidth,  employees[index]['name'],),
+                                        screenWidth,
+                                        employees[index]['address'],
+                                      ),
                                       ..._buildInfoText(
-                                          screenWidth,  employees[index]['phoneNumber1'],),
-
+                                        screenWidth,
+                                        employees[index]['name'],
+                                      ),
+                                      ..._buildInfoText(
+                                        screenWidth,
+                                        employees[index]['phoneNumber1'],
+                                      ),
                                       // Horizontal Timeline Container
-                                      employees[index]['campStatus'] == "Waiting" ?
-                                      Container(
+                                      employees[index]['campStatus'] == "Waiting"
+                                          ? Container(
                                         height: screenHeight * 0.1,
-                                        // Increased height for timeline container
                                         width: double.infinity,
                                         child: SingleChildScrollView(
                                           scrollDirection: Axis.horizontal,
@@ -210,7 +215,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               _buildTimelineTile(
                                                 isFirst: true,
                                                 color: Colors.yellow[700]!,
-                                                // Non-nullable color
                                                 icon: Icons.check,
                                                 text: 'Processing',
                                                 screenWidth: screenWidth,
@@ -219,7 +223,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               ),
                                               _buildTimelineTile(
                                                 color: Colors.blue[600]!,
-                                                // Non-nullable color
                                                 icon: Icons.pending,
                                                 text: 'Confirmed',
                                                 screenWidth: screenWidth,
@@ -229,7 +232,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               _buildTimelineTile(
                                                 isLast: true,
                                                 color: Colors.grey[400]!,
-                                                // Non-nullable color
                                                 icon: Icons.circle,
                                                 text: 'Completed',
                                                 screenWidth: screenWidth,
@@ -238,9 +240,10 @@ class _DashboardScreenState extends State<DashboardScreen>
                                             ],
                                           ),
                                         ),
-                                      ) :   employees[index]['campStatus'] == "Approved" ?   Container(
+                                      )
+                                          : employees[index]['campStatus'] == "Approved"
+                                          ? Container(
                                         height: screenHeight * 0.1,
-                                        // Increased height for timeline container
                                         width: double.infinity,
                                         child: SingleChildScrollView(
                                           scrollDirection: Axis.horizontal,
@@ -249,7 +252,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               _buildTimelineTile(
                                                 isFirst: true,
                                                 color: Colors.yellow[700]!,
-                                                // Non-nullable color
                                                 icon: Icons.check,
                                                 text: 'Processing',
                                                 screenWidth: screenWidth,
@@ -258,7 +260,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               ),
                                               _buildTimelineTile(
                                                 color: Colors.blue[600]!,
-                                                // Non-nullable color
                                                 icon: Icons.pending,
                                                 text: 'Confirmed',
                                                 screenWidth: screenWidth,
@@ -268,7 +269,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               _buildTimelineTile(
                                                 isLast: true,
                                                 color: Colors.grey[400]!,
-                                                // Non-nullable color
                                                 icon: Icons.circle,
                                                 text: 'Completed',
                                                 screenWidth: screenWidth,
@@ -277,9 +277,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                                             ],
                                           ),
                                         ),
-                                      ) :         Container(
+                                      )
+                                          : Container(
                                         height: screenHeight * 0.1,
-                                        // Increased height for timeline container
                                         width: double.infinity,
                                         child: SingleChildScrollView(
                                           scrollDirection: Axis.horizontal,
@@ -288,7 +288,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               _buildTimelineTile(
                                                 isFirst: true,
                                                 color: Colors.yellow[700]!,
-                                                // Non-nullable color
                                                 icon: Icons.check,
                                                 text: 'Processing',
                                                 screenWidth: screenWidth,
@@ -297,7 +296,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               ),
                                               _buildTimelineTile(
                                                 color: Colors.blue[600]!,
-                                                // Non-nullable color
                                                 icon: Icons.pending,
                                                 text: 'Confirmed',
                                                 screenWidth: screenWidth,
@@ -307,7 +305,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               _buildTimelineTile(
                                                 isLast: true,
                                                 color: Colors.grey[400]!,
-                                                // Non-nullable color
                                                 icon: Icons.circle,
                                                 text: 'Completed',
                                                 screenWidth: screenWidth,
@@ -317,12 +314,10 @@ class _DashboardScreenState extends State<DashboardScreen>
                                           ),
                                         ),
                                       ),
-
                                     ],
                                   ),
                                 ),
                               ),
-
                               const SizedBox(height: 20),
                             ],
                           ),
@@ -334,14 +329,15 @@ class _DashboardScreenState extends State<DashboardScreen>
               );
             } else if (state is StatusError) {
               return Center(
-                child: Text('Error+${state.errorMessage}'),
+                child: Text('Error: ${state.errorMessage}'),
               );
             }
             return Center(
               child: Text("No data available"),
             );
           },
-        ),
+        )
+
       ),
     );
   }

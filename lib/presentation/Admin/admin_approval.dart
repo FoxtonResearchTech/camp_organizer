@@ -1,6 +1,7 @@
 import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:camp_organizer/utils/app_colors.dart';
 import 'package:camp_organizer/widgets/button/custom_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -85,7 +86,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
             if (state is AdminApprovalLoading) {
               return Center(child: CircularProgressIndicator());
             } else if (state is AdminApprovalLoaded) {
-              final camps = state.camps;
+              final camps = state.allCamps;
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ListView.builder(
@@ -289,13 +290,20 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                                           ),
                                                         ),
                                                         TextButton(
-                                                          onPressed: () {
+                                                          onPressed: () async {
+                                                            /*
                                                             String reasonText =
                                                                 _reason.text;
                                                             _reason.clear();
+                                                            context
+                                                                .read<
+                                                                    AdminApprovalBloc>()
+                                                                .add(AddReasonEvent(
+                                                                    reasonText));
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
+                                                             */
                                                           },
                                                           child: const Text(
                                                             'Submit',
@@ -393,7 +401,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
               );
             } else if (state is AdminApprovalError) {
               return Center(
-                child: Text('Error+${state.errorMessage}'),
+                child: Text('Error'),
               );
             }
             return Center(

@@ -21,12 +21,12 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
         // Fetch employee data
         List<Map<String, dynamic>> employees = await fetchEmployees(userId);
 
-        // Fetch document IDs for employee and camp
+        // Fetch document IDs for employee and all camps
         String employeeDocId = await fetchEmployeeDocId(userId);
-        String campDocId = await fetchCampDocId(userId);
+        List<String> campDocIds = await fetchAllCampDocIds(userId);
 
         // Emit the loaded state with the retrieved data
-        emit(StatusLoaded(employees, employeeDocId, campDocId));
+        emit(StatusLoaded(employees, employeeDocId, campDocIds));
       } catch (e) {
         emit(StatusError('Failed to load data: $e'));
       }
@@ -54,15 +54,15 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
     return employeeDocSnapshot.id; // Return the document ID
   }
 
-  // Fetch camp document ID
-  Future<String> fetchCampDocId(String userId) async {
+  // Fetch all camp document IDs
+  Future<List<String>> fetchAllCampDocIds(String userId) async {
     final campDocSnapshot = await FirebaseFirestore.instance
         .collection('employees')
         .doc(userId)
         .collection('camps')
         .get();
 
-    // Assuming there's only one camp document, get its ID
-    return campDocSnapshot.docs.isNotEmpty ? campDocSnapshot.docs.first.id : '';
+    // Collect all camp document IDs in a list
+    return campDocSnapshot.docs.map((doc) => doc.id).toList();
   }
 }

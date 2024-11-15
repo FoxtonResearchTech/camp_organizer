@@ -7,7 +7,7 @@ class StatusLoading extends StatusState {}
 class StatusLoaded extends StatusState {
   final List<Map<String, dynamic>> employees;
   final String employeeDocId;
-  final String campDocId;
+  final List<String> campDocId;
 
   StatusLoaded(this.employees, this.employeeDocId, this.campDocId);
 }

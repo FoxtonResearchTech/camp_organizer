@@ -9,8 +9,9 @@ import 'EventDetailsEditingPage.dart';
 
 class EventDetailsPage extends StatefulWidget {
   final Map<String, dynamic> employee;
-
-  const EventDetailsPage({Key? key, required this.employee}) : super(key: key);
+  final String? employeedocId;
+  final String? campId;
+  const EventDetailsPage({Key? key, required this.employee, this.employeedocId, this.campId}) : super(key: key);
 
   @override
   _EventDetailsPageState createState() => _EventDetailsPageState();
@@ -27,6 +28,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
   @override
   void initState() {
     super.initState();
+    print("camp doc id: ${widget.campId}");
     _controller = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -185,14 +187,15 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                     ),
                     onPressed: () {
                       final eventDocRef = FirebaseFirestore.instance
-                          .collection('employees').doc('osVjMnYxkRdBZAK8gp7hSGsVr1o1').collection("camps")
-                          .doc('gXJPAMO0fMjObtqxlom5');
+                          .collection('employees').doc(widget.employeedocId).collection("camps")
+                          .doc(widget.campId);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => EventDetailsEditingPage(
                             employee: widget.employee,
                             docRef: eventDocRef,
+                            campId: widget.campId,
                           ),
                         ),
                       );
