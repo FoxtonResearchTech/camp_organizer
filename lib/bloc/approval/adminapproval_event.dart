@@ -9,3 +9,8 @@ class UpdateStatusEvent extends AdminApprovalEvent {
 
   UpdateStatusEvent(this.documentId);
 }
+
+class AddReasonEvent extends AdminApprovalEvent {
+  final String reasonText;
+  AddReasonEvent(this.reasonText);
+}

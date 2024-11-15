@@ -43,25 +43,75 @@ class AdminApprovalBloc extends Bloc<AdminApprovalEvent, AdminApprovalState> {
     });
     on<UpdateStatusEvent>((event, emit) async {
       try {
-        final user = FirebaseAuth.instance.currentUser;
-        if (user == null) {
-          emit(AdminApprovalError("User not logged in"));
-          return;
+        // Fetch all documents from the 'employees' collection
+        final employeesSnapshot =
+            await FirebaseFirestore.instance.collection('employees').get();
+
+        for (var employeeDoc in employeesSnapshot.docs) {
+          // Get the employee ID (document ID)
+          String employeeId = employeeDoc.id;
+
+          // Fetch all camp documents for each employee
+          final campsSnapshot = await FirebaseFirestore.instance
+              .collection('employees')
+              .doc(employeeId)
+              .collection('camps')
+              .get();
+
+          for (var campDoc in campsSnapshot.docs) {
+            String campDocumentId = campDoc.id;
+
+            // Update the 'campStatus' field in each camp document
+            await FirebaseFirestore.instance
+                .collection('employees')
+                .doc(employeeId)
+                .collection('camps')
+                .doc(campDocumentId)
+                .update({'campStatus': 'Approved'});
+          }
         }
-
-        final userId = user.uid;
-
-        // Update the 'campStatus' field in the specified document
-        await FirebaseFirestore.instance
-            .collection('employees')
-            .doc(userId)
-            .collection('camps')
-            .doc(event.documentId)
-            .update({'campStatus': 'Approved'});
 
         emit(AdminApprovalUpdated());
       } catch (e) {
-        emit(AdminApprovalError("Failed to update status: ${e.toString()}"));
+        emit(AdminApprovalError("Failed to update status: \${e.toString()}"));
+      }
+    });
+    on<AddReasonEvent>((event, emit) async {
+      try {
+        final reasonText = event.reasonText;
+
+        final employeesSnapshot =
+            await FirebaseFirestore.instance.collection('employees').get();
+
+        for (var employeeDoc in employeesSnapshot.docs) {
+          // Get the employee ID (document ID)
+          String employeeId = employeeDoc.id;
+
+          // Fetch all camp documents for each employee
+          final campsSnapshot = await FirebaseFirestore.instance
+              .collection('employees')
+              .doc(employeeId)
+              .collection('camps')
+              .get();
+
+          for (var campDoc in campsSnapshot.docs) {
+            String campDocumentId = campDoc.id;
+
+            // Update the 'campStatus' field in each camp document
+            await FirebaseFirestore.instance
+                .collection('employees')
+                .doc(employeeId)
+                .collection('camps')
+                .doc(campDocumentId)
+                .update({'reason': reasonText});
+          }
+        }
+
+        // Emit success after all updates
+        emit(AdminApprovalUpdated());
+      } catch (e) {
+        // Handle any errors that might occur during the process
+        emit(AdminApprovalError("Failed to add reason: ${e.toString()}"));
       }
     });
   }
