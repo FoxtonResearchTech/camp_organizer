@@ -1,6 +1,14 @@
+import 'package:camp_organizer/bloc/Status/status_bloc.dart';
+import 'package:camp_organizer/bloc/Status/status_event.dart';
+import 'package:camp_organizer/bloc/Status/status_state.dart';
+import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
+import 'package:camp_organizer/utils/app_colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:timeline_tile/timeline_tile.dart';
+import 'package:bloc/bloc.dart';
 
 class AnimatedRotatingPieChartWithGrid extends StatefulWidget {
   const AnimatedRotatingPieChartWithGrid({Key? key}) : super(key: key);
@@ -16,7 +24,7 @@ class _AnimatedRotatingPieChartWithGridState
   int touchedIndex = -1;
   late AnimationController _controller;
   double rotationAngle = 0;
-
+  late StatusBloc _StatusBloc;
   final List<double> values = [30, 25, 20, 15, 10];
   final List<Color> colors = [
     Colors.blueAccent,
@@ -35,6 +43,7 @@ class _AnimatedRotatingPieChartWithGridState
 
   @override
   void initState() {
+    _StatusBloc = StatusBloc()..add(FetchDataEvent());
     super.initState();
     _controller = AnimationController(
       vsync: this,
@@ -50,6 +59,7 @@ class _AnimatedRotatingPieChartWithGridState
   @override
   void dispose() {
     _controller.dispose();
+    _StatusBloc.close();
     super.dispose();
   }
 
@@ -57,247 +67,348 @@ class _AnimatedRotatingPieChartWithGridState
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Dashboard',
-          style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: false,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+    return BlocProvider(
+      create: (context) => _StatusBloc,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Dashboard',
+            style: TextStyle(
+                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
           ),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationPage()));
-            },
-          ),
-        ],
-      ),
-      drawer: Drawer(
-        width: screenWidth / 1.5,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.blue,
-                    Colors.lightBlueAccent,
-                    Colors.lightBlue
-                  ],
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    'Menu',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
-                  ),
-                ],
+          centerTitle: false,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
             ),
-            ListTile(
-              leading: Icon(Icons.manage_accounts),
-              title: Text('Manage Account'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.approval),
-              title: Text('New Camp Approval'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.approval),
-              title: Text('Onsite Team Approval'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.approval),
-              title: Text('Account Approval'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.approval),
-              title: Text('Camp Repects Approval'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.approval),
-              title: Text('Logestic Approval'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.pending),
-              title: Text('Pending Camp Data'),
-              onTap: () {},
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.notifications, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationPage()));
+              },
             ),
           ],
         ),
-      ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final pieChartRadius = constraints.maxWidth < 600 ? 120.0 : 180.0;
-          final fontSizeFactor = constraints.maxWidth < 600 ? 0.8 : 1.0;
-          final gridAspectRatio = constraints.maxWidth < 600 ? 2.0 : 2.5;
+        drawer: Drawer(
+          width: screenWidth / 1.5,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.blue,
+                      Colors.lightBlueAccent,
+                      Colors.lightBlue
+                    ],
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Menu',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.manage_accounts),
+                title: Text('Manage Account'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.approval),
+                title: Text('New Camp Approval'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.approval),
+                title: Text('Onsite Team Approval'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.approval),
+                title: Text('Account Approval'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.approval),
+                title: Text('Camp Repects Approval'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.approval),
+                title: Text('Logestic Approval'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.pending),
+                title: Text('Pending Camp Data'),
+                onTap: () {},
+              ),
+            ],
+          ),
+        ),
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            final pieChartRadius = constraints.maxWidth < 600 ? 120.0 : 180.0;
+            final fontSizeFactor = constraints.maxWidth < 600 ? 0.8 : 1.0;
+            final gridAspectRatio = constraints.maxWidth < 600 ? 2.0 : 2.5;
 
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: AspectRatio(
-                    aspectRatio: 1.3,
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: PieChart(
-                            PieChartData(
-                              pieTouchData: PieTouchData(
-                                touchCallback:
-                                    (FlTouchEvent event, pieTouchResponse) {
-                                  setState(() {
-                                    if (!event.isInterestedForInteractions ||
-                                        pieTouchResponse == null ||
-                                        pieTouchResponse.touchedSection ==
-                                            null) {
-                                      touchedIndex = -1;
-                                      return;
-                                    }
-                                    touchedIndex = pieTouchResponse
-                                        .touchedSection!.touchedSectionIndex;
-                                  });
-                                },
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: AspectRatio(
+                      aspectRatio: 1.3,
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: PieChart(
+                              PieChartData(
+                                pieTouchData: PieTouchData(
+                                  touchCallback:
+                                      (FlTouchEvent event, pieTouchResponse) {
+                                    setState(() {
+                                      if (!event.isInterestedForInteractions ||
+                                          pieTouchResponse == null ||
+                                          pieTouchResponse.touchedSection ==
+                                              null) {
+                                        touchedIndex = -1;
+                                        return;
+                                      }
+                                      touchedIndex = pieTouchResponse
+                                          .touchedSection!.touchedSectionIndex;
+                                    });
+                                  },
+                                ),
+                                startDegreeOffset: rotationAngle,
+                                borderData: FlBorderData(show: false),
+                                sectionsSpace: 2,
+                                centerSpaceRadius: pieChartRadius - 60,
+                                sections: showingSections(
+                                    fontSizeFactor, pieChartRadius),
                               ),
-                              startDegreeOffset: rotationAngle,
-                              borderData: FlBorderData(show: false),
-                              sectionsSpace: 2,
-                              centerSpaceRadius: pieChartRadius - 60,
-                              sections: showingSections(
-                                  fontSizeFactor, pieChartRadius),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 20),
-                        _buildIndicators(fontSizeFactor),
-                      ],
+                          const SizedBox(width: 20),
+                          _buildIndicators(fontSizeFactor),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                _buildDetailsGrid(gridAspectRatio, fontSizeFactor),
-                const Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Text(
-                    "Upcoming Event",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 25,
-                        color: Colors.black54),
+                  const SizedBox(height: 20),
+                  _buildDetailsGrid(gridAspectRatio, fontSizeFactor),
+                  const Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Text(
+                      "Upcoming Event",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 25,
+                          color: Colors.black54),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: SizedBox(
-                    height: constraints.maxHeight * 0.6,
-                    child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: 2,
-                      itemBuilder: (BuildContext context, int index) {
-                        Animation<double> animation = CurvedAnimation(
-                          parent: _controller,
-                          curve: Interval(
-                            (1 / 5) * index,
-                            1.0,
-                            curve: Curves.easeOut,
-                          ),
-                        );
-                        _controller.forward();
+                  BlocBuilder<StatusBloc, StatusState>(
+                    builder: (context, state) {
+                      if (state is StatusLoading) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (state is StatusLoaded) {
+                        final employees = state.employees;
 
-                        return FadeTransition(
-                          opacity: animation,
-                          child: SlideTransition(
-                            position: Tween<Offset>(
-                              begin: Offset(0, 0.2),
-                              end: Offset.zero,
-                            ).animate(animation),
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
-                              child: Container(
-                                height: MediaQuery.of(context).size.height *
-                                    0.25, // Set height to 25% of screen height
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
-                                      spreadRadius: 2,
-                                      blurRadius: 10,
-                                      offset: const Offset(0, 4),
-                                    ),
-                                  ],
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          _buildEventDetail(Icons.date_range,
-                                              '12-2-2024', constraints),
-                                          _buildEventDetail(Icons.watch_later,
-                                              'Morning', constraints),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 5),
-                                      ..._buildInfoText(
-                                          screenWidth, 'CSI Trust'),
-                                      ..._buildInfoText(screenWidth,
-                                          'Marthandam, near PPK Hospital'),
-                                      ..._buildInfoText(
-                                          screenWidth, 'test@gmail.com'),
-                                      ..._buildInfoText(
-                                          screenWidth, '65415874155'),
-                                    ],
+                        return Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: SizedBox(
+                            height: constraints.maxHeight * 0.6,
+                            child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: employees.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                Animation<double> animation = CurvedAnimation(
+                                  parent: _controller,
+                                  curve: Interval(
+                                    (1 / 5) * index,
+                                    1.0,
+                                    curve: Curves.easeOut,
                                   ),
-                                ),
-                              ),
+                                );
+                                _controller.forward();
+
+                                return employees[index]['campStatus'] ==
+                                        "Approved"
+                                    ? FadeTransition(
+                                        opacity: animation,
+                                        child: SlideTransition(
+                                          position: Tween<Offset>(
+                                            begin: Offset(0, 0.2),
+                                            end: Offset.zero,
+                                          ).animate(animation),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 20),
+                                            child: Container(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.25,
+                                              // Set height to 25% of screen height
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                color: Colors.white,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black
+                                                        .withOpacity(0.1),
+                                                    spreadRadius: 2,
+                                                    blurRadius: 10,
+                                                    offset: const Offset(0, 4),
+                                                  ),
+                                                ],
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(12),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Icon(
+                                                              Icons.date_range,
+                                                              size:
+                                                                  screenWidth *
+                                                                      0.07,
+                                                              // Responsive icon size
+                                                              color: Colors
+                                                                  .orange, // Icon color
+                                                            ),
+                                                            const SizedBox(
+                                                                width: 8),
+                                                            Text(
+                                                              employees[index]
+                                                                  ['campDate'],
+                                                              style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                color: Colors
+                                                                    .black54,
+                                                                fontSize:
+                                                                    screenWidth *
+                                                                        0.05, // Responsive font size
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Icon(
+                                                              Icons.watch_later,
+                                                              size:
+                                                                  screenWidth *
+                                                                      0.07,
+                                                              // Responsive icon size
+                                                              color: Colors
+                                                                  .orange, // Icon color
+                                                            ),
+                                                            const SizedBox(
+                                                                width: 8),
+                                                            Text(
+                                                              employees[index]
+                                                                  ['campTime'],
+                                                              style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                color: Colors
+                                                                    .black54,
+                                                                fontSize:
+                                                                    screenWidth *
+                                                                        0.05, // Responsive font size
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    ..._buildInfoText(
+                                                      screenWidth,
+                                                      employees[index]
+                                                          ['campName'],
+                                                    ),
+                                                    ..._buildInfoText(
+                                                      screenWidth,
+                                                      employees[index]
+                                                          ['address'],
+                                                    ),
+                                                    ..._buildInfoText(
+                                                      screenWidth,
+                                                      employees[index]['name'],
+                                                    ),
+                                                    ..._buildInfoText(
+                                                      screenWidth,
+                                                      employees[index]
+                                                          ['phoneNumber1'],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox();
+                              },
                             ),
                           ),
                         );
-                      },
-                    ),
+                      } else if (state is StatusError) {
+                        return Center(
+                          child: Text('Error+${state.errorMessage}'),
+                        );
+                      }
+                      return Center(
+                        child: Text("No data available"),
+                      );
+                    },
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

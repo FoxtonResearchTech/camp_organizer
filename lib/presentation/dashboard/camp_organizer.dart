@@ -198,7 +198,47 @@ class _DashboardScreenState extends State<DashboardScreen>
                                           screenWidth,  employees[index]['phoneNumber1'],),
 
                                       // Horizontal Timeline Container
+                                      employees[index]['campStatus'] == "Waiting" ?
                                       Container(
+                                        height: screenHeight * 0.1,
+                                        // Increased height for timeline container
+                                        width: double.infinity,
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            children: [
+                                              _buildTimelineTile(
+                                                isFirst: true,
+                                                color: Colors.yellow[700]!,
+                                                // Non-nullable color
+                                                icon: Icons.check,
+                                                text: 'Processing',
+                                                screenWidth: screenWidth,
+                                                lineBeforeColor: Colors.grey,
+                                                lineAfterColor: Colors.grey,
+                                              ),
+                                              _buildTimelineTile(
+                                                color: Colors.blue[600]!,
+                                                // Non-nullable color
+                                                icon: Icons.pending,
+                                                text: 'Confirmed',
+                                                screenWidth: screenWidth,
+                                                lineBeforeColor: Colors.grey,
+                                                lineAfterColor: Colors.grey,
+                                              ),
+                                              _buildTimelineTile(
+                                                isLast: true,
+                                                color: Colors.grey[400]!,
+                                                // Non-nullable color
+                                                icon: Icons.circle,
+                                                text: 'Completed',
+                                                screenWidth: screenWidth,
+                                                lineBeforeColor: Colors.grey,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ) :   employees[index]['campStatus'] == "Approved" ?   Container(
                                         height: screenHeight * 0.1,
                                         // Increased height for timeline container
                                         width: double.infinity,
@@ -237,7 +277,47 @@ class _DashboardScreenState extends State<DashboardScreen>
                                             ],
                                           ),
                                         ),
+                                      ) :         Container(
+                                        height: screenHeight * 0.1,
+                                        // Increased height for timeline container
+                                        width: double.infinity,
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            children: [
+                                              _buildTimelineTile(
+                                                isFirst: true,
+                                                color: Colors.yellow[700]!,
+                                                // Non-nullable color
+                                                icon: Icons.check,
+                                                text: 'Processing',
+                                                screenWidth: screenWidth,
+                                                lineBeforeColor: Colors.green,
+                                                lineAfterColor: Colors.green,
+                                              ),
+                                              _buildTimelineTile(
+                                                color: Colors.blue[600]!,
+                                                // Non-nullable color
+                                                icon: Icons.pending,
+                                                text: 'Confirmed',
+                                                screenWidth: screenWidth,
+                                                lineBeforeColor: Colors.green,
+                                                lineAfterColor: Colors.green,
+                                              ),
+                                              _buildTimelineTile(
+                                                isLast: true,
+                                                color: Colors.grey[400]!,
+                                                // Non-nullable color
+                                                icon: Icons.circle,
+                                                text: 'Completed',
+                                                screenWidth: screenWidth,
+                                                lineBeforeColor: Colors.green,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ),
+
                                     ],
                                   ),
                                 ),
