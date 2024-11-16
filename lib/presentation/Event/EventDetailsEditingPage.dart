@@ -7,10 +7,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 class EventDetailsEditingPage extends StatefulWidget {
   final Map<String, dynamic> employee;
   final DocumentReference docRef;
-
+String? campId;
   EventDetailsEditingPage({
     required this.employee,
-    required this.docRef,
+    required this.docRef,this.campId
   });
 
   @override
@@ -23,7 +23,7 @@ class _EventDetailsEditingPageState extends State<EventDetailsEditingPage>
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
-  bool _isEditing = false;
+  bool _isEditing = true;
   late Map<String, dynamic> _editableEmployee;
 
   @override
@@ -243,7 +243,7 @@ class _EventDetailsEditingPageState extends State<EventDetailsEditingPage>
             .collection('employees')
             .doc(userId)
             .collection('camps')
-            .doc(documentId)
+            .doc(widget.campId)
             .update({
           'campName':
               _editableEmployee['Camp Name'] ?? widget.employee['campName'],

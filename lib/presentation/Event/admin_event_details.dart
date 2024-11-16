@@ -243,7 +243,21 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                           ),
                           TextButton(
                             onPressed: () {
+                              BlocProvider.of<AdminApprovalBloc>(context).add(
+                                UpdateStatusEvent(
+                                  employeeId: 'osVjMnYxkRdBZAK8gp7hSGsVr1o1',
+                                  campDocId: 'nBwrfnOSFxA9SABAQAuB',
+                                  newStatus: 'Approved',
+                                ),
+                              );
                               String reasonText = _reason.text;
+                              BlocProvider.of<AdminApprovalBloc>(context).add(
+                                AddReasonEvent(
+                                    reasonText: reasonText,
+                                  employeeId: 'osVjMnYxkRdBZAK8gp7hSGsVr1o1',
+                                  campDocId: 'nBwrfnOSFxA9SABAQAuB',
+                                ),
+                              );
                               _reason.clear();
                               Navigator.of(context).pop();
                             },
@@ -283,6 +297,14 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.verified),
                   onPressed: () {
+                    BlocProvider.of<AdminApprovalBloc>(context).add(
+                      UpdateStatusEvent(
+                        employeeId: 'osVjMnYxkRdBZAK8gp7hSGsVr1o1',
+                        campDocId: 'nBwrfnOSFxA9SABAQAuB',
+                        newStatus: 'Rejected',
+                      ),
+                    );
+                  /*
                     final documentId = widget.employee['documentId'] as String?;
                     if (documentId != null && documentId.isNotEmpty) {
                       context
@@ -294,6 +316,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                     }
                     // print("Employee data: ${widget.employee}");
                     print("Document ID: ${widget.employee['documentId']}");
+                   */
                   },
                   style: ElevatedButton.styleFrom(
                     iconColor: Colors.green,
