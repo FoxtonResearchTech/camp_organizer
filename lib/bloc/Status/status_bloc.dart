@@ -27,6 +27,7 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
 
         // Emit the loaded state with the retrieved data
         emit(StatusLoaded(employees, employeeDocId, campDocIds));
+        print(employees);
       } catch (e) {
         emit(StatusError('Failed to load data: $e'));
       }

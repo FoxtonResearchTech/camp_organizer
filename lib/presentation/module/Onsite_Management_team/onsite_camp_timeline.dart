@@ -11,7 +11,8 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      appBar: AppBar(),
+      body: Column(),
     );
   }
 }

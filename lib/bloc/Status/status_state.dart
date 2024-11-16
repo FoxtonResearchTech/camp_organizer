@@ -2,7 +2,9 @@ class StatusState {}
 
 class StatusInitial extends StatusState {}
 
-class StatusLoading extends StatusState {}
+class StatusLoading extends StatusState {
+
+}
 
 class StatusLoaded extends StatusState {
   final List<Map<String, dynamic>> employees;

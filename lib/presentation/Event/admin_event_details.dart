@@ -12,8 +12,9 @@ import '../../utils/app_colors.dart';
 
 class AdminEventDetailsPage extends StatefulWidget {
   final Map<String, dynamic> employee;
-
-  const AdminEventDetailsPage({Key? key, required this.employee})
+final String? campID;
+  final String? employeeID;
+  const AdminEventDetailsPage({Key? key, required this.employee, this.campID, this.employeeID})
       : super(key: key);
 
   @override
@@ -54,6 +55,8 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
     SchedulerBinding.instance.addPostFrameCallback((_) {
       _controller.forward();
     });
+    print("Camp ID: ${widget.campID}");
+    print("Employee ID: ${widget.employeeID}");
   }
 
   @override
@@ -245,17 +248,17 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                             onPressed: () {
                               BlocProvider.of<AdminApprovalBloc>(context).add(
                                 UpdateStatusEvent(
-                                  employeeId: 'osVjMnYxkRdBZAK8gp7hSGsVr1o1',
-                                  campDocId: 'nBwrfnOSFxA9SABAQAuB',
-                                  newStatus: 'Approved',
+                                  employeeId: widget.employeeID.toString(),
+                                  campDocId: widget.campID.toString(),
+                                  newStatus: 'Rejected',
                                 ),
                               );
                               String reasonText = _reason.text;
                               BlocProvider.of<AdminApprovalBloc>(context).add(
                                 AddReasonEvent(
                                     reasonText: reasonText,
-                                  employeeId: 'osVjMnYxkRdBZAK8gp7hSGsVr1o1',
-                                  campDocId: 'nBwrfnOSFxA9SABAQAuB',
+                                  employeeId: widget.employeeID.toString(),
+                                  campDocId: widget.campID.toString(),
                                 ),
                               );
                               _reason.clear();
@@ -299,9 +302,9 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                   onPressed: () {
                     BlocProvider.of<AdminApprovalBloc>(context).add(
                       UpdateStatusEvent(
-                        employeeId: 'osVjMnYxkRdBZAK8gp7hSGsVr1o1',
-                        campDocId: 'nBwrfnOSFxA9SABAQAuB',
-                        newStatus: 'Rejected',
+                        employeeId: widget.employeeID.toString(),
+                        campDocId: widget.campID.toString(),
+                        newStatus: 'Accepted',
                       ),
                     );
                   /*
@@ -328,7 +331,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                     ),
                   ),
                   label: const Text(
-                    " Accept",
+                    "Approved",
                     style: TextStyle(
                         fontSize: 18,
                         color: Colors.white,

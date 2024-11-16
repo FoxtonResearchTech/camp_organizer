@@ -87,6 +87,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
               return Center(child: CircularProgressIndicator());
             } else if (state is AdminApprovalLoaded) {
               final camps = state.allCamps;
+
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ListView.builder(
@@ -109,291 +110,346 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                           begin: const Offset(0, 0.2), // Start slightly below
                           end: Offset.zero, // End at original position
                         ).animate(animation),
-                        child: Column(
-                          children: [
-                            // Information Container
-                            Container(
-                              height: screenHeight >= 973
-                                  ? screenHeight / 4
-                                  : screenHeight / 3.5, // Responsive height
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    spreadRadius: 2,
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.date_range,
-                                              size: screenWidth *
-                                                  0.07, // Responsive icon size
-                                              color:
-                                                  Colors.orange, // Icon color
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Text(
-                                              camps[index]['campDate'],
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black54,
-                                                fontSize: screenWidth *
-                                                    0.05, // Responsive font size
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.watch_later,
-                                              size: screenWidth *
-                                                  0.07, // Responsive icon size
-                                              color:
-                                                  Colors.orange, // Icon color
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Text(
-                                              camps[index]['campTime'],
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black54,
-                                                fontSize: screenWidth *
-                                                    0.05, // Responsive font size
-                                              ),
-                                            ),
-                                          ],
+                        child: camps[index]['campStatus'] == 'Waiting'
+                            ?
+                            Column(
+                                children: [
+                                  // Information Container
+                                  Container(
+                                    height: screenHeight >= 973
+                                        ? screenHeight / 4
+                                        : screenHeight /
+                                            3.5, // Responsive height
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          spreadRadius: 2,
+                                          blurRadius: 10,
+                                          offset: const Offset(0, 4),
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(height: 5),
-                                    ..._buildInfoText(
-                                      screenWidth,
-                                      camps[index]['campName'],
-                                    ),
-                                    ..._buildInfoText(
-                                      screenWidth,
-                                      camps[index]['address'],
-                                    ),
-                                    ..._buildInfoText(
-                                      screenWidth,
-                                      camps[index]['name'],
-                                    ),
-                                    ..._buildInfoText(
-                                      screenWidth,
-                                      camps[index]['phoneNumber1'],
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Container(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          SizedBox(
-                                            width: screenWidth / 3,
-                                            height: screenHeight / 20,
-                                            child: ElevatedButton.icon(
-                                              icon: const Icon(Icons.cancel),
-                                              onPressed: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return AlertDialog(
-                                                      title: Text(
-                                                        'Reason',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            color:
-                                                                Colors.black54,
-                                                            fontSize: screenWidth *
-                                                                0.05 // Responsive font size
-                                                            ),
-                                                      ),
-                                                      content: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          Text(
-                                                            'Please provide a reason for rejection:',
-                                                            style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              color: Colors
-                                                                  .black54,
-                                                              fontSize:
-                                                                  screenWidth *
-                                                                      0.04, // Responsive font size
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                              height: 10),
-                                                          TextField(
-                                                            controller: _reason,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              hintText:
-                                                                  'Enter reason',
-                                                              suffixStyle:
-                                                                  TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                                color: Colors
-                                                                    .black54,
-                                                                fontSize:
-                                                                    screenWidth *
-                                                                        0.10, // Responsive font size
-                                                              ),
-                                                              border:
-                                                                  const OutlineInputBorder(),
-                                                            ),
-                                                            maxLines: null,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      actions: [
-                                                        TextButton(
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                          child: const Text(
-                                                            'Cancel',
-                                                            style: TextStyle(
-                                                                color: AppColors
-                                                                    .accentBlue),
-                                                          ),
-                                                        ),
-                                                        TextButton(
-                                                          onPressed: () async {
-                                                            /*
-                                                            String reasonText =
-                                                                _reason.text;
-                                                            _reason.clear();
-                                                            context
-                                                                .read<
-                                                                    AdminApprovalBloc>()
-                                                                .add(AddReasonEvent(
-                                                                    reasonText));
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                             */
-                                                          },
-                                                          child: const Text(
-                                                            'Submit',
-                                                            style: TextStyle(
-                                                                color: AppColors
-                                                                    .accentBlue),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                iconColor: Colors.red,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 5,
-                                                        vertical: 5),
-                                                backgroundColor:
-                                                    AppColors.lightRed,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                              ),
-                                              label: const Text(
-                                                " Reject",
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 50),
-                                          Flexible(
-                                            child: SizedBox(
-                                              width: screenWidth / 3,
-                                              height: screenHeight / 20,
-                                              child: ElevatedButton.icon(
-                                                icon:
-                                                    const Icon(Icons.view_list),
-                                                onPressed: () async {
-                                                  await Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          AdminEventDetailsPage(
-                                                              employee:
-                                                                  camps[index]),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.date_range,
+                                                    size: screenWidth *
+                                                        0.07, // Responsive icon size
+                                                    color: Colors
+                                                        .orange, // Icon color
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    camps[index]['campDate'],
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Colors.black54,
+                                                      fontSize: screenWidth *
+                                                          0.05, // Responsive font size
                                                     ),
-                                                  );
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  iconColor: Colors.white,
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 5,
-                                                      vertical: 5),
-                                                  backgroundColor: Colors.grey,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.watch_later,
+                                                    size: screenWidth *
+                                                        0.07, // Responsive icon size
+                                                    color: Colors
+                                                        .orange, // Icon color
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    camps[index]['campTime'],
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Colors.black54,
+                                                      fontSize: screenWidth *
+                                                          0.05, // Responsive font size
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 5),
+                                          ..._buildInfoText(
+                                            screenWidth,
+                                            camps[index]['campName'],
+                                          ),
+                                          ..._buildInfoText(
+                                            screenWidth,
+                                            camps[index]['address'],
+                                          ),
+                                          ..._buildInfoText(
+                                            screenWidth,
+                                            camps[index]['name'],
+                                          ),
+                                          ..._buildInfoText(
+                                            screenWidth,
+                                            camps[index]['phoneNumber1'],
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Container(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  width: screenWidth / 3,
+                                                  height: screenHeight / 20,
+                                                  child: ElevatedButton.icon(
+                                                    icon: const Icon(
+                                                        Icons.cancel),
+                                                    onPressed: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            title: Text(
+                                                              'Reason',
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  color: Colors
+                                                                      .black54,
+                                                                  fontSize:
+                                                                      screenWidth *
+                                                                          0.05 // Responsive font size
+                                                                  ),
+                                                            ),
+                                                            content: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: [
+                                                                Text(
+                                                                  'Please provide a reason for rejection:',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color: Colors
+                                                                        .black54,
+                                                                    fontSize:
+                                                                        screenWidth *
+                                                                            0.04, // Responsive font size
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 10),
+                                                                TextField(
+                                                                  controller:
+                                                                      _reason,
+                                                                  decoration:
+                                                                      InputDecoration(
+                                                                    hintText:
+                                                                        'Enter reason',
+                                                                    suffixStyle:
+                                                                        TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500,
+                                                                      color: Colors
+                                                                          .black54,
+                                                                      fontSize:
+                                                                          screenWidth *
+                                                                              0.10, // Responsive font size
+                                                                    ),
+                                                                    border:
+                                                                        const OutlineInputBorder(),
+                                                                  ),
+                                                                  maxLines:
+                                                                      null,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                  'Cancel',
+                                                                  style: TextStyle(
+                                                                      color: AppColors
+                                                                          .accentBlue),
+                                                                ),
+                                                              ),
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  BlocProvider.of<
+                                                                              AdminApprovalBloc>(
+                                                                          context)
+                                                                      .add(
+                                                                    UpdateStatusEvent(
+                                                                      employeeId:
+                                                                          state.employeeDocId[
+                                                                              index],
+                                                                      campDocId:
+                                                                          state.campDocIds[
+                                                                              index],
+                                                                      newStatus:
+                                                                          'Rejected',
+                                                                    ),
+                                                                  );
+                                                                  String
+                                                                      reasonText =
+                                                                      _reason
+                                                                          .text;
+                                                                  BlocProvider.of<
+                                                                              AdminApprovalBloc>(
+                                                                          context)
+                                                                      .add(
+                                                                    AddReasonEvent(
+                                                                      reasonText:
+                                                                          reasonText,
+                                                                      employeeId:
+                                                                          state.employeeDocId[
+                                                                              index],
+                                                                      campDocId:
+                                                                          state.campDocIds[
+                                                                              index],
+                                                                    ),
+                                                                  );
+                                                                  _reason
+                                                                      .clear();
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                  'Submit',
+                                                                  style: TextStyle(
+                                                                      color: AppColors
+                                                                          .accentBlue),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      iconColor: Colors.red,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 5,
+                                                          vertical: 5),
+                                                      backgroundColor:
+                                                          AppColors.lightRed,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                      ),
+                                                    ),
+                                                    label: const Text(
+                                                      " Reject",
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
                                                   ),
                                                 ),
-                                                label: const Text(
-                                                  " View",
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.w500),
+                                                const SizedBox(width: 50),
+                                                Flexible(
+                                                  child: SizedBox(
+                                                    width: screenWidth / 3,
+                                                    height: screenHeight / 20,
+                                                    child: ElevatedButton.icon(
+                                                      icon: const Icon(
+                                                          Icons.view_list),
+                                                      onPressed: () async {
+                                                        await Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                AdminEventDetailsPage(
+                                                                    employeeID:
+                                                                        state.employeeDocId[
+                                                                            index],
+                                                                    campID: state
+                                                                            .campDocIds[
+                                                                        index],
+                                                                    employee: camps[
+                                                                        index]),
+                                                          ),
+                                                        );
+                                                      },
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        iconColor: Colors.white,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 5,
+                                                                vertical: 5),
+                                                        backgroundColor:
+                                                            Colors.grey,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                        ),
+                                                      ),
+                                                      label: const Text(
+                                                        " View",
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
+                                              ],
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                                  ),
 
-                            const SizedBox(height: 20),
-                          ],
-                        ),
+                                  const SizedBox(height: 20),
+                                ],
+                              ) : SizedBox(),
                       ),
                     );
                   },

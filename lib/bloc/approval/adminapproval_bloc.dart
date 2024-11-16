@@ -13,8 +13,14 @@ class AdminApprovalBloc extends Bloc<AdminApprovalEvent, AdminApprovalState> {
         final employeesSnapshot = await FirebaseFirestore.instance.collection('employees').get();
 
         List<Map<String, dynamic>> allCamps = [];
+        List<String> campDocIds = [];
+        List<String> employeeDocIds = []; // Store all employee IDs
+
+        // Loop through employees
         for (var employeeDoc in employeesSnapshot.docs) {
-          final employeeId = employeeDoc.id;
+          final employeeId = employeeDoc.id; // This is the employeeDocId
+          employeeDocIds.add(employeeId);  // Collect employeeDocId
+
           final campsSnapshot = await FirebaseFirestore.instance
               .collection('employees')
               .doc(employeeId)
@@ -23,15 +29,17 @@ class AdminApprovalBloc extends Bloc<AdminApprovalEvent, AdminApprovalState> {
 
           final camps = campsSnapshot.docs.map((doc) {
             final data = doc.data();
-            data['documentId'] = doc.id; // Add the document ID to the data
+            data['documentId'] = doc.id; // Add the camp document ID to the data
+            data['employeeDocId'] = employeeId; // Add employeeDocId to the data
+            campDocIds.add(doc.id); // Store the camp document IDs
             return data;
           }).toList();
 
           allCamps.addAll(camps);
         }
 
-        print("Fetched all camps: $allCamps");
-        emit(AdminApprovalLoaded(allCamps));
+        // Emit the AdminApprovalLoaded state with the camps, employeeDocIds, and campDocIds
+        emit(AdminApprovalLoaded(allCamps, employeeDocIds, campDocIds));
       } catch (e) {
         print("Error in fetching camps: $e");
         emit(AdminApprovalError(e.toString()));
