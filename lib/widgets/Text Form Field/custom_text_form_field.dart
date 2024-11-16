@@ -9,6 +9,7 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextInputType keyboardType;
   final VoidCallback? onTap; // Add onTap parameter
+  final void Function(String?)? onSaved; // Add onSaved property
 
   const CustomTextFormField({
     Key? key,
@@ -19,6 +20,8 @@ class CustomTextFormField extends StatelessWidget {
     this.validator,
     this.keyboardType = TextInputType.text,
     this.onTap, // Initialize onTap
+    this.onSaved, // Initialize onSaved
+
   }) : super(key: key);
 
   @override
@@ -29,6 +32,7 @@ class CustomTextFormField extends StatelessWidget {
       validator: validator,
       keyboardType: keyboardType,
       onTap: onTap, // Set the onTap callback here
+      onSaved: onSaved, // Set the onSaved callback
       readOnly: onTap != null, // Make the field read-only if onTap is set
       decoration: InputDecoration(
         labelText: labelText,
