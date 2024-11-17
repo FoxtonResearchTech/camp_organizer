@@ -1,6 +1,10 @@
+import 'package:camp_organizer/bloc/Employee/employee_update_bloc.dart';
+import 'package:camp_organizer/bloc/Employee/employee_update_state.dart';
 import 'package:camp_organizer/presentation/module/admin/edit_employee_account.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../bloc/Employee/employee_update_event.dart';
 import '../../notification/notification.dart';
 
 class ManageEmployeeAccount extends StatefulWidget {
@@ -9,16 +13,32 @@ class ManageEmployeeAccount extends StatefulWidget {
   @override
   State<ManageEmployeeAccount> createState() => _ManageEmployeeAccountState();
 }
+
 class Employee {
   final String name;
   final String empCode;
   final String designation;
 
-  Employee({required this.name, required this.empCode, required this.designation});
+  Employee(
+      {required this.name, required this.empCode, required this.designation});
 }
 
-
 class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
+  late EmployeeUpdateBloc _employeeUpdateBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _employeeUpdateBloc = EmployeeUpdateBloc();
+    _employeeUpdateBloc.add(FetchDataEvent());
+  }
+
+  @override
+  void dispose() {
+    _employeeUpdateBloc.close(); // Close the bloc when the widget is disposed
+    super.dispose();
+  }
+
   // Sample employee data
   List<Employee> employees = [
     Employee(name: 'John Doe', empCode: 'E001', designation: 'Manager'),
@@ -33,10 +53,8 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
     });
   }
 
-  // Function to edit an employee (add actual functionality as needed)
+  // Function to edit an employee
   void _editEmployee(int index) {
-    // You could navigate to a form to edit employee details
-    // For now, it just shows a snackbar
     final employee = employees[index];
     Navigator.push(
       context,
@@ -62,58 +80,85 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'User Registration',
-          style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: false,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+    return BlocProvider<EmployeeUpdateBloc>(
+      create: (context) => _employeeUpdateBloc,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'User Registration',
+            style: TextStyle(
+                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
           ),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>NotificationPage()));
-            },
-          ),
-        ],
-      ),
-      body: ListView.builder(
-        itemCount: employees.length,
-        itemBuilder: (context, index) {
-          final employee = employees[index];
-          return Card(
-            margin: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            child: ListTile(
-              title: Text(employee.name),
-              subtitle: Text('Code: ${employee.empCode} | Designation: ${employee.designation}'),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.edit, color: Colors.blue),
-                    onPressed: () => _editEmployee(index),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.delete, color: Colors.red),
-                    onPressed: () => _deleteEmployee(index),
-                  ),
-                ],
+          centerTitle: false,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
             ),
-          );
-        },
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.notifications, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationPage()));
+              },
+            ),
+          ],
+        ),
+        body: BlocBuilder<EmployeeUpdateBloc, EmployeeUpdateState>(
+          bloc: _employeeUpdateBloc,
+          builder: (context, state) {
+            if (state is EmployeeUpdateLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is EmployeeUpdateLoaded) {
+              final employees = state.employeesData;
+              print(employees);
+              return ListView.builder(
+                itemCount: employees.length,
+                itemBuilder: (context, index) {
+                  final employee = employees[index];
+                  return Card(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 16),
+                    child: ListTile(
+                      title: Text(employee['firstName'] ?? "N/A"),
+                      subtitle: Text(
+                          'Code: ${employee['empCode'] ?? "N/A"} | Designation: ${employee['designation'] ?? "N/A"}'),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.blue),
+                            onPressed: () => _editEmployee(index),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: () => _deleteEmployee(index),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            } else if (state is EmployeeUpdateError) {
+              return Center(
+                child: Text('Error: ${state.errorMessage}'),
+              );
+            }
+            return const Center(
+              child: Text("No data available"),
+            );
+          },
+        ),
       ),
     );
   }
