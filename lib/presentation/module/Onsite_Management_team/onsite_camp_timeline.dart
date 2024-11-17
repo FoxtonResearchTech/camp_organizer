@@ -3,6 +3,9 @@ import 'package:camp_organizer/widgets/button/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../bloc/AddEvent/onsite_add_team_bloc.dart';
+import '../../../bloc/AddEvent/onsite_add_team_event.dart';
+import '../../../bloc/AddEvent/onsite_add_team_state.dart';
 import '../../../bloc/Status/status_bloc.dart';
 import '../../../bloc/approval/adminapproval_bloc.dart';
 import '../../../bloc/approval/adminapproval_event.dart';
@@ -36,41 +39,57 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
   Widget build(BuildContext context) {
     // Screen size parameters
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    return BlocProvider(
-      create: (context) => AdminApprovalBloc()..add(FetchDataEvents()),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Onsite Camp Timeline',
-            style: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: false,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+
+    return BlocListener<AddTeamBloc, AddTeamState>(
+      listener: (context, state) {
+        if (state is AddTeamLoading) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Adding team...')),
+          );
+        } else if (state is AddTeamSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Team added successfully!')),
+          );
+        } else if (state is AddTeamError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: ${state.message}')),
+          );
+        }
+      },
+      child: BlocProvider(
+        create: (context) => AdminApprovalBloc()..add(FetchDataEvents()),
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'Onsite Camp Timeline',
+              style: TextStyle(
+                  color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            centerTitle: false,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
             ),
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.notifications, color: Colors.white),
-              onPressed: () {
-                Navigator.push(
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.notifications, color: Colors.white),
+                onPressed: () {
+                  Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => NotificationPage()));
-              },
-            ),
-          ],
-        ),
-        body: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
+                    MaterialPageRoute(builder: (context) => NotificationPage()),
+                  );
+                },
+              ),
+            ],
+          ),
+          body: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
             builder: (context, state) {
               if (state is AdminApprovalLoading) {
                 return const Center(child: CircularProgressIndicator());
@@ -97,117 +116,92 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                               children: [
                                 Icon(
                                   Icons.date_range,
-                                  size: screenWidth *
-                                      0.07, // Responsive icon size
-                                  color:
-                                  Colors.orange, // Icon color
+                                  size: screenWidth * 0.07,
+                                  color: Colors.orange,
                                 ),
-                                SizedBox(width: 20,),
+                                const SizedBox(width: 20),
                                 Text(
                                   camps[index]['campDate'],
                                   style: const TextStyle(
                                       fontSize: 18, fontWeight: FontWeight.bold),
                                 ),
                               ],
-
                             ),
-
-
                             const SizedBox(height: 8.0),
                             Row(
                               children: [
-                                Text(
+                                const Text(
                                   "Camp Name: ",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     color: Colors.black54,
-                                    fontSize: screenWidth *
-                                        0.05, // Responsive font size
                                   ),
                                 ),
                                 Text(
                                   "${camps[index]['campName']}",
-                                  style: TextStyle(
-
-                                    color: Colors.black,
-                                    fontSize: screenWidth *
-                                        0.05, // Responsive font size
-                                  ),
+                                  style: const TextStyle(color: Colors.black),
                                 ),
                               ],
                             ),
-
                             const SizedBox(height: 8.0),
                             Row(
                               children: [
-                                Text(
+                                const Text(
                                   "Document ID: ",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     color: Colors.black54,
-                                    fontSize: screenWidth *
-                                        0.05, // Responsive font size
                                   ),
                                 ),
                                 Text(
                                   "${camps[index]['documentId']}",
-                                  style: TextStyle(
-
-                                    color: Colors.black,
-                                    fontSize: screenWidth *
-                                        0.05, // Responsive font size
-                                  ),
+                                  style: const TextStyle(color: Colors.black),
                                 ),
                               ],
                             ),
-
                             const SizedBox(height: 8.0),
                             Row(
                               children: [
-                                Text(
+                                const Text(
                                   "Camp Time: ",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     color: Colors.black54,
-                                    fontSize: screenWidth *
-                                        0.05, // Responsive font size
                                   ),
                                 ),
                                 Text(
                                   "${camps[index]['campTime']}",
-                                  style: TextStyle(
-
-                                    color: Colors.black,
-                                    fontSize: screenWidth *
-                                        0.05, // Responsive font size
-                                  ),
+                                  style: const TextStyle(color: Colors.black),
                                 ),
-
                               ],
                             ),
-
                             const SizedBox(height: 16.0),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    _showAddCampTeamDialog(context, camps);
+                                    _showAddCampTeamDialog(
+                                        context, camp['documentId']);
                                   },
-                                  child: Text('Add Camp Team',style: TextStyle(color: Colors.green,fontSize: 19),),
+                                  child: const Text(
+                                    'Add Camp Team',
+                                    style: TextStyle(
+                                        color: Colors.green, fontSize: 19),
+                                  ),
                                 ),
-
                                 ElevatedButton(
                                   onPressed: () {
                                     print(camp);
-                                    //_showAddCampTeamDialog(context, camps);
                                   },
-                                  child: const Text('View Team',style: TextStyle(color: Colors.blue,fontSize: 19),),
+                                  child: const Text(
+                                    'View Team',
+                                    style: TextStyle(
+                                        color: Colors.blue, fontSize: 19),
+                                  ),
                                 ),
-
                               ],
                             ),
-
                           ],
                         ),
                       ),
@@ -226,18 +220,23 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                   child: Text('No Camps Found'),
                 );
               }
-            }),
+            },
+          ),
+        ),
       ),
     );
   }
 
-  void _showAddCampTeamDialog(BuildContext context, dynamic camp) {
+
+
+
+  void _showAddCampTeamDialog(BuildContext context, String documentId) {
     final TextEditingController teamController = TextEditingController();
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Add Team to ${camp['campName'].toString()}'),
+        title: const Text('Add Team'),
         content: TextField(
           controller: teamController,
           decoration: const InputDecoration(
@@ -254,9 +253,14 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
           ),
           ElevatedButton(
             onPressed: () {
-              final teamInfo = teamController.text;
+              final teamInfo = teamController.text.trim();
               if (teamInfo.isNotEmpty) {
-                _addTeamToCamp(camp, teamInfo);
+                context.read<AddTeamBloc>().add(
+                  AddTeamWithDocumentId(
+                    documentId: documentId,
+                    teamInfo: teamInfo,
+                  ),
+                );
                 Navigator.pop(context);
               }
             },
@@ -266,6 +270,8 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
       ),
     );
   }
+
+
 
   void _addTeamToCamp(dynamic camp, String teamInfo) {
     // Logic to add team information to the selected camp
