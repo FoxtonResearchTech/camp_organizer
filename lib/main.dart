@@ -1,12 +1,15 @@
+import 'package:camp_organizer/bloc/AddEvent/onsite_add_team_bloc.dart';
 import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
 import 'package:camp_organizer/camp_update/camp_update_bloc.dart';
 import 'package:camp_organizer/presentation/Admin/admin_approval.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
 import 'package:camp_organizer/presentation/dashboard/camp_organizer.dart';
+import 'package:camp_organizer/presentation/module/Onsite_Management_team/onsite_camp_timeline.dart';
 import 'package:camp_organizer/presentation/module/admin/manage_employee_account.dart';
 import 'package:camp_organizer/presentation/profile/camp-organizer_profile.dart';
 import 'package:camp_organizer/widgets/bottom_navigation_bar/admin_bottom_navigation_bar.dart';
 import 'package:camp_organizer/widgets/bottom_navigation_bar/fluid_bottom_navigation_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,6 +63,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => CampUpdateBloc(),
         ),
+        BlocProvider(
+          create: (context) => AddTeamBloc(firestore: FirebaseFirestore.instance),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -68,7 +74,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home: ManageEmployeeAccount(), // Starting screen is the splash screen
+        home: OnsiteCampTimeline(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),

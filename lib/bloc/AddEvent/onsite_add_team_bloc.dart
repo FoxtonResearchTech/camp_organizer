@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'onsite_add_team_event.dart';
 import 'onsite_add_team_state.dart';
 
-
 class AddTeamBloc extends Bloc<AddTeamEvent, AddTeamState> {
   final FirebaseFirestore firestore;
 
@@ -16,15 +15,52 @@ class AddTeamBloc extends Bloc<AddTeamEvent, AddTeamState> {
       AddTeamWithDocumentId event, Emitter<AddTeamState> emit) async {
     emit(AddTeamLoading());
     try {
-      // Reference to the camp document
-      final campRef = FirebaseFirestore.instance
-          .collection('employees')
-          .doc('osVjMnYxkRdBZAK8gp7hSGsVr1o1')
-          .collection('camps')
-          .doc(event.documentId);
+      // Fetch all employees
+      final employeesSnapshot = await firestore.collection('employees').get();
 
+      if (employeesSnapshot.docs.isEmpty) {
+        emit(AddTeamError(message: "No employees found"));
+        return;
+      }
+
+      // Loop through employees to find the desired employee/camp
+      String? targetEmployeeId;
+      String? targetCampDocId;
+
+      for (var employeeDoc in employeesSnapshot.docs) {
+        final employeeId = employeeDoc.id;
+
+        // Fetch camps for the current employee
+        final campsSnapshot = await firestore
+            .collection('employees')
+            .doc(employeeId)
+            .collection('camps')
+            .get();
+
+        // Look for the matching camp
+        for (var campDoc in campsSnapshot.docs) {
+          if (campDoc.id == event.documentId) {
+            targetEmployeeId = employeeId;
+            targetCampDocId = campDoc.id;
+            break;
+          }
+        }
+
+        if (targetEmployeeId != null) break; // Stop searching once found
+      }
+
+      if (targetEmployeeId == null || targetCampDocId == null) {
+        emit(AddTeamError(message: "Camp not found"));
+        return;
+      }
 
       // Add the team information to the "teams" array field
+      final campRef = firestore
+          .collection('employees')
+          .doc(targetEmployeeId)
+          .collection('camps')
+          .doc(targetCampDocId);
+
       await campRef.update({
         'teams': FieldValue.arrayUnion([event.teamInfo]),
       });
