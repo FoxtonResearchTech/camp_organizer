@@ -15,3 +15,8 @@ class EmployeeUpdateError extends EmployeeUpdateState {
 
   EmployeeUpdateError(this.errorMessage);
 }
+
+class EmployeeUpdateSuccess extends EmployeeUpdateState {
+  final String empCode;
+  EmployeeUpdateSuccess(this.empCode);
+}

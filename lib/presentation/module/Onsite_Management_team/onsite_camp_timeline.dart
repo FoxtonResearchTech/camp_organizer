@@ -257,6 +257,7 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
               if (teamInfo.isNotEmpty) {
                 context.read<AddTeamBloc>().add(
                   AddTeamWithDocumentId(
+
                     documentId: documentId,
                     teamInfo: teamInfo,
                   ),

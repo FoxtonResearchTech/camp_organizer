@@ -39,45 +39,6 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
     super.dispose();
   }
 
-  // Sample employee data
-  List<Employee> employees = [
-    Employee(name: 'John Doe', empCode: 'E001', designation: 'Manager'),
-    Employee(name: 'Jane Smith', empCode: 'E002', designation: 'Developer'),
-    Employee(name: 'Mike Johnson', empCode: 'E003', designation: 'Designer'),
-  ];
-
-  // Function to delete an employee
-  void _deleteEmployee(int index) {
-    setState(() {
-      employees.removeAt(index);
-    });
-  }
-
-  // Function to edit an employee
-  void _editEmployee(int index) {
-    final employee = employees[index];
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditEmployeeAccount(
-          employee: employee,
-          index: index,
-          onUpdate: (int index, Employee updatedEmployee) {
-            setState(() {
-              employees[index] = updatedEmployee;
-            });
-          },
-          onDelete: (int index) {
-            _deleteEmployee(index);
-          },
-        ),
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Edit ${employees[index].name}')),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider<EmployeeUpdateBloc>(
@@ -137,12 +98,54 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.edit, color: Colors.blue),
-                            onPressed: () => _editEmployee(index),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditEmployeeAccount(
+                                    employee: Employee(
+                                      name: employee['firstName'] ?? "N/A",
+                                      empCode: employee['empCode'] ?? "N/A",
+                                      designation:
+                                          employee['designation'] ?? "N/A",
+                                    ),
+                                    index: index,
+                                    onUpdate: (updatedIndex, updatedEmployee) {
+                                      setState(() {
+                                        employees[updatedIndex] = {
+                                          'firstName': updatedEmployee.name,
+                                          'empCode': updatedEmployee.empCode,
+                                          'designation':
+                                              updatedEmployee.designation,
+                                        };
+                                      });
+                                    },
+                                    onDelete: (deletedIndex) {
+                                      setState(() {
+                                        employees.removeAt(deletedIndex);
+                                      });
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                           IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: () => _deleteEmployee(index),
-                          ),
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () {
+                                final empCode = employee['empCode'];
+                                print(empCode);
+                                if (empCode != null && empCode.isNotEmpty) {
+                                  context.read<EmployeeUpdateBloc>().add(
+                                        DeleteEmployeeEvent(empCode),
+                                      );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text("Invalid employee code")),
+                                  );
+                                }
+                              }),
                         ],
                       ),
                     ),
