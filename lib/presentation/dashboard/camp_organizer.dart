@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
+import 'CampSearchScreen.dart';
+
 class DashboardScreen extends StatefulWidget {
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -69,6 +71,15 @@ class _DashboardScreenState extends State<DashboardScreen>
             ),
             actions: [
               IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CampSearchScreen()),
+                    );
+                  },
+                  icon: const Icon(Icons.search, color: Colors.white)),
+              IconButton(
                 icon: const Icon(Icons.notifications, color: Colors.white),
                 onPressed: () {
                   Navigator.push(
@@ -129,15 +140,16 @@ class _DashboardScreenState extends State<DashboardScreen>
                             opacity: animation,
                             child: SlideTransition(
                               position: Tween<Offset>(
-                                begin:
-                                    const Offset(0, 0.2), // Start slightly below
+                                begin: const Offset(
+                                    0, 0.2), // Start slightly below
                                 end: Offset.zero, // End at original position
                               ).animate(animation),
                               child: Column(
                                 children: [
                                   // Information Container
                                   Container(
-                                    height: screenHeight / 3, // Responsive height
+                                    height:
+                                        screenHeight / 3, // Responsive height
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
@@ -172,9 +184,11 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                   ),
                                                   const SizedBox(width: 8),
                                                   Text(
-                                                    employees[index]['campDate'],
+                                                    employees[index]
+                                                        ['campDate'],
                                                     style: TextStyle(
-                                                      fontWeight: FontWeight.w500,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                       color: Colors.black54,
                                                       fontSize:
                                                           screenWidth * 0.05,
@@ -191,9 +205,11 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                   ),
                                                   const SizedBox(width: 8),
                                                   Text(
-                                                    employees[index]['campTime'],
+                                                    employees[index]
+                                                        ['campTime'],
                                                     style: TextStyle(
-                                                      fontWeight: FontWeight.w500,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                       color: Colors.black54,
                                                       fontSize:
                                                           screenWidth * 0.05,
@@ -233,8 +249,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                       children: [
                                                         _buildTimelineTile(
                                                           isFirst: true,
-                                                          color:
-                                                              Colors.yellow[700]!,
+                                                          color: Colors
+                                                              .yellow[700]!,
                                                           icon: Icons.check,
                                                           text: 'Processing',
                                                           screenWidth:
@@ -271,10 +287,12 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                     ),
                                                   ),
                                                 )
-                                              : employees[index]['campStatus'] ==
+                                              : employees[index]
+                                                          ['campStatus'] ==
                                                       "Approved"
                                                   ? Container(
-                                                      height: screenHeight * 0.1,
+                                                      height:
+                                                          screenHeight * 0.1,
                                                       width: double.infinity,
                                                       child:
                                                           SingleChildScrollView(
@@ -287,7 +305,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                               color: Colors
                                                                   .yellow[700]!,
                                                               icon: Icons.check,
-                                                              text: 'Processing',
+                                                              text:
+                                                                  'Processing',
                                                               screenWidth:
                                                                   screenWidth,
                                                               lineBeforeColor:
@@ -298,7 +317,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                             _buildTimelineTile(
                                                               color: Colors
                                                                   .blue[600]!,
-                                                              icon: Icons.pending,
+                                                              icon:
+                                                                  Icons.pending,
                                                               text: 'Confirmed',
                                                               screenWidth:
                                                                   screenWidth,
@@ -311,7 +331,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                               isLast: true,
                                                               color: Colors
                                                                   .grey[400]!,
-                                                              icon: Icons.circle,
+                                                              icon:
+                                                                  Icons.circle,
                                                               text: 'Completed',
                                                               screenWidth:
                                                                   screenWidth,
@@ -323,7 +344,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                       ),
                                                     )
                                                   : Container(
-                                                      height: screenHeight * 0.1,
+                                                      height:
+                                                          screenHeight * 0.1,
                                                       width: double.infinity,
                                                       child:
                                                           SingleChildScrollView(
@@ -336,7 +358,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                               color: Colors
                                                                   .yellow[700]!,
                                                               icon: Icons.check,
-                                                              text: 'Processing',
+                                                              text:
+                                                                  'Processing',
                                                               screenWidth:
                                                                   screenWidth,
                                                               lineBeforeColor:
@@ -347,7 +370,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                             _buildTimelineTile(
                                                               color: Colors
                                                                   .blue[600]!,
-                                                              icon: Icons.pending,
+                                                              icon:
+                                                                  Icons.pending,
                                                               text: 'Confirmed',
                                                               screenWidth:
                                                                   screenWidth,
@@ -360,7 +384,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                               isLast: true,
                                                               color: Colors
                                                                   .grey[400]!,
-                                                              icon: Icons.circle,
+                                                              icon:
+                                                                  Icons.circle,
                                                               text: 'Completed',
                                                               screenWidth:
                                                                   screenWidth,

@@ -64,7 +64,8 @@ class MyApp extends StatelessWidget {
           create: (context) => CampUpdateBloc(),
         ),
         BlocProvider(
-          create: (context) => AddTeamBloc(firestore: FirebaseFirestore.instance),
+          create: (context) =>
+              AddTeamBloc(firestore: FirebaseFirestore.instance),
         ),
       ],
       child: MaterialApp(
@@ -74,7 +75,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home: OnsiteCampTimeline(), // Starting screen is the splash screen
+        home: CampOrganizerLoginPage(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),
