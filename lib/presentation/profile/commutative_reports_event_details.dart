@@ -1,25 +1,29 @@
-import 'package:camp_organizer/presentation/Event/EventDetailsEditing.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/animation.dart';
 
 import '../../utils/app_colors.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 
-class EventDetailsPage extends StatefulWidget {
+class CommutativeReportsEventDetails extends StatefulWidget {
   final Map<String, dynamic> employee;
   final String? employeedocId;
   final String? campId;
-  const EventDetailsPage(
+  const CommutativeReportsEventDetails(
       {Key? key, required this.employee, this.employeedocId, this.campId})
       : super(key: key);
 
   @override
-  _EventDetailsPageState createState() => _EventDetailsPageState();
+  _CommutativeReportsEventDetails createState() =>
+      _CommutativeReportsEventDetails();
 }
 
-class _EventDetailsPageState extends State<EventDetailsPage>
+class _CommutativeReportsEventDetails
+    extends State<CommutativeReportsEventDetails>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
@@ -151,39 +155,59 @@ class _EventDetailsPageState extends State<EventDetailsPage>
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildAnimatedButton(
-              label: "Edit",
-              icon: Icons.edit,
-              color: widget.employee['campStatus'] == 'Waiting'
-                  ? AppColors.accentBlue
-                  : Colors.grey,
-              onPressed: () {
-                final eventDocRef = FirebaseFirestore.instance
-                    .collection('employees')
-                    .doc(widget.employeedocId)
-                    .collection("camps")
-                    .doc(widget.campId);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EventDetailsEditing(
-                      employee: widget.employee,
-                      docRef: eventDocRef,
-                      campId: widget.campId,
-                    ),
+              label: "Save as Pdf",
+              icon: Icons.save,
+              color: AppColors.accentBlue,
+              onPressed: () async {
+                final pdf = pw.Document();
+
+                // Adding the content to the PDF
+                pdf.addPage(
+                  pw.Page(
+                    pageFormat: PdfPageFormat.a4,
+                    build: (context) {
+                      return pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Text("Camp Details",
+                              style: pw.TextStyle(
+                                  fontSize: 35,
+                                  fontWeight: pw.FontWeight.bold)),
+                          pw.SizedBox(height: 20),
+                          ..._generatePdfRows(),
+                        ],
+                      );
+                    },
                   ),
                 );
+
+                // Save the file to the Downloads folder
+                try {
+                  // Get the Downloads folder directory
+                  final directory = Directory('/storage/emulated/0/Download');
+                  if (await directory.exists()) {
+                    final path =
+                        "${directory.path}/${widget.employee['campName']}.pdf";
+                    final file = File(path);
+                    await file.writeAsBytes(await pdf.save());
+
+                    print("PDF saved at $path");
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("PDF saved at $path")),
+                    );
+                  } else {
+                    throw Exception("Downloads folder not found.");
+                  }
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Failed to save PDF: $e")),
+                  );
+                }
               },
               screenWidth: screenWidth,
               screenHeight: screenHeight,
-            ),
-            _buildAnimatedButton(
-              label: "Edit",
-              icon: Icons.edit,
-              color: AppColors.accentBlue,
-              onPressed: () {},
-              screenWidth: screenWidth,
-              screenHeight: screenHeight,
-            ),
+            )
           ],
         ),
       ),
@@ -211,6 +235,78 @@ class _EventDetailsPageState extends State<EventDetailsPage>
             fontSize: screenWidth * 0.05,
           ),
         ),
+      ],
+    );
+  }
+
+  List<pw.Widget> _generatePdfRows() {
+    return [
+      pw.Container(
+          child: pw.Row(
+        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+        children: [
+          _buildPdfRow("Camp Date : ", widget.employee['campDate']),
+          _buildPdfRow("Camp Time : ", widget.employee['campTime']),
+        ],
+      )),
+      pw.SizedBox(height: 20),
+      _buildPdfRow("Camp Name : ", widget.employee['campName']),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("Organization : ", widget.employee['organization']),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("Address : ", widget.employee['address']),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("City : ", widget.employee['city']),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("State : ", widget.employee['state']),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("Pincode : ", widget.employee['pincode']),
+      pw.SizedBox(height: 15),
+      pw.Text("Concern Person 1 Details :",
+          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+      pw.SizedBox(height: 15),
+      _buildPdfRow("Name : ", widget.employee['name']),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("Position : ", widget.employee['position']),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("Phone Number 1 : ", widget.employee['phoneNumber1']),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("Phone Number 2 : ", widget.employee['phoneNumber1_2']),
+      pw.SizedBox(height: 15),
+      pw.Text("Concern Person 2 Details :",
+          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+      pw.SizedBox(height: 15),
+      _buildPdfRow("Name : ", widget.employee['name2']),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("Position : ", widget.employee['position2']),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("Phone Number 1 : ", widget.employee['phoneNumber2']),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("Phone Number 2 : ", widget.employee['phoneNumber2_2']),
+      pw.SizedBox(height: 15),
+      _buildPdfRow("Camp Plan Type : ", widget.employee['campPlanType']),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("Road Access : ", widget.employee['roadAccess']),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("Total Square Feet : ", widget.employee['totalSquareFeet']),
+      pw.SizedBox(height: 10),
+      _buildPdfRow(
+          "Water Availability : ", widget.employee['waterAvailability']),
+      pw.SizedBox(height: 10),
+      _buildPdfRow(
+          "No Of Patients Expected : ", widget.employee['noOfPatientExpected']),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("Last Camp Done : ", widget.employee['lastCampDone']),
+      pw.SizedBox(height: 10),
+    ];
+  }
+
+  pw.Widget _buildPdfRow(String title, String data) {
+    return pw.Row(
+      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+      children: [
+        pw.Text(title, style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+        pw.Text(data),
       ],
     );
   }

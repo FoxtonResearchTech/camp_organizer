@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/Profile/profile_bloc.dart';
 import '../../bloc/Profile/profile_event.dart';
+import 'commutative_reports_search_screen.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -217,11 +218,21 @@ class _UserProfilePageState extends State<UserProfilePage>
                                     subtitle: 'Search',
                                     slideAnimation: _slideAnimation,
                                   ),
-                                  ProfileInfoTile(
-                                    icon: Icons.copy,
-                                    title: 'Commutative Reports',
-                                    subtitle: 'Search',
-                                    slideAnimation: _slideAnimation,
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                CommutativeReportsSearchScreen()),
+                                      );
+                                    },
+                                    child: ProfileInfoTile(
+                                      icon: Icons.copy,
+                                      title: 'Commutative Reports',
+                                      subtitle: 'Search',
+                                      slideAnimation: _slideAnimation,
+                                    ),
                                   ),
                                   ProfileInfoTile(
                                     icon: Icons.login,

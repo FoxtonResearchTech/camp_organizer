@@ -1,3 +1,4 @@
+import 'package:camp_organizer/presentation/Event/camp_search_event_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -168,7 +169,7 @@ class _CampSearchScreenState extends State<CampSearchScreen>
                         await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => EventDetailsPage(
+                            builder: (context) => CampSearchEventDetailsPage(
                               employee: _filteredEmployees[index],
                               employeedocId: state.employeeDocId[index],
                               campId: state.campDocId[index],
