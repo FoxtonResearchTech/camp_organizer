@@ -1,25 +1,49 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'onsite_add_team_event.dart';
-import 'onsite_add_team_state.dart';
+import 'incharge_report_event.dart';
+import 'incharge_report_state.dart';
 
-class AddTeamBloc extends Bloc<AddTeamEvent, AddTeamState> {
+class InchargeReportBloc extends Bloc<InchargeReportEvent, InchargeReportState> {
   final FirebaseFirestore firestore;
 
-  AddTeamBloc({required this.firestore}) : super(AddTeamInitial()) {
-    on<AddTeamWithDocumentId>(_onAddTeamWithDocumentId);
+  InchargeReportBloc({required this.firestore}) : super(InchargeReportInitial()) {
+    on<FetchInchargeReport>(_onFetchInchargeReport);
+    on<UpdateInchargeReport>(_onUpdateInchargeReport);
   }
 
-  Future<void> _onAddTeamWithDocumentId(
-      AddTeamWithDocumentId event, Emitter<AddTeamState> emit) async {
-    emit(AddTeamLoading());
+  Future<void> _onFetchInchargeReport(
+      FetchInchargeReport event, Emitter<InchargeReportState> emit) async {
+    emit(InchargeReportLoading());
+    try {
+      // Fetch incharge report based on employeeId and campId
+      final reportSnapshot = await firestore
+          .collection('employees')
+          .doc(event.employeeId)
+          .collection('camps')
+          .doc(event.campId)
+          .get();
+
+      if (!reportSnapshot.exists) {
+        emit(InchargeReportError(message: "Report not found"));
+        return;
+      }
+
+      emit(InchargeReportLoaded(report: reportSnapshot.data()!));
+    } catch (e) {
+      emit(InchargeReportError(message: e.toString()));
+    }
+  }
+
+  Future<void> _onUpdateInchargeReport(
+      UpdateInchargeReport event, Emitter<InchargeReportState> emit) async {
+    emit(InchargeReportLoading());
     try {
       // Fetch all employees
       final employeesSnapshot = await firestore.collection('employees').get();
 
       if (employeesSnapshot.docs.isEmpty) {
-        emit(AddTeamError(message: "No employees found"));
+        emit(InchargeReportError(message: "No employees found"));
         return;
       }
 
@@ -50,7 +74,7 @@ class AddTeamBloc extends Bloc<AddTeamEvent, AddTeamState> {
       }
 
       if (targetEmployeeId == null || targetCampDocId == null) {
-        emit(AddTeamError(message: "Camp not found"));
+        emit(InchargeReportError(message: "Camp not found"));
         return;
       }
 
@@ -63,9 +87,9 @@ class AddTeamBloc extends Bloc<AddTeamEvent, AddTeamState> {
 
       await campRef.update(event.data);
 
-      emit(AddTeamSuccess());
+      emit(InchargeReportUpdated());
     } catch (e) {
-      emit(AddTeamError(message: e.toString()));
+      emit(InchargeReportError(message: e.toString()));
     }
   }
 }

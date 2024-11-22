@@ -1,69 +1,75 @@
+import 'package:camp_organizer/bloc/AddEvent/incharge_report_bloc.dart';
+import 'package:camp_organizer/bloc/AddEvent/incharge_report_state.dart';
 import 'package:camp_organizer/bloc/Status/status_event.dart';
-import 'package:camp_organizer/presentation/module/Onsite_Management_team/onsite_camp_details_page.dart';
-import 'package:camp_organizer/widgets/button/custom_button.dart';
+import 'package:camp_organizer/bloc/approval/onsite_approval_event.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../bloc/AddEvent/onsite_add_team_bloc.dart';
-import '../../../bloc/AddEvent/onsite_add_team_event.dart';
-import '../../../bloc/AddEvent/onsite_add_team_state.dart';
+import '../../../bloc/AddEvent/incharge_report_event.dart';
+import '../../../bloc/Employee/employee_update_event.dart';
 import '../../../bloc/Status/status_bloc.dart';
 import '../../../bloc/approval/adminapproval_bloc.dart';
 import '../../../bloc/approval/adminapproval_event.dart';
 import '../../../bloc/approval/adminapproval_state.dart';
+import '../../../bloc/approval/onsite_approval_bloc.dart';
+import '../../../bloc/approval/onsite_approval_state.dart';
 import '../../notification/notification.dart';
-import 'onsite_team_setup.dart';
+import 'camp_incharge_reporting.dart';
+import 'incharge_details_page.dart';
 
-class OnsiteCampTimeline extends StatefulWidget {
-  const OnsiteCampTimeline({super.key});
+class CampInchargeTimeline extends StatefulWidget {
+  const CampInchargeTimeline({super.key});
 
   @override
-  State<OnsiteCampTimeline> createState() => _OnsiteCampTimelineState();
+  State<CampInchargeTimeline> createState() => _CampInchargeTimelineState();
 }
 
-class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
-    with SingleTickerProviderStateMixin {
-  late StatusBloc _StatusBloc;
+class _CampInchargeTimelineState extends State<CampInchargeTimeline> with SingleTickerProviderStateMixin {
+
+  late InchargeReportBloc _inchargeReportBloc;
 
   @override
   void initState() {
     super.initState();
-    _StatusBloc = StatusBloc()..add(FetchDataEvent());
+    //_inchargeReportBloc = InchargeReportBloc(firestore: FirebaseFirestore.instance)..add(FetchInchargeReport(employeeId: ''));
   }
 
   @override
   void dispose() {
-    _StatusBloc.close();
+    _inchargeReportBloc.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
     // Screen size parameters
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return BlocListener<AddTeamBloc, AddTeamState>(
-      listener: (context, state) {
-        if (state is AddTeamLoading) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Adding team...')),
-          );
-        } else if (state is AddTeamSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Team added successfully!')),
-          );
-        } else if (state is AddTeamError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${state.message}')),
-          );
-        }
-      },
+    return BlocListener<OnsiteApprovalBloc, OnsiteApprovalState>(
+        listener: (context, state) {
+          if (state is InchargeReportLoading) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Loading reports...')),
+            );
+          } else if (state is InchargeReportUpdated) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Report updated successfully!')),
+            );
+          } else if (state is InchargeReportError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error: ${'state.message'}')),
+            );
+          }
+        },
       child: BlocProvider(
-        create: (context) => AdminApprovalBloc()..add(FetchDataEvents()),
+      create: (context) => OnsiteApprovalBloc()..add(FetchOnsiteApprovalData()),
         child: Scaffold(
           appBar: AppBar(
             title: const Text(
-              'Onsite Camp Timeline',
+              'Camp Incharge Reports',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,
@@ -97,11 +103,11 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
               ),
             ],
           ),
-          body: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
+          body: BlocBuilder<OnsiteApprovalBloc, OnsiteApprovalState>(
             builder: (context, state) {
-              if (state is AdminApprovalLoading) {
+              if (state is OnsiteApprovalLoading) {
                 return const Center(child: CircularProgressIndicator());
-              } else if (state is AdminApprovalLoaded) {
+              } else if (state is OnsiteApprovalLoaded) {
                 final camps = state.allCamps;
 
                 return ListView.builder(
@@ -197,14 +203,15 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => OnsiteTeamSetup(
+                                          builder: (context) => CampInchargeReporting(
                                               documentId: documentId,
-                                              campData: camp),
+                                              campData: camp
+                                          ),
                                         ),
                                       );
                                     },
                                     child: const Text(
-                                      'Add Team',
+                                      'Add Reports',
                                       style: TextStyle(
                                           color: Colors.black87, fontSize: 19),
                                     ),
@@ -221,18 +228,15 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                                   child: ElevatedButton(
 
                                     onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              OnsiteCampDetailsPage(
-                                                  campData: camp),
-                                        ),
-                                      );
+                                          Navigator.push(context,MaterialPageRoute(
+                                          builder: (context) => InchargeDetailsPage(
+                                              inchargeData: camp),
+                                            ),
+                                          );
                                       print(camp);
                                     },
                                     child: const Text(
-                                      'View Team',
+                                      'View Reports',
                                       style: TextStyle(
                                           color: Colors.black87, fontSize: 19),
                                     ),
@@ -243,7 +247,6 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                                 ),
                               ],
                             ),
-
                           ],
                         ),
                       ),
@@ -265,55 +268,7 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
             },
           ),
         ),
-      ),
+    ),
     );
-  }
-
-  void _showAddCampTeamDialog(BuildContext context, String documentId) {
-    final TextEditingController teamController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Add Team'),
-        content: TextField(
-          controller: teamController,
-          decoration: const InputDecoration(
-            labelText: 'Enter Team Information',
-            border: OutlineInputBorder(),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              //final teamInfo = teamController.text.trim();
-              // if (teamInfo.isNotEmpty) {
-              // context.read<AddTeamBloc>().add(
-              //  AddTeamWithDocumentId(
-
-              //    documentId: documentId,
-              //   teamInfo: teamInfo,
-              // ),
-              // );
-              // Navigator.pop(context);
-              //}
-            },
-            child: const Text('Add'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _addTeamToCamp(dynamic camp, String teamInfo) {
-    // Logic to add team information to the selected camp
-    print('Team "$teamInfo" added to camp: ${camp.name}');
-    // Integrate with your bloc or backend logic here
   }
 }

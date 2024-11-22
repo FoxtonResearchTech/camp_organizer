@@ -1,3 +1,5 @@
+import 'package:camp_organizer/presentation/module/Onsite_Management_team/onsite_camp_timeline.dart';
+import 'package:camp_organizer/presentation/module/Onsite_Management_team/onsite_profile.dart';
 import 'package:flutter/material.dart';
 
 import '../../../widgets/bottom_navigation_bar/fluid_bottom_navigation_bar.dart';
@@ -58,6 +60,10 @@ class _OnsiteDashboardState extends State<OnsiteDashboard> {
               itemsCount: '3 Events',
               color: Colors.blue,
               onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => OnsiteCampTimeline()),
+                );
                 print("Camp Timeline tapped");
               },
             ),
@@ -68,19 +74,14 @@ class _OnsiteDashboardState extends State<OnsiteDashboard> {
               itemsCount: '4 items',
               color: Colors.green,
               onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => OnsiteProfile()),
+                );
                 print("Profile tapped");
               },
             ),
-            _buildDashboardItem(
-              icon: Icons.work_history_sharp,
-              label: 'Upcoming Project',
-              subtitle: '',
-              itemsCount: '',
-              color: Colors.red,
-              onTap: () {
-                print("Upcoming Project tapped");
-              },
-            ),
+
             _buildDashboardItem(
               icon: Icons.remove_red_eye_rounded,
               label: 'View Onsite Team',

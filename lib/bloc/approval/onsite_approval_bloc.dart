@@ -9,24 +9,41 @@ import 'onsite_approval_state.dart';
 class OnsiteApprovalBloc extends Bloc<OnsiteApprovalEvent, OnsiteApprovalState> {
   OnsiteApprovalBloc() : super(OnsiteApprovalInitial()) {
     // Handle FetchDataEvents
-    on<FetchDataEvents>((event, emit) async {
+    on<FetchOnsiteApprovalData>((event, emit) async {
       emit(OnsiteApprovalLoading());
       try {
-        // Access the 'onsiteRequests' collection
-        final onsiteRequestsSnapshot =
-        await FirebaseFirestore.instance.collection('onsiteRequests').get();
+        final employeesSnapshot = await FirebaseFirestore.instance.collection('employees').get();
 
-        // Fetch and prepare data from the collection
-        List<Map<String, dynamic>> allApprovals = onsiteRequestsSnapshot.docs.map((doc) {
-          final data = doc.data();
-          data['documentId'] = doc.id; // Add the document ID to the data
-          return data;
-        }).toList();
+        List<Map<String, dynamic>> allCamps = [];
+        List<String> campDocIds = [];
+        List<String> employeeDocIds = []; // Store all employee IDs
 
-        print("Fetched onsite approvals: $allApprovals");
-        emit(OnsiteApprovalLoaded(allApprovals));
+        // Loop through employees
+        for (var employeeDoc in employeesSnapshot.docs) {
+          final employeeId = employeeDoc.id; // This is the employeeDocId
+          employeeDocIds.add(employeeId);  // Collect employeeDocId
+
+          final campsSnapshot = await FirebaseFirestore.instance
+              .collection('employees')
+              .doc(employeeId)
+              .collection('camps')
+              .get();
+
+          final camps = campsSnapshot.docs.map((doc) {
+            final data = doc.data();
+            data['documentId'] = doc.id; // Add the camp document ID to the data
+            data['employeeDocId'] = employeeId; // Add employeeDocId to the data
+            campDocIds.add(doc.id); // Store the camp document IDs
+            return data;
+          }).toList();
+
+          allCamps.addAll(camps);
+        }
+
+        // Emit the AdminApprovalLoaded state with the camps, employeeDocIds, and campDocIds
+        emit(OnsiteApprovalLoaded(allCamps, employeeDocIds, campDocIds));
       } catch (e) {
-        print("Error in fetching onsite approvals: $e");
+        print("Error in fetching camps: $e");
         emit(OnsiteApprovalError(e.toString()));
       }
     });

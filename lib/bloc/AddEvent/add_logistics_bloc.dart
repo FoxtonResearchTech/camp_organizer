@@ -1,25 +1,25 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'onsite_add_team_event.dart';
-import 'onsite_add_team_state.dart';
+import 'add_logistics_event.dart';
+import 'add_logistics_state.dart';
 
-class AddTeamBloc extends Bloc<AddTeamEvent, AddTeamState> {
+class AddLogisticsBloc extends Bloc<AddLogisticsEvent, AddLogisticsState> {
   final FirebaseFirestore firestore;
 
-  AddTeamBloc({required this.firestore}) : super(AddTeamInitial()) {
-    on<AddTeamWithDocumentId>(_onAddTeamWithDocumentId);
+  AddLogisticsBloc({required this.firestore}) : super(AddLogisticsInitial()) {
+    on<AddLogisticsWithDocumentId>(_onAddLogisticsWithDocumentId);
   }
 
-  Future<void> _onAddTeamWithDocumentId(
-      AddTeamWithDocumentId event, Emitter<AddTeamState> emit) async {
-    emit(AddTeamLoading());
+  Future<void> _onAddLogisticsWithDocumentId(
+      AddLogisticsWithDocumentId event, Emitter<AddLogisticsState> emit) async {
+    emit(AddLogisticsLoading());
     try {
       // Fetch all employees
       final employeesSnapshot = await firestore.collection('employees').get();
 
       if (employeesSnapshot.docs.isEmpty) {
-        emit(AddTeamError(message: "No employees found"));
+        emit(AddLogisticsError(message: "No employees found"));
         return;
       }
 
@@ -50,7 +50,7 @@ class AddTeamBloc extends Bloc<AddTeamEvent, AddTeamState> {
       }
 
       if (targetEmployeeId == null || targetCampDocId == null) {
-        emit(AddTeamError(message: "Camp not found"));
+        emit(AddLogisticsError(message: "Camp not found"));
         return;
       }
 
@@ -63,9 +63,9 @@ class AddTeamBloc extends Bloc<AddTeamEvent, AddTeamState> {
 
       await campRef.update(event.data);
 
-      emit(AddTeamSuccess());
+      emit(AddLogisticsSuccess());
     } catch (e) {
-      emit(AddTeamError(message: e.toString()));
+      emit(AddLogisticsError(message: e.toString()));
     }
   }
 }

@@ -4,6 +4,7 @@ import '../../notification/notification.dart';
 import 'finance_add_expense.dart';
 import 'finance_edit_expense.dart';
 import 'finance_profile.dart';
+import 'finance_timeline.dart';
 
 class FinanceDashboard extends StatefulWidget {
   const FinanceDashboard({super.key});
@@ -62,7 +63,7 @@ class _FinanceDashboardState extends State<FinanceDashboard> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NotificationPage()),
+                  MaterialPageRoute(builder: (context) => FinanceTimeline()),
                 );
                 print("Camp Timeline tapped");
               },
@@ -103,10 +104,7 @@ class _FinanceDashboardState extends State<FinanceDashboard> {
               itemsCount: '',
               color: Colors.purple,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => FinanceAddExpense()),
-                );
+
                 print("camp incharge");
               },
             ),

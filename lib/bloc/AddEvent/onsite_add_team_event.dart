@@ -7,10 +7,10 @@ abstract class AddTeamEvent extends Equatable {
 
 class AddTeamWithDocumentId extends AddTeamEvent {
   final String documentId; // The document ID for the camp in Firestore
-  final String teamInfo; // The team data to be added
+  final Map<String, dynamic> data; // The team data to be added
 
-  AddTeamWithDocumentId({required this.documentId, required this.teamInfo});
+  AddTeamWithDocumentId({required this.documentId, required this.data});
 
   @override
-  List<Object?> get props => [documentId, teamInfo];
+  List<Object?> get props => [documentId, data];
 }

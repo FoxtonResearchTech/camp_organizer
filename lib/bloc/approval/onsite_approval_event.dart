@@ -1,7 +1,7 @@
 abstract class OnsiteApprovalEvent {}
 
-class FetchDataEvents extends OnsiteApprovalEvent {
-  FetchDataEvents();
+class FetchOnsiteApprovalData extends OnsiteApprovalEvent {
+  FetchOnsiteApprovalData();
 }
 
 class UpdateStatusEvent extends OnsiteApprovalEvent {

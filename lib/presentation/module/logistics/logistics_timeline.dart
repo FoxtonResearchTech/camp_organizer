@@ -1,28 +1,28 @@
-import 'package:camp_organizer/bloc/Status/status_event.dart';
-import 'package:camp_organizer/presentation/module/Onsite_Management_team/onsite_camp_details_page.dart';
-import 'package:camp_organizer/widgets/button/custom_button.dart';
+import 'package:camp_organizer/bloc/AddEvent/add_logistics_bloc.dart';
+import 'package:camp_organizer/bloc/AddEvent/add_logistics_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../bloc/AddEvent/onsite_add_team_bloc.dart';
-import '../../../bloc/AddEvent/onsite_add_team_event.dart';
-import '../../../bloc/AddEvent/onsite_add_team_state.dart';
 import '../../../bloc/Status/status_bloc.dart';
+import '../../../bloc/Status/status_event.dart';
 import '../../../bloc/approval/adminapproval_bloc.dart';
 import '../../../bloc/approval/adminapproval_event.dart';
 import '../../../bloc/approval/adminapproval_state.dart';
 import '../../notification/notification.dart';
-import 'onsite_team_setup.dart';
+import 'inward_details.dart';
+import 'logistics_inward.dart';
+import 'logistics_outward.dart';
+import 'outward_details.dart';
 
-class OnsiteCampTimeline extends StatefulWidget {
-  const OnsiteCampTimeline({super.key});
+class LogisticsTimeline extends StatefulWidget {
+  const LogisticsTimeline({super.key});
 
   @override
-  State<OnsiteCampTimeline> createState() => _OnsiteCampTimelineState();
+  State<LogisticsTimeline> createState() => _LogisticsTimelineState();
 }
 
-class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
-    with SingleTickerProviderStateMixin {
+class _LogisticsTimelineState extends State<LogisticsTimeline> with SingleTickerProviderStateMixin {
+
   late StatusBloc _StatusBloc;
 
   @override
@@ -42,28 +42,29 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
     // Screen size parameters
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return BlocListener<AddTeamBloc, AddTeamState>(
-      listener: (context, state) {
-        if (state is AddTeamLoading) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Adding team...')),
-          );
-        } else if (state is AddTeamSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Team added successfully!')),
-          );
-        } else if (state is AddTeamError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${state.message}')),
-          );
-        }
-      },
+
+    return BlocListener<AddLogisticsBloc, AddLogisticsState>(
+        listener: (context, state) {
+          if (state is AddLogisticsLoading) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Adding Logistics...')),
+            );
+          } else if (state is AddLogisticsSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Logistics added successfully!')),
+            );
+          } else if (state is AddLogisticsError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error: ${state.message}')),
+            );
+          }
+        },
       child: BlocProvider(
-        create: (context) => AdminApprovalBloc()..add(FetchDataEvents()),
+      create: (context) => AdminApprovalBloc()..add(FetchDataEvents()),
         child: Scaffold(
           appBar: AppBar(
             title: const Text(
-              'Onsite Camp Timeline',
+              'Logistics Timeline',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,
@@ -197,14 +198,14 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => OnsiteTeamSetup(
+                                          builder: (context) => LogisticsOutward(
                                               documentId: documentId,
                                               campData: camp),
                                         ),
                                       );
                                     },
                                     child: const Text(
-                                      'Add Team',
+                                      'Outward',
                                       style: TextStyle(
                                           color: Colors.black87, fontSize: 19),
                                     ),
@@ -224,15 +225,15 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              OnsiteCampDetailsPage(
-                                                  campData: camp),
+                                          builder: (context) => LogisticsOutwardPage(
+                                              campData: camp),
                                         ),
                                       );
+
                                       print(camp);
                                     },
                                     child: const Text(
-                                      'View Team',
+                                      'View Details',
                                       style: TextStyle(
                                           color: Colors.black87, fontSize: 19),
                                     ),
@@ -243,7 +244,66 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                                 ),
                               ],
                             ),
+                            SizedBox(height: 10,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      //_showAddCampTeamDialog(
+                                      // context, camp['documentId']);
+                                      final documentId = camp['documentId'];
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => LogisticsInward(
+                                              documentId: documentId,
+                                              campData: camp),
+                                        ),
+                                      );
 
+                                      print(camp);
+                                    },
+                                    child: const Text(
+                                      'Inward',
+                                      style: TextStyle(
+                                          color: Colors.black87, fontSize: 19),
+                                    ),
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent), // Set the background color
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+
+                                Expanded(
+                                  child: ElevatedButton(
+
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => InwardDetails(
+                                              campData: camp),
+                                        ),
+                                      );
+                                      print(camp);
+                                    },
+                                    child: const Text(
+                                      'View Details',
+                                      style: TextStyle(
+                                          color: Colors.black87, fontSize: 19),
+                                    ),
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent), // Set the background color
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -267,53 +327,5 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
         ),
       ),
     );
-  }
-
-  void _showAddCampTeamDialog(BuildContext context, String documentId) {
-    final TextEditingController teamController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Add Team'),
-        content: TextField(
-          controller: teamController,
-          decoration: const InputDecoration(
-            labelText: 'Enter Team Information',
-            border: OutlineInputBorder(),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              //final teamInfo = teamController.text.trim();
-              // if (teamInfo.isNotEmpty) {
-              // context.read<AddTeamBloc>().add(
-              //  AddTeamWithDocumentId(
-
-              //    documentId: documentId,
-              //   teamInfo: teamInfo,
-              // ),
-              // );
-              // Navigator.pop(context);
-              //}
-            },
-            child: const Text('Add'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _addTeamToCamp(dynamic camp, String teamInfo) {
-    // Logic to add team information to the selected camp
-    print('Team "$teamInfo" added to camp: ${camp.name}');
-    // Integrate with your bloc or backend logic here
   }
 }
