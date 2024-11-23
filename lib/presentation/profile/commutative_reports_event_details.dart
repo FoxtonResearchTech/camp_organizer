@@ -207,7 +207,7 @@ class _CommutativeReportsEventDetails
               },
               screenWidth: screenWidth,
               screenHeight: screenHeight,
-            )
+            ),
           ],
         ),
       ),

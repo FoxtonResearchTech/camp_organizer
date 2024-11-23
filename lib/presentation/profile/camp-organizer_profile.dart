@@ -209,7 +209,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                                   ProfileInfoTile(
                                     icon: Icons.supervised_user_circle,
                                     title: 'Employee id',
-                                    subtitle: employee['employeeId'] ?? 'N/A',
+                                    subtitle: employee['empCode'] ?? 'N/A',
                                     slideAnimation: _slideAnimation,
                                   ),
                                   ProfileInfoTile(
@@ -224,7 +224,15 @@ class _UserProfilePageState extends State<UserProfilePage>
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                CommutativeReportsSearchScreen()),
+                                                CommutativeReportsSearchScreen(
+                                                  name:
+                                                      '${employee['firstName']} ${employee['lastName']}',
+                                                  position:
+                                                      employee['role'] ?? 'N/A',
+                                                  empCode:
+                                                      employee['empCode'] ??
+                                                          'N/A',
+                                                )),
                                       );
                                     },
                                     child: ProfileInfoTile(

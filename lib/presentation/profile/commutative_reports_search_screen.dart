@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:camp_organizer/presentation/profile/commutative_reports_event_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +10,19 @@ import '../../bloc/Status/status_bloc.dart';
 import '../../bloc/Status/status_state.dart';
 import 'package:camp_organizer/bloc/Status/status_event.dart';
 
-import '../Event/camp_search_event_details.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class CommutativeReportsSearchScreen extends StatefulWidget {
+  final String name;
+  final String position;
+  final String empCode;
+  const CommutativeReportsSearchScreen({
+    Key? key,
+    required this.name,
+    required this.position,
+    required this.empCode,
+  }) : super(key: key);
   @override
   State<CommutativeReportsSearchScreen> createState() =>
       _CommutativeReportsSearchScreen();
@@ -120,7 +132,53 @@ class _CommutativeReportsSearchScreen
           ),
           actions: [
             IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final pdf = pw.Document();
+
+                  // Adding the content to the PDF
+                  pdf.addPage(
+                    pw.Page(
+                      pageFormat: PdfPageFormat.a4,
+                      build: (context) {
+                        return pw.Column(
+                          crossAxisAlignment: pw.CrossAxisAlignment.start,
+                          children: [
+                            pw.Text("Camp Commutative Reports ",
+                                style: pw.TextStyle(
+                                    fontSize: 35,
+                                    fontWeight: pw.FontWeight.bold)),
+                            pw.SizedBox(height: 20),
+                            ..._generatePdfRows(),
+                          ],
+                        );
+                      },
+                    ),
+                  );
+
+                  // Save the file to the Downloads folder
+                  try {
+                    // Get the Downloads folder directory
+                    final directory = Directory('/storage/emulated/0/Download');
+                    if (await directory.exists()) {
+                      final path =
+                          "${directory.path}/CommutativeReports_${_startDateController.text}_to_${_endDateController.text}.pdf";
+                      final file = File(path);
+                      await file.writeAsBytes(await pdf.save());
+
+                      print("PDF saved at $path");
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("PDF saved at $path")),
+                      );
+                    } else {
+                      throw Exception("Downloads folder not found.");
+                    }
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Failed to save PDF: $e")),
+                    );
+                  }
+                },
                 icon: const Icon(
                   Icons.file_download_outlined,
                   color: Colors.white,
@@ -193,6 +251,121 @@ class _CommutativeReportsSearchScreen
           ],
         ),
       ),
+    );
+  }
+
+  int _noOfCampsApproved() {
+    return _filteredEmployees
+        .where((employee) => employee['campStatus'] == 'Approved')
+        .length;
+  }
+
+  int _noOfCampsRejected() {
+    return _filteredEmployees
+        .where((employee) => employee['campStatus'] == 'Rejected')
+        .length;
+  }
+
+  int _noOfCampsCompleted() {
+    return _filteredEmployees
+        .where((employee) => employee['campStatus'] == 'Completed')
+        .length;
+  }
+
+  int _noOfCataractPatients() {
+    return _filteredEmployees.fold<int>(
+      0,
+      (sum, employee) => sum + ((employee['cataractPatients'] ?? 0) as int),
+    );
+  }
+
+  int _noOfPatientsSelectedForSurgery() {
+    return _filteredEmployees.fold<int>(
+      0,
+      (sum, employee) =>
+          sum + ((employee['patientsSelectedForSurgery'] ?? 0) as int),
+    );
+  }
+
+  int _noOfPatientsAttended() {
+    return _filteredEmployees.fold<int>(
+      0,
+      (sum, employee) => sum + ((employee['patientsAttended'] ?? 0) as int),
+    );
+  }
+
+  int _noOfDiabeticsPatients() {
+    return _filteredEmployees.fold<int>(
+      0,
+      (sum, employee) => sum + ((employee['diabeticPatients'] ?? 0) as int),
+    );
+  }
+
+  int _noOfGlassesSupplied() {
+    return _filteredEmployees.fold<int>(
+      0,
+      (sum, employee) => sum + ((employee['glassesSupplied'] ?? 0) as int),
+    );
+  }
+
+  List<pw.Widget> _generatePdfRows() {
+    final startDateString = _startDate != null
+        ? DateFormat('dd-MM-yyyy').format(_startDate!)
+        : "Not Selected";
+    final endDateString = _endDate != null
+        ? DateFormat('dd-MM-yyyy').format(_endDate!)
+        : "Not Selected";
+    return [
+      pw.Container(
+          child: pw.Row(
+        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+        children: [
+          _buildPdfRow("From : ", startDateString),
+          _buildPdfRow("To : ", endDateString),
+        ],
+      )),
+      pw.SizedBox(height: 20),
+      _buildPdfRow("Name: ", widget.name),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("Position : ", widget.position),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("EmpCode: ", widget.empCode),
+      pw.SizedBox(height: 20),
+      _buildPdfRow(
+          "No Of Camp Initiated: ", _filteredEmployees.length.toString()),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("No Of Camp Approved: ", _noOfCampsApproved().toString()),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("No Of Camp Rejected: ", _noOfCampsRejected().toString()),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("No Of Camp Completed: ", _noOfCampsCompleted().toString()),
+      pw.SizedBox(height: 20),
+      _buildPdfRow("Camp results ", ""),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("No Of OP : ", _noOfPatientsAttended().toString()),
+      pw.SizedBox(height: 10),
+      _buildPdfRow(
+          "No Of Cataract Patients : ", _noOfCataractPatients().toString()),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("No Of Patients Selected For Surgery : ",
+          _noOfPatientsSelectedForSurgery().toString()),
+      pw.SizedBox(height: 10),
+      _buildPdfRow(
+          "No Of Diabetics Patients : ", _noOfDiabeticsPatients().toString()),
+      pw.SizedBox(height: 10),
+      _buildPdfRow(
+          "No Of Glasses Supplied : ", _noOfGlassesSupplied().toString()),
+      pw.SizedBox(height: 10),
+    ];
+  }
+
+  pw.Widget _buildPdfRow(String title, String data) {
+    return pw.Row(
+      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+      children: [
+        pw.Text(title, style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+        pw.Text(data),
+      ],
     );
   }
 
