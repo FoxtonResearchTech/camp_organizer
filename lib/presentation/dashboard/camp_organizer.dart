@@ -250,7 +250,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                         _buildTimelineTile(
                                                           isFirst: true,
                                                           color: Colors
-                                                              .yellow[700]!,
+                                                              .purple,
                                                           icon: Icons.check,
                                                           text: 'Processing',
                                                           screenWidth:
@@ -262,8 +262,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                         ),
                                                         _buildTimelineTile(
                                                           color:
-                                                              Colors.blue[600]!,
-                                                          icon: Icons.pending,
+                                                              Colors.grey[400]!,
+                                                          icon: Icons.circle,
                                                           text: 'Confirmed',
                                                           screenWidth:
                                                               screenWidth,
@@ -303,7 +303,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                             _buildTimelineTile(
                                                               isFirst: true,
                                                               color: Colors
-                                                                  .yellow[700]!,
+                                                                  .purple,
                                                               icon: Icons.check,
                                                               text:
                                                                   'Processing',
@@ -317,8 +317,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                             _buildTimelineTile(
                                                               color: Colors
                                                                   .blue[600]!,
-                                                              icon:
-                                                                  Icons.pending,
+                                                              icon: Icons.check,
                                                               text: 'Confirmed',
                                                               screenWidth:
                                                                   screenWidth,
@@ -342,7 +341,62 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                           ],
                                                         ),
                                                       ),
-                                                    )
+                                                    ) :
+                                          employees[index]
+                                          ['campStatus'] ==
+                                              "Completed"
+                                              ? Container(
+                                            height:
+                                            screenHeight * 0.1,
+                                            width: double.infinity,
+                                            child:
+                                            SingleChildScrollView(
+                                              scrollDirection:
+                                              Axis.horizontal,
+                                              child: Row(
+                                                children: [
+                                                  _buildTimelineTile(
+                                                    isFirst: true,
+                                                    color: Colors
+                                                        .purple,
+                                                    icon: Icons.check,
+                                                    text:
+                                                    'Processing',
+                                                    screenWidth:
+                                                    screenWidth,
+                                                    lineBeforeColor:
+                                                    Colors.green,
+                                                    lineAfterColor:
+                                                    Colors.green,
+                                                  ),
+                                                  _buildTimelineTile(
+                                                    color: Colors
+                                                        .blue[600]!,
+                                                    icon: Icons.check,
+                                                    text: 'Confirmed',
+                                                    screenWidth:
+                                                    screenWidth,
+                                                    lineBeforeColor:
+                                                    Colors.green,
+                                                    lineAfterColor:
+                                                    Colors.green,
+                                                  ),
+                                                  _buildTimelineTile(
+                                                    isLast: true,
+                                                    color: Colors.green,
+                                                    icon:
+                                                    Icons.check,
+                                                    text: 'Completed',
+                                                    screenWidth:
+                                                    screenWidth,
+                                                    lineBeforeColor:
+                                                    Colors.green,
+
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
                                                   : Container(
                                                       height:
                                                           screenHeight * 0.1,
@@ -355,8 +409,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                           children: [
                                                             _buildTimelineTile(
                                                               isFirst: true,
-                                                              color: Colors
-                                                                  .yellow[700]!,
+                                                              color:Colors.purple,
                                                               icon: Icons.check,
                                                               text:
                                                                   'Processing',
@@ -371,7 +424,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                               color: Colors
                                                                   .blue[600]!,
                                                               icon:
-                                                                  Icons.pending,
+                                                                  Icons.circle,
                                                               text: 'Confirmed',
                                                               screenWidth:
                                                                   screenWidth,
@@ -383,9 +436,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                             _buildTimelineTile(
                                                               isLast: true,
                                                               color: Colors
-                                                                  .grey[400]!,
-                                                              icon:
-                                                                  Icons.circle,
+                                                                  .green,
+                                                              icon: Icons.check,
                                                               text: 'Completed',
                                                               screenWidth:
                                                                   screenWidth,

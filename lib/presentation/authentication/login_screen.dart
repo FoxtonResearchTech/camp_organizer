@@ -7,6 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../widgets/bottom_navigation_bar/admin_bottom_navigation_bar.dart';
+
 class CampOrganizerLoginPage extends StatefulWidget {
   @override
   _CampOrganizerLoginPageState createState() => _CampOrganizerLoginPageState();
@@ -67,7 +69,11 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
                     (Route<dynamic> route) => false,  // This removes all previous routes
               );
             } else {
-
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) =>AdminBottomNavigationBar()),
+                    (Route<dynamic> route) => false,  // This removes all previous routes
+              );
             }
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(

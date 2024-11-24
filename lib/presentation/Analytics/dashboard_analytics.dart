@@ -100,73 +100,6 @@ class _AnimatedRotatingPieChartWithGridState
             ),
           ],
         ),
-        drawer: Drawer(
-          width: screenWidth / 1.5,
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              DrawerHeader(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.blue,
-                      Colors.lightBlueAccent,
-                      Colors.lightBlue
-                    ],
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Menu',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.manage_accounts),
-                title: Text('Manage Account'),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.approval),
-                title: Text('New Camp Approval'),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.approval),
-                title: Text('Onsite Team Approval'),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.approval),
-                title: Text('Account Approval'),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.approval),
-                title: Text('Camp Repects Approval'),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.approval),
-                title: Text('Logestic Approval'),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.pending),
-                title: Text('Pending Camp Data'),
-                onTap: () {},
-              ),
-            ],
-          ),
-        ),
         body: LayoutBuilder(
           builder: (context, constraints) {
             final pieChartRadius = constraints.maxWidth < 600 ? 120.0 : 180.0;
@@ -218,7 +151,170 @@ class _AnimatedRotatingPieChartWithGridState
                     ),
                   ),
                   const SizedBox(height: 20),
-                  _buildDetailsGrid(gridAspectRatio, fontSizeFactor),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: BlocBuilder<StatusBloc, StatusState>(
+                      builder: (context, state) {
+                        if (state is StatusLoading) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (state is StatusLoaded) {
+                          final employees = state.employees;
+
+                          // Calculate the approved count once
+                          int approvedCount = employees
+                              .where((employee) =>
+                                  employee["campStatus"] == "Approved")
+                              .length;
+
+                          // Titles to display
+                          List<String> titles = [
+                            "Title 1",
+                            "Title 2",
+                            "Title 3",
+                            "Title 4",
+                            "Title 5"
+                          ];
+
+                          return Column(
+                            children: [
+                              for (int i = 0; i < titles.length; i += 2)
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    if (i < titles.length)
+                                      Expanded(
+                                        child: ScaleTransition(
+                                          scale: Tween<double>(
+                                                  begin: 0.0, end: 1.0)
+                                              .animate(
+                                            CurvedAnimation(
+                                              parent: _controller,
+                                              curve: Interval(0.5, 1.0,
+                                                  curve: Curves.easeOut),
+                                            ),
+                                          ),
+                                          child: Container(
+                                            margin: const EdgeInsets.all(8.0),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(0.1),
+                                                  blurRadius: 8,
+                                                  offset: const Offset(0, 4),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(16.0),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    approvedCount.toString(),
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          22 * fontSizeFactor,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 8),
+                                                  Text(
+                                                    titles[i],
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          16 * fontSizeFactor,
+                                                      color: Colors.black54,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    if (i + 1 < titles.length)
+                                      Expanded(
+                                        child: ScaleTransition(
+                                          scale: Tween<double>(
+                                                  begin: 0.0, end: 1.0)
+                                              .animate(
+                                            CurvedAnimation(
+                                              parent: _controller,
+                                              curve: Interval(0.5, 1.0,
+                                                  curve: Curves.easeOut),
+                                            ),
+                                          ),
+                                          child: Container(
+                                            margin: const EdgeInsets.all(8.0),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(0.1),
+                                                  blurRadius: 8,
+                                                  offset: const Offset(0, 4),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(16.0),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    approvedCount.toString(),
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          22 * fontSizeFactor,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 8),
+                                                  Text(
+                                                    titles[i + 1],
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          16 * fontSizeFactor,
+                                                      color: Colors.black54,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                            ],
+                          );
+                        } else if (state is StatusError) {
+                          return Center(
+                            child: Text('Error: ${state.errorMessage}'),
+                          );
+                        }
+                        return Center(
+                          child: Text("No data available"),
+                        );
+                      },
+                    ),
+                  ),
+
+                  //  _buildDetailsGrid(gridAspectRatio, fontSizeFactor),
                   const Padding(
                     padding: EdgeInsets.all(20),
                     child: Text(
@@ -502,55 +598,77 @@ class _AnimatedRotatingPieChartWithGridState
   Widget _buildDetailsGrid(double aspectRatio, double fontSizeFactor) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: GridView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: values.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-          childAspectRatio: aspectRatio,
-        ),
-        itemBuilder: (context, index) {
-          return ScaleTransition(
-            scale: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-              parent: _controller,
-              curve: Interval(0.5, 1.0, curve: Curves.easeOut),
-            )),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
+      child: BlocBuilder<StatusBloc, StatusState>(
+        builder: (context, state) {
+          if (state is StatusLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is StatusLoaded) {
+            final employees = state.employees;
+
+            return GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: 5,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: aspectRatio,
+              ),
+              itemBuilder: (context, index) {
+                int approvedCount = employees
+                    .where((employee) => employee["campStatus"] == "Approved")
+                    .length;
+                return ScaleTransition(
+                  scale: Tween<double>(begin: 0.0, end: 1.0)
+                      .animate(CurvedAnimation(
+                    parent: _controller,
+                    curve: Interval(0.5, 1.0, curve: Curves.easeOut),
+                  )),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            approvedCount.toString(),
+                            style: TextStyle(
+                                fontSize: 22 * fontSizeFactor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            titles[index],
+                            style: TextStyle(
+                                fontSize: 16 * fontSizeFactor,
+                                color: Colors.black54),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '${values[index]}',
-                      style: TextStyle(
-                          fontSize: 22 * fontSizeFactor,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      titles[index],
-                      style: TextStyle(
-                          fontSize: 16 * fontSizeFactor, color: Colors.black54),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                );
+              },
+            );
+          } else if (state is StatusError) {
+            return Center(
+              child: Text('Error+${state.errorMessage}'),
+            );
+          }
+          return Center(
+            child: Text("No data available"),
           );
         },
       ),
