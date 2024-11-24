@@ -6,6 +6,7 @@ import 'package:camp_organizer/presentation/authentication/login_screen.dart';
 import 'package:camp_organizer/presentation/dashboard/camp_organizer.dart';
 import 'package:camp_organizer/presentation/module/Onsite_Management_team/onsite_camp_timeline.dart';
 import 'package:camp_organizer/presentation/module/admin/manage_employee_account.dart';
+import 'package:camp_organizer/presentation/module/post_camp_followup/post_camp_dashboard.dart';
 import 'package:camp_organizer/presentation/profile/camp-organizer_profile.dart';
 import 'package:camp_organizer/widgets/bottom_navigation_bar/admin_bottom_navigation_bar.dart';
 import 'package:camp_organizer/widgets/bottom_navigation_bar/fluid_bottom_navigation_bar.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'admin_add_employee.dart';
 import 'bloc/AddEvent/event_bloc.dart';
+import 'bloc/AddEvent/patient_follow_ups_bloc.dart';
 import 'bloc/Employee_registration/employee_registration_bloc.dart';
 import 'bloc/Status/status_bloc.dart';
 import 'bloc/auth/auth_bloc.dart';
@@ -37,6 +39,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+
   final AuthRepository authRepository;
 
   const MyApp({super.key, required this.authRepository});
@@ -60,12 +63,16 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AdminApprovalBloc(),
         ),
+
         BlocProvider(
           create: (context) => CampUpdateBloc(),
         ),
         BlocProvider(
           create: (context) =>
               AddTeamBloc(firestore: FirebaseFirestore.instance),
+        ),
+        BlocProvider(
+          create: (context) => PatientFollowUpsBloc(firestore: FirebaseFirestore.instance),
         ),
       ],
       child: MaterialApp(
@@ -75,7 +82,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home: CampOrganizerLoginPage(), // Starting screen is the splash screen
+        home: AdminBottomNavigationBar(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),

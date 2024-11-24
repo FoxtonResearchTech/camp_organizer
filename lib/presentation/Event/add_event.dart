@@ -363,7 +363,7 @@ class _AddEventState extends State<AddEvent>
               // Show duplicate entry SnackBar
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Patient with the same data already exists.'),
+                  content: Text('Something went wrong please try again!'),
                   backgroundColor: Colors.orange,
                 ),
               );
@@ -371,7 +371,7 @@ class _AddEventState extends State<AddEvent>
               // Show success SnackBar
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Patient registered successfully!'),
+                  content: Text('Camp created successfully!'),
                   backgroundColor: Colors.green,
                 ),
               );
