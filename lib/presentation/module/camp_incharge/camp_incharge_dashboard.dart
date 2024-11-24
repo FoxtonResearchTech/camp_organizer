@@ -1,8 +1,12 @@
+import 'package:camp_organizer/bloc/Status/status_event.dart';
 import 'package:flutter/material.dart';
 
+import '../../../bloc/Employee/employee_update_event.dart';
+import '../../../bloc/Status/status_bloc.dart';
 import '../../notification/notification.dart';
 import 'camp_incharge_profile.dart';
 import 'camp_incharge_reporting.dart';
+import 'camp_incharge_timeline.dart';
 
 class CampInchargeDashboard extends StatefulWidget {
   const CampInchargeDashboard({super.key});
@@ -11,7 +15,8 @@ class CampInchargeDashboard extends StatefulWidget {
   State<CampInchargeDashboard> createState() => _CampInchargeDashboardState();
 }
 
-class _CampInchargeDashboardState extends State<CampInchargeDashboard> {
+class _CampInchargeDashboardState extends State<CampInchargeDashboard>{
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +66,7 @@ class _CampInchargeDashboardState extends State<CampInchargeDashboard> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NotificationPage()),
+                  MaterialPageRoute(builder: (context) => CampInchargeTimeline()),
                 );
                 print("Camp Timeline tapped");
               },
@@ -102,10 +107,7 @@ class _CampInchargeDashboardState extends State<CampInchargeDashboard> {
               itemsCount: '',
               color: Colors.purple,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CampInchargeReporting()),
-                );
+
                 print("camp incharge");
               },
             ),

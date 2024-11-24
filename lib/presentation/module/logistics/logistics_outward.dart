@@ -1,28 +1,32 @@
-import 'package:camp_organizer/widgets/Text%20Form%20Field/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
-
+import 'package:camp_organizer/widgets/Text%20Form%20Field/custom_text_form_field.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../bloc/AddEvent/add_logistics_bloc.dart';
+import '../../../bloc/AddEvent/add_logistics_event.dart';
 import '../../notification/notification.dart';
 
 class LogisticsOutward extends StatefulWidget {
-  const LogisticsOutward({super.key});
+  final String documentId;
+  final Map<String, dynamic> campData;
+
+  const LogisticsOutward({Key? key, required this.documentId, required this.campData}) : super(key: key);
 
   @override
   State<LogisticsOutward> createState() => _LogisticsOutwardState();
 }
 
 class _LogisticsOutwardState extends State<LogisticsOutward> {
-
   final _formKey = GlobalKey<FormState>();
 
-  // Form fields
-  String campPlace = '';
-  String date = '';
-  String cameraIn = '';
-  String cameraOut = '';
-  String inChargeName = '';
-  String dutyInCharge1 = '';
-  String dutyInCharge2 = '';
-  String remarks = '';
+  // Controllers for form fields
+  final TextEditingController campPlaceController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController cameraInController = TextEditingController();
+  final TextEditingController cameraOutController = TextEditingController();
+  final TextEditingController inChargeNameController = TextEditingController();
+  final TextEditingController dutyInCharge1Controller = TextEditingController();
+  final TextEditingController dutyInCharge2Controller = TextEditingController();
+  final TextEditingController remarksController = TextEditingController();
 
   // Checkbox states for each category
   Map<String, bool> doctorRoomThings = {
@@ -84,6 +88,29 @@ class _LogisticsOutwardState extends State<LogisticsOutward> {
     "Camera": false,
   };
 
+  void saveData(BuildContext context, String documentId) {
+    final Map<String, dynamic> data = {
+      'campPlace': campPlaceController.text.trim(),
+      'date': dateController.text.trim(),
+      'Outward_cameraIn': cameraInController.text.trim(),
+      'Outward_cameraOut': cameraOutController.text.trim(),
+      'Outward_inChargeName': inChargeNameController.text.trim(),
+      'Outward_dutyInCharge1': dutyInCharge1Controller.text.trim(),
+      'Outward_dutyInCharge2': dutyInCharge2Controller.text.trim(),
+      'Outward_remarks': remarksController.text.trim(),
+      'Outward_doctorRoomThings': doctorRoomThings,
+      'Outward_visionRoomThings': visionRoomThings,
+      'Outward_crRoomThings': crRoomThings,
+      'Outward_tnDuctThings': tnDuctThings,
+      'Outward_opticalThings': opticalThings,
+      'Outward_fittingThings': fittingThings,
+      'Outward_others': others,
+    };
+
+    // Dispatch the data to the BLoC
+    context.read<AddLogisticsBloc>().add(AddLogisticsWithDocumentId(documentId: widget.documentId, data: data));
+  }
+
   // Function to build a checklist
   Widget buildChecklistCategory(String title, Map<String, bool> items) {
     return ExpansionTile(
@@ -100,6 +127,20 @@ class _LogisticsOutwardState extends State<LogisticsOutward> {
         );
       }).toList(),
     );
+  }
+
+  @override
+  void dispose() {
+    // Dispose controllers to release resources
+    campPlaceController.dispose();
+    dateController.dispose();
+    cameraInController.dispose();
+    cameraOutController.dispose();
+    inChargeNameController.dispose();
+    dutyInCharge1Controller.dispose();
+    dutyInCharge2Controller.dispose();
+    remarksController.dispose();
+    super.dispose();
   }
 
   @override
@@ -141,13 +182,16 @@ class _LogisticsOutwardState extends State<LogisticsOutward> {
           key: _formKey,
           child: ListView(
             children: [
-              // Input for camp place and date
-              SizedBox(height: 20,),
-              CustomTextFormField(labelText: "Camp Place",onSaved: (value) => campPlace = value ?? '',),
-              SizedBox(height: 20,),
-              CustomTextFormField(labelText: "Date",onSaved: (value) => date = value ?? '',),
-
-
+              SizedBox(height: 20),
+              CustomTextFormField(
+                controller: campPlaceController,
+                labelText: "Camp Place",
+              ),
+              SizedBox(height: 20),
+              CustomTextFormField(
+                controller: dateController,
+                labelText: "Date",
+              ),
               SizedBox(height: 20),
 
               // Checklists for each category
@@ -161,47 +205,43 @@ class _LogisticsOutwardState extends State<LogisticsOutward> {
 
               SizedBox(height: 20),
 
-              // Fields for camera in/out
-              CustomTextFormField(labelText: 'Camera In',onSaved: (value) => cameraIn = value ?? '',),
+              CustomTextFormField(
+                controller: cameraInController,
+                labelText: 'Camera In',
+              ),
               SizedBox(height: 20),
-              CustomTextFormField(labelText: 'Camera Out',onSaved: (value) => cameraOut = value ?? '',),
-
-              SizedBox(height: 20),
-
-              // Input for in-charge names
-              CustomTextFormField(labelText: 'In-Charge Name',onSaved: (value) => inChargeName = value ?? '',),
-              SizedBox(height: 20,),
-              CustomTextFormField(labelText: 'Duty In-Charge 1',onSaved: (value) => dutyInCharge1 = value ?? '',),
-              SizedBox(height: 20,),
-              CustomTextFormField(labelText: 'Duty In-Charge 2',onSaved: (value) => dutyInCharge2 = value ?? '',),
-              SizedBox(height: 20),
-              CustomTextFormField(labelText: 'Remarks',onSaved: (value) => remarks = value ?? '',),
-
-
+              CustomTextFormField(
+                controller: cameraOutController,
+                labelText: 'Camera Out',
+              ),
               SizedBox(height: 20),
 
-              // Submit button
+              CustomTextFormField(
+                controller: inChargeNameController,
+                labelText: 'In-Charge Name',
+              ),
+              SizedBox(height: 20),
+              CustomTextFormField(
+                controller: dutyInCharge1Controller,
+                labelText: 'Duty In-Charge 1',
+              ),
+              SizedBox(height: 20),
+              CustomTextFormField(
+                controller: dutyInCharge2Controller,
+                labelText: 'Duty In-Charge 2',
+              ),
+              SizedBox(height: 20),
+              CustomTextFormField(
+                controller: remarksController,
+                labelText: 'Remarks',
+              ),
+
+              SizedBox(height: 20),
+
               ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-
-                    // Print or process the form data
-                    print("Camp Place: $campPlace");
-                    print("Date: $date");
-                    print("Doctor Room Things: $doctorRoomThings");
-                    print("Vision Room Things: $visionRoomThings");
-                    print("CR Room Things: $crRoomThings");
-                    print("TN Duct Things: $tnDuctThings");
-                    print("Optical Things: $opticalThings");
-                    print("Fitting Things: $fittingThings");
-                    print("Others: $others");
-                    print("Camera In: $cameraIn");
-                    print("Camera Out: $cameraOut");
-                    print("In-Charge Name: $inChargeName");
-                    print("Duty In-Charge 1: $dutyInCharge1");
-                    print("Duty In-Charge 2: $dutyInCharge2");
-                  }
+                  saveData(context, widget.documentId);
+                  print(widget.documentId);
                 },
                 child: Text("Submit"),
               ),

@@ -4,6 +4,7 @@ import '../../notification/notification.dart';
 import 'logistics_inward.dart';
 import 'logistics_outward.dart';
 import 'logistics_profile.dart';
+import 'logistics_timeline.dart';
 
 class LogisticsDashboard extends StatefulWidget {
   const LogisticsDashboard({super.key});
@@ -59,7 +60,7 @@ class _LogisticsDashboardState extends State<LogisticsDashboard> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NotificationPage()),
+                  MaterialPageRoute(builder: (context) => LogisticsTimeline()),
                 );
                 print("Camp Timeline tapped");
               },
@@ -100,10 +101,7 @@ class _LogisticsDashboardState extends State<LogisticsDashboard> {
               itemsCount: '',
               color: Colors.purple,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LogisticsInward()),
-                );
+
                 print("camp incharge");
               },
             ),
@@ -114,10 +112,7 @@ class _LogisticsDashboardState extends State<LogisticsDashboard> {
               itemsCount: '',
               color: Colors.purple,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LogisticsOutward()),
-                );
+
                 print("camp incharge");
               },
             ),
@@ -206,5 +201,4 @@ class _LogisticsDashboardState extends State<LogisticsDashboard> {
       },
     );
   }
-
 }
