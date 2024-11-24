@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:bloc/bloc.dart';
-
+import 'package:animated_text_kit/animated_text_kit.dart';
 class AnimatedRotatingPieChartWithGrid extends StatefulWidget {
   const AnimatedRotatingPieChartWithGrid({Key? key}) : super(key: key);
 
@@ -25,17 +25,32 @@ class _AnimatedRotatingPieChartWithGridState
   late AnimationController _controller;
   double rotationAngle = 0;
   late StatusBloc _StatusBloc;
-  final List<double> values = [30, 25, 20, 15, 10];
+  final List<double> valuess = [];
+
+  List<double> get values {
+    return [
+      initiatedCount.toDouble(),
+      approvedCount.toDouble(),
+      waitingQueueCount.toDouble(),
+      rejectedCount.toDouble(),
+
+
+    ];
+  }
+
   final List<Color> colors = [
-    Colors.blueAccent,
-    Colors.orangeAccent,
-    Colors.redAccent,
     Colors.greenAccent,
+    Colors.blueAccent,
     Colors.purpleAccent,
+    Colors.orangeAccent,
+
+   // Colors.redAccent,
+
+
   ];
   final List<String> titles = [
-    'Total Camp Target',
-    'Total Camp Initiated',
+   // 'Total Camp Target',
+   'Total Camp Initiated',
     'Total Camp Confirmed',
     'Waiting Queue',
     'Total Camp Rejected'
@@ -54,6 +69,26 @@ class _AnimatedRotatingPieChartWithGridState
         });
       });
     _controller.forward();
+    // Fetch data and initialize counts
+    _StatusBloc.stream.listen((state) {
+      if (state is StatusLoaded) {
+        final employees = state.employees;
+
+        // Initialize the counts based on the data
+        setState(() {
+          approvedCount = employees
+              .where((employee) => employee["campStatus"] == "Approved")
+              .length;
+          rejectedCount = employees
+              .where((employee) => employee["campStatus"] == "Rejected")
+              .length;
+          waitingQueueCount = employees
+              .where((employee) => employee["campStatus"] == "Waiting")
+              .length;
+          initiatedCount = employees.length;
+        });
+      }
+    });
   }
 
   @override
@@ -62,6 +97,11 @@ class _AnimatedRotatingPieChartWithGridState
     _StatusBloc.close();
     super.dispose();
   }
+
+  int approvedCount = 0;
+  int rejectedCount = 0;
+  int waitingQueueCount = 0;
+  int initiatedCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -155,170 +195,120 @@ class _AnimatedRotatingPieChartWithGridState
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: BlocBuilder<StatusBloc, StatusState>(
                       builder: (context, state) {
-                        if (state is StatusLoading) {
-                          return Center(child: CircularProgressIndicator());
-                        } else if (state is StatusLoaded) {
-                          final employees = state.employees;
+                        return AnimatedSwitcher(
+                          duration: Duration(milliseconds: 500),
+                          switchInCurve: Curves.easeIn,
+                          switchOutCurve: Curves.easeOut,
+                          child: () {
+                            if (state is StatusLoading) {
+                              return Center(
+                                key: ValueKey('loading'),
+                                child: CircularProgressIndicator(color: Colors.blue,),
+                              );
+                            } else if (state is StatusLoaded) {
+                              final employees = state.employees;
 
-                          // Calculate the approved count once
-                          int approvedCount = employees
-                              .where((employee) =>
-                                  employee["campStatus"] == "Approved")
-                              .length;
+                              // Calculate the approved count once
+                              approvedCount = employees
+                                  .where((employee) => employee["campStatus"] == "Approved")
+                                  .length;
+                              rejectedCount = employees
+                                  .where((employee) => employee["campStatus"] == "Rejected")
+                                  .length;
+                              waitingQueueCount = employees
+                                  .where((employee) => employee["campStatus"] == "Waiting")
+                                  .length;
 
-                          // Titles to display
-                          List<String> titles = [
-                            "Title 1",
-                            "Title 2",
-                            "Title 3",
-                            "Title 4",
-                            "Title 5"
-                          ];
-
-                          return Column(
-                            children: [
-                              for (int i = 0; i < titles.length; i += 2)
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    if (i < titles.length)
+                              return Column(
+                                key: ValueKey('loaded'),
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      // Approved Card
                                       Expanded(
-                                        child: ScaleTransition(
-                                          scale: Tween<double>(
-                                                  begin: 0.0, end: 1.0)
-                                              .animate(
-                                            CurvedAnimation(
-                                              parent: _controller,
-                                              curve: Interval(0.5, 1.0,
-                                                  curve: Curves.easeOut),
-                                            ),
-                                          ),
-                                          child: Container(
-                                            margin: const EdgeInsets.all(8.0),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              color: Colors.white,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(0.1),
-                                                  blurRadius: 8,
-                                                  offset: const Offset(0, 4),
-                                                ),
-                                              ],
-                                            ),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(16.0),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    approvedCount.toString(),
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          22 * fontSizeFactor,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  Text(
-                                                    titles[i],
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          16 * fontSizeFactor,
-                                                      color: Colors.black54,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
+                                        child: _buildStatusCard(
+                                          count: approvedCount,
+                                          label: 'Approved',
+                                          icon: Icons.check_circle,
+                                          gradient: LinearGradient(
+                                            colors: [Colors.blueAccent, Colors.lightBlue],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
                                           ),
                                         ),
                                       ),
-                                    if (i + 1 < titles.length)
+                                      // Rejected Card
                                       Expanded(
-                                        child: ScaleTransition(
-                                          scale: Tween<double>(
-                                                  begin: 0.0, end: 1.0)
-                                              .animate(
-                                            CurvedAnimation(
-                                              parent: _controller,
-                                              curve: Interval(0.5, 1.0,
-                                                  curve: Curves.easeOut),
-                                            ),
-                                          ),
-                                          child: Container(
-                                            margin: const EdgeInsets.all(8.0),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              color: Colors.white,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(0.1),
-                                                  blurRadius: 8,
-                                                  offset: const Offset(0, 4),
-                                                ),
-                                              ],
-                                            ),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(16.0),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    approvedCount.toString(),
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          22 * fontSizeFactor,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  Text(
-                                                    titles[i + 1],
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          16 * fontSizeFactor,
-                                                      color: Colors.black54,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
+                                        child: _buildStatusCard(
+                                          count: rejectedCount,
+                                          label: 'Rejected',
+                                          icon: Icons.cancel,
+                                          gradient: LinearGradient(
+                                            colors: [Colors.redAccent, Colors.orangeAccent],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
                                           ),
                                         ),
                                       ),
-                                  ],
-                                ),
-                            ],
-                          );
-                        } else if (state is StatusError) {
-                          return Center(
-                            child: Text('Error: ${state.errorMessage}'),
-                          );
-                        }
-                        return Center(
-                          child: Text("No data available"),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      // Waiting Queue Card
+                                      Expanded(
+                                        child: _buildStatusCard(
+                                          count: waitingQueueCount,
+                                          label: 'Waiting Queue',
+                                          icon: Icons.hourglass_top,
+                                          gradient: LinearGradient(
+                                            colors: [Colors.purpleAccent, Colors.deepPurple],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          ),
+                                        ),
+                                      ),
+                                      // Initiated Card
+                                      Expanded(
+                                        child: _buildStatusCard(
+                                          count: employees.length,
+                                          label: 'Initiated',
+                                          icon: Icons.play_circle_fill,
+                                          gradient: LinearGradient(
+                                            colors: [Colors.tealAccent, Colors.teal],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            } else if (state is StatusError) {
+                              return Center(
+                                key: ValueKey('error'),
+                                child: Text('Error: ${state.errorMessage}'),
+                              );
+                            }
+
+                            return Center(
+                              key: ValueKey('empty'),
+                              child: Text("No data available"),
+                            );
+                          }(),
                         );
                       },
                     ),
                   ),
 
+
                   //  _buildDetailsGrid(gridAspectRatio, fontSizeFactor),
                   const Padding(
                     padding: EdgeInsets.all(20),
                     child: Text(
-                      "Upcoming Event",
+                      "Upcoming Camps",
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 25,
@@ -328,9 +318,43 @@ class _AnimatedRotatingPieChartWithGridState
                   BlocBuilder<StatusBloc, StatusState>(
                     builder: (context, state) {
                       if (state is StatusLoading) {
-                        return Center(child: CircularProgressIndicator());
+                        return Center(
+                          child: AnimatedTextKit(
+                            animatedTexts: [
+                              TypewriterAnimatedText(
+                                'Loading...',
+                                textStyle: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                ),
+                                speed: Duration(milliseconds: 150), // Adjust speed here
+                              ),
+                            ],
+                            totalRepeatCount: 1, // Set to `1` for single loop, or `0` for infinite
+                            pause: Duration(milliseconds: 500), // Pause between loops
+                            displayFullTextOnTap: true,
+                          ),
+                        );
                       } else if (state is StatusLoaded) {
-                        final employees = state.employees;
+                        // Filter employees with "Approved" campStatus
+                        final approvedEmployees = state.employees
+                            .where((employee) => employee['campStatus'] == "Approved")
+                            .toList();
+
+                        if (approvedEmployees.isEmpty) {
+                          // Display "No camp found" when no employees meet the criteria
+                          return Center(
+                            child: Text(
+                              "No camp found",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          );
+                        }
 
                         return Padding(
                           padding: EdgeInsets.all(16.0),
@@ -338,7 +362,7 @@ class _AnimatedRotatingPieChartWithGridState
                             height: constraints.maxHeight * 0.6,
                             child: ListView.builder(
                               physics: NeverScrollableScrollPhysics(),
-                              itemCount: employees.length,
+                              itemCount: approvedEmployees.length,
                               itemBuilder: (BuildContext context, int index) {
                                 Animation<double> animation = CurvedAnimation(
                                   parent: _controller,
@@ -350,160 +374,185 @@ class _AnimatedRotatingPieChartWithGridState
                                 );
                                 _controller.forward();
 
-                                return employees[index]['campStatus'] ==
-                                        "Approved"
-                                    ? FadeTransition(
-                                        opacity: animation,
-                                        child: SlideTransition(
-                                          position: Tween<Offset>(
-                                            begin: Offset(0, 0.2),
-                                            end: Offset.zero,
-                                          ).animate(animation),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 20),
-                                            child: Container(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.25,
-                                              // Set height to 25% of screen height
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                color: Colors.white,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.black
-                                                        .withOpacity(0.1),
-                                                    spreadRadius: 2,
-                                                    blurRadius: 10,
-                                                    offset: const Offset(0, 4),
-                                                  ),
-                                                ],
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(0, 0.2),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        print('Employee: ${approvedEmployees[index]}');
+                                        print('Employee Doc ID: ${state.employeeDocId[index]}');
+                                        print('Camp Doc ID: ${state.campDocId[index]}');
+
+                                        await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => EventDetailsPage(
+                                              employee: approvedEmployees[index],
+                                              employeedocId: state.employeeDocId[index],
+                                              campId: state.campDocId[index],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(bottom: 20),
+                                        child: Container(
+                                          height: MediaQuery.of(context).size.height * 0.25,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(12),
+                                            color: Colors.white,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(0.1),
+                                                spreadRadius: 2,
+                                                blurRadius: 10,
+                                                offset: const Offset(0, 4),
                                               ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(12),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                            ],
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(12),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
                                                     Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
                                                       children: [
-                                                        Row(
-                                                          children: [
-                                                            Icon(
-                                                              Icons.date_range,
-                                                              size:
-                                                                  screenWidth *
-                                                                      0.07,
-                                                              // Responsive icon size
-                                                              color: Colors
-                                                                  .orange, // Icon color
-                                                            ),
-                                                            const SizedBox(
-                                                                width: 8),
-                                                            Text(
-                                                              employees[index]
-                                                                  ['campDate'],
-                                                              style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                                color: Colors
-                                                                    .black54,
-                                                                fontSize:
-                                                                    screenWidth *
-                                                                        0.05, // Responsive font size
-                                                              ),
-                                                            ),
-                                                          ],
+                                                        Icon(
+                                                          Icons.date_range,
+                                                          size: screenWidth * 0.07,
+                                                          color: Colors.orange,
                                                         ),
-                                                        Row(
-                                                          children: [
-                                                            Icon(
-                                                              Icons.watch_later,
-                                                              size:
-                                                                  screenWidth *
-                                                                      0.07,
-                                                              // Responsive icon size
-                                                              color: Colors
-                                                                  .orange, // Icon color
-                                                            ),
-                                                            const SizedBox(
-                                                                width: 8),
-                                                            Text(
-                                                              employees[index]
-                                                                  ['campTime'],
-                                                              style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                                color: Colors
-                                                                    .black54,
-                                                                fontSize:
-                                                                    screenWidth *
-                                                                        0.05, // Responsive font size
-                                                              ),
-                                                            ),
-                                                          ],
+                                                        const SizedBox(width: 8),
+                                                        Text(
+                                                          approvedEmployees[index]['campDate'],
+                                                          style: TextStyle(
+                                                            fontWeight: FontWeight.w500,
+                                                            color: Colors.black54,
+                                                            fontSize: screenWidth * 0.05,
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
-                                                    const SizedBox(height: 5),
-                                                    ..._buildInfoText(
-                                                      screenWidth,
-                                                      employees[index]
-                                                          ['campName'],
-                                                    ),
-                                                    ..._buildInfoText(
-                                                      screenWidth,
-                                                      employees[index]
-                                                          ['address'],
-                                                    ),
-                                                    ..._buildInfoText(
-                                                      screenWidth,
-                                                      employees[index]['name'],
-                                                    ),
-                                                    ..._buildInfoText(
-                                                      screenWidth,
-                                                      employees[index]
-                                                          ['phoneNumber1'],
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.watch_later,
+                                                          size: screenWidth * 0.07,
+                                                          color: Colors.orange,
+                                                        ),
+                                                        const SizedBox(width: 8),
+                                                        Text(
+                                                          approvedEmployees[index]['campTime'],
+                                                          style: TextStyle(
+                                                            fontWeight: FontWeight.w500,
+                                                            color: Colors.black54,
+                                                            fontSize: screenWidth * 0.05,
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ],
                                                 ),
-                                              ),
+                                                const SizedBox(height: 5),
+                                                ..._buildInfoText(screenWidth, approvedEmployees[index]['campName']),
+                                                ..._buildInfoText(screenWidth, approvedEmployees[index]['address']),
+                                                ..._buildInfoText(screenWidth, approvedEmployees[index]['name']),
+                                                ..._buildInfoText(screenWidth, approvedEmployees[index]['phoneNumber1']),
+                                              ],
                                             ),
                                           ),
                                         ),
-                                      )
-                                    : SizedBox();
+                                      ),
+                                    ),
+                                  ),
+                                );
                               },
                             ),
                           ),
                         );
                       } else if (state is StatusError) {
                         return Center(
-                          child: Text('Error+${state.errorMessage}'),
+                          child: Text('Error: ${state.errorMessage}'),
                         );
                       }
                       return Center(
-                        child: Text("No data available"),
+                        child: Text(
+                          "No data available",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey,
+                          ),
+                        ),
                       );
                     },
                   ),
+
+
                 ],
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+  Widget _buildStatusCard({
+    required int count,
+    required String label,
+    required IconData icon,
+    required Gradient gradient,
+  }) {
+    return Container(
+      margin: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        gradient: gradient,
+        boxShadow: [
+          BoxShadow(
+            color: gradient.colors.first.withOpacity(0.2),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 40,
+              color: Colors.white,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              count.toString(),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white70,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -550,7 +599,7 @@ class _AnimatedRotatingPieChartWithGridState
       return PieChartSectionData(
         color: colors[i],
         value: values[i],
-        title: '${values[i].toInt()}%',
+        title: '${values[i].toInt()}',
         radius: radius,
         titleStyle: TextStyle(
           fontSize: fontSize,
