@@ -57,7 +57,7 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
     _dateController = TextEditingController();
     _editableEmployee = Map<String, dynamic>.from(widget.employee);
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 800),
       vsync: this,
     );
 
@@ -69,7 +69,8 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
     );
 
     _slideAnimation =
-        Tween<Offset>(begin: Offset(0, 0.3), end: Offset(0, 0)).animate(
+        Tween<Offset>(begin: const Offset(0, 0.3), end: const Offset(0, 0))
+            .animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeInOut,
@@ -112,6 +113,33 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
       });
     } catch (e) {
       print("Error occured while Fetching $e");
+    }
+  }
+
+  Future<void> deleteCamp() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      final userId = user?.uid;
+
+      if (userId != null && widget.campId != null) {
+        await FirebaseFirestore.instance
+            .collection('employees')
+            .doc(userId)
+            .collection('camps')
+            .doc(widget.campId)
+            .delete();
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Camp deleted successfully")),
+        );
+        Navigator.pop(context);
+      } else {
+        throw Exception("Invalid user or camp ID");
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error deleting camp: $e")),
+      );
     }
   }
 
@@ -159,8 +187,8 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
           'waterAvailability': _selectedValue2,
         });
 
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Data updated successfully")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Data updated successfully")));
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -263,13 +291,49 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
             ),
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              bool? confirmDelete = await showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Delete Camp'),
+                    content: const Text(
+                        'Are you sure you want to delete this camp?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        child: const Text('Cancel',
+                            style: TextStyle(color: AppColors.accentBlue)),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        child: const Text('Delete',
+                            style: TextStyle(color: AppColors.accentBlue)),
+                      ),
+                    ],
+                  );
+                },
+              );
+
+              if (confirmDelete == true) {
+                await deleteCamp();
+              }
+            },
+            icon: const Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -284,7 +348,7 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
                     ),
                   ),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Expanded(
                   child: AnimatedSize(
                     duration: const Duration(milliseconds: 300),
@@ -316,64 +380,64 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildCustomTextFormField(
                 'Camp Name', Icons.location_city, campNameController),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildCustomTextFormField(
                 'Organization', Icons.location_city, organizationController),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildCustomTextFormField('Address', Icons.home, addressController),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildCustomTextFormField(
                 'City', Icons.location_city, cityController),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildCustomTextFormField(
                 'State', Icons.location_city, stateController),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildCustomTextFormField(
                 'Pincode', Icons.location_city, pincodeController),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               "Concern Person1 Details",
               style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildCustomTextFormField(
                 'Name', Icons.location_city, nameController),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildCustomTextFormField(
                 'Position', Icons.location_city, positionController),
             // Assuming Position field is here
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildCustomTextFormField(
                 'Phone Number 1', Icons.location_city, phoneNumber1Controller),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildCustomTextFormField(
                 'Phone Number 2', Icons.location_city, phoneNumber2Controller),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               "Concern Person2 Details",
               style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildCustomTextFormField(
                 'Name', Icons.location_city, name2Controller),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildCustomTextFormField(
                 'Position', Icons.location_city, position2Controller),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildCustomTextFormField('Phone Number 1', Icons.location_city,
                 phoneNumber1_2Controller),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildCustomTextFormField('Phone Number 2', Icons.location_city,
                 phoneNumber2_2Controller),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               "Event Planning",
               style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             CustomDropdownFormField(
               labelText: "Camp Plan Type",
               icon: Icons.campaign,
@@ -391,27 +455,27 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
                 return null;
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildRadioOption('Road Access Site:', _options, _selectedValue,
                 (value) {
               setState(() {
                 _selectedValue = value;
               });
             }),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildCustomTextFormField('Total Square Feet',
                 Icons.area_chart_outlined, totalSquareFeetController),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildRadioOption('Water Availability:', _options, _selectedValue2,
                 (value) {
               setState(() {
                 _selectedValue2 = value;
               });
             }),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildCustomTextFormField('No Of Patient Expected', Icons.person,
                 noOfPatientExpectedController),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             CustomDropdownFormField(
               labelText: "Last Camp Done",
               icon: Icons.campaign_outlined,
@@ -429,7 +493,7 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
                 return null;
               },
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
           ],
         ),
       ),
@@ -452,7 +516,7 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
               ),
               label: Text(
                 _isEditing ? "Save" : "Edit",
-                style: TextStyle(fontSize: 18, color: Colors.white),
+                style: const TextStyle(fontSize: 18, color: Colors.white),
               ),
             ),
           ],
@@ -478,7 +542,7 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
         Row(
           children: options.map((option) {
             return Row(

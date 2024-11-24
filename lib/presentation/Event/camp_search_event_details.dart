@@ -244,58 +244,65 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
           child: pw.Row(
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
         children: [
-          _buildPdfRow("Camp Date : ", widget.employee['campDate']),
-          _buildPdfRow("Camp Time : ", widget.employee['campTime']),
+          _buildPdfRow("Camp Date : ", widget.employee['campDate'] ?? "N/A"),
+          _buildPdfRow("Camp Time : ", widget.employee['campTime'] ?? "N/A"),
         ],
       )),
       pw.SizedBox(height: 20),
-      _buildPdfRow("Camp Name : ", widget.employee['campName']),
+      _buildPdfRow("Camp Name : ", widget.employee['campName'] ?? "N/A"),
       pw.SizedBox(height: 10),
-      _buildPdfRow("Organization : ", widget.employee['organization']),
+      _buildPdfRow("Organization : ", widget.employee['organization'] ?? "N/A"),
       pw.SizedBox(height: 10),
-      _buildPdfRow("Address : ", widget.employee['address']),
+      _buildPdfRow("Address : ", widget.employee['address'] ?? "N/A"),
       pw.SizedBox(height: 10),
-      _buildPdfRow("City : ", widget.employee['city']),
+      _buildPdfRow("City : ", widget.employee['city'] ?? "N/A"),
       pw.SizedBox(height: 10),
-      _buildPdfRow("State : ", widget.employee['state']),
+      _buildPdfRow("State : ", widget.employee['state'] ?? "N/A"),
       pw.SizedBox(height: 10),
-      _buildPdfRow("Pincode : ", widget.employee['pincode']),
+      _buildPdfRow("Pincode : ", widget.employee['pincode'] ?? "N/A"),
       pw.SizedBox(height: 15),
       pw.Text("Concern Person 1 Details :",
           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
       pw.SizedBox(height: 15),
-      _buildPdfRow("Name : ", widget.employee['name']),
+      _buildPdfRow("Name : ", widget.employee['name'] ?? "N/A"),
       pw.SizedBox(height: 10),
-      _buildPdfRow("Position : ", widget.employee['position']),
+      _buildPdfRow("Position : ", widget.employee['position'] ?? "N/A"),
       pw.SizedBox(height: 10),
-      _buildPdfRow("Phone Number 1 : ", widget.employee['phoneNumber1']),
+      _buildPdfRow(
+          "Phone Number 1 : ", widget.employee['phoneNumber1'] ?? "N/A"),
       pw.SizedBox(height: 10),
-      _buildPdfRow("Phone Number 2 : ", widget.employee['phoneNumber1_2']),
+      _buildPdfRow(
+          "Phone Number 2 : ", widget.employee['phoneNumber1_2'] ?? "N/A"),
       pw.SizedBox(height: 15),
       pw.Text("Concern Person 2 Details :",
           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
       pw.SizedBox(height: 15),
-      _buildPdfRow("Name : ", widget.employee['name2']),
+      _buildPdfRow("Name : ", widget.employee['name2'] ?? "N/A"),
       pw.SizedBox(height: 10),
-      _buildPdfRow("Position : ", widget.employee['position2']),
+      _buildPdfRow("Position : ", widget.employee['position2'] ?? "N/A"),
       pw.SizedBox(height: 10),
-      _buildPdfRow("Phone Number 1 : ", widget.employee['phoneNumber2']),
+      _buildPdfRow(
+          "Phone Number 1 : ", widget.employee['phoneNumber2'] ?? "N/A"),
       pw.SizedBox(height: 10),
-      _buildPdfRow("Phone Number 2 : ", widget.employee['phoneNumber2_2']),
+      _buildPdfRow(
+          "Phone Number 2 : ", widget.employee['phoneNumber2_2'] ?? "N/A"),
       pw.SizedBox(height: 15),
-      _buildPdfRow("Camp Plan Type : ", widget.employee['campPlanType']),
+      _buildPdfRow(
+          "Camp Plan Type : ", widget.employee['campPlanType'] ?? "N/A"),
       pw.SizedBox(height: 10),
-      _buildPdfRow("Road Access : ", widget.employee['roadAccess']),
-      pw.SizedBox(height: 10),
-      _buildPdfRow("Total Square Feet : ", widget.employee['totalSquareFeet']),
+      _buildPdfRow("Road Access : ", widget.employee['roadAccess'] ?? "N/A"),
       pw.SizedBox(height: 10),
       _buildPdfRow(
-          "Water Availability : ", widget.employee['waterAvailability']),
+          "Total Square Feet : ", widget.employee['totalSquareFeet'] ?? "N/A"),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("Water Availability : ",
+          widget.employee['waterAvailability'] ?? "N/A"),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("No Of Patients Expected : ",
+          widget.employee['noOfPatientExpected'] ?? "N/A"),
       pw.SizedBox(height: 10),
       _buildPdfRow(
-          "No Of Patients Expected : ", widget.employee['noOfPatientExpected']),
-      pw.SizedBox(height: 10),
-      _buildPdfRow("Last Camp Done : ", widget.employee['lastCampDone']),
+          "Last Camp Done : ", widget.employee['lastCampDone'] ?? "N/A"),
       pw.SizedBox(height: 10),
     ];
   }
@@ -304,7 +311,8 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
     return pw.Row(
       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
       children: [
-        pw.Text(title, style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+        pw.Text(title ?? "N/A",
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
         pw.Text(data),
       ],
     );
@@ -312,13 +320,16 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
 
   List<Widget> _buildDetailRows(double screenWidth) {
     return [
-      _buildDetailRow('Camp Name', widget.employee['campName'], screenWidth),
       _buildDetailRow(
-          'Organization', widget.employee['organization'], screenWidth),
-      _buildDetailRow('Address', widget.employee['address'], screenWidth),
-      _buildDetailRow('City', widget.employee['city'], screenWidth),
-      _buildDetailRow('State', widget.employee['state'], screenWidth),
-      _buildDetailRow('Pincode', widget.employee['pincode'], screenWidth),
+          'Camp Name', widget.employee['campName'] ?? "N/A", screenWidth),
+      _buildDetailRow('Organization', widget.employee['organization'] ?? "N/A",
+          screenWidth),
+      _buildDetailRow(
+          'Address', widget.employee['address'] ?? "N/A", screenWidth),
+      _buildDetailRow('City', widget.employee['city'] ?? "N/A", screenWidth),
+      _buildDetailRow('State', widget.employee['state'] ?? "N/A", screenWidth),
+      _buildDetailRow(
+          'Pincode', widget.employee['pincode'] ?? "N/A", screenWidth),
       Text(
         "Concern Person1 Details :",
         style: TextStyle(
@@ -327,12 +338,13 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
           fontSize: screenWidth * 0.05,
         ),
       ),
-      _buildDetailRow('Name', widget.employee['name'], screenWidth),
-      _buildDetailRow('Position', widget.employee['position'], screenWidth),
+      _buildDetailRow('Name', widget.employee['name'] ?? "N/A", screenWidth),
       _buildDetailRow(
-          'Phone Number 1', widget.employee['phoneNumber1'], screenWidth),
-      _buildDetailRow(
-          'Phone Number 2', widget.employee['phoneNumber1_2'], screenWidth),
+          'Position', widget.employee['position'] ?? "N/A", screenWidth),
+      _buildDetailRow('Phone Number 1',
+          widget.employee['phoneNumber1'] ?? "N/A", screenWidth),
+      _buildDetailRow('Phone Number 2',
+          widget.employee['phoneNumber1_2'] ?? "N/A", screenWidth),
       Text(
         "Concern Person2 Details :",
         style: TextStyle(
@@ -341,24 +353,25 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
           fontSize: screenWidth * 0.05,
         ),
       ),
-      _buildDetailRow('Name', widget.employee['name2'], screenWidth),
-      _buildDetailRow('Position', widget.employee['position2'], screenWidth),
+      _buildDetailRow('Name', widget.employee['name2'] ?? "N/A", screenWidth),
       _buildDetailRow(
-          'Phone Number 1', widget.employee['phoneNumber2'], screenWidth),
+          'Position', widget.employee['position2'] ?? "N/A", screenWidth),
+      _buildDetailRow('Phone Number 1',
+          widget.employee['phoneNumber2'] ?? "N/A", screenWidth),
+      _buildDetailRow('Phone Number 2',
+          widget.employee['phoneNumber2_2'] ?? "N/A", screenWidth),
+      _buildDetailRow('Camp Plan Type',
+          widget.employee['campPlanType'] ?? "N/A", screenWidth),
       _buildDetailRow(
-          'Phone Number 2', widget.employee['phoneNumber2_2'], screenWidth),
-      _buildDetailRow(
-          'Camp Plan Type', widget.employee['campPlanType'], screenWidth),
-      _buildDetailRow(
-          'Road Access', widget.employee['roadAccess'], screenWidth),
-      _buildDetailRow(
-          'Total Square Feet', widget.employee['totalSquareFeet'], screenWidth),
+          'Road Access', widget.employee['roadAccess'] ?? "N/A", screenWidth),
+      _buildDetailRow('Total Square Feet',
+          widget.employee['totalSquareFeet'] ?? "N/A", screenWidth),
       _buildDetailRow('Water Availability',
-          widget.employee['waterAvailability'], screenWidth),
+          widget.employee['waterAvailability'] ?? "N/A", screenWidth),
       _buildDetailRow('No Of Patients Expected',
-          widget.employee['noOfPatientExpected'], screenWidth),
-      _buildDetailRow(
-          'Last Camp Done', widget.employee['lastCampDone'], screenWidth),
+          widget.employee['noOfPatientExpected'] ?? "N/A", screenWidth),
+      _buildDetailRow('Last Camp Done',
+          widget.employee['lastCampDone'] ?? "N/A", screenWidth),
     ];
   }
 
@@ -367,7 +380,7 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          title,
+          title ?? "N/A",
           style: TextStyle(
             fontWeight: FontWeight.w500,
             color: Colors.black54,
@@ -375,7 +388,7 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
           ),
         ),
         Text(
-          data,
+          data ?? "N/A",
           style: TextStyle(
             fontWeight: FontWeight.w500,
             color: Colors.black54,

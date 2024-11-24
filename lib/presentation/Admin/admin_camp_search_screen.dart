@@ -2,21 +2,21 @@ import 'package:camp_organizer/presentation/Event/camp_search_event_details.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:camp_organizer/bloc/Status/status_bloc.dart';
-import 'package:camp_organizer/bloc/Status/status_event.dart';
-import 'package:camp_organizer/bloc/Status/status_state.dart';
+import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
+import 'package:camp_organizer/bloc/approval/adminapproval_state.dart';
+import 'package:camp_organizer/bloc/approval/adminapproval_event.dart';
 import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
-class CampSearchScreen extends StatefulWidget {
+class AdminCampSearchScreen extends StatefulWidget {
   @override
-  State<CampSearchScreen> createState() => _CampSearchScreenState();
+  State<AdminCampSearchScreen> createState() => _AdminCampSearchScreenState();
 }
 
-class _CampSearchScreenState extends State<CampSearchScreen>
+class _AdminCampSearchScreenState extends State<AdminCampSearchScreen>
     with SingleTickerProviderStateMixin {
-  late StatusBloc _statusBloc;
+  late AdminApprovalBloc _AdminApprovalBloc;
   late TextEditingController _searchController;
 
   List<Map<String, dynamic>> _filteredEmployees = [];
@@ -26,13 +26,13 @@ class _CampSearchScreenState extends State<CampSearchScreen>
   void initState() {
     super.initState();
     _searchController = TextEditingController();
-    _statusBloc = StatusBloc()..add(FetchDataEvent());
+    _AdminApprovalBloc = AdminApprovalBloc()..add(FetchDataEvents());
   }
 
   @override
   void dispose() {
     _searchController.dispose();
-    _statusBloc.close();
+    _AdminApprovalBloc.close();
     super.dispose();
   }
 
@@ -75,8 +75,9 @@ class _CampSearchScreenState extends State<CampSearchScreen>
       });
 
       // Filter employees based on the formatted date
-      if (_statusBloc.state is StatusLoaded) {
-        _filterEmployees((_statusBloc.state as StatusLoaded).employees);
+      if (_AdminApprovalBloc.state is AdminApprovalLoaded) {
+        _filterEmployees(
+            (_AdminApprovalBloc.state as AdminApprovalLoaded).allCamps);
       }
     }
   }
@@ -87,7 +88,7 @@ class _CampSearchScreenState extends State<CampSearchScreen>
     double screenHeight = MediaQuery.of(context).size.height;
 
     return BlocProvider(
-      create: (context) => _statusBloc,
+      create: (context) => _AdminApprovalBloc,
       child: Scaffold(
         appBar: AppBar(
           title: TextField(
@@ -96,8 +97,9 @@ class _CampSearchScreenState extends State<CampSearchScreen>
               setState(() {
                 _searchQuery = value;
               });
-              if (_statusBloc.state is StatusLoaded) {
-                _filterEmployees((_statusBloc.state as StatusLoaded).employees);
+              if (_AdminApprovalBloc.state is AdminApprovalLoaded) {
+                _filterEmployees(
+                    (_AdminApprovalBloc.state as AdminApprovalLoaded).allCamps);
               }
             },
             style: const TextStyle(color: Colors.white),
@@ -131,9 +133,10 @@ class _CampSearchScreenState extends State<CampSearchScreen>
                 setState(() {
                   _searchQuery = "";
                 });
-                if (_statusBloc.state is StatusLoaded) {
+                if (_AdminApprovalBloc.state is AdminApprovalLoaded) {
                   _filterEmployees(
-                      (_statusBloc.state as StatusLoaded).employees);
+                      (_AdminApprovalBloc.state as AdminApprovalLoaded)
+                          .allCamps);
                 }
               },
             ),
@@ -148,13 +151,13 @@ class _CampSearchScreenState extends State<CampSearchScreen>
             },
           ),
         ),
-        body: BlocBuilder<StatusBloc, StatusState>(
+        body: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
           builder: (context, state) {
-            if (state is StatusLoading) {
+            if (state is AdminApprovalLoading) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state is StatusLoaded) {
+            } else if (state is AdminApprovalLoaded) {
               if (_searchQuery.isEmpty) {
-                _filteredEmployees = state.employees;
+                _filteredEmployees = state.allCamps;
               }
               if (_filteredEmployees.isEmpty) {
                 return Center(
@@ -179,7 +182,7 @@ class _CampSearchScreenState extends State<CampSearchScreen>
               }
               return RefreshIndicator(
                 onRefresh: () async {
-                  context.read<StatusBloc>().add(FetchDataEvent());
+                  context.read<AdminApprovalBloc>().add(FetchDataEvents());
                 },
                 child: ListView.builder(
                   padding: const EdgeInsets.all(16.0),
@@ -193,7 +196,7 @@ class _CampSearchScreenState extends State<CampSearchScreen>
                             builder: (context) => CampSearchEventDetailsPage(
                               employee: _filteredEmployees[index],
                               employeedocId: state.employeeDocId[index],
-                              campId: state.campDocId[index],
+                              campId: state.campDocIds[index],
                             ),
                           ),
                         );
@@ -294,7 +297,7 @@ class _CampSearchScreenState extends State<CampSearchScreen>
                   },
                 ),
               );
-            } else if (state is StatusError) {
+            } else if (state is AdminApprovalError) {
               return const Center(
                 child: Text('Failed to load camps. Please try again.'),
               );

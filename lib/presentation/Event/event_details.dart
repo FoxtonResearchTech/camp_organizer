@@ -177,10 +177,49 @@ class _EventDetailsPageState extends State<EventDetailsPage>
               screenHeight: screenHeight,
             ),
             _buildAnimatedButton(
-              label: "Edit",
-              icon: Icons.edit,
+              label: "Reason",
+              icon: Icons.question_answer,
               color: AppColors.accentBlue,
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Reason"),
+                      content: Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Reason for rejection : ${widget.employee['reason']}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black54,
+                                fontSize:
+                                    screenWidth * 0.04, // Responsive font size
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                          ],
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(
+                            'Ok',
+                            style: TextStyle(color: AppColors.accentBlue),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
               screenWidth: screenWidth,
               screenHeight: screenHeight,
             ),

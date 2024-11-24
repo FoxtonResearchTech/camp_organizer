@@ -3,21 +3,23 @@ import 'package:camp_organizer/presentation/authentication/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/Profile/profile_bloc.dart';
-import '../../bloc/Profile/profile_event.dart';
+import '../../bloc/Profile/admin_profile_bloc.dart';
+import '../../bloc/Profile/admin_profile_state.dart';
 import '../../utils/app_colors.dart';
+import 'admin_commutative_reports_search_screen.dart';
 import 'commutative_reports_search_screen.dart';
+import '../../bloc/Profile/admin_profile_event.dart';
 
-class UserProfilePage extends StatefulWidget {
+class AdminUserProfilePage extends StatefulWidget {
   @override
-  _UserProfilePageState createState() => _UserProfilePageState();
+  _AdminUserProfilePageState createState() => _AdminUserProfilePageState();
 }
 
-class _UserProfilePageState extends State<UserProfilePage>
+class _AdminUserProfilePageState extends State<AdminUserProfilePage>
     with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
-  late ProfileBloc _ProfileBloc;
+  late AdminProfileBloc _AdminProfileBloc;
 
   @override
   void initState() {
@@ -33,13 +35,13 @@ class _UserProfilePageState extends State<UserProfilePage>
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
     _controller.forward(); // Start the animation
-    _ProfileBloc = ProfileBloc()..add(FetchDataEvent());
+    _AdminProfileBloc = AdminProfileBloc()..add(FetchDataEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _ProfileBloc,
+      create: (context) => _AdminProfileBloc,
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -113,11 +115,11 @@ class _UserProfilePageState extends State<UserProfilePage>
             AnimatedPadding(
               duration: const Duration(seconds: 1),
               padding: const EdgeInsets.only(top: 50),
-              child: BlocBuilder<ProfileBloc, ProfileState>(
+              child: BlocBuilder<AdminProfileBloc, AdminProfileState>(
                 builder: (context, state) {
                   if (state is ProfileLoading) {
                     return const Center(child: CircularProgressIndicator());
-                  } else if (state is ProfileLoaded) {
+                  } else if (state is AdminProfileLoaded) {
                     final employee = state.employee;
                     return Column(
                       children: [
@@ -226,7 +228,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                CommutativeReportsSearchScreen(
+                                                AdminCommutativeReportsSearchScreen(
                                                   name:
                                                       '${employee['firstName']} ${employee['lastName']}',
                                                   position:
@@ -291,7 +293,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                         ),
                       ],
                     );
-                  } else if (state is ProfileError) {
+                  } else if (state is AdminProfileError) {
                     return Center(
                       child: Text('Error+${state.errorMessage}'),
                     );

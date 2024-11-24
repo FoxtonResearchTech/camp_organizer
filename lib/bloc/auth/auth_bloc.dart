@@ -2,7 +2,7 @@ import 'package:camp_organizer/repository/auth_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
-
+import 'package:bloc/bloc.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
@@ -12,26 +12,45 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({required this.authRepository}) : super(AuthInitial()) {
     on<SignInRequested>(_onSignInRequested);
     on<SignOutRequested>(_onSignOutRequested);
+
+    // Initialize the authentication state on app startup
+    _initializeAuthState();
   }
 
-  void _onSignInRequested(SignInRequested event, Emitter<AuthState> emit) async {
+  // Initialize authentication state by checking stored UID
+  Future<void> _initializeAuthState() async {
+    final storedUid = await authRepository.getStoredUserId();
+
+    if (storedUid != null) {
+      // If UID is found, user is authenticated, fetch role and emit state
+      await _fetchUserRole(storedUid);
+    } else {
+      // If no UID, user is unauthenticated
+      emit(AuthUnauthenticated());
+    }
+  }
+
+  // Handle the sign-in request
+  void _onSignInRequested(
+      SignInRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      final user = await authRepository.signInWithEmailPassword(event.email, event.password);
+      final user = await authRepository.signInWithEmailPassword(
+          event.email, event.password);
       if (user != null) {
-        await _fetchUserRole(user.uid, emit);
+        await _fetchUserRole(user.uid); // Fetch role after successful sign-in
       } else {
         emit(AuthError('Authentication failed.'));
       }
     } on FirebaseAuthException catch (e) {
-      // Firebase-specific error handling
       emit(AuthError(_mapFirebaseErrorToMessage(e)));
     } catch (e) {
       emit(AuthError('An unexpected error occurred. Please try again.'));
     }
   }
 
-  Future<void> _fetchUserRole(String uid, Emitter<AuthState> emit) async {
+  // Fetch user role after sign-in
+  Future<void> _fetchUserRole(String uid) async {
     try {
       final role = await authRepository.getUserRole(uid);
       emit(AuthAuthenticated(role: role!));
@@ -40,7 +59,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void _onSignOutRequested(SignOutRequested event, Emitter<AuthState> emit) async {
+  // Handle the sign-out request
+  void _onSignOutRequested(
+      SignOutRequested event, Emitter<AuthState> emit) async {
     try {
       await authRepository.signOut();
       emit(AuthUnauthenticated());
@@ -49,6 +70,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  // Map Firebase authentication errors to user-friendly messages
   String _mapFirebaseErrorToMessage(FirebaseAuthException e) {
     switch (e.code) {
       case 'user-not-found':

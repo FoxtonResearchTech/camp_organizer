@@ -1,6 +1,7 @@
 import 'package:camp_organizer/presentation/Admin/admin_approval.dart';
 import 'package:camp_organizer/presentation/Analytics/dashboard_analytics.dart';
 import 'package:camp_organizer/presentation/Event/add_event.dart';
+import 'package:camp_organizer/presentation/profile/admin_profile.dart';
 import 'package:camp_organizer/presentation/profile/camp-organizer_profile.dart';
 import 'package:camp_organizer/utils/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class _AdminBottomNavigationBarState extends State<AdminBottomNavigationBar> {
     AnimatedRotatingPieChartWithGrid(),
     AddEvent(),
     AdminDashboardScreen(),
-    UserProfilePage(),
+    AdminUserProfilePage(),
   ];
 
   @override

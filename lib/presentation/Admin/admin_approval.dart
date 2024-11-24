@@ -12,6 +12,7 @@ import '../../bloc/approval/adminapproval_bloc.dart';
 import '../../bloc/approval/adminapproval_event.dart';
 import '../../bloc/approval/adminapproval_state.dart';
 import '../Event/admin_event_details.dart';
+import 'admin_camp_search_screen.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   @override
@@ -71,6 +72,15 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
           ),
           actions: [
             IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AdminCampSearchScreen()),
+                  );
+                },
+                icon: const Icon(Icons.search, color: Colors.white)),
+            IconButton(
               icon: const Icon(Icons.notifications, color: Colors.white),
               onPressed: () {
                 Navigator.push(
@@ -111,8 +121,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                           end: Offset.zero, // End at original position
                         ).animate(animation),
                         child: camps[index]['campStatus'] == 'Waiting'
-                            ?
-                            Column(
+                            ? Column(
                                 children: [
                                   // Information Container
                                   Container(
@@ -449,7 +458,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
 
                                   const SizedBox(height: 20),
                                 ],
-                              ) : SizedBox(),
+                              )
+                            : SizedBox(),
                       ),
                     );
                   },

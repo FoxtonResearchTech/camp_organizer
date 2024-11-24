@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
 import 'package:camp_organizer/presentation/profile/commutative_reports_event_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,31 +8,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../bloc/Status/status_bloc.dart';
-import '../../bloc/Status/status_state.dart';
-import 'package:camp_organizer/bloc/Status/status_event.dart';
+import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
+import 'package:camp_organizer/bloc/approval/adminapproval_state.dart';
+import 'package:camp_organizer/bloc/approval/adminapproval_event.dart';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-class CommutativeReportsSearchScreen extends StatefulWidget {
+class AdminCommutativeReportsSearchScreen extends StatefulWidget {
   final String name;
   final String position;
   final String empCode;
-  const CommutativeReportsSearchScreen({
+  const AdminCommutativeReportsSearchScreen({
     Key? key,
     required this.name,
     required this.position,
     required this.empCode,
   }) : super(key: key);
   @override
-  State<CommutativeReportsSearchScreen> createState() =>
+  State<AdminCommutativeReportsSearchScreen> createState() =>
       _CommutativeReportsSearchScreen();
 }
 
 class _CommutativeReportsSearchScreen
-    extends State<CommutativeReportsSearchScreen> {
-  late StatusBloc _statusBloc;
+    extends State<AdminCommutativeReportsSearchScreen> {
+  late AdminApprovalBloc _AdminApprovalBloc;
   late TextEditingController _startDateController;
   late TextEditingController _endDateController;
 
@@ -44,14 +45,14 @@ class _CommutativeReportsSearchScreen
     super.initState();
     _startDateController = TextEditingController();
     _endDateController = TextEditingController();
-    _statusBloc = StatusBloc()..add(FetchDataEvent());
+    _AdminApprovalBloc = AdminApprovalBloc()..add(FetchDataEvents());
   }
 
   @override
   void dispose() {
     _startDateController.dispose();
     _endDateController.dispose();
-    _statusBloc.close();
+    _AdminApprovalBloc.close();
     super.dispose();
   }
 
@@ -91,8 +92,9 @@ class _CommutativeReportsSearchScreen
         }
       });
 
-      if (_statusBloc.state is StatusLoaded) {
-        _filterEmployees((_statusBloc.state as StatusLoaded).employees);
+      if (_AdminApprovalBloc.state is AdminApprovalLoaded) {
+        _filterEmployees(
+            (_AdminApprovalBloc.state as AdminApprovalLoaded).allCamps);
       }
     }
   }
@@ -103,7 +105,7 @@ class _CommutativeReportsSearchScreen
     double screenHeight = MediaQuery.of(context).size.height;
 
     return BlocProvider(
-      create: (context) => _statusBloc,
+      create: (context) => _AdminApprovalBloc,
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -163,7 +165,7 @@ class _CommutativeReportsSearchScreen
                     final directory = Directory('/storage/emulated/0/Download');
                     if (await directory.exists()) {
                       final path =
-                          "${directory.path}/CommutativeReports_${_startDateController.text}_to_${_endDateController.text}.pdf";
+                          "${directory.path}/AdminCommutativeReports_${_startDateController.text}_to_${_endDateController.text}.pdf";
                       final file = File(path);
                       await file.writeAsBytes(await pdf.save());
 
@@ -224,24 +226,24 @@ class _CommutativeReportsSearchScreen
               ),
             ),
             Expanded(
-              child: BlocBuilder<StatusBloc, StatusState>(
+              child: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
                 builder: (context, state) {
-                  if (state is StatusLoading) {
+                  if (state is AdminApprovalLoading) {
                     return const Center(child: CircularProgressIndicator());
-                  } else if (state is StatusLoaded) {
+                  } else if (state is AdminApprovalLoaded) {
                     // Use a post-frame callback to update filtered data after the build.
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       if (_startDate != null || _endDate != null) {
-                        _filterEmployees(state.employees);
+                        _filterEmployees(state.allCamps);
                       } else if (_filteredEmployees.isEmpty) {
                         setState(() {
-                          _filteredEmployees = state.employees;
+                          _filteredEmployees = state.allCamps;
                         });
                       }
                     });
 
                     return _buildEmployeeList(state, screenWidth, screenHeight);
-                  } else if (state is StatusError) {
+                  } else if (state is AdminApprovalError) {
                     return const Center(
                       child: Text('Failed to load camps. Please try again.'),
                     );
@@ -372,7 +374,7 @@ class _CommutativeReportsSearchScreen
   }
 
   Widget _buildEmployeeList(
-      StatusLoaded state, double screenWidth, double screenHeight) {
+      AdminApprovalLoaded state, double screenWidth, double screenHeight) {
     if (_filteredEmployees.isEmpty) {
       return Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -394,7 +396,7 @@ class _CommutativeReportsSearchScreen
     }
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<StatusBloc>().add(FetchDataEvent());
+        context.read<AdminApprovalBloc>().add(FetchDataEvents());
       },
       child: ListView.builder(
         padding: const EdgeInsets.all(16.0),
@@ -408,7 +410,7 @@ class _CommutativeReportsSearchScreen
                   builder: (context) => CommutativeReportsEventDetails(
                     employee: _filteredEmployees[index],
                     employeedocId: state.employeeDocId[index],
-                    campId: state.campDocId[index],
+                    campId: state.campDocIds[index],
                   ),
                 ),
               );

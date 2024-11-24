@@ -21,7 +21,7 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
         // Fetch employee data
         List<Map<String, dynamic>> employees = await fetchEmployees(userId);
 
-        // Fetch document IDs for employee and all campsz
+        // Fetch document IDs for employee and all camps
         String employeeDocId = await fetchEmployeeDocId(userId);
         List<String> campDocIds = await fetchAllCampDocIds(userId);
 
