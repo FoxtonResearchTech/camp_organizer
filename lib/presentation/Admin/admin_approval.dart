@@ -14,12 +14,12 @@ import '../../bloc/approval/adminapproval_state.dart';
 import '../Event/admin_event_details.dart';
 import 'admin_camp_search_screen.dart';
 
-class AdminDashboardScreen extends StatefulWidget {
+class AdminApproval extends StatefulWidget {
   @override
-  State<AdminDashboardScreen> createState() => _AdminDashboardScreenState();
+  State<AdminApproval> createState() => _AdminApprovalState();
 }
 
-class _AdminDashboardScreenState extends State<AdminDashboardScreen>
+class _AdminApprovalState extends State<AdminApproval>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late final TextEditingController _reason;

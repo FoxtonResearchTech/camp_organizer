@@ -201,7 +201,7 @@ class _CampSearchScreenState extends State<CampSearchScreen>
                       child: Column(
                         children: [
                           Container(
-                            height: screenHeight / 5,
+                            height: screenHeight / 4,
                             width: double.infinity,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
