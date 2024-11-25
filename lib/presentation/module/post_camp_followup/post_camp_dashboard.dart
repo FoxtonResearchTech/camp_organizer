@@ -1,6 +1,7 @@
 import 'package:camp_organizer/presentation/module/post_camp_followup/post_camp_follow.dart';
 import 'package:camp_organizer/presentation/module/post_camp_followup/post_camp_follow_completed.dart';
 import 'package:camp_organizer/presentation/module/post_camp_followup/post_camp_profile.dart';
+import 'package:camp_organizer/presentation/module/post_camp_followup/post_camp_timeline.dart';
 import 'package:flutter/material.dart';
 
 import '../../notification/notification.dart';
@@ -62,7 +63,7 @@ class _PostCampDashboardState extends State<PostCampDashboard> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NotificationPage()),
+                  MaterialPageRoute(builder: (context) => PostCampTimeline()),
                 );
                 print("Camp Timeline tapped");
               },
@@ -103,10 +104,7 @@ class _PostCampDashboardState extends State<PostCampDashboard> {
               itemsCount: '',
               color: Colors.purple,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PostCampFollow()),
-                );
+
                 print("camp incharge");
               },
             ),
@@ -118,10 +116,7 @@ class _PostCampDashboardState extends State<PostCampDashboard> {
               itemsCount: '',
               color: Colors.lightGreenAccent,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PostCampFollowCompleted()),
-                );
+
                 print("camp incharge");
               },
             ),

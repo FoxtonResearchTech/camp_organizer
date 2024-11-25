@@ -110,8 +110,6 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                
-
                   _buildAnimatedSection(
                     context,
                     sectionTitle: 'Camp Info',
@@ -123,15 +121,12 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
                       _buildInfoCard('Organization', widget.campData['organization']),
                     ],
                   ),
-
                   _buildAnimatedSection(
                     context,
                     sectionTitle: 'Add Team Info',
                     children: [
-
                     ],
                   ),
-
                   Row(
                     children: [
                       Expanded(
@@ -149,8 +144,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
                       ),
                     ],
                   ),
-                
-                
+
                   SizedBox(height: 30),
                   CustomTextFormField(
                     labelText: 'Camp Name',
@@ -246,7 +240,6 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
             ),
           ),
         ),
-      
       ),
     );
   }

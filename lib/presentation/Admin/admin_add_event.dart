@@ -12,14 +12,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 
-class AddEvent extends StatefulWidget {
-  const AddEvent({super.key});
+class AdminAddEvent extends StatefulWidget {
+  const AdminAddEvent({super.key});
 
   @override
-  State<AddEvent> createState() => _AddEventState();
+  State<AdminAddEvent> createState() => _AdminAddEventState();
 }
 
-class _AddEventState extends State<AddEvent>
+class _AdminAddEventState extends State<AdminAddEvent>
     with SingleTickerProviderStateMixin {
   late TextEditingController _dateController;
   late AnimationController _controller;
@@ -60,9 +60,9 @@ class _AddEventState extends State<AddEvent>
     _slideAnimation =
         Tween<Offset>(begin: const Offset(0.0, 0.1), end: Offset.zero)
             .animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+          parent: _controller,
+          curve: Curves.easeInOut,
+        ));
     _controller.forward();
   }
 
@@ -119,17 +119,17 @@ class _AddEventState extends State<AddEvent>
   final TextEditingController phoneNumber2Controller = TextEditingController();
   final TextEditingController name2Controller = TextEditingController();
   final TextEditingController phoneNumber1_2Controller =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController positionController =
   TextEditingController();
   final TextEditingController position2Controller =
   TextEditingController();
   final TextEditingController phoneNumber2_2Controller =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController totalSquareFeetController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController noOfPatientExpectedController =
-      TextEditingController();
+  TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -320,11 +320,11 @@ class _AddEventState extends State<AddEvent>
           totalSquareFeetController),
       SizedBox(height: 20),
       _buildRadioOption('Water Availability:', _options, _selectedValue2,
-          (value) {
-        setState(() {
-          _selectedValue2 = value;
-        });
-      }),
+              (value) {
+            setState(() {
+              _selectedValue2 = value;
+            });
+          }),
       SizedBox(height: 20),
       _buildCustomTextFormField('No Of Patient Expected', Icons.person,
           noOfPatientExpectedController),
@@ -363,7 +363,7 @@ class _AddEventState extends State<AddEvent>
               // Show duplicate entry SnackBar
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Something went wrong please try again!'),
+                  content: Text('Patient with the same data already exists.'),
                   backgroundColor: Colors.orange,
                 ),
               );
@@ -371,7 +371,7 @@ class _AddEventState extends State<AddEvent>
               // Show success SnackBar
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Camp created successfully!'),
+                  content: Text('Patient registered successfully!'),
                   backgroundColor: Colors.green,
                 ),
               );
@@ -380,40 +380,40 @@ class _AddEventState extends State<AddEvent>
           builder: (context, currentState) {
             return currentState is FormSubmitting
                 ? Center(
-                    child: SpinKitPumpingHeart(
-                      color: Colors.blue,
-                      size: 50.0,
-                    ),
-                  )
+              child: SpinKitPumpingHeart(
+                color: Colors.blue,
+                size: 50.0,
+              ),
+            )
                 : CustomButton(
-                    text: "Submit",
-                    onPressed: () {
-                      bloc.add(SubmitForm(
-                        campName: campNameController.text,
-                        organization: organizationController.text,
-                        address: addressController.text,
-                        city: cityController.text,
-                        state: stateController.text,
-                        pincode: pincodeController.text,
-                        name: nameController.text,
-                        phoneNumber1: phoneNumber1Controller.text,
-                        phoneNumber2: phoneNumber2Controller.text,
-                        name2: name2Controller.text,
-                        phoneNumber1_2: phoneNumber1_2Controller.text,
-                        phoneNumber2_2: phoneNumber2_2Controller.text,
-                        totalSquareFeet: totalSquareFeetController.text,
-                        noOfPatientExpected: noOfPatientExpectedController.text,
-                        position2: position2Controller.text,
-                        campPlanType: campPlanselectedValue.toString(),
-                        roadAccess: _selectedValue.toString(),
-                        waterAvailability: _selectedValue2.toString(),
-                        lastCampDone: lastselectedValue.toString(),
-                        campDate: _dateController.text,
-                        campTime: timeController.text,
-                        position: positionController.text,
-                      ));
-                    },
-                  );
+              text: "Submit",
+              onPressed: () {
+                bloc.add(SubmitForm(
+                  campName: campNameController.text,
+                  organization: organizationController.text,
+                  address: addressController.text,
+                  city: cityController.text,
+                  state: stateController.text,
+                  pincode: pincodeController.text,
+                  name: nameController.text,
+                  phoneNumber1: phoneNumber1Controller.text,
+                  phoneNumber2: phoneNumber2Controller.text,
+                  name2: name2Controller.text,
+                  phoneNumber1_2: phoneNumber1_2Controller.text,
+                  phoneNumber2_2: phoneNumber2_2Controller.text,
+                  totalSquareFeet: totalSquareFeetController.text,
+                  noOfPatientExpected: noOfPatientExpectedController.text,
+                  position2: position2Controller.text,
+                  campPlanType: campPlanselectedValue.toString(),
+                  roadAccess: _selectedValue.toString(),
+                  waterAvailability: _selectedValue2.toString(),
+                  lastCampDone: lastselectedValue.toString(),
+                  campDate: _dateController.text,
+                  campTime: timeController.text,
+                  position: positionController.text,
+                ));
+              },
+            );
           },
         ),
       ),
