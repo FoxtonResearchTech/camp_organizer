@@ -33,6 +33,8 @@ class _AnimatedRotatingPieChartWithGridState
       approvedCount.toDouble(),
       waitingQueueCount.toDouble(),
       rejectedCount.toDouble(),
+
+
     ];
   }
 
@@ -41,7 +43,10 @@ class _AnimatedRotatingPieChartWithGridState
     Colors.blueAccent,
     Colors.purpleAccent,
     Colors.orangeAccent,
+
    // Colors.redAccent,
+
+
   ];
   final List<String> titles = [
    // 'Total Camp Target',
