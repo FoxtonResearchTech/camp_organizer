@@ -39,7 +39,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-
   final AuthRepository authRepository;
 
   const MyApp({super.key, required this.authRepository});
@@ -63,7 +62,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AdminApprovalBloc(),
         ),
-
         BlocProvider(
           create: (context) => CampUpdateBloc(),
         ),
@@ -72,7 +70,8 @@ class MyApp extends StatelessWidget {
               AddTeamBloc(firestore: FirebaseFirestore.instance),
         ),
         BlocProvider(
-          create: (context) => PatientFollowUpsBloc(firestore: FirebaseFirestore.instance),
+          create: (context) =>
+              PatientFollowUpsBloc(firestore: FirebaseFirestore.instance),
         ),
       ],
       child: MaterialApp(
@@ -82,7 +81,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home: AdminBottomNavigationBar(), // Starting screen is the splash screen
+        home: CampOrganizerLoginPage(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),
