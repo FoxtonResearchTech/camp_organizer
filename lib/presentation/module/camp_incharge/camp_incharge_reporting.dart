@@ -21,7 +21,14 @@ class CampInchargeReporting extends StatefulWidget {
 }
 
 class _CampInchargeReportingState extends State<CampInchargeReporting> {
-
+@override
+  void initState() {
+  print("Emp id:${widget.documentId.toString()}");
+  print("Camp id:${widget.campData.toString()}");
+  getEmployeeDocId(widget.campData);
+    // TODO: implement initState
+    super.initState();
+  }
   // TextEditingControllers for the form fields
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
@@ -91,6 +98,17 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
     );
   }
 
+void getEmployeeDocId(Map<String, dynamic> campData) {
+  // Access the 'EmployeeDocId' or 'employeeDocId' field from the map
+  String? employeeDocId = campData['employeeDocId'] ?? campData['employeeDocId'];
+
+  if (employeeDocId != null) {
+    print('Employee Document ID: $employeeDocId');
+    saveFollowUpsToEmployeeCamp(employeeDocId,widget.documentId, _followUpControllers);
+  } else {
+    print('Employee Document ID not found.');
+  }
+}
 
   @override
   void dispose() {
@@ -279,6 +297,7 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
                         'glassesSupplied': int.tryParse(_glassesSuppliedController.text) ?? 0,
                         'vehicleNumber': _vehicleNumberController.text,
                         'kmRun': double.tryParse(_kmRunController.text) ?? 0.0,
+
                         'patientFollowUps': _followUpControllers.map((controllerMap) {
                           return {
                             'name': controllerMap['name']?.text ?? '',
@@ -286,6 +305,7 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
                             'status': controllerMap['status']?.text ?? '',
                           };
                         }).toList(),
+
 
                       };
 
@@ -296,7 +316,9 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
                         //  data: formData,
                         //),
                       //);
-                      submitReport(context, widget.documentId, formData);
+                   //   submitReport(context, widget.documentId, formData);
+                   //   getEmployeeDocId(widget.campData);
+
                     },
                   ),
                 ],
@@ -403,5 +425,35 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
       ),
     );
   }
+Future<void> saveFollowUpsToEmployeeCamp(
+    String employeeId,
+    String campDocId,
+    List<Map<String, TextEditingController?>> followUpControllers) async {
+  try {
+    // Convert the controller data to a list of maps
+    final patientFollowUps = followUpControllers.map((controllerMap) {
+      return {
+        'name': controllerMap['name']?.text ?? '',
+        'phone': controllerMap['phone']?.text ?? '',
+        'status': controllerMap['status']?.text ?? '',
+      };
+    }).toList();
+
+    // Reference the specific camp document in the 'camps' subcollection
+    DocumentReference campDocRef = FirebaseFirestore.instance
+        .collection('employees') // Main collection
+        .doc(employeeId)         // Employee document
+        .collection('camps')     // Subcollection
+        .doc(campDocId);         // Specific camp document
+
+    // Set the follow-up data in the specified camp document
+    await campDocRef.set({'followUps': patientFollowUps});
+
+    print('Follow-ups added successfully to Firestore with camp ID: $campDocId!');
+  } catch (e) {
+    print('Error adding follow-ups to Firestore: $e');
+  }
+}
+
 
 }
