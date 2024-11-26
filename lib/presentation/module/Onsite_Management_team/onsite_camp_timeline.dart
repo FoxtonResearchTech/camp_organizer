@@ -121,16 +121,16 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                           ),
                         );
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 1,left: 16,right: 16,bottom: 10),
-                        child:   camps[index]
-                        ['campStatus'] ==
-                            "Approved"
-                            ?
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
+                      child: camps[index]
+                      ['campStatus'] ==
+                          "Approved"
+                          ?
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
                               height:
                               screenHeight / 3.2, // Responsive height
                               width: double.infinity,
@@ -313,11 +313,11 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                                 ),
                               ),
                             ),
+                          ),
 
-                          ],
-                        ) : Center(
+                        ],
+                      ) : Center(
 
-                        ),
                       ),
                     );
                   },

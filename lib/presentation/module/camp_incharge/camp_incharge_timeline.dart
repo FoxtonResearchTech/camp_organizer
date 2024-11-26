@@ -33,7 +33,7 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline> with Single
   @override
   void initState() {
     super.initState();
-    //_inchargeReportBloc = InchargeReportBloc(firestore: FirebaseFirestore.instance)..add(FetchInchargeReport(employeeId: ''));
+    _inchargeReportBloc = InchargeReportBloc(firestore: FirebaseFirestore.instance)..add(FetchInchargeReport(employeeId: '', campId: ''));
   }
 
   @override

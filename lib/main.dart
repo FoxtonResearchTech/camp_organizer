@@ -1,5 +1,7 @@
 import 'package:camp_organizer/bloc/AddEvent/onsite_add_team_bloc.dart';
 import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
+import 'package:camp_organizer/bloc/approval/onsite_approval_bloc.dart';
+import 'package:camp_organizer/bloc/approval/onsite_approval_state.dart';
 import 'package:camp_organizer/camp_update/camp_update_bloc.dart';
 import 'package:camp_organizer/presentation/Admin/admin_approval.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
@@ -22,6 +24,8 @@ import 'bloc/Employee_registration/employee_registration_bloc.dart';
 import 'bloc/Status/status_bloc.dart';
 import 'bloc/auth/auth_bloc.dart';
 import 'firebase_options.dart';
+import 'presentation/module/camp_incharge/camp_incharge_dashboard.dart';
+import 'presentation/module/camp_incharge/camp_incharge_timeline.dart';
 import 'repository/auth_repository.dart';
 import 'services/notification/email_notification.dart';
 
@@ -39,7 +43,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-
   final AuthRepository authRepository;
 
   const MyApp({super.key, required this.authRepository});
@@ -63,7 +66,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AdminApprovalBloc(),
         ),
-
         BlocProvider(
           create: (context) => CampUpdateBloc(),
         ),
@@ -72,7 +74,12 @@ class MyApp extends StatelessWidget {
               AddTeamBloc(firestore: FirebaseFirestore.instance),
         ),
         BlocProvider(
-          create: (context) => PatientFollowUpsBloc(firestore: FirebaseFirestore.instance),
+          create: (context) =>
+              PatientFollowUpsBloc(firestore: FirebaseFirestore.instance),
+        ),
+        BlocProvider(
+          create: (context) =>
+             OnsiteApprovalBloc(),
         ),
       ],
       child: MaterialApp(
@@ -82,7 +89,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home:OnsiteCampTimeline(), // Starting screen is the splash screen
+        home: CampInchargeDashboard(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),
