@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home: AdminBottomNavigationBar(), // Starting screen is the splash screen
+        home:OnsiteCampTimeline(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),

@@ -34,17 +34,7 @@ class _OnsiteDashboardState extends State<OnsiteDashboard> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NotificationPage()),
-              );
-            },
-          ),
-        ],
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -74,11 +64,7 @@ class _OnsiteDashboardState extends State<OnsiteDashboard> {
               itemsCount: '4 items',
               color: Colors.green,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => OnsiteProfile()),
-                );
-                print("Profile tapped");
+
               },
             ),
 

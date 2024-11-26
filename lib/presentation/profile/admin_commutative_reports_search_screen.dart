@@ -193,37 +193,91 @@ class _CommutativeReportsSearchScreen
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Row(
+              child:Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _startDateController,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        labelText: "Start Date",
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.calendar_today),
-                          onPressed: () => _selectDateRange(context, true),
+                  // Start Date Field
+                  Flexible(
+                    child: GestureDetector(
+                      onTap: () => _selectDateRange(context, true),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              _startDateController.text.isNotEmpty
+                                  ? _startDateController.text
+                                  : "Start Date",
+                              style: TextStyle(
+                                color: _startDateController.text.isNotEmpty
+                                    ? Colors.black
+                                    : Colors.grey[600],
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Icon(Icons.calendar_today, color: Colors.orangeAccent),
+                          ],
                         ),
                       ),
                     ),
                   ),
                   const SizedBox(width: 16),
-                  Expanded(
-                    child: TextField(
-                      controller: _endDateController,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        labelText: "End Date",
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.calendar_today),
-                          onPressed: () => _selectDateRange(context, false),
+                  // End Date Field
+                  Flexible(
+                    child: GestureDetector(
+                      onTap: () => _selectDateRange(context, false),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              _endDateController.text.isNotEmpty
+                                  ? _endDateController.text
+                                  : "End Date",
+                              style: TextStyle(
+                                color: _endDateController.text.isNotEmpty
+                                    ? Colors.black
+                                    : Colors.grey[600],
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Icon(Icons.calendar_today, color: Colors.orangeAccent),
+                          ],
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
+
             ),
             Expanded(
               child: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
@@ -400,16 +454,17 @@ class _CommutativeReportsSearchScreen
       },
       child: ListView.builder(
         padding: const EdgeInsets.all(16.0),
-        itemCount: _filteredEmployees.length,
+        itemCount: _filteredEmployees.length ,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () async {
+              print("Length:${index}");
               await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => CommutativeReportsEventDetails(
                     employee: _filteredEmployees[index],
-                    employeedocId: state.employeeDocId[index],
+                    employeedocId: state.employeeDocId[2],
                     campId: state.campDocIds[index],
                   ),
                 ),
@@ -427,7 +482,7 @@ class _CommutativeReportsSearchScreen
     return Column(
       children: [
         Container(
-          height: screenHeight / 5,
+          height: screenHeight / 4,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),

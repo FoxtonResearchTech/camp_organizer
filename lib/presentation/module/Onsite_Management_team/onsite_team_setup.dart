@@ -63,7 +63,12 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
     return BlocProvider(
       create: (_) => AddTeamBloc(firestore: FirebaseFirestore.instance),
       child: Scaffold(
+
         appBar: AppBar(
+          automaticallyImplyLeading: false,
+          leading: IconButton(onPressed:(){
+            Navigator.pop(context);
+          }, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
           title: const Text(
             'Onsite Team Setup',
             style: TextStyle(
@@ -82,15 +87,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
             ),
           ),
           actions: [
-            IconButton(
-              icon: Icon(Icons.notifications, color: Colors.white),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NotificationPage()),
-                );
-              },
-            ),
+
           ],
         ),
         body: BlocListener<AddTeamBloc, AddTeamState>(

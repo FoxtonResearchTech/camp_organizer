@@ -1,4 +1,5 @@
 import 'package:camp_organizer/bloc/Status/status_event.dart';
+import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:camp_organizer/presentation/module/Onsite_Management_team/onsite_camp_details_page.dart';
 import 'package:camp_organizer/widgets/button/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -40,8 +41,9 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
   @override
   Widget build(BuildContext context) {
     // Screen size parameters
+    double screenWidths = MediaQuery.of(context).size.width;
     double screenWidth = MediaQuery.of(context).size.width;
-
+    double screenHeight = MediaQuery.of(context).size.height;
     return BlocListener<AddTeamBloc, AddTeamState>(
       listener: (context, state) {
         if (state is AddTeamLoading) {
@@ -63,7 +65,7 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
         child: Scaffold(
           appBar: AppBar(
             title: const Text(
-              'Onsite Camp Timeline',
+              'Onsite Camp ',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,
@@ -86,15 +88,7 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
               ),
             ),
             actions: [
-              IconButton(
-                icon: const Icon(Icons.notifications, color: Colors.white),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => NotificationPage()),
-                  );
-                },
-              ),
+
             ],
           ),
           body: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
@@ -108,143 +102,221 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                   itemCount: camps.length,
                   itemBuilder: (context, index) {
                     final camp = camps[index];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 16.0),
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
+                    return GestureDetector(
+                      onTap: () async {
+                        // Add debug logs to check the employee data and IDs being passed
+                        print('Employee: ${camps[index]}');
+                        print(
+                            'Employee Doc ID: ${state.employeeDocId[index]}');
+                        print('Camp Doc ID: ${state.campDocIds[index]}');
+
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EventDetailsPage(
+                              employee: camps[index],
+                              employeedocId: state.employeeDocId[index],
+                              campId: state.campDocIds[index],
+                            ),
+                          ),
+                        );
+                      },
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
+                        padding: const EdgeInsets.only(top: 1,left: 16,right: 16,bottom: 10),
+                        child:   camps[index]
+                        ['campStatus'] ==
+                            "Approved"
+                            ?
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.date_range,
-                                  size: screenWidth * 0.07,
-                                  color: Colors.lightBlueAccent,
-                                ),
-                                const SizedBox(width: 20),
-                                Text(
-                                  camps[index]['campDate'],
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8.0),
-                            Row(
-                              children: [
-                                const Text(
-                                  "Camp Name: ",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black54,
+                            Container(
+                              height:
+                              screenHeight / 3.2, // Responsive height
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    spreadRadius: 2,
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
                                   ),
-                                ),
-                                Text(
-                                  "${camps[index]['campName']}",
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8.0),
-                            Row(
-                              children: [
-                                const Text(
-                                  "Document ID: ",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                                Text(
-                                  "${camps[index]['documentId']}",
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8.0),
-                            Row(
-                              children: [
-                                const Text(
-                                  "Camp Time: ",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                                Text(
-                                  "${camps[index]['campTime']}",
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16.0),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      //_showAddCampTeamDialog(
-                                      // context, camp['documentId']);
-                                      final documentId = camp['documentId'];
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => OnsiteTeamSetup(
-                                              documentId: documentId,
-                                              campData: camp),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.date_range,
+                                              size: screenWidth * 0.07,
+                                              color: Colors.orange,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              camps[index]
+                                              ['campDate'],
+                                              style: TextStyle(
+                                                fontWeight:
+                                                FontWeight.w500,
+                                                color: Colors.black54,
+                                                fontSize:
+                                                screenWidth * 0.05,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      );
-                                    },
-                                    child: const Text(
-                                      'Add Team',
-                                      style: TextStyle(
-                                          color: Colors.black87, fontSize: 19),
-                                    ),
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent), // Set the background color
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-
-                                Expanded(
-                                  child: ElevatedButton(
-
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              OnsiteCampDetailsPage(
-                                                  campData: camp),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.watch_later,
+                                              size: screenWidth * 0.07,
+                                              color: Colors.orange,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              camps[index]
+                                              ['campTime'],
+                                              style: TextStyle(
+                                                fontWeight:
+                                                FontWeight.w500,
+                                                color: Colors.black54,
+                                                fontSize:
+                                                screenWidth * 0.05,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      );
-                                      print(camp);
-                                    },
-                                    child: const Text(
-                                      'View Team',
-                                      style: TextStyle(
-                                          color: Colors.black87, fontSize: 19),
+                                      ],
                                     ),
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent), // Set the background color
+                                    const SizedBox(height: 5),
+                                    ..._buildInfoText(
+                                      screenWidth,
+                                      camps[index]['campName'],
                                     ),
-                                  ),
+                                    ..._buildInfoText(
+                                      screenWidth,
+                                      camps[index]['address'],
+                                    ),
+                                    ..._buildInfoText(
+                                      screenWidth,
+                                      camps[index]['name'],
+                                    ),
+                                    ..._buildInfoText(
+                                      screenWidth,
+                                      camps[index]['phoneNumber1'],
+                                    ),
+                                    SizedBox(height: 20,),
+                                    // Horizontal Timeline Container
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        // Add Team Button
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              final documentId = camp['documentId'];
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => OnsiteTeamSetup(
+                                                    documentId: documentId,
+                                                    campData: camp,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              padding: const EdgeInsets.symmetric(vertical: 16),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                              backgroundColor: Colors.lightBlueAccent,
+                                              shadowColor: Colors.blue.withOpacity(0.4),
+                                              elevation: 5,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                const Icon(Icons.group_add, color: Colors.white),
+                                                const SizedBox(width: 8),
+                                                const Text(
+                                                  'Add Team',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+
+                                        // View Team Button
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => OnsiteCampDetailsPage(
+                                                    campData: camp,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              padding: const EdgeInsets.symmetric(vertical: 16),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                              backgroundColor: Colors.tealAccent.shade700,
+                                              shadowColor: Colors.teal.withOpacity(0.4),
+                                              elevation: 5,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                const Icon(Icons.visibility, color: Colors.white),
+                                                const SizedBox(width: 8),
+                                                const Text(
+                                                  'View Team',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
 
                           ],
+                        ) : Center(
+
                         ),
                       ),
                     );
@@ -315,5 +387,17 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
     // Logic to add team information to the selected camp
     print('Team "$teamInfo" added to camp: ${camp.name}');
     // Integrate with your bloc or backend logic here
+  }
+  List<Widget> _buildInfoText(double screenWidth, String text) {
+    return [
+      Text(
+        text,
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: Colors.black54,
+          fontSize: screenWidth * 0.05, // Responsive font size
+        ),
+      ),
+    ];
   }
 }

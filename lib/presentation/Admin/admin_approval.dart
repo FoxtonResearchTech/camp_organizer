@@ -12,7 +12,6 @@ import '../../bloc/approval/adminapproval_bloc.dart';
 import '../../bloc/approval/adminapproval_event.dart';
 import '../../bloc/approval/adminapproval_state.dart';
 import '../Event/admin_event_details.dart';
-import 'admin_camp_search_screen.dart';
 
 class AdminApproval extends StatefulWidget {
   @override
@@ -72,15 +71,6 @@ class _AdminApprovalState extends State<AdminApproval>
           ),
           actions: [
             IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AdminCampSearchScreen()),
-                  );
-                },
-                icon: const Icon(Icons.search, color: Colors.white)),
-            IconButton(
               icon: const Icon(Icons.notifications, color: Colors.white),
               onPressed: () {
                 Navigator.push(
@@ -103,6 +93,7 @@ class _AdminApprovalState extends State<AdminApproval>
                 child: ListView.builder(
                   itemCount: camps.length,
                   itemBuilder: (BuildContext context, int index) {
+                    print("doc Id:${state.employeeDocId[2]}");
                     Animation<double> animation = CurvedAnimation(
                       parent: _controller,
                       curve: Interval(

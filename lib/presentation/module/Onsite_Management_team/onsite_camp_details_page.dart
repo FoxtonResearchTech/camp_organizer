@@ -10,8 +10,30 @@ class OnsiteCampDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Camp Details'),
-        backgroundColor: Colors.lightBlue[600],
+        automaticallyImplyLeading: false,
+        leading: IconButton(onPressed:(){
+          Navigator.pop(context);
+        }, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+        title: const Text(
+          'Camp Details',
+          style: TextStyle(
+              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: false,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        actions: [
+
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10.0),

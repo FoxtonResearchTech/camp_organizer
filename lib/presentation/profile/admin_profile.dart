@@ -1,5 +1,6 @@
 import 'package:camp_organizer/bloc/Profile/profile_state.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
+import 'package:camp_organizer/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -265,8 +266,10 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
                                                             .accentBlue)),
                                               ),
                                               TextButton(
-                                                onPressed: () => Navigator.pop(
-                                                    context, true),
+                                                onPressed: () {
+                                                  AuthRepository().signOut();
+                                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CampOrganizerLoginPage()));
+                                                },
                                                 child: const Text('Logout',
                                                     style: TextStyle(
                                                         color: AppColors
