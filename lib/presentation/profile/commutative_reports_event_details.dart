@@ -11,11 +11,14 @@ import 'package:pdf/widgets.dart' as pw;
 
 class CommutativeReportsEventDetails extends StatefulWidget {
   final Map<String, dynamic> employee;
-  final String? employeedocId;
+  // final String? employeedocId;
   final String? campId;
-  const CommutativeReportsEventDetails(
-      {Key? key, required this.employee, this.employeedocId, this.campId})
-      : super(key: key);
+  const CommutativeReportsEventDetails({
+    Key? key,
+    required this.employee,
+    // this.employeedocId,
+    this.campId,
+  }) : super(key: key);
 
   @override
   _CommutativeReportsEventDetails createState() =>

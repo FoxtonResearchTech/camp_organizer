@@ -39,10 +39,10 @@ class EventFormBloc extends Bloc<EventEvent, EventFormState> {
         _firestore.collection('employees').doc(user.uid);
 
     try {
-      // Create a subcollection under the employee document (e.g. 'events')
+      // Create a subcollection under the employee document (e.g. 'camps')
       CollectionReference eventsCollection = employeeDocRef.collection('camps');
 
-      // Add the event data to the 'events' subcollection
+      // Add the event data to the 'camps' subcollection
       await eventsCollection.add({
         'campName': event.campName,
         'campDate': event.campDate,
@@ -68,6 +68,7 @@ class EventFormBloc extends Bloc<EventEvent, EventFormState> {
         'noOfPatientExpected': event.noOfPatientExpected,
         'CreatedOn': DateTime.now(),
         'EmployeeId': user.email,
+        'EmployeeDocId': user.uid, // Add the employee document ID
         'campStatus': 'Waiting',
       });
 

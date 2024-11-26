@@ -1,15 +1,10 @@
 import 'package:camp_organizer/bloc/AddEvent/onsite_add_team_bloc.dart';
 import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
 import 'package:camp_organizer/camp_update/camp_update_bloc.dart';
-import 'package:camp_organizer/presentation/Admin/admin_approval.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
-import 'package:camp_organizer/presentation/dashboard/camp_organizer.dart';
 import 'package:camp_organizer/presentation/module/Onsite_Management_team/onsite_camp_timeline.dart';
-import 'package:camp_organizer/presentation/module/admin/manage_employee_account.dart';
-import 'package:camp_organizer/presentation/module/post_camp_followup/post_camp_dashboard.dart';
-import 'package:camp_organizer/presentation/profile/camp-organizer_profile.dart';
-import 'package:camp_organizer/widgets/bottom_navigation_bar/admin_bottom_navigation_bar.dart';
-import 'package:camp_organizer/widgets/bottom_navigation_bar/fluid_bottom_navigation_bar.dart';
+import 'package:camp_organizer/widgets/bottom_navigation_bar/onsite_management_nav_bar.dart';
+import 'package:camp_organizer/widgets/bottom_navigation_bar/super_admin_bottom_navigation_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +34,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-
   final AuthRepository authRepository;
 
   const MyApp({super.key, required this.authRepository});
@@ -63,7 +57,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AdminApprovalBloc(),
         ),
-
         BlocProvider(
           create: (context) => CampUpdateBloc(),
         ),
@@ -72,7 +65,8 @@ class MyApp extends StatelessWidget {
               AddTeamBloc(firestore: FirebaseFirestore.instance),
         ),
         BlocProvider(
-          create: (context) => PatientFollowUpsBloc(firestore: FirebaseFirestore.instance),
+          create: (context) =>
+              PatientFollowUpsBloc(firestore: FirebaseFirestore.instance),
         ),
       ],
       child: MaterialApp(
@@ -82,7 +76,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home:OnsiteCampTimeline(), // Starting screen is the splash screen
+        home: CampOrganizerLoginPage(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),

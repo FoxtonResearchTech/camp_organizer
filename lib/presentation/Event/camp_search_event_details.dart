@@ -11,11 +11,14 @@ import 'package:pdf/widgets.dart' as pw;
 
 class CampSearchEventDetailsPage extends StatefulWidget {
   final Map<String, dynamic> employee;
-  final String? employeedocId;
+  // final String? employeedocId;
   final String? campId;
-  const CampSearchEventDetailsPage(
-      {Key? key, required this.employee, this.employeedocId, this.campId})
-      : super(key: key);
+  const CampSearchEventDetailsPage({
+    Key? key,
+    required this.employee,
+    // this.employeedocId,
+    this.campId,
+  }) : super(key: key);
 
   @override
   _CampSearchEventDetailsPage createState() => _CampSearchEventDetailsPage();

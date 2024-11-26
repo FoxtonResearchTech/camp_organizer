@@ -1,9 +1,11 @@
+import 'package:camp_organizer/presentation/Admin/admin_camp_search_screen.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:camp_organizer/utils/app_colors.dart';
 import 'package:camp_organizer/widgets/button/custom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 import '../../bloc/Status/status_bloc.dart';
@@ -71,6 +73,15 @@ class _AdminApprovalState extends State<AdminApproval>
           ),
           actions: [
             IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AdminCampSearchScreen()),
+                  );
+                },
+                icon: const Icon(Icons.search, color: Colors.white)),
+            IconButton(
               icon: const Icon(Icons.notifications, color: Colors.white),
               onPressed: () {
                 Navigator.push(
@@ -84,10 +95,36 @@ class _AdminApprovalState extends State<AdminApproval>
         body: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
           builder: (context, state) {
             if (state is AdminApprovalLoading) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (state is AdminApprovalLoaded) {
               final camps = state.allCamps;
-
+              final waitingCamps = camps
+                  .where((camp) => camp['campStatus'] == 'Waiting')
+                  .toList();
+              // Check if there are no camps with status "Waiting"
+              if (waitingCamps.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Lottie.asset(
+                        'assets/no_data.json',
+                        width: screenWidth * 0.35,
+                        height: screenHeight * 0.25,
+                      ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        "No Camps are in Waiting list ",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ListView.builder(
@@ -306,45 +343,68 @@ class _AdminApprovalState extends State<AdminApproval>
                                                               ),
                                                               TextButton(
                                                                 onPressed: () {
-                                                                  BlocProvider.of<
-                                                                              AdminApprovalBloc>(
-                                                                          context)
-                                                                      .add(
-                                                                    UpdateStatusEvent(
-                                                                      employeeId:
-                                                                          state.employeeDocId[
-                                                                              index],
-                                                                      campDocId:
-                                                                          state.campDocIds[
-                                                                              index],
-                                                                      newStatus:
-                                                                          'Rejected',
-                                                                    ),
-                                                                  );
-                                                                  String
-                                                                      reasonText =
-                                                                      _reason
-                                                                          .text;
-                                                                  BlocProvider.of<
-                                                                              AdminApprovalBloc>(
-                                                                          context)
-                                                                      .add(
-                                                                    AddReasonEvent(
-                                                                      reasonText:
-                                                                          reasonText,
-                                                                      employeeId:
-                                                                          state.employeeDocId[
-                                                                              index],
-                                                                      campDocId:
-                                                                          state.campDocIds[
-                                                                              index],
-                                                                    ),
-                                                                  );
-                                                                  _reason
-                                                                      .clear();
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
+                                                                  try {
+                                                                    BlocProvider.of<AdminApprovalBloc>(
+                                                                            context)
+                                                                        .add(
+                                                                      UpdateStatusEvent(
+                                                                        employeeId:
+                                                                            state.employeeDocId[index],
+                                                                        campDocId:
+                                                                            state.campDocIds[index],
+                                                                        newStatus:
+                                                                            'Rejected',
+                                                                      ),
+                                                                    );
+                                                                    String
+                                                                        reasonText =
+                                                                        _reason
+                                                                            .text;
+                                                                    BlocProvider.of<AdminApprovalBloc>(
+                                                                            context)
+                                                                        .add(
+                                                                      AddReasonEvent(
+                                                                        reasonText:
+                                                                            reasonText,
+                                                                        employeeId:
+                                                                            state.employeeDocId[index],
+                                                                        campDocId:
+                                                                            state.campDocIds[index],
+                                                                      ),
+                                                                    );
+                                                                    _reason
+                                                                        .clear();
+                                                                    ScaffoldMessenger.of(
+                                                                            context)
+                                                                        .showSnackBar(
+                                                                      const SnackBar(
+                                                                        content:
+                                                                            Center(
+                                                                          child: Text(
+                                                                              'Camp Rejected',
+                                                                              style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500)),
+                                                                        ),
+                                                                        backgroundColor:
+                                                                            AppColors.lightRed,
+                                                                      ),
+                                                                    );
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  } catch (e) {
+                                                                    ScaffoldMessenger.of(
+                                                                            context)
+                                                                        .showSnackBar(
+                                                                      const SnackBar(
+                                                                        content:
+                                                                            Center(
+                                                                          child: Text(
+                                                                              'Failed to Reject ',
+                                                                              style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500)),
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  }
                                                                 },
                                                                 child:
                                                                     const Text(
@@ -399,14 +459,15 @@ class _AdminApprovalState extends State<AdminApproval>
                                                           MaterialPageRoute(
                                                             builder: (context) =>
                                                                 AdminEventDetailsPage(
-                                                                    employeeID:
-                                                                        state.employeeDocId[
-                                                                            index],
-                                                                    campID: state
-                                                                            .campDocIds[
-                                                                        index],
-                                                                    employee: camps[
-                                                                        index]),
+                                                              employeeID: camps[
+                                                                      index][
+                                                                  'EmployeeDocId'],
+                                                              campID: state
+                                                                      .campDocIds[
+                                                                  index],
+                                                              employee:
+                                                                  camps[index],
+                                                            ),
                                                           ),
                                                         );
                                                       },
@@ -450,18 +511,18 @@ class _AdminApprovalState extends State<AdminApproval>
                                   const SizedBox(height: 20),
                                 ],
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                       ),
                     );
                   },
                 ),
               );
             } else if (state is AdminApprovalError) {
-              return Center(
+              return const Center(
                 child: Text('Error'),
               );
             }
-            return Center(
+            return const Center(
               child: Text("No data available"),
             );
           },

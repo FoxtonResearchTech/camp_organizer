@@ -193,7 +193,7 @@ class _CommutativeReportsSearchScreen
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child:Row(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Start Date Field
@@ -201,7 +201,8 @@ class _CommutativeReportsSearchScreen
                     child: GestureDetector(
                       onTap: () => _selectDateRange(context, true),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 14, horizontal: 16),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
@@ -229,7 +230,8 @@ class _CommutativeReportsSearchScreen
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Icon(Icons.calendar_today, color: Colors.orangeAccent),
+                            Icon(Icons.calendar_today,
+                                color: Colors.orangeAccent),
                           ],
                         ),
                       ),
@@ -241,7 +243,8 @@ class _CommutativeReportsSearchScreen
                     child: GestureDetector(
                       onTap: () => _selectDateRange(context, false),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 14, horizontal: 16),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
@@ -269,7 +272,8 @@ class _CommutativeReportsSearchScreen
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Icon(Icons.calendar_today, color: Colors.orangeAccent),
+                            Icon(Icons.calendar_today,
+                                color: Colors.orangeAccent),
                           ],
                         ),
                       ),
@@ -277,7 +281,6 @@ class _CommutativeReportsSearchScreen
                   ),
                 ],
               ),
-
             ),
             Expanded(
               child: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
@@ -454,17 +457,16 @@ class _CommutativeReportsSearchScreen
       },
       child: ListView.builder(
         padding: const EdgeInsets.all(16.0),
-        itemCount: _filteredEmployees.length ,
+        itemCount: _filteredEmployees.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () async {
-              print("Length:${index}");
               await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => CommutativeReportsEventDetails(
                     employee: _filteredEmployees[index],
-                    employeedocId: state.employeeDocId[2],
+                    // employeedocId: state.employeeDocId[1],
                     campId: state.campDocIds[index],
                   ),
                 ),
@@ -482,7 +484,7 @@ class _CommutativeReportsSearchScreen
     return Column(
       children: [
         Container(
-          height: screenHeight / 4,
+          height: screenHeight / 5,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
