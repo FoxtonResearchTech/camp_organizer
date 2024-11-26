@@ -8,6 +8,8 @@ import 'package:camp_organizer/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
+import '../../presentation/Admin/dashboard.dart';
+
 class AdminBottomNavigationBar extends StatefulWidget {
   @override
   _AdminBottomNavigationBarState createState() =>
