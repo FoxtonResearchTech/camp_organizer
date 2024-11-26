@@ -1,3 +1,4 @@
+import 'package:camp_organizer/presentation/Analytics/app_resources.dart';
 import 'package:camp_organizer/presentation/Event/camp_search_event_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -204,7 +205,7 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
                       child: Column(
                         children: [
                           Container(
-                            height: screenHeight / 5,
+                            height: screenHeight / 4,
                             width: double.infinity,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
@@ -285,6 +286,85 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
                                   ..._buildInfoText(
                                     screenWidth,
                                     _filteredEmployees[index]['phoneNumber1'],
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(
+                                        left: screenWidth / 10,
+                                        right: screenWidth / 10),
+                                    width: double.maxFinite,
+                                    child: ElevatedButton.icon(
+                                      icon: const Icon(Icons.delete),
+                                      onPressed: () async {
+                                        bool? confirmDelete = await showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: const Text('Delete Camp'),
+                                              content: const Text(
+                                                  'Are you sure you want to delete this camp?'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          context, false),
+                                                  child: Text('Cancel',
+                                                      style: TextStyle(
+                                                          color: Colors.blue)),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          context, true),
+                                                  child: Text('Delete',
+                                                      style: TextStyle(
+                                                          color: Colors.blue)),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                        if (confirmDelete == true) {
+                                          try {
+                                            final employeeId =
+                                                _filteredEmployees[index]
+                                                    ['employeeDocId'];
+                                            final campDocId =
+                                                _filteredEmployees[index]
+                                                    ['documentId'];
+
+                                            context
+                                                .read<AdminApprovalBloc>()
+                                                .add(DeleteCampEvent(
+                                                  employeeId: employeeId,
+                                                  campDocId: campDocId,
+                                                ));
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    "Camp Deleted Successfully"),
+                                              ),
+                                            );
+                                          } catch (e) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    "Failed to delete the camp"),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          backgroundColor: Colors.red,
+                                          foregroundColor: Colors.white),
+                                      label: const Text("Delete"),
+                                    ),
                                   ),
                                 ],
                               ),

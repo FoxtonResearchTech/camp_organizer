@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../notification/notification.dart';
 import 'finance_add_expense.dart';
 import 'finance_edit_expense.dart';
 import 'finance_profile.dart';
@@ -96,7 +95,6 @@ class _FinanceDashboardState extends State<FinanceDashboard> {
                 print("Upcoming Project tapped");
               },
             ),
-
             _buildDashboardItem(
               icon: Icons.monetization_on_outlined,
               label: 'Camp Expenses',
@@ -104,11 +102,9 @@ class _FinanceDashboardState extends State<FinanceDashboard> {
               itemsCount: '',
               color: Colors.purple,
               onTap: () {
-
                 print("camp incharge");
               },
             ),
-
             _buildDashboardItem(
               icon: Icons.money_off_sharp,
               label: 'Edit Expenses',
@@ -208,5 +204,4 @@ class _FinanceDashboardState extends State<FinanceDashboard> {
       },
     );
   }
-
 }

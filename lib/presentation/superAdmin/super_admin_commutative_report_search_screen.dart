@@ -290,16 +290,24 @@ class _SuperCommutativeReportsSearchScreen
                   } else if (state is AdminApprovalLoaded) {
                     // Use a post-frame callback to update filtered data after the build.
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (_startDate != null || _endDate != null) {
-                        _filterEmployees(state.allCamps);
-                      } else if (_filteredEmployees.isEmpty) {
-                        setState(() {
+                      setState(() {
+                        if (_startDate != null || _endDate != null) {
+                          _filterEmployees(state.allCamps);
+                        } else {
                           _filteredEmployees = state.allCamps;
-                        });
-                      }
+                        }
+                      });
                     });
-
-                    return _buildEmployeeList(state, screenWidth, screenHeight);
+                    return RefreshIndicator(
+                      onRefresh: () async {
+                        context
+                            .read<AdminApprovalBloc>()
+                            .add(FetchDataEvents());
+                      },
+                      child:
+                          _buildEmployeeList(state, screenWidth, screenHeight),
+                    );
+                    // return _buildEmployeeList(state, screenWidth, screenHeight);
                   } else if (state is AdminApprovalError) {
                     return const Center(
                       child: Text('Failed to load camps. Please try again.'),
@@ -451,31 +459,26 @@ class _SuperCommutativeReportsSearchScreen
         ),
       ]));
     }
-    return RefreshIndicator(
-      onRefresh: () async {
-        context.read<AdminApprovalBloc>().add(FetchDataEvents());
-      },
-      child: ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: _filteredEmployees.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CommutativeReportsEventDetails(
-                    employee: _filteredEmployees[index],
-                    // employeedocId: state.employeeDocId[1],
-                    campId: state.campDocIds[index],
-                  ),
+    return ListView.builder(
+      padding: const EdgeInsets.all(16.0),
+      itemCount: _filteredEmployees.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CommutativeReportsEventDetails(
+                  employee: _filteredEmployees[index],
+                  // employeedocId: state.employeeDocId[1],
+                  campId: state.campDocIds[index],
                 ),
-              );
-            },
-            child: _buildEmployeeCard(index, screenWidth, screenHeight),
-          );
-        },
-      ),
+              ),
+            );
+          },
+          child: _buildEmployeeCard(index, screenWidth, screenHeight),
+        );
+      },
     );
   }
 
@@ -484,7 +487,7 @@ class _SuperCommutativeReportsSearchScreen
     return Column(
       children: [
         Container(
-          height: screenHeight / 5,
+          height: screenHeight / 3.75,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
@@ -561,6 +564,73 @@ class _SuperCommutativeReportsSearchScreen
                 ..._buildInfoText(
                   screenWidth,
                   _filteredEmployees[index]['phoneNumber1'],
+                ),
+                SizedBox(height: 10),
+                Container(
+                  padding: EdgeInsets.only(
+                      left: screenWidth / 10, right: screenWidth / 10),
+                  width: double.maxFinite,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () async {
+                      bool? confirmDelete = await showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Delete Camp'),
+                            content: const Text(
+                                'Are you sure you want to delete this camp?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: Text('Cancel',
+                                    style: TextStyle(color: Colors.blue)),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                child: Text('Delete',
+                                    style: TextStyle(color: Colors.blue)),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      if (confirmDelete == true) {
+                        try {
+                          final employeeId =
+                              _filteredEmployees[index]['employeeDocId'];
+                          final campDocId =
+                              _filteredEmployees[index]['documentId'];
+
+                          context.read<AdminApprovalBloc>().add(DeleteCampEvent(
+                                employeeId: employeeId,
+                                campDocId: campDocId,
+                              ));
+                          setState(() {
+                            _filteredEmployees.removeAt(index);
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Camp Deleted Successfully"),
+                            ),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Failed to delete the camp"),
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white),
+                    label: Text("Delete"),
+                  ),
                 ),
               ],
             ),

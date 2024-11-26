@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../../../bloc/Employee/employee_update_event.dart';
 import '../../../bloc/Status/status_bloc.dart';
-import '../../notification/notification.dart';
 import 'camp_incharge_profile.dart';
 import 'camp_incharge_reporting.dart';
 import 'camp_incharge_timeline.dart';
@@ -15,8 +14,7 @@ class CampInchargeDashboard extends StatefulWidget {
   State<CampInchargeDashboard> createState() => _CampInchargeDashboardState();
 }
 
-class _CampInchargeDashboardState extends State<CampInchargeDashboard>{
-
+class _CampInchargeDashboardState extends State<CampInchargeDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +64,8 @@ class _CampInchargeDashboardState extends State<CampInchargeDashboard>{
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CampInchargeTimeline()),
+                  MaterialPageRoute(
+                      builder: (context) => CampInchargeTimeline()),
                 );
                 print("Camp Timeline tapped");
               },
@@ -80,7 +79,8 @@ class _CampInchargeDashboardState extends State<CampInchargeDashboard>{
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CampInchargeProfile()),
+                  MaterialPageRoute(
+                      builder: (context) => CampInchargeProfile()),
                 );
                 print("Profile tapped");
               },
@@ -99,7 +99,6 @@ class _CampInchargeDashboardState extends State<CampInchargeDashboard>{
                 print("Upcoming Project tapped");
               },
             ),
-
             _buildDashboardItem(
               icon: Icons.bookmark_add,
               label: 'Reporting',
@@ -107,7 +106,6 @@ class _CampInchargeDashboardState extends State<CampInchargeDashboard>{
               itemsCount: '',
               color: Colors.purple,
               onTap: () {
-
                 print("camp incharge");
               },
             ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../notification/notification.dart';
 import 'logistics_inward.dart';
 import 'logistics_outward.dart';
 import 'logistics_profile.dart';
@@ -38,9 +37,7 @@ class _LogisticsDashboardState extends State<LogisticsDashboard> {
         actions: [
           IconButton(
             icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-
-            },
+            onPressed: () {},
           ),
         ],
       ),
@@ -93,7 +90,6 @@ class _LogisticsDashboardState extends State<LogisticsDashboard> {
                 print("Upcoming Project tapped");
               },
             ),
-
             _buildDashboardItem(
               icon: Icons.arrow_circle_left_sharp,
               label: 'inward',
@@ -101,7 +97,6 @@ class _LogisticsDashboardState extends State<LogisticsDashboard> {
               itemsCount: '',
               color: Colors.purple,
               onTap: () {
-
                 print("camp incharge");
               },
             ),
@@ -112,7 +107,6 @@ class _LogisticsDashboardState extends State<LogisticsDashboard> {
               itemsCount: '',
               color: Colors.purple,
               onTap: () {
-
                 print("camp incharge");
               },
             ),

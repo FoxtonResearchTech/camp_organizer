@@ -288,16 +288,22 @@ class _CommutativeReportsSearchScreen
                   } else if (state is StatusLoaded) {
                     // Use a post-frame callback to update filtered data after the build.
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (_startDate != null || _endDate != null) {
-                        _filterEmployees(state.employees);
-                      } else if (_filteredEmployees.isEmpty) {
-                        setState(() {
+                      setState(() {
+                        if (_startDate != null || _endDate != null) {
+                          _filterEmployees(state.employees);
+                        } else {
                           _filteredEmployees = state.employees;
-                        });
-                      }
+                        }
+                      });
                     });
 
-                    return _buildEmployeeList(state, screenWidth, screenHeight);
+                    return RefreshIndicator(
+                      onRefresh: () async {
+                        context.read<StatusBloc>().add(FetchDataEvent());
+                      },
+                      child:
+                          _buildEmployeeList(state, screenWidth, screenHeight),
+                    );
                   } else if (state is StatusError) {
                     return const Center(
                       child: Text('Failed to load camps. Please try again.'),
@@ -431,49 +437,53 @@ class _CommutativeReportsSearchScreen
   Widget _buildEmployeeList(
       StatusLoaded state, double screenWidth, double screenHeight) {
     if (_filteredEmployees.isEmpty) {
-      return Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Lottie.asset(
-          'assets/no_records.json',
-          width: screenWidth * 0.6,
-          height: screenHeight * 0.4,
-        ),
-        const SizedBox(height: 10),
-        const Text(
-          "No matching record found",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey,
-          ),
-        ),
-      ]));
-    }
-    return RefreshIndicator(
-      onRefresh: () async {
-        context.read<StatusBloc>().add(FetchDataEvent());
-      },
-      child: ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: _filteredEmployees.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CommutativeReportsEventDetails(
-                    employee: _filteredEmployees[index],
-                    // employeedocId: state.employeeDocId[index],
-                    campId: state.campDocId[index],
+      return SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Container(
+          padding: EdgeInsets.only(top: screenHeight / 6),
+          child: Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                Lottie.asset(
+                  'assets/no_records.json',
+                  width: screenWidth * 0.6,
+                  height: screenHeight * 0.4,
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  "No matching record found",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey,
                   ),
                 ),
-              );
-            },
-            child: _buildEmployeeCard(index, screenWidth, screenHeight),
-          );
-        },
-      ),
+              ])),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(16.0),
+      itemCount: _filteredEmployees.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CommutativeReportsEventDetails(
+                  employee: _filteredEmployees[index],
+                  // employeedocId: state.employeeDocId[index],
+                  campId: state.campDocId[index],
+                ),
+              ),
+            );
+          },
+          child: _buildEmployeeCard(index, screenWidth, screenHeight),
+        );
+      },
     );
   }
 
