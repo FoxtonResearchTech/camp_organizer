@@ -8,18 +8,13 @@ import 'package:camp_organizer/bloc/approval/onsite_approval_state.dart';
 import 'package:camp_organizer/camp_update/camp_update_bloc.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
 import 'package:camp_organizer/presentation/module/Onsite_Management_team/onsite_camp_timeline.dart';
-import 'package:camp_organizer/presentation/module/admin/approvals.dart';
-import 'package:camp_organizer/presentation/module/admin/dashboard.dart';
-import 'package:camp_organizer/widgets/bottom_navigation_bar/camp_incharge_nav_bar.dart';
-import 'package:camp_organizer/widgets/bottom_navigation_bar/finance_nav_bar.dart';
-import 'package:camp_organizer/widgets/bottom_navigation_bar/logistics_nav_bar.dart';
 import 'package:camp_organizer/widgets/bottom_navigation_bar/onsite_management_nav_bar.dart';
-import 'package:camp_organizer/widgets/bottom_navigation_bar/post_camp_nav_bar.dart';
 import 'package:camp_organizer/widgets/bottom_navigation_bar/super_admin_bottom_navigation_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'admin_add_employee.dart';
 import 'bloc/AddEvent/event_bloc.dart';
 import 'bloc/AddEvent/patient_follow_ups_bloc.dart';
@@ -33,6 +28,7 @@ import 'presentation/module/logistics/logistics_timeline.dart';
 import 'presentation/module/post_camp_followup/post_camp_timeline.dart';
 import 'repository/auth_repository.dart';
 import 'services/notification/email_notification.dart';
+import 'widgets/bottom_navigation_bar/post_camp_nav_bar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -105,7 +101,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home: FinanceNavBar(), // Starting screen is the splash screen
+        home:PostCampNavBar(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),
