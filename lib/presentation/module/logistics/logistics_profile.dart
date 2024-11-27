@@ -1,226 +1,340 @@
+import 'package:camp_organizer/presentation/authentication/login_screen.dart';
+import 'package:camp_organizer/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../notification/notification.dart';
+import '../../../bloc/Profile/logistics_profile_bloc.dart';
+import '../../../bloc/Profile/logistics_profile_event.dart';
+import '../../../bloc/Profile/logistics_profile_state.dart';
+
+import '../../../utils/app_colors.dart';
 
 class LogisticsProfile extends StatefulWidget {
-  const LogisticsProfile({super.key});
-
   @override
-  State<LogisticsProfile> createState() => _LogisticsProfileState();
+  _LogisticsProfile createState() => _LogisticsProfile();
 }
 
-class _LogisticsProfileState extends State<LogisticsProfile> {
+class _LogisticsProfile extends State<LogisticsProfile>
+    with TickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Offset> _slideAnimation;
+  late LogisticsProfileBloc _LogisticsProfileBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(-1.0, 0.0), // Starts from the left
+      end: Offset.zero, // Ends at the original position
+    ).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+    _controller.forward(); // Start the animation
+    _LogisticsProfileBloc = LogisticsProfileBloc()..add(FetchDataEvent());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => _LogisticsProfileBloc,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Profile',
+            style: TextStyle(
+                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: false,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.notifications, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        NotificationPage(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(-1.0, 0.0); // Start from the left
+                      const end = Offset.zero; // End at the original position
+                      const curve = Curves.easeInOut;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      var offsetAnimation = animation.drive(tween);
+                      return SlideTransition(
+                          position: offsetAnimation, child: child);
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        backgroundColor: Colors.white,
+        body: Stack(
+          children: [
+            // Header Background with transition animation
+            AnimatedContainer(
+              duration: const Duration(seconds: 1),
+              height: 250,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.blue,
+                    Colors.lightBlueAccent,
+                    Colors.lightBlue
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
+              ),
+              child: Container(),
+            ),
+            // Profile Content with smooth transitions
+            AnimatedPadding(
+              duration: const Duration(seconds: 1),
+              padding: const EdgeInsets.only(top: 50),
+              child: BlocBuilder<LogisticsProfileBloc, LogisticsProfileState>(
+                builder: (context, state) {
+                  if (state is LogisticsProfileLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is LogisticsProfileLoaded) {
+                    final employee = state.employee;
+                    return Column(
+                      children: [
+                        const SizedBox(height: 15),
+                        AnimatedDefaultTextStyle(
+                          duration: const Duration(milliseconds: 500),
+                          style: const TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          child: Text(employee['firstName'] +
+                                  " " +
+                                  employee['lastName'] ??
+                              'N/A'),
+                        ),
+                        AnimatedDefaultTextStyle(
+                          duration: const Duration(milliseconds: 500),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15),
+                          child: Text(employee['role'] ?? 'N/A'),
+                        ),
+                        const SizedBox(height: 30),
+                        Expanded(
+                          child: AnimatedContainer(
+                            duration: const Duration(seconds: 1),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 30),
+                            margin: const EdgeInsets.only(top: 20),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.3),
+                                  spreadRadius: 5,
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Animated Profile Info Tiles
+                                  ProfileInfoTile(
+                                    icon: Icons.person,
+                                    title: 'DOB',
+                                    subtitle: employee['dob'] ?? 'N/A',
+                                    slideAnimation: _slideAnimation,
+                                  ),
+                                  ProfileInfoTile(
+                                    icon: Icons.people,
+                                    title: 'Gender',
+                                    subtitle: employee['gender'] ?? 'N/A',
+                                    slideAnimation: _slideAnimation,
+                                  ),
+                                  ProfileInfoTile(
+                                    icon: Icons.bloodtype,
+                                    title: 'Blood Group',
+                                    subtitle: employee['bloodGroup'] ?? 'N/A',
+                                    slideAnimation: _slideAnimation,
+                                  ),
+                                  ProfileInfoTile(
+                                    icon: Icons.place,
+                                    title: 'Lane 1',
+                                    subtitle: employee['lane1'] ?? 'N/A',
+                                    slideAnimation: _slideAnimation,
+                                  ),
+                                  ProfileInfoTile(
+                                    icon: Icons.place,
+                                    title: 'Lane 2',
+                                    subtitle: employee['lane2'] ?? 'N/A',
+                                    slideAnimation: _slideAnimation,
+                                  ),
+                                  ProfileInfoTile(
+                                    icon: Icons.location_city_outlined,
+                                    title: 'State',
+                                    subtitle: employee['state'] ?? 'N/A',
+                                    slideAnimation: _slideAnimation,
+                                  ),
+                                  ProfileInfoTile(
+                                    icon: Icons.my_location,
+                                    title: 'Pincode',
+                                    subtitle: employee['pincode'] ?? 'N/A',
+                                    slideAnimation: _slideAnimation,
+                                  ),
+                                  ProfileInfoTile(
+                                    icon: Icons.supervised_user_circle,
+                                    title: 'Employee id',
+                                    subtitle: employee['empCode'] ?? 'N/A',
+                                    slideAnimation: _slideAnimation,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      bool? confirmLogout = await showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: const Text('Logout'),
+                                            content: const Text(
+                                                'Are you sure you want to Logout?'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    context, false),
+                                                child: const Text('Cancel',
+                                                    style: TextStyle(
+                                                        color: AppColors
+                                                            .accentBlue)),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  AuthRepository().signOut();
+                                                  Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              CampOrganizerLoginPage()));
+                                                },
+                                                child: const Text('Logout',
+                                                    style: TextStyle(
+                                                        color: AppColors
+                                                            .accentBlue)),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                      if (confirmLogout == true) {}
+                                    },
+                                    child: ProfileInfoTile(
+                                      icon: Icons.login,
+                                      title: 'Logout',
+                                      subtitle: 'logout',
+                                      slideAnimation: _slideAnimation,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  } else if (state is LogisticsProfileError) {
+                    return Center(
+                      child: Text('Error+${state.errorMessage}'),
+                    );
+                  }
+                  return const Center(
+                    child: Text("No data available"),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ProfileInfoTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final Animation<Offset> slideAnimation;
+
+  ProfileInfoTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.slideAnimation,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SlideTransition(
+      position: slideAnimation,
+      child: ListTile(
+        leading: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.blueAccent.withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            icon,
+            color: Colors.blueAccent,
+          ),
+        ),
+        title: Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(subtitle),
+      ),
+    );
+  }
+}
+
+class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: false,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NotificationPage()),
-              );
-            },
-          ),
-        ],
+        title: const Text('Notifications'),
       ),
-
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(0.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Top container with gradient background and profile details
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.vertical(
-                    bottom: Radius.circular(30),
-                  ),
-                ),
-                padding: EdgeInsets.symmetric(vertical: 40),
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundImage: AssetImage('assets/profile_picture.jpg'), // Replace with a network image if needed
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Nick Edward',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      'nickedward@gmail.com',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white70,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    // Row of action buttons (Payment, Settings, Notification)
-                    // Row(
-                    //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    // children: [
-                    //   _buildIconButton(Icons.wallet_giftcard, 'Payment'),
-                    //  _buildIconButton(Icons.settings, 'Settings'),
-                    //  _buildIconButton(Icons.notifications, 'Notification'),
-                    //  ],
-                    // ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-              // Information section with items like password, mobile, etc.
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.shade300,
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildInfoRow('Password', 'Change'),
-                      Divider(),
-                      _buildInfoRow('Mobile', '1234-123-9874'),
-                      Divider(),
-                      _buildInfoRow('Tell', '1234-123-9874'),
-                      Divider(),
-                      _buildInfoRow('Address', 'NY - Street 21-no 34'),
-                      Divider(),
-                      _buildInfoRow('PostalCode', '9871234567'),
-                    ],
-                  ),
-                ),
-              ),
-              Spacer(),
-              // Edit Profile button
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Define action for edit profile button
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  ),
-                  child: Text(
-                    'Change Profile Pic',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-            ],
-          ),
-        ),
-      ),
-
-    );
-  }
-
-  // Helper method to build icon buttons
-  Widget _buildIconButton(IconData icon, String label) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.shade300,
-                blurRadius: 5,
-                offset: Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Icon(icon, color: Colors.blue),
-        ),
-        SizedBox(height: 5),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: Colors.black54,
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Helper method to build info rows
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.blue,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.black54,
-            ),
-          ),
-        ],
+      body: const Center(
+        child: Text('Notification Page'),
       ),
     );
   }
-
 }

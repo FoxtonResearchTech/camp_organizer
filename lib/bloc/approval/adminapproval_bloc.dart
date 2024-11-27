@@ -5,12 +5,12 @@ import 'adminapproval_state.dart';
 
 class AdminApprovalBloc extends Bloc<AdminApprovalEvent, AdminApprovalState> {
   AdminApprovalBloc() : super(AdminApprovalInitial()) {
-
     // Fetch camps data from Firestore
     on<FetchDataEvents>((event, emit) async {
       emit(AdminApprovalLoading());
       try {
-        final employeesSnapshot = await FirebaseFirestore.instance.collection('employees').get();
+        final employeesSnapshot =
+            await FirebaseFirestore.instance.collection('employees').get();
 
         List<Map<String, dynamic>> allCamps = [];
         List<String> campDocIds = [];
@@ -19,7 +19,7 @@ class AdminApprovalBloc extends Bloc<AdminApprovalEvent, AdminApprovalState> {
         // Loop through employees
         for (var employeeDoc in employeesSnapshot.docs) {
           final employeeId = employeeDoc.id; // This is the employeeDocId
-          employeeDocIds.add(employeeId);  // Collect employeeDocId
+          employeeDocIds.add(employeeId); // Collect employeeDocId
 
           final campsSnapshot = await FirebaseFirestore.instance
               .collection('employees')
@@ -51,7 +51,7 @@ class AdminApprovalBloc extends Bloc<AdminApprovalEvent, AdminApprovalState> {
       try {
         String employeeId = event.employeeId;
         String campDocId = event.campDocId;
-        String newStatus = event.newStatus;  // Dynamic status
+        String newStatus = event.newStatus; // Dynamic status
 
         // Fetch the specific camp document
         final campDoc = await FirebaseFirestore.instance
@@ -82,9 +82,11 @@ class AdminApprovalBloc extends Bloc<AdminApprovalEvent, AdminApprovalState> {
     // Add reason for rejection or any status update
     on<AddReasonEvent>((event, emit) async {
       try {
-        String reasonText = event.reasonText;  // Reason passed from the event
-        String employeeId = event.employeeId;  // Use the employeeId passed in the event
-        String campDocId = event.campDocId;    // Use the campDocId passed in the event
+        String reasonText = event.reasonText; // Reason passed from the event
+        String employeeId =
+            event.employeeId; // Use the employeeId passed in the event
+        String campDocId =
+            event.campDocId; // Use the campDocId passed in the event
 
         // Check if the reason is not empty
         if (reasonText.isEmpty) {
@@ -115,6 +117,54 @@ class AdminApprovalBloc extends Bloc<AdminApprovalEvent, AdminApprovalState> {
         }
       } catch (e) {
         emit(AdminApprovalError("Failed to add reason: ${e.toString()}"));
+      }
+    });
+    // adminapproval_bloc.dart
+    on<DeleteCampEvent>((event, emit) async {
+      try {
+        String employeeId = event.employeeId;
+        String campDocId = event.campDocId;
+
+        // Delete the specific camp document
+        await FirebaseFirestore.instance
+            .collection('employees')
+            .doc(employeeId)
+            .collection('camps')
+            .doc(campDocId)
+            .delete();
+
+        // Fetch the updated list of camps
+        final employeesSnapshot =
+            await FirebaseFirestore.instance.collection('employees').get();
+        List<Map<String, dynamic>> allCamps = [];
+        List<String> campDocIds = [];
+        List<String> employeeDocIds = [];
+
+        for (var employeeDoc in employeesSnapshot.docs) {
+          final employeeId = employeeDoc.id;
+          employeeDocIds.add(employeeId);
+
+          final campsSnapshot = await FirebaseFirestore.instance
+              .collection('employees')
+              .doc(employeeId)
+              .collection('camps')
+              .get();
+
+          final camps = campsSnapshot.docs.map((doc) {
+            final data = doc.data();
+            data['documentId'] = doc.id;
+            data['employeeDocId'] = employeeId;
+            campDocIds.add(doc.id);
+            return data;
+          }).toList();
+
+          allCamps.addAll(camps);
+        }
+
+        // Emit the updated list of camps
+        emit(AdminApprovalLoaded(allCamps, employeeDocIds, campDocIds));
+      } catch (e) {
+        emit(AdminApprovalError("Failed to delete camp: ${e.toString()}"));
       }
     });
   }

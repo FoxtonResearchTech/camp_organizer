@@ -27,3 +27,13 @@ class AddReasonEvent extends AdminApprovalEvent {
     required this.campDocId,
   });
 }
+
+class DeleteCampEvent extends AdminApprovalEvent {
+  final String employeeId; // The ID of the employee
+  final String campDocId; // The ID of the camp to delete
+
+  DeleteCampEvent({required this.employeeId, required this.campDocId});
+
+  @override
+  List<Object> get props => [employeeId, campDocId];
+}

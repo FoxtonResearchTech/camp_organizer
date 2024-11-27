@@ -5,6 +5,7 @@ import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 import 'CampSearchScreen.dart';
@@ -96,6 +97,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                 return Center(child: CircularProgressIndicator());
               } else if (state is StatusLoaded) {
                 final employees = state.employees;
+
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: RefreshIndicator(
@@ -103,363 +105,448 @@ class _DashboardScreenState extends State<DashboardScreen>
                       // Trigger the refresh event in your bloc or reload the data here
                       context.read<StatusBloc>().add(FetchDataEvent());
                     },
-                    child: ListView.builder(
-                      itemCount: employees.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        Animation<double> animation = CurvedAnimation(
-                          parent: _controller,
-                          curve: Interval(
-                            (1 / 5) * index, // Animate each item sequentially
-                            1.0,
-                            curve: Curves.easeOut,
-                          ),
-                        );
-                        _controller
-                            .forward(); // Start the animation when building
-
-                        return GestureDetector(
-                          onTap: () async {
-                            // Add debug logs to check the employee data and IDs being passed
-                            print('Employee: ${employees[index]}');
-                            print(
-                                'Employee Doc ID: ${state.employeeDocId[index]}');
-                            print('Camp Doc ID: ${state.campDocId[index]}');
-
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EventDetailsPage(
-                                  employee: employees[index],
-                                  employeedocId: state.employeeDocId[index],
-                                  campId: state.campDocId[index],
+                    child: employees.isEmpty
+                        ? SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Center(
+                              child: Container(
+                                padding: EdgeInsets.only(top: screenHeight / 4),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Lottie.asset(
+                                      'assets/no_data.json',
+                                      width: screenWidth * 0.35,
+                                      height: screenHeight * 0.25,
+                                    ),
+                                    const SizedBox(height: 10),
+                                    const Text(
+                                      "No Camps found",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            );
-                          },
-                          child: FadeTransition(
-                            opacity: animation,
-                            child: SlideTransition(
-                              position: Tween<Offset>(
-                                begin: const Offset(
-                                    0, 0.2), // Start slightly below
-                                end: Offset.zero, // End at original position
-                              ).animate(animation),
-                              child: Column(
-                                children: [
-                                  // Information Container
-                                  Container(
-                                    height:
-                                        screenHeight / 3, // Responsive height
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.1),
-                                          spreadRadius: 2,
-                                          blurRadius: 10,
-                                          offset: const Offset(0, 4),
-                                        ),
-                                      ],
+                            ),
+                          )
+                        : ListView.builder(
+                            itemCount: employees.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              Animation<double> animation = CurvedAnimation(
+                                parent: _controller,
+                                curve: Interval(
+                                  (1 / 5) *
+                                      index, // Animate each item sequentially
+                                  1.0,
+                                  curve: Curves.easeOut,
+                                ),
+                              );
+                              _controller
+                                  .forward(); // Start the animation when building
+
+                              return GestureDetector(
+                                onTap: () async {
+                                  // Add debug logs to check the employee data and IDs being passed
+                                  print('Employee: ${employees[index]}');
+                                  print(
+                                      'Employee Doc ID: ${state.employeeDocId[index]}');
+                                  print(
+                                      'Camp Doc ID: ${state.campDocId[index]}');
+
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EventDetailsPage(
+                                        employee: employees[index],
+                                        employeedocId:
+                                            state.employeeDocId[index],
+                                        campId: state.campDocId[index],
+                                      ),
                                     ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.date_range,
-                                                    size: screenWidth * 0.07,
-                                                    color: Colors.orange,
-                                                  ),
-                                                  const SizedBox(width: 8),
-                                                  Text(
-                                                    employees[index]
-                                                        ['campDate'],
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      color: Colors.black54,
-                                                      fontSize:
-                                                          screenWidth * 0.05,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.watch_later,
-                                                    size: screenWidth * 0.07,
-                                                    color: Colors.orange,
-                                                  ),
-                                                  const SizedBox(width: 8),
-                                                  Text(
-                                                    employees[index]
-                                                        ['campTime'],
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      color: Colors.black54,
-                                                      fontSize:
-                                                          screenWidth * 0.05,
-                                                    ),
-                                                  ),
-                                                ],
+                                  );
+                                },
+                                child: FadeTransition(
+                                  opacity: animation,
+                                  child: SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: const Offset(
+                                          0, 0.2), // Start slightly below
+                                      end: Offset
+                                          .zero, // End at original position
+                                    ).animate(animation),
+                                    child: Column(
+                                      children: [
+                                        // Information Container
+                                        Container(
+                                          height: screenHeight /
+                                              3, // Responsive height
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            color: Colors.white,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.1),
+                                                spreadRadius: 2,
+                                                blurRadius: 10,
+                                                offset: const Offset(0, 4),
                                               ),
                                             ],
                                           ),
-                                          const SizedBox(height: 5),
-                                          ..._buildInfoText(
-                                            screenWidth,
-                                            employees[index]['campName'],
-                                          ),
-                                          ..._buildInfoText(
-                                            screenWidth,
-                                            employees[index]['address'],
-                                          ),
-                                          ..._buildInfoText(
-                                            screenWidth,
-                                            employees[index]['name'],
-                                          ),
-                                          ..._buildInfoText(
-                                            screenWidth,
-                                            employees[index]['phoneNumber1'],
-                                          ),
-                                          // Horizontal Timeline Container
-                                          employees[index]['campStatus'] ==
-                                                  "Waiting"
-                                              ? Container(
-                                                  height: screenHeight * 0.1,
-                                                  width: double.infinity,
-                                                  child: SingleChildScrollView(
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                    child: Row(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(12),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Row(
                                                       children: [
-                                                        _buildTimelineTile(
-                                                          isFirst: true,
-                                                          color: Colors
-                                                              .purple,
-                                                          icon: Icons.check,
-                                                          text: 'Processing',
-                                                          screenWidth:
-                                                              screenWidth,
-                                                          lineBeforeColor:
-                                                              Colors.grey,
-                                                          lineAfterColor:
-                                                              Colors.grey,
+                                                        Icon(
+                                                          Icons.date_range,
+                                                          size: screenWidth *
+                                                              0.07,
+                                                          color: Colors.orange,
                                                         ),
-                                                        _buildTimelineTile(
-                                                          color:
-                                                              Colors.grey[400]!,
-                                                          icon: Icons.circle,
-                                                          text: 'Confirmed',
-                                                          screenWidth:
-                                                              screenWidth,
-                                                          lineBeforeColor:
-                                                              Colors.grey,
-                                                          lineAfterColor:
-                                                              Colors.grey,
-                                                        ),
-                                                        _buildTimelineTile(
-                                                          isLast: true,
-                                                          color:
-                                                              Colors.grey[400]!,
-                                                          icon: Icons.circle,
-                                                          text: 'Completed',
-                                                          screenWidth:
-                                                              screenWidth,
-                                                          lineBeforeColor:
-                                                              Colors.grey,
+                                                        const SizedBox(
+                                                            width: 8),
+                                                        Text(
+                                                          employees[index]
+                                                              ['campDate'],
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color:
+                                                                Colors.black54,
+                                                            fontSize:
+                                                                screenWidth *
+                                                                    0.05,
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
-                                                  ),
-                                                )
-                                              : employees[index]
-                                                          ['campStatus'] ==
-                                                      "Approved"
-                                                  ? Container(
-                                                      height:
-                                                          screenHeight * 0.1,
-                                                      width: double.infinity,
-                                                      child:
-                                                          SingleChildScrollView(
-                                                        scrollDirection:
-                                                            Axis.horizontal,
-                                                        child: Row(
-                                                          children: [
-                                                            _buildTimelineTile(
-                                                              isFirst: true,
-                                                              color: Colors
-                                                                  .purple,
-                                                              icon: Icons.check,
-                                                              text:
-                                                                  'Processing',
-                                                              screenWidth:
-                                                                  screenWidth,
-                                                              lineBeforeColor:
-                                                                  Colors.green,
-                                                              lineAfterColor:
-                                                                  Colors.green,
-                                                            ),
-                                                            _buildTimelineTile(
-                                                              color: Colors
-                                                                  .blue[600]!,
-                                                              icon: Icons.check,
-                                                              text: 'Confirmed',
-                                                              screenWidth:
-                                                                  screenWidth,
-                                                              lineBeforeColor:
-                                                                  Colors.green,
-                                                              lineAfterColor:
-                                                                  Colors.grey,
-                                                            ),
-                                                            _buildTimelineTile(
-                                                              isLast: true,
-                                                              color: Colors
-                                                                  .grey[400]!,
-                                                              icon:
-                                                                  Icons.circle,
-                                                              text: 'Completed',
-                                                              screenWidth:
-                                                                  screenWidth,
-                                                              lineBeforeColor:
-                                                                  Colors.grey,
-                                                            ),
-                                                          ],
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.watch_later,
+                                                          size: screenWidth *
+                                                              0.07,
+                                                          color: Colors.orange,
                                                         ),
-                                                      ),
-                                                    ) :
-                                          employees[index]
-                                          ['campStatus'] ==
-                                              "Completed"
-                                              ? Container(
-                                            height:
-                                            screenHeight * 0.1,
-                                            width: double.infinity,
-                                            child:
-                                            SingleChildScrollView(
-                                              scrollDirection:
-                                              Axis.horizontal,
-                                              child: Row(
-                                                children: [
-                                                  _buildTimelineTile(
-                                                    isFirst: true,
-                                                    color: Colors
-                                                        .purple,
-                                                    icon: Icons.check,
-                                                    text:
-                                                    'Processing',
-                                                    screenWidth:
-                                                    screenWidth,
-                                                    lineBeforeColor:
-                                                    Colors.green,
-                                                    lineAfterColor:
-                                                    Colors.green,
-                                                  ),
-                                                  _buildTimelineTile(
-                                                    color: Colors
-                                                        .blue[600]!,
-                                                    icon: Icons.check,
-                                                    text: 'Confirmed',
-                                                    screenWidth:
-                                                    screenWidth,
-                                                    lineBeforeColor:
-                                                    Colors.green,
-                                                    lineAfterColor:
-                                                    Colors.green,
-                                                  ),
-                                                  _buildTimelineTile(
-                                                    isLast: true,
-                                                    color: Colors.green,
-                                                    icon:
-                                                    Icons.check,
-                                                    text: 'Completed',
-                                                    screenWidth:
-                                                    screenWidth,
-                                                    lineBeforeColor:
-                                                    Colors.green,
-
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                                  : Container(
-                                                      height:
-                                                          screenHeight * 0.1,
-                                                      width: double.infinity,
-                                                      child:
-                                                          SingleChildScrollView(
-                                                        scrollDirection:
-                                                            Axis.horizontal,
-                                                        child: Row(
-                                                          children: [
-                                                            _buildTimelineTile(
-                                                              isFirst: true,
-                                                              color:Colors.red,
-                                                              icon: Icons.close,
-                                                              text:
-                                                                  'Rejected',
-                                                              screenWidth:
-                                                                  screenWidth,
-                                                              lineBeforeColor:
-                                                                  Colors.grey,
-                                                              lineAfterColor:
-                                                                  Colors.grey,
-                                                            ),
-                                                            _buildTimelineTile(
-                                                              color: Colors
-                                                                  .grey[400]!,
-                                                              icon:
-                                                                  Icons.circle,
-                                                              text: 'Confirmed',
-                                                              screenWidth:
-                                                                  screenWidth,
-                                                              lineBeforeColor:
-                                                                  Colors.grey,
-                                                              lineAfterColor:
-                                                                  Colors.grey,
-                                                            ),
-                                                            _buildTimelineTile(
-                                                              isLast: true,
-                                                              color: Colors
-                                                                  .grey,
-                                                              icon: Icons.circle,
-                                                              text: 'Completed',
-                                                              screenWidth:
-                                                                  screenWidth,
-                                                              lineBeforeColor:
-                                                                  Colors.grey,
-                                                            ),
-                                                          ],
+                                                        const SizedBox(
+                                                            width: 8),
+                                                        Text(
+                                                          employees[index]
+                                                              ['campTime'],
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color:
+                                                                Colors.black54,
+                                                            fontSize:
+                                                                screenWidth *
+                                                                    0.05,
+                                                          ),
                                                         ),
-                                                      ),
+                                                      ],
                                                     ),
-                                        ],
-                                      ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 5),
+                                                ..._buildInfoText(
+                                                  screenWidth,
+                                                  employees[index]['campName'],
+                                                ),
+                                                ..._buildInfoText(
+                                                  screenWidth,
+                                                  employees[index]['address'],
+                                                ),
+                                                ..._buildInfoText(
+                                                  screenWidth,
+                                                  employees[index]['name'],
+                                                ),
+                                                ..._buildInfoText(
+                                                  screenWidth,
+                                                  employees[index]
+                                                      ['phoneNumber1'],
+                                                ),
+                                                // Horizontal Timeline Container
+                                                employees[index]
+                                                            ['campStatus'] ==
+                                                        "Waiting"
+                                                    ? Container(
+                                                        height:
+                                                            screenHeight * 0.1,
+                                                        width: double.infinity,
+                                                        child:
+                                                            SingleChildScrollView(
+                                                          scrollDirection:
+                                                              Axis.horizontal,
+                                                          child: Row(
+                                                            children: [
+                                                              _buildTimelineTile(
+                                                                isFirst: true,
+                                                                color: Colors
+                                                                    .purple,
+                                                                icon:
+                                                                    Icons.check,
+                                                                text:
+                                                                    'Processing',
+                                                                screenWidth:
+                                                                    screenWidth,
+                                                                lineBeforeColor:
+                                                                    Colors.grey,
+                                                                lineAfterColor:
+                                                                    Colors.grey,
+                                                              ),
+                                                              _buildTimelineTile(
+                                                                color: Colors
+                                                                    .grey[400]!,
+                                                                icon: Icons
+                                                                    .circle,
+                                                                text:
+                                                                    'Confirmed',
+                                                                screenWidth:
+                                                                    screenWidth,
+                                                                lineBeforeColor:
+                                                                    Colors.grey,
+                                                                lineAfterColor:
+                                                                    Colors.grey,
+                                                              ),
+                                                              _buildTimelineTile(
+                                                                isLast: true,
+                                                                color: Colors
+                                                                    .grey[400]!,
+                                                                icon: Icons
+                                                                    .circle,
+                                                                text:
+                                                                    'Completed',
+                                                                screenWidth:
+                                                                    screenWidth,
+                                                                lineBeforeColor:
+                                                                    Colors.grey,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : employees[index][
+                                                                'campStatus'] ==
+                                                            "Approved"
+                                                        ? Container(
+                                                            height:
+                                                                screenHeight *
+                                                                    0.1,
+                                                            width:
+                                                                double.infinity,
+                                                            child:
+                                                                SingleChildScrollView(
+                                                              scrollDirection:
+                                                                  Axis.horizontal,
+                                                              child: Row(
+                                                                children: [
+                                                                  _buildTimelineTile(
+                                                                    isFirst:
+                                                                        true,
+                                                                    color: Colors
+                                                                        .purple,
+                                                                    icon: Icons
+                                                                        .check,
+                                                                    text:
+                                                                        'Processing',
+                                                                    screenWidth:
+                                                                        screenWidth,
+                                                                    lineBeforeColor:
+                                                                        Colors
+                                                                            .green,
+                                                                    lineAfterColor:
+                                                                        Colors
+                                                                            .green,
+                                                                  ),
+                                                                  _buildTimelineTile(
+                                                                    color: Colors
+                                                                            .blue[
+                                                                        600]!,
+                                                                    icon: Icons
+                                                                        .check,
+                                                                    text:
+                                                                        'Confirmed',
+                                                                    screenWidth:
+                                                                        screenWidth,
+                                                                    lineBeforeColor:
+                                                                        Colors
+                                                                            .green,
+                                                                    lineAfterColor:
+                                                                        Colors
+                                                                            .grey,
+                                                                  ),
+                                                                  _buildTimelineTile(
+                                                                    isLast:
+                                                                        true,
+                                                                    color: Colors
+                                                                            .grey[
+                                                                        400]!,
+                                                                    icon: Icons
+                                                                        .circle,
+                                                                    text:
+                                                                        'Completed',
+                                                                    screenWidth:
+                                                                        screenWidth,
+                                                                    lineBeforeColor:
+                                                                        Colors
+                                                                            .grey,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : employees[index][
+                                                                    'campStatus'] ==
+                                                                "Completed"
+                                                            ? Container(
+                                                                height:
+                                                                    screenHeight *
+                                                                        0.1,
+                                                                width: double
+                                                                    .infinity,
+                                                                child:
+                                                                    SingleChildScrollView(
+                                                                  scrollDirection:
+                                                                      Axis.horizontal,
+                                                                  child: Row(
+                                                                    children: [
+                                                                      _buildTimelineTile(
+                                                                        isFirst:
+                                                                            true,
+                                                                        color: Colors
+                                                                            .purple,
+                                                                        icon: Icons
+                                                                            .check,
+                                                                        text:
+                                                                            'Processing',
+                                                                        screenWidth:
+                                                                            screenWidth,
+                                                                        lineBeforeColor:
+                                                                            Colors.green,
+                                                                        lineAfterColor:
+                                                                            Colors.green,
+                                                                      ),
+                                                                      _buildTimelineTile(
+                                                                        color: Colors
+                                                                            .blue[600]!,
+                                                                        icon: Icons
+                                                                            .check,
+                                                                        text:
+                                                                            'Confirmed',
+                                                                        screenWidth:
+                                                                            screenWidth,
+                                                                        lineBeforeColor:
+                                                                            Colors.green,
+                                                                        lineAfterColor:
+                                                                            Colors.green,
+                                                                      ),
+                                                                      _buildTimelineTile(
+                                                                        isLast:
+                                                                            true,
+                                                                        color: Colors
+                                                                            .green,
+                                                                        icon: Icons
+                                                                            .check,
+                                                                        text:
+                                                                            'Completed',
+                                                                        screenWidth:
+                                                                            screenWidth,
+                                                                        lineBeforeColor:
+                                                                            Colors.green,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            : Container(
+                                                                height:
+                                                                    screenHeight *
+                                                                        0.1,
+                                                                width: double
+                                                                    .infinity,
+                                                                child:
+                                                                    SingleChildScrollView(
+                                                                  scrollDirection:
+                                                                      Axis.horizontal,
+                                                                  child: Row(
+                                                                    children: [
+                                                                      _buildTimelineTile(
+                                                                        isFirst:
+                                                                            true,
+                                                                        color: Colors
+                                                                            .red,
+                                                                        icon: Icons
+                                                                            .close,
+                                                                        text:
+                                                                            'Rejected',
+                                                                        screenWidth:
+                                                                            screenWidth,
+                                                                        lineBeforeColor:
+                                                                            Colors.grey,
+                                                                        lineAfterColor:
+                                                                            Colors.grey,
+                                                                      ),
+                                                                      _buildTimelineTile(
+                                                                        color: Colors
+                                                                            .grey[400]!,
+                                                                        icon: Icons
+                                                                            .circle,
+                                                                        text:
+                                                                            'Confirmed',
+                                                                        screenWidth:
+                                                                            screenWidth,
+                                                                        lineBeforeColor:
+                                                                            Colors.grey,
+                                                                        lineAfterColor:
+                                                                            Colors.grey,
+                                                                      ),
+                                                                      _buildTimelineTile(
+                                                                        isLast:
+                                                                            true,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        icon: Icons
+                                                                            .circle,
+                                                                        text:
+                                                                            'Completed',
+                                                                        screenWidth:
+                                                                            screenWidth,
+                                                                        lineBeforeColor:
+                                                                            Colors.grey,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 20),
+                                      ],
                                     ),
                                   ),
-                                  const SizedBox(height: 20),
-                                ],
-                              ),
-                            ),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
                   ),
                 );
               } else if (state is StatusError) {

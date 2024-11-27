@@ -159,143 +159,155 @@ class _AdminCampSearchScreenState extends State<AdminCampSearchScreen>
               if (_searchQuery.isEmpty) {
                 _filteredEmployees = state.allCamps;
               }
-              if (_filteredEmployees.isEmpty) {
-                return Center(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                      Lottie.asset(
-                        'assets/no_records.json',
-                        width: screenWidth * 0.6,
-                        height: screenHeight * 0.4,
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        "No matching record found",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ]));
-              }
               return RefreshIndicator(
                 onRefresh: () async {
                   context.read<AdminApprovalBloc>().add(FetchDataEvents());
                 },
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(16.0),
-                  itemCount: _filteredEmployees.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                      onTap: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CampSearchEventDetailsPage(
-                              employee: _filteredEmployees[index],
-                              // employeedocId: state.employeeDocId[1],
-                              campId: state.campDocIds[index],
-                            ),
-                          ),
-                        );
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            height: screenHeight / 5,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  spreadRadius: 2,
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
+                child: _filteredEmployees.isEmpty
+                    ? SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Center(
+                          child: Container(
+                            padding: EdgeInsets.only(top: screenHeight / 4),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Lottie.asset(
+                                  'assets/no_records.json',
+                                  width: screenWidth * 0.6,
+                                  height: screenHeight * 0.4,
+                                ),
+                                const SizedBox(height: 10),
+                                const Text(
+                                  "No matching record found",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ],
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.date_range,
-                                            size: screenWidth * 0.07,
-                                            color: Colors.orange,
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            _filteredEmployees[index]
-                                                ['campDate'],
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black54,
-                                              fontSize: screenWidth * 0.05,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.watch_later,
-                                            size: screenWidth * 0.07,
-                                            color: Colors.orange,
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            _filteredEmployees[index]
-                                                ['campTime'],
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black54,
-                                              fontSize: screenWidth * 0.05,
-                                            ),
-                                          ),
-                                        ],
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.all(16.0),
+                        itemCount: _filteredEmployees.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return GestureDetector(
+                            onTap: () async {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      CampSearchEventDetailsPage(
+                                    employee: _filteredEmployees[index],
+                                    // employeedocId: state.employeeDocId[1],
+                                    campId: state.campDocIds[index],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: screenHeight / 5,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        spreadRadius: 2,
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 4),
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 5),
-                                  ..._buildInfoText(
-                                    screenWidth,
-                                    _filteredEmployees[index]['campName'],
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.date_range,
+                                                  size: screenWidth * 0.07,
+                                                  color: Colors.orange,
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  _filteredEmployees[index]
+                                                      ['campDate'],
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.black54,
+                                                    fontSize:
+                                                        screenWidth * 0.05,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.watch_later,
+                                                  size: screenWidth * 0.07,
+                                                  color: Colors.orange,
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  _filteredEmployees[index]
+                                                      ['campTime'],
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.black54,
+                                                    fontSize:
+                                                        screenWidth * 0.05,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 5),
+                                        ..._buildInfoText(
+                                          screenWidth,
+                                          _filteredEmployees[index]['campName'],
+                                        ),
+                                        ..._buildInfoText(
+                                          screenWidth,
+                                          _filteredEmployees[index]['address'],
+                                        ),
+                                        ..._buildInfoText(
+                                          screenWidth,
+                                          _filteredEmployees[index]['name'],
+                                        ),
+                                        ..._buildInfoText(
+                                          screenWidth,
+                                          _filteredEmployees[index]
+                                              ['phoneNumber1'],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  ..._buildInfoText(
-                                    screenWidth,
-                                    _filteredEmployees[index]['address'],
-                                  ),
-                                  ..._buildInfoText(
-                                    screenWidth,
-                                    _filteredEmployees[index]['name'],
-                                  ),
-                                  ..._buildInfoText(
-                                    screenWidth,
-                                    _filteredEmployees[index]['phoneNumber1'],
-                                  ),
-                                ],
-                              ),
+                                ),
+                                const SizedBox(height: 20),
+                              ],
                             ),
-                          ),
-                          const SizedBox(height: 20),
-                        ],
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
               );
             } else if (state is AdminApprovalError) {
               return const Center(

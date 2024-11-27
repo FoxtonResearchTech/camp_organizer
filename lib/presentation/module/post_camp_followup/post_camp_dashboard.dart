@@ -4,8 +4,6 @@ import 'package:camp_organizer/presentation/module/post_camp_followup/post_camp_
 import 'package:camp_organizer/presentation/module/post_camp_followup/post_camp_timeline.dart';
 import 'package:flutter/material.dart';
 
-import '../../notification/notification.dart';
-
 class PostCampDashboard extends StatefulWidget {
   const PostCampDashboard({super.key});
 
@@ -96,7 +94,6 @@ class _PostCampDashboardState extends State<PostCampDashboard> {
                 print("Upcoming Project tapped");
               },
             ),
-
             _buildDashboardItem(
               icon: Icons.follow_the_signs_sharp,
               label: 'Follow up',
@@ -104,11 +101,9 @@ class _PostCampDashboardState extends State<PostCampDashboard> {
               itemsCount: '',
               color: Colors.purple,
               onTap: () {
-
                 print("camp incharge");
               },
             ),
-
             _buildDashboardItem(
               icon: Icons.mark_email_read_outlined,
               label: 'Follow Completed',
@@ -116,7 +111,6 @@ class _PostCampDashboardState extends State<PostCampDashboard> {
               itemsCount: '',
               color: Colors.lightGreenAccent,
               onTap: () {
-
                 print("camp incharge");
               },
             ),
@@ -205,5 +199,4 @@ class _PostCampDashboardState extends State<PostCampDashboard> {
       },
     );
   }
-
 }
