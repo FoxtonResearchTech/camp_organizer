@@ -1,6 +1,7 @@
 import 'package:camp_organizer/presentation/Analytics/dashboard_analytics.dart';
 import 'package:camp_organizer/presentation/Event/add_event.dart';
 import 'package:camp_organizer/presentation/dashboard/camp_organizer.dart';
+import 'package:camp_organizer/presentation/module/Finance_Reports/finance_profile.dart';
 import 'package:camp_organizer/presentation/module/Finance_Reports/finance_timeline.dart';
 import 'package:camp_organizer/presentation/module/Onsite_Management_team/onsite_camp_timeline.dart';
 import 'package:camp_organizer/presentation/profile/camp-organizer_profile.dart';
@@ -19,8 +20,8 @@ class _FinanceNavBarState extends State<FinanceNavBar> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-   FinanceTimeline(),
-    OnsiteProfile(),
+    FinanceTimeline(),
+    FinanceProfile(),
   ];
 
   @override

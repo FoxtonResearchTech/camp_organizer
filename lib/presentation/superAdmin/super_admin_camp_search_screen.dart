@@ -162,9 +162,9 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
               }
               if (_filteredEmployees.isEmpty) {
                 return Center(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
                       Lottie.asset(
                         'assets/no_records.json',
                         width: screenWidth * 0.6,
@@ -179,7 +179,9 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
                           color: Colors.grey,
                         ),
                       ),
-                    ]));
+                    ],
+                  ),
+                );
               }
               return RefreshIndicator(
                 onRefresh: () async {

@@ -1,10 +1,8 @@
-import 'package:camp_organizer/admin_add_employee.dart';
 import 'package:camp_organizer/bloc/Status/status_bloc.dart';
 import 'package:camp_organizer/bloc/Status/status_event.dart';
 import 'package:camp_organizer/bloc/Status/status_state.dart';
 import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
 import 'package:camp_organizer/presentation/Event/event_details.dart';
-import 'package:camp_organizer/presentation/module/admin/manage_employee_account.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:camp_organizer/utils/app_colors.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -16,16 +14,16 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 
 import '../../bloc/approval/adminapproval_event.dart';
 import '../../bloc/approval/adminapproval_state.dart';
-import '../module/admin/add_employee.dart';
-
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({Key? key}) : super(key: key);
 
   @override
-  State<AdminDashboardScreen> createState() => _AdminDashboardScreenState();
+  State<AdminDashboardScreen> createState() =>
+      _AdminDashboardScreenState();
 }
 
-class _AdminDashboardScreenState extends State<AdminDashboardScreen>
+class _AdminDashboardScreenState
+    extends State<AdminDashboardScreen>
     with SingleTickerProviderStateMixin {
   int touchedIndex = -1;
   late AnimationController _controller;
@@ -39,6 +37,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
       approvedCount.toDouble(),
       waitingQueueCount.toDouble(),
       rejectedCount.toDouble(),
+
+
     ];
   }
 
@@ -49,6 +49,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
     Colors.orangeAccent,
 
     // Colors.redAccent,
+
+
   ];
   final List<String> titles = [
     // 'Total Camp Target',
@@ -66,10 +68,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
       vsync: this,
       duration: const Duration(seconds: 1),
     )..addListener(() {
-        setState(() {
-          rotationAngle = _controller.value * 360;
-        });
+      setState(() {
+        rotationAngle = _controller.value * 360;
       });
+    });
     _controller.forward();
     // Fetch data and initialize counts
     _StatusBloc.stream.listen((state) {
@@ -104,7 +106,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
   int rejectedCount = 0;
   int waitingQueueCount = 0;
   int initiatedCount = 0;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -112,7 +114,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
     return BlocProvider(
       create: (context) => AdminApprovalBloc()..add(FetchDataEvents()),
       child: Scaffold(
-key: _scaffoldKey,
         appBar: AppBar(
           title: const Text(
             'Dashboard',
@@ -131,71 +132,17 @@ key: _scaffoldKey,
               ),
             ),
           ),
-          leading: IconButton(
-            icon: const Icon(Icons.menu),
-            color: Colors.white, // Set the color of the drawer icon
-            onPressed: () {
-              // Drawer open logic
-              _scaffoldKey.currentState?.openDrawer();
-            },
-          ),
-        ),
-        drawer: Drawer(
-
-          child: Column(
-            children: [
-              // Drawer Header
-              UserAccountsDrawerHeader(
-                decoration: BoxDecoration(
-                  // Use the image as background for the header
-                  image: DecorationImage(
-                    image: AssetImage(
-                      'assets/Newmodel[1].png',
-                    ),
-                    // Path to your image
-                    fit: BoxFit
-                        .contain, // This makes sure the image covers the area
-                  ),
-                ),
-                accountName: null,
-                accountEmail: null,
-              ),
-              // Menu Options
-              ListTile(
-                leading: Icon(Icons.person_add, color: Colors.blueAccent),
-                title: Text(
-                  'Add Employee',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AdminAddEmployee()));
-                },
-              ),
-              Divider(height: 1, color: Colors.grey[300]),
-
-              ListTile(
-                leading: Icon(Icons.manage_accounts, color: Colors.blueAccent),
-                title: Text(
-                  'Manage Employee',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ManageEmployeeAccount()));
-                },
-              ),
-              Divider(height: 1, color: Colors.grey[300]),
-
-              Divider(height: 1, color: Colors.grey[300]),
-
-              SizedBox(height: 10),
-            ],
-          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.notifications, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationPage()));
+              },
+            ),
+          ],
         ),
         body: LayoutBuilder(
           builder: (context, constraints) {
@@ -260,32 +207,26 @@ key: _scaffoldKey,
                             if (state is StatusLoading) {
                               return Center(
                                 key: ValueKey('loading'),
-                                child: CircularProgressIndicator(
-                                  color: Colors.blue,
-                                ),
+                                child: CircularProgressIndicator(color: Colors.blue,),
                               );
                             } else if (state is AdminApprovalLoaded) {
                               final employees = state.allCamps;
                               // Calculate the approved count once
                               approvedCount = employees
-                                  .where((employee) =>
-                                      employee["campStatus"] == "Approved")
+                                  .where((employee) => employee["campStatus"] == "Approved")
                                   .length;
                               rejectedCount = employees
-                                  .where((employee) =>
-                                      employee["campStatus"] == "Rejected")
+                                  .where((employee) => employee["campStatus"] == "Rejected")
                                   .length;
                               waitingQueueCount = employees
-                                  .where((employee) =>
-                                      employee["campStatus"] == "Waiting")
+                                  .where((employee) => employee["campStatus"] == "Waiting")
                                   .length;
 
                               return Column(
                                 key: ValueKey('loaded'),
                                 children: [
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       // Approved Card
                                       Expanded(
@@ -294,10 +235,7 @@ key: _scaffoldKey,
                                           label: 'Approved',
                                           icon: Icons.check_circle,
                                           gradient: LinearGradient(
-                                            colors: [
-                                              Colors.blueAccent,
-                                              Colors.lightBlue
-                                            ],
+                                            colors: [Colors.blueAccent, Colors.lightBlue],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
                                           ),
@@ -310,10 +248,7 @@ key: _scaffoldKey,
                                           label: 'Rejected',
                                           icon: Icons.cancel,
                                           gradient: LinearGradient(
-                                            colors: [
-                                              Colors.redAccent,
-                                              Colors.orangeAccent
-                                            ],
+                                            colors: [Colors.redAccent, Colors.orangeAccent],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
                                           ),
@@ -322,8 +257,7 @@ key: _scaffoldKey,
                                     ],
                                   ),
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       // Waiting Queue Card
                                       Expanded(
@@ -332,10 +266,7 @@ key: _scaffoldKey,
                                           label: 'Waiting Queue',
                                           icon: Icons.hourglass_top,
                                           gradient: LinearGradient(
-                                            colors: [
-                                              Colors.purpleAccent,
-                                              Colors.deepPurple
-                                            ],
+                                            colors: [Colors.purpleAccent, Colors.deepPurple],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
                                           ),
@@ -348,10 +279,7 @@ key: _scaffoldKey,
                                           label: 'Initiated',
                                           icon: Icons.play_circle_fill,
                                           gradient: LinearGradient(
-                                            colors: [
-                                              Colors.tealAccent,
-                                              Colors.teal
-                                            ],
+                                            colors: [Colors.tealAccent, Colors.teal],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
                                           ),
@@ -370,15 +298,14 @@ key: _scaffoldKey,
 
                             return Center(
                               key: ValueKey('empty'),
-                              child: CircularProgressIndicator(
-                                color: Colors.blue,
-                              ),
+                              child: CircularProgressIndicator(color: Colors.blue,),
                             );
                           }(),
                         );
                       },
                     ),
                   ),
+
 
                   //  _buildDetailsGrid(gridAspectRatio, fontSizeFactor),
                   const Padding(
@@ -404,22 +331,18 @@ key: _scaffoldKey,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.grey,
                                 ),
-                                speed: Duration(
-                                    milliseconds: 150), // Adjust speed here
+                                speed: Duration(milliseconds: 150), // Adjust speed here
                               ),
                             ],
-                            totalRepeatCount: 1,
-                            // Set to `1` for single loop, or `0` for infinite
-                            pause: Duration(milliseconds: 500),
-                            // Pause between loops
+                            totalRepeatCount: 1, // Set to `1` for single loop, or `0` for infinite
+                            pause: Duration(milliseconds: 500), // Pause between loops
                             displayFullTextOnTap: true,
                           ),
                         );
                       } else if (state is StatusLoaded) {
                         // Filter employees with "Approved" campStatus
                         final approvedEmployees = state.employees
-                            .where((employee) =>
-                                employee['campStatus'] == "Approved")
+                            .where((employee) => employee['campStatus'] == "Approved")
                             .toList();
 
                         if (approvedEmployees.isEmpty) {
@@ -463,44 +386,32 @@ key: _scaffoldKey,
                                     ).animate(animation),
                                     child: GestureDetector(
                                       onTap: () async {
-                                        print(
-                                            'Employee: ${approvedEmployees[index]}');
-                                        print(
-                                            'Employee Doc ID: ${state.employeeDocId[index]}');
-                                        print(
-                                            'Camp Doc ID: ${state.campDocId[index]}');
+                                        print('Employee: ${approvedEmployees[index]}');
+                                        print('Employee Doc ID: ${state.employeeDocId[index]}');
+                                        print('Camp Doc ID: ${state.campDocId[index]}');
 
                                         await Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                EventDetailsPage(
-                                              employee:
-                                                  approvedEmployees[index],
-                                              employeedocId:
-                                                  state.employeeDocId[index],
+                                            builder: (context) => EventDetailsPage(
+                                              employee: approvedEmployees[index],
+                                              employeedocId: state.employeeDocId[index],
                                               campId: state.campDocId[index],
                                             ),
                                           ),
                                         );
                                       },
                                       child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 20),
+                                        padding: const EdgeInsets.only(bottom: 20),
                                         child: Container(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.25,
+                                          height: MediaQuery.of(context).size.height * 0.25,
                                           width: double.infinity,
                                           decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                             color: Colors.white,
                                             boxShadow: [
                                               BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.1),
+                                                color: Colors.black.withOpacity(0.1),
                                                 spreadRadius: 2,
                                                 blurRadius: 10,
                                                 offset: const Offset(0, 4),
@@ -510,38 +421,26 @@ key: _scaffoldKey,
                                           child: Padding(
                                             padding: const EdgeInsets.all(12),
                                             child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
                                                     Row(
                                                       children: [
                                                         Icon(
                                                           Icons.date_range,
-                                                          size: screenWidth *
-                                                              0.07,
+                                                          size: screenWidth * 0.07,
                                                           color: Colors.orange,
                                                         ),
-                                                        const SizedBox(
-                                                            width: 8),
+                                                        const SizedBox(width: 8),
                                                         Text(
-                                                          approvedEmployees[
-                                                                  index]
-                                                              ['campDate'],
+                                                          approvedEmployees[index]['campDate'],
                                                           style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            color:
-                                                                Colors.black54,
-                                                            fontSize:
-                                                                screenWidth *
-                                                                    0.05,
+                                                            fontWeight: FontWeight.w500,
+                                                            color: Colors.black54,
+                                                            fontSize: screenWidth * 0.05,
                                                           ),
                                                         ),
                                                       ],
@@ -550,24 +449,16 @@ key: _scaffoldKey,
                                                       children: [
                                                         Icon(
                                                           Icons.watch_later,
-                                                          size: screenWidth *
-                                                              0.07,
+                                                          size: screenWidth * 0.07,
                                                           color: Colors.orange,
                                                         ),
-                                                        const SizedBox(
-                                                            width: 8),
+                                                        const SizedBox(width: 8),
                                                         Text(
-                                                          approvedEmployees[
-                                                                  index]
-                                                              ['campTime'],
+                                                          approvedEmployees[index]['campTime'],
                                                           style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            color:
-                                                                Colors.black54,
-                                                            fontSize:
-                                                                screenWidth *
-                                                                    0.05,
+                                                            fontWeight: FontWeight.w500,
+                                                            color: Colors.black54,
+                                                            fontSize: screenWidth * 0.05,
                                                           ),
                                                         ),
                                                       ],
@@ -575,22 +466,10 @@ key: _scaffoldKey,
                                                   ],
                                                 ),
                                                 const SizedBox(height: 5),
-                                                ..._buildInfoText(
-                                                    screenWidth,
-                                                    approvedEmployees[index]
-                                                        ['campName']),
-                                                ..._buildInfoText(
-                                                    screenWidth,
-                                                    approvedEmployees[index]
-                                                        ['address']),
-                                                ..._buildInfoText(
-                                                    screenWidth,
-                                                    approvedEmployees[index]
-                                                        ['name']),
-                                                ..._buildInfoText(
-                                                    screenWidth,
-                                                    approvedEmployees[index]
-                                                        ['phoneNumber1']),
+                                                ..._buildInfoText(screenWidth, approvedEmployees[index]['campName']),
+                                                ..._buildInfoText(screenWidth, approvedEmployees[index]['address']),
+                                                ..._buildInfoText(screenWidth, approvedEmployees[index]['name']),
+                                                ..._buildInfoText(screenWidth, approvedEmployees[index]['phoneNumber1']),
                                               ],
                                             ),
                                           ),
@@ -620,6 +499,8 @@ key: _scaffoldKey,
                       );
                     },
                   ),
+
+
                 ],
               ),
             );
@@ -628,7 +509,6 @@ key: _scaffoldKey,
       ),
     );
   }
-
   Widget _buildStatusCard({
     required int count,
     required String label,
