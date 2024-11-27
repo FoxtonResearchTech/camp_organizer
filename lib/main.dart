@@ -25,6 +25,7 @@ import 'firebase_options.dart';
 import 'presentation/module/Finance_Reports/finance_timeline.dart';
 import 'presentation/module/camp_incharge/camp_incharge_timeline.dart';
 import 'presentation/module/logistics/logistics_timeline.dart';
+import 'presentation/module/post_camp_followup/post_camp_timeline.dart';
 import 'repository/auth_repository.dart';
 import 'services/notification/email_notification.dart';
 
@@ -78,19 +79,18 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) =>
-             AddLogisticsBloc(firestore:  FirebaseFirestore.instance),
+              AddLogisticsBloc(firestore: FirebaseFirestore.instance),
         ),
         BlocProvider(
           create: (context) =>
-              InchargeReportBloc(firestore:  FirebaseFirestore.instance),
+              InchargeReportBloc(firestore: FirebaseFirestore.instance),
+        ),
+        BlocProvider(
+          create: (context) => OnsiteApprovalBloc(),
         ),
         BlocProvider(
           create: (context) =>
-            OnsiteApprovalBloc(),
-        ),
-        BlocProvider(
-          create: (context) =>
-            AddFinanceBloc(firestore:  FirebaseFirestore.instance),
+              AddFinanceBloc(firestore: FirebaseFirestore.instance),
         ),
       ],
       child: MaterialApp(
@@ -100,7 +100,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home: FinanceTimeline(), // Starting screen is the splash screen
+        home: PostCampTimeline(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),
