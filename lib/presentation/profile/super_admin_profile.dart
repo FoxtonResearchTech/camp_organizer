@@ -1,24 +1,28 @@
+import 'package:camp_organizer/bloc/Profile/profile_state.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
-import 'package:camp_organizer/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../bloc/Profile/onsite_profile_bloc.dart';
-import '../../../bloc/Profile/onsite_profile_event.dart';
-import '../../../bloc/Profile/onsite_profile_state.dart';
+import '../../bloc/Profile/admin_profile_bloc.dart';
+import '../../bloc/Profile/admin_profile_state.dart';
+import '../../repository/auth_repository.dart';
+import '../../utils/app_colors.dart';
+import '../superAdmin/super_admin_commutative_report_search_screen.dart';
+import 'admin_commutative_reports_search_screen.dart';
+import 'commutative_reports_search_screen.dart';
+import '../../bloc/Profile/admin_profile_event.dart';
 
-import '../../../utils/app_colors.dart';
-
-class OnsiteProfile extends StatefulWidget {
+class SuperAdminUserProfilePage extends StatefulWidget {
   @override
-  _OnsiteProfile createState() => _OnsiteProfile();
+  _SuperAdminUserProfilePageState createState() =>
+      _SuperAdminUserProfilePageState();
 }
 
-class _OnsiteProfile extends State<OnsiteProfile>
+class _SuperAdminUserProfilePageState extends State<SuperAdminUserProfilePage>
     with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
-  late OnsiteProfileBloc _OnsiteProfileBloc;
+  late AdminProfileBloc _AdminProfileBloc;
 
   @override
   void initState() {
@@ -34,13 +38,13 @@ class _OnsiteProfile extends State<OnsiteProfile>
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
     _controller.forward(); // Start the animation
-    _OnsiteProfileBloc = OnsiteProfileBloc()..add(FetchDataEvent());
+    _AdminProfileBloc = AdminProfileBloc()..add(FetchDataEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _OnsiteProfileBloc,
+      create: (context) => _AdminProfileBloc,
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -114,11 +118,11 @@ class _OnsiteProfile extends State<OnsiteProfile>
             AnimatedPadding(
               duration: const Duration(seconds: 1),
               padding: const EdgeInsets.only(top: 50),
-              child: BlocBuilder<OnsiteProfileBloc, OnsiteProfileState>(
+              child: BlocBuilder<AdminProfileBloc, AdminProfileState>(
                 builder: (context, state) {
-                  if (state is OnsiteProfileLoading) {
+                  if (state is ProfileLoading) {
                     return const Center(child: CircularProgressIndicator());
-                  } else if (state is OnsiteProfileLoaded) {
+                  } else if (state is AdminProfileLoaded) {
                     final employee = state.employee;
                     return Column(
                       children: [
@@ -215,6 +219,36 @@ class _OnsiteProfile extends State<OnsiteProfile>
                                     subtitle: employee['empCode'] ?? 'N/A',
                                     slideAnimation: _slideAnimation,
                                   ),
+                                  ProfileInfoTile(
+                                    icon: Icons.search,
+                                    title: 'Camp Reports',
+                                    subtitle: 'Search',
+                                    slideAnimation: _slideAnimation,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SuperAdminCommutativeReportsSearchScreen(
+                                                  name:
+                                                      '${employee['firstName']} ${employee['lastName']}',
+                                                  position:
+                                                      employee['role'] ?? 'N/A',
+                                                  empCode:
+                                                      employee['empCode'] ??
+                                                          'N/A',
+                                                )),
+                                      );
+                                    },
+                                    child: ProfileInfoTile(
+                                      icon: Icons.copy,
+                                      title: 'Commutative Reports',
+                                      subtitle: 'Search',
+                                      slideAnimation: _slideAnimation,
+                                    ),
+                                  ),
                                   GestureDetector(
                                     onTap: () async {
                                       bool? confirmLogout = await showDialog(
@@ -268,7 +302,7 @@ class _OnsiteProfile extends State<OnsiteProfile>
                         ),
                       ],
                     );
-                  } else if (state is OnsiteProfileError) {
+                  } else if (state is AdminProfileError) {
                     return Center(
                       child: Text('Error+${state.errorMessage}'),
                     );

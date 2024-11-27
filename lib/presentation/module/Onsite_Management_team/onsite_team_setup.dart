@@ -14,14 +14,15 @@ class OnsiteTeamSetup extends StatefulWidget {
   final String documentId;
   final Map<String, dynamic> campData;
 
-  const OnsiteTeamSetup({Key? key, required this.documentId, required this.campData}) : super(key: key);
+  const OnsiteTeamSetup(
+      {Key? key, required this.documentId, required this.campData})
+      : super(key: key);
 
   @override
   State<OnsiteTeamSetup> createState() => _OnsiteTeamSetupState();
 }
 
 class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
-
   final TextEditingController dateController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
   final TextEditingController campNameController = TextEditingController();
@@ -35,7 +36,10 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
   final TextEditingController drRoomController = TextEditingController();
   final TextEditingController counsellingController = TextEditingController();
 
-  final List<String> Opticals = ['Bejansingh_Opticals', 'SS_OPticals',];
+  final List<String> Opticals = [
+    'Bejansingh_Opticals',
+    'SS_OPticals',
+  ];
   String? selectedOpticals;
 
   void saveData(BuildContext context, documentId) {
@@ -55,7 +59,9 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
       'optical': selectedOpticals ?? '',
     };
 
-    context.read<AddTeamBloc>().add(AddTeamWithDocumentId(documentId: widget.documentId, data: data));
+    context
+        .read<AddTeamBloc>()
+        .add(AddTeamWithDocumentId(documentId: widget.documentId, data: data));
   }
 
   @override
@@ -63,12 +69,16 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
     return BlocProvider(
       create: (_) => AddTeamBloc(firestore: FirebaseFirestore.instance),
       child: Scaffold(
-
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          leading: IconButton(onPressed:(){
-            Navigator.pop(context);
-          }, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+              )),
           title: const Text(
             'Onsite Team Setup',
             style: TextStyle(
@@ -86,9 +96,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
               ),
             ),
           ),
-          actions: [
-
-          ],
+          actions: [],
         ),
         body: BlocListener<AddTeamBloc, AddTeamState>(
           listener: (context, state) {
@@ -115,14 +123,14 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
                       _buildInfoCard('Status', widget.campData['campStatus']),
                       _buildInfoCard('Date', widget.campData['campDate']),
                       _buildInfoCard('Time', widget.campData['campTime']),
-                      _buildInfoCard('Organization', widget.campData['organization']),
+                      _buildInfoCard(
+                          'Organization', widget.campData['organization']),
                     ],
                   ),
                   _buildAnimatedSection(
                     context,
                     sectionTitle: 'Add Team Info',
-                    children: [
-                    ],
+                    children: [],
                   ),
                   Row(
                     children: [
@@ -141,7 +149,6 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
                       ),
                     ],
                   ),
-
                   SizedBox(height: 30),
                   CustomTextFormField(
                     labelText: 'Camp Name',
@@ -185,7 +192,6 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
                       ),
                     ],
                   ),
-                
                   SizedBox(height: 20),
                   CustomTextFormField(
                     labelText: 'AR',
@@ -263,7 +269,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
             },
           ),
           ...children.map(
-                (child) => TweenAnimationBuilder(
+            (child) => TweenAnimationBuilder(
               tween: Tween<double>(begin: 0, end: 1),
               duration: const Duration(milliseconds: 300),
               builder: (context, value, _) {
@@ -335,5 +341,4 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
       ),
     );
   }
-
 }

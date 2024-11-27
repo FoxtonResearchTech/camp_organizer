@@ -1,5 +1,6 @@
 import 'package:camp_organizer/bloc/AddEvent/add_logistics_bloc.dart';
 import 'package:camp_organizer/bloc/AddEvent/add_logistics_state.dart';
+import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,8 +41,10 @@ class _LogisticsTimelineState extends State<LogisticsTimeline> with SingleTicker
   @override
   Widget build(BuildContext context) {
     // Screen size parameters
+    double screenWidths = MediaQuery.of(context).size.width;
+   // double screenWidths = MediaQuery.of(context).size.width;
     double screenWidth = MediaQuery.of(context).size.width;
-
+    double screenHeight = MediaQuery.of(context).size.height;
 
     return BlocListener<AddLogisticsBloc, AddLogisticsState>(
         listener: (context, state) {
@@ -109,203 +112,294 @@ class _LogisticsTimelineState extends State<LogisticsTimeline> with SingleTicker
                   itemCount: camps.length,
                   itemBuilder: (context, index) {
                     final camp = camps[index];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 16.0),
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.date_range,
-                                  size: screenWidth * 0.07,
-                                  color: Colors.lightBlueAccent,
-                                ),
-                                const SizedBox(width: 20),
-                                Text(
-                                  camps[index]['campDate'],
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
+                    return GestureDetector(
+                      onTap: () async {
+                        // Add debug logs to check the employee data and IDs being passed
+                        print('Employee: ${camps[index]}');
+                        print(
+                            'Employee Doc ID: ${state.employeeDocId[index]}');
+                        print('Camp Doc ID: ${state.campDocIds[index]}');
+
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EventDetailsPage(
+                              employee: camps[index],
+                              employeedocId:  camps[index]
+                              ['EmployeeDocId'],
+                              campId: state.campDocIds[index],
                             ),
-                            const SizedBox(height: 8.0),
-                            Row(
-                              children: [
-                                const Text(
-                                  "Camp Name: ",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black54,
+                          ),
+                        );
+                      },
+                      child: camps[index]
+                      ['campStatus'] ==
+                          "Approved"
+                          ?
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height:
+                              screenHeight / 2.5, // Responsive height
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    spreadRadius: 2,
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
                                   ),
-                                ),
-                                Text(
-                                  "${camps[index]['campName']}",
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8.0),
-                            Row(
-                              children: [
-                                const Text(
-                                  "Document ID: ",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                                Text(
-                                  "${camps[index]['documentId']}",
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8.0),
-                            Row(
-                              children: [
-                                const Text(
-                                  "Camp Time: ",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                                Text(
-                                  "${camps[index]['campTime']}",
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16.0),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      //_showAddCampTeamDialog(
-                                      // context, camp['documentId']);
-                                      final documentId = camp['documentId'];
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => LogisticsOutward(
-                                              documentId: documentId,
-                                              campData: camp),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.date_range,
+                                              size: screenWidth * 0.07,
+                                              color: Colors.orange,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              camps[index]
+                                              ['campDate'],
+                                              style: TextStyle(
+                                                fontWeight:
+                                                FontWeight.w500,
+                                                color: Colors.black54,
+                                                fontSize:
+                                                screenWidth * 0.05,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      );
-                                    },
-                                    child: const Text(
-                                      'Outward',
-                                      style: TextStyle(
-                                          color: Colors.black87, fontSize: 19),
-                                    ),
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent), // Set the background color
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-
-                                Expanded(
-                                  child: ElevatedButton(
-
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => LogisticsOutwardPage(
-                                              campData: camp),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.watch_later,
+                                              size: screenWidth * 0.07,
+                                              color: Colors.orange,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              camps[index]
+                                              ['campTime'],
+                                              style: TextStyle(
+                                                fontWeight:
+                                                FontWeight.w500,
+                                                color: Colors.black54,
+                                                fontSize:
+                                                screenWidth * 0.05,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      );
+                                      ],
+                                    ),
+                                    const SizedBox(height: 5),
+                                    ..._buildInfoText(
+                                      screenWidth,
+                                      camps[index]['campName'],
+                                    ),
+                                    ..._buildInfoText(
+                                      screenWidth,
+                                      camps[index]['address'],
+                                    ),
+                                    ..._buildInfoText(
+                                      screenWidth,
+                                      camps[index]['name'],
+                                    ),
+                                    ..._buildInfoText(
+                                      screenWidth,
+                                      camps[index]['phoneNumber1'],
+                                    ),
+                                    SizedBox(height: 20,),
+                                    // Horizontal Timeline Container
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              final documentId = camp['documentId'];
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => LogisticsOutward(
+                                                      documentId: documentId, campData: camp),
+                                                ),
+                                              );
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: const [
+                                                Icon(Icons.outbox, color: Colors.white), // Icon for "Outward"
+                                                SizedBox(width: 8),
+                                                Text(
+                                                  'Outward',
+                                                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                            style: ButtonStyle(
+                                              backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
+                                              foregroundColor: MaterialStateProperty.all(Colors.white),
+                                              shadowColor: MaterialStateProperty.all(Colors.blueAccent),
+                                              elevation: MaterialStateProperty.all(5),
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(20),
+                                                ),
+                                              ),
+                                              padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 15)),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => LogisticsOutwardPage(campData: camp),
+                                                ),
+                                              );
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: const [
+                                                Icon(Icons.details, color: Colors.white), // Icon for "View Details"
+                                                SizedBox(width: 8),
+                                                Text(
+                                                  'View Details',
+                                                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                            style: ButtonStyle(
+                                              backgroundColor: MaterialStateProperty.all(Colors.tealAccent),
+                                              foregroundColor: MaterialStateProperty.all(Colors.white),
+                                              shadowColor: MaterialStateProperty.all(Colors.teal),
+                                              elevation: MaterialStateProperty.all(5),
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(20),
+                                                ),
+                                              ),
+                                              padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 15)),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 20),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              final documentId = camp['documentId'];
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => LogisticsInward(
+                                                      documentId: documentId, campData: camp),
+                                                ),
+                                              );
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: const [
+                                                Icon(Icons.inbox, color: Colors.white), // Icon for "Inward"
+                                                SizedBox(width: 8),
+                                                Text(
+                                                  'Inward',
+                                                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                            style: ButtonStyle(
+                                              backgroundColor: MaterialStateProperty.all(Colors.pinkAccent),
+                                              foregroundColor: MaterialStateProperty.all(Colors.white),
+                                              shadowColor: MaterialStateProperty.all(Colors.pink),
+                                              elevation: MaterialStateProperty.all(5),
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(20),
+                                                ),
+                                              ),
+                                              padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 15)),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => InwardDetails(campData: camp),
+                                                ),
+                                              );
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: const [
+                                                Icon(Icons.info, color: Colors.white), // Icon for "View Details"
+                                                SizedBox(width: 8),
+                                                Text(
+                                                  'View Details',
+                                                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                            style: ButtonStyle(
+                                              backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
+                                              foregroundColor: MaterialStateProperty.all(Colors.white),
+                                              shadowColor: MaterialStateProperty.all(Colors.orange),
+                                              elevation: MaterialStateProperty.all(5),
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(20),
+                                                ),
+                                              ),
+                                              padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 15)),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
 
-                                      print(camp);
-                                    },
-                                    child: const Text(
-                                      'View Details',
-                                      style: TextStyle(
-                                          color: Colors.black87, fontSize: 19),
-                                    ),
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent), // Set the background color
-                                    ),
-                                  ),
+
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                            SizedBox(height: 10,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      //_showAddCampTeamDialog(
-                                      // context, camp['documentId']);
-                                      final documentId = camp['documentId'];
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => LogisticsInward(
-                                              documentId: documentId,
-                                              campData: camp),
-                                        ),
-                                      );
+                          ),
 
-                                      print(camp);
-                                    },
-                                    child: const Text(
-                                      'Inward',
-                                      style: TextStyle(
-                                          color: Colors.black87, fontSize: 19),
-                                    ),
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent), // Set the background color
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
+                        ],
+                      ) : Center(
 
-                                Expanded(
-                                  child: ElevatedButton(
-
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => InwardDetails(
-                                              campData: camp),
-                                        ),
-                                      );
-                                      print(camp);
-                                    },
-                                    child: const Text(
-                                      'View Details',
-                                      style: TextStyle(
-                                          color: Colors.black87, fontSize: 19),
-                                    ),
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent), // Set the background color
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
                       ),
                     );
                   },
@@ -327,5 +421,17 @@ class _LogisticsTimelineState extends State<LogisticsTimeline> with SingleTicker
         ),
       ),
     );
+  }
+  List<Widget> _buildInfoText(double screenWidth, String text) {
+    return [
+      Text(
+        text,
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: Colors.black54,
+          fontSize: screenWidth * 0.05, // Responsive font size
+        ),
+      ),
+    ];
   }
 }

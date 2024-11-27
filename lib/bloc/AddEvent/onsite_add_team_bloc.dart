@@ -54,6 +54,12 @@ class AddTeamBloc extends Bloc<AddTeamEvent, AddTeamState> {
         return;
       }
 
+      // Add the employee document id to the event data
+      final updatedData = {
+        ...event.data,
+        'employeeId': targetEmployeeId, // Add the employeeId here
+      };
+
       // Add the team information to the "teams" array field
       final campRef = firestore
           .collection('employees')
@@ -61,7 +67,7 @@ class AddTeamBloc extends Bloc<AddTeamEvent, AddTeamState> {
           .collection('camps')
           .doc(targetCampDocId);
 
-      await campRef.update(event.data);
+      await campRef.update(updatedData);
 
       emit(AddTeamSuccess());
     } catch (e) {

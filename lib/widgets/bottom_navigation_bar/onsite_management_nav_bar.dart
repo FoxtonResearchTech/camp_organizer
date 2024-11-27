@@ -7,10 +7,11 @@ import 'package:camp_organizer/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
+import '../../presentation/module/Onsite_Management_team/onsite_profile.dart';
+
 class OnSiteManagement extends StatefulWidget {
   @override
-  _OnSiteManagementState createState() =>
-      _OnSiteManagementState();
+  _OnSiteManagementState createState() => _OnSiteManagementState();
 }
 
 class _OnSiteManagementState extends State<OnSiteManagement> {
@@ -18,9 +19,7 @@ class _OnSiteManagementState extends State<OnSiteManagement> {
 
   final List<Widget> _pages = [
     OnsiteCampTimeline(),
-
-
-    UserProfilePage(),
+    OnsiteProfile(),
   ];
 
   @override
@@ -31,7 +30,6 @@ class _OnSiteManagementState extends State<OnSiteManagement> {
         index: _currentIndex,
         height: 60.0,
         items: <Widget>[
-
           Icon(Icons.fact_check_rounded,
               size: 30,
               color: _currentIndex == 0 ? AppColors.textBlue : Colors.white),

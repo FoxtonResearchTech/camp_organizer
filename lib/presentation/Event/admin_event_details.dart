@@ -12,9 +12,10 @@ import '../../utils/app_colors.dart';
 
 class AdminEventDetailsPage extends StatefulWidget {
   final Map<String, dynamic> employee;
-final String? campID;
+  final String? campID;
   final String? employeeID;
-  const AdminEventDetailsPage({Key? key, required this.employee, this.campID, this.employeeID})
+  const AdminEventDetailsPage(
+      {Key? key, required this.employee, this.campID, this.employeeID})
       : super(key: key);
 
   @override
@@ -198,10 +199,11 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                         title: Text(
                           'Reason',
                           style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black54,
-                            fontSize: screenWidth * 0.05, // Responsive font size
-                          ),
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black54,
+                              fontSize:
+                                  screenWidth * 0.05 // Responsive font size
+                              ),
                         ),
                         content: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -212,7 +214,8 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black54,
-                                fontSize: screenWidth * 0.04, // Responsive font size
+                                fontSize:
+                                    screenWidth * 0.04, // Responsive font size
                               ),
                             ),
                             const SizedBox(height: 10),
@@ -223,7 +226,8 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                                 suffixStyle: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   color: Colors.black54,
-                                  fontSize: screenWidth * 0.10, // Responsive font size
+                                  fontSize: screenWidth *
+                                      0.10, // Responsive font size
                                 ),
                                 border: const OutlineInputBorder(),
                               ),
@@ -243,36 +247,49 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                           ),
                           TextButton(
                             onPressed: () {
-                              BlocProvider.of<AdminApprovalBloc>(context).add(
-                                UpdateStatusEvent(
-                                  employeeId: widget.employeeID.toString(),
-                                  campDocId: widget.campID.toString(),
-                                  newStatus: 'Rejected',
-                                ),
-                              );
-
-                              String reasonText = _reason.text;
-                              BlocProvider.of<AdminApprovalBloc>(context).add(
-                                AddReasonEvent(
-                                  reasonText: reasonText,
-                                  employeeId: widget.employeeID.toString(),
-                                  campDocId: widget.campID.toString(),
-                                ),
-                              );
-
-                              // Show SnackBar for feedback
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Camp Rejected Successfully.',
+                              try {
+                                BlocProvider.of<AdminApprovalBloc>(context).add(
+                                  UpdateStatusEvent(
+                                    employeeId: widget.employeeID.toString(),
+                                    campDocId: widget.campID.toString(),
+                                    newStatus: 'Rejected',
                                   ),
-                                  duration: const Duration(seconds: 3),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-
-                              _reason.clear();
-                              Navigator.of(context).pop();
+                                );
+                                String reasonText = _reason.text;
+                                BlocProvider.of<AdminApprovalBloc>(context).add(
+                                  AddReasonEvent(
+                                    reasonText: reasonText,
+                                    employeeId: widget.employeeID.toString(),
+                                    campDocId: widget.campID.toString(),
+                                  ),
+                                );
+                                _reason.clear();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Center(
+                                      child: Text('Camp Rejected',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500)),
+                                    ),
+                                    backgroundColor: AppColors.lightRed,
+                                  ),
+                                );
+                                Navigator.of(context).pop();
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Center(
+                                      child: Text('Failed to Reject ',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500)),
+                                    ),
+                                  ),
+                                );
+                              }
                             },
                             child: const Text(
                               'Submit',
@@ -286,7 +303,8 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                 },
                 style: ElevatedButton.styleFrom(
                   iconColor: Colors.red,
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                   backgroundColor: AppColors.lightRed,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -295,14 +313,12 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                 label: const Text(
                   " Reject",
                   style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500),
                 ),
               ),
             ),
-
             const SizedBox(width: 50),
             Flexible(
               child: SizedBox(
@@ -311,43 +327,59 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.verified),
                   onPressed: () {
-                    BlocProvider.of<AdminApprovalBloc>(context).add(
-                      UpdateStatusEvent(
-                        employeeId: widget.employeeID.toString(),
-                        campDocId: widget.campID.toString(),
-                        newStatus: 'Accepted',
-                      ),
-                    );
-
-                    // Show SnackBar for feedback
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Camp Accepted Successfully.'),
-                        duration: const Duration(seconds: 3),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
+                    try {
+                      BlocProvider.of<AdminApprovalBloc>(context).add(
+                        UpdateStatusEvent(
+                          employeeId: widget.employeeID.toString(),
+                          campDocId: widget.campID.toString(),
+                          newStatus: 'Accepted',
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Center(
+                            child: Text('Camp Accepted',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                          backgroundColor: AppColors.lightGreen,
+                        ),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Center(
+                            child: Text('Failed to Accept ',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                        ),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     iconColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                     backgroundColor: AppColors.lightGreen,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   label: const Text(
-                    "Accept",
+                    "Approved",
                     style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
+                        fontSize: 18,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500),
                   ),
                 ),
               ),
             ),
-
           ],
         ),
       ),

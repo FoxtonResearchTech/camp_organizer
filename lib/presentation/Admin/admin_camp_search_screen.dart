@@ -195,7 +195,7 @@ class _AdminCampSearchScreenState extends State<AdminCampSearchScreen>
                           MaterialPageRoute(
                             builder: (context) => CampSearchEventDetailsPage(
                               employee: _filteredEmployees[index],
-                              employeedocId: state.employeeDocId[index],
+                              // employeedocId: state.employeeDocId[1],
                               campId: state.campDocIds[index],
                             ),
                           ),

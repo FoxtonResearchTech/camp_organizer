@@ -3,26 +3,29 @@ import 'package:camp_organizer/presentation/Analytics/dashboard_analytics.dart';
 import 'package:camp_organizer/presentation/Event/add_event.dart';
 import 'package:camp_organizer/presentation/profile/admin_profile.dart';
 import 'package:camp_organizer/presentation/profile/camp-organizer_profile.dart';
+import 'package:camp_organizer/presentation/profile/super_admin_profile.dart';
+import 'package:camp_organizer/presentation/superAdmin/super_admin_camp_search_screen.dart';
+import 'package:camp_organizer/presentation/superAdmin/super_admin_commutative_report_search_screen.dart';
 import 'package:camp_organizer/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 import '../../presentation/Admin/dashboard.dart';
 
-class AdminBottomNavigationBar extends StatefulWidget {
+class SuperAdminBottomNavigationBar extends StatefulWidget {
   @override
-  _AdminBottomNavigationBarState createState() =>
-      _AdminBottomNavigationBarState();
+  _SuperAdminBottomNavigationBarState createState() =>
+      _SuperAdminBottomNavigationBarState();
 }
 
-class _AdminBottomNavigationBarState extends State<AdminBottomNavigationBar> {
+class _SuperAdminBottomNavigationBarState
+    extends State<SuperAdminBottomNavigationBar> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
     AnimatedRotatingPieChartWithGrid(),
-    AddEvent(),
-    AdminApproval(),
-    AdminUserProfilePage(),
+    SuperAdminCampSearchScreen(),
+    SuperAdminUserProfilePage(),
   ];
 
   @override
@@ -36,15 +39,12 @@ class _AdminBottomNavigationBarState extends State<AdminBottomNavigationBar> {
           Icon(Icons.analytics_outlined,
               size: 30,
               color: _currentIndex == 0 ? AppColors.textBlue : Colors.white),
-          Icon(Icons.event_note,
+          Icon(Icons.checklist,
               size: 30,
               color: _currentIndex == 1 ? AppColors.textBlue : Colors.white),
-          Icon(Icons.fact_check_rounded,
+          Icon(Icons.filter_list_alt,
               size: 30,
               color: _currentIndex == 2 ? AppColors.textBlue : Colors.white),
-          Icon(Icons.person,
-              size: 30,
-              color: _currentIndex == 3 ? AppColors.textBlue : Colors.white),
         ],
         color: AppColors.primaryBlue,
         buttonBackgroundColor: AppColors.lightGray,
