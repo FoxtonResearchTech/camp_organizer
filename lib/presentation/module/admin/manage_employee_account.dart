@@ -46,7 +46,7 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'User Registration',
+            'Manage Account',
             style: TextStyle(
                 color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
           ),
@@ -62,17 +62,11 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
               ),
             ),
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.notifications, color: Colors.white),
+          leading: IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NotificationPage()));
+                Navigator.pop(context);
               },
-            ),
-          ],
+              icon:Icon(Icons.arrow_back_ios,color: Colors.white,)),
         ),
         body: BlocBuilder<EmployeeUpdateBloc, EmployeeUpdateState>(
           bloc: _employeeUpdateBloc,
@@ -81,23 +75,46 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
               return const Center(child: CircularProgressIndicator());
             } else if (state is EmployeeUpdateLoaded) {
               final employees = state.employeesData;
-              print(employees);
               return ListView.builder(
+                padding: const EdgeInsets.all(16.0),
                 itemCount: employees.length,
                 itemBuilder: (context, index) {
                   final employee = employees[index];
                   return Card(
                     margin: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 16),
+                        vertical: 12, horizontal: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 4,
                     child: ListTile(
-                      title: Text(employee['firstName'] ?? "N/A"),
+                      contentPadding: const EdgeInsets.all(16.0),
+                      title: Text(
+                        employee['firstName'] ?? "N/A",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
                       subtitle: Text(
-                          'Code: ${employee['empCode'] ?? "N/A"} | Designation: ${employee['designation'] ?? "N/A"}'),
+                        'Emp id: ${employee['empCode'] ?? "N/A"} | Designation: ${employee['role'] ?? "N/A"}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[700],fontWeight: FontWeight.w500
+                        ),
+                      ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.blue),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8), backgroundColor: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -107,7 +124,7 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
                                       name: employee['firstName'] ?? "N/A",
                                       empCode: employee['empCode'] ?? "N/A",
                                       designation:
-                                          employee['designation'] ?? "N/A",
+                                      employee['role'] ?? "N/A",
                                     ),
                                     index: index,
                                     onUpdate: (updatedIndex, updatedEmployee) {
@@ -116,7 +133,7 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
                                           'firstName': updatedEmployee.name,
                                           'empCode': updatedEmployee.empCode,
                                           'designation':
-                                              updatedEmployee.designation,
+                                          updatedEmployee.designation,
                                         };
                                       });
                                     },
@@ -129,23 +146,32 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
                                 ),
                               );
                             },
+                            child: const Text("Edit",style: TextStyle(fontWeight: FontWeight.w500,color: Colors.white),),
                           ),
-                          IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                final empCode = employee['empCode'];
-                                print(empCode);
-                                if (empCode != null && empCode.isNotEmpty) {
-                                  context.read<EmployeeUpdateBloc>().add(
-                                        DeleteEmployeeEvent(empCode),
-                                      );
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text("Invalid employee code")),
-                                  );
-                                }
-                              }),
+                          const SizedBox(width: 8),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8), backgroundColor: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            onPressed: () {
+                              final empCode = employee['empCode'];
+                              if (empCode != null && empCode.isNotEmpty) {
+                                context.read<EmployeeUpdateBloc>().add(
+                                  DeleteEmployeeEvent(empCode),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text("Invalid employee code")),
+                                );
+                              }
+                            },
+                            child: const Text("Delete",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500),),
+                          ),
                         ],
                       ),
                     ),

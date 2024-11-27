@@ -332,7 +332,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                         UpdateStatusEvent(
                           employeeId: widget.employeeID.toString(),
                           campDocId: widget.campID.toString(),
-                          newStatus: 'Accepted',
+                          newStatus: 'Approved',
                         ),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(

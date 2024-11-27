@@ -26,11 +26,19 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
   final TextEditingController stateController = TextEditingController();
   final TextEditingController pinCodeController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController reEnterPasswordController = TextEditingController();
+  final TextEditingController reEnterPasswordController =
+      TextEditingController();
 
   final List<String> gender = ['Male', 'Female'];
   String? selectedValue;
-  final List<String> role = ['CampOrganizer', 'OnSiteManagement','SupportService','PostCampActivity','Opthamologist','Report',];
+  final List<String> role = [
+    'CampOrganizer',
+    'OnSiteManagement',
+    'SupportService',
+    'PostCampActivity',
+    'Opthamologist',
+    'Report',
+  ];
   String? selectedrole;
 
   // Firebase Authentication and Firestore instances
@@ -78,25 +86,31 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
 
     try {
       // Register with Firebase Authentication using empCode as email and password
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-        email: empCodeController.text,  // empCode as email
-        password: passwordController.text,  // password as password
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: empCodeController.text, // empCode as email
+        password: passwordController.text, // password as password
       );
 
       // Save employee data to Firestore
-      await _firestore.collection('employees').doc(userCredential.user?.uid).set({
+      await _firestore
+          .collection('employees')
+          .doc(userCredential.user?.uid)
+          .set({
         'firstName': firstNameController.text,
         'lastName': lastNameController.text,
         'dob': dobController.text,
         'gender': selectedValue,
         'position': positionController.text,
-        'empCode': empCodeController.text,  // email (empCode)
+        'empCode': empCodeController.text,
+        // email (empCode)
         'lane1': lane1Controller.text,
         'lane2': lane2Controller.text,
-        'role':selectedrole,
+        'role': selectedrole,
         'state': stateController.text,
         'pinCode': pinCodeController.text,
-        'password': passwordController.text,  // (not recommended to store password this way, use hash)
+        'password': passwordController.text,
+        // (not recommended to store password this way, use hash)
       });
 
       _showSnackBar("Employee Registered Successfully!");
@@ -116,8 +130,13 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon:Icon(Icons.arrow_back_ios,color: Colors.white,)),
         title: const Text(
-          'User Registration',
+          'Employee Registration',
           style: TextStyle(
               color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
         ),
@@ -133,15 +152,7 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationPage()));
-            },
-          ),
-        ],
+
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -215,7 +226,7 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
                 value: selectedrole,
                 onChanged: (newValue) {
                   setState(() {
-                   selectedrole = newValue;
+                    selectedrole = newValue;
                   });
                 },
                 validator: (value) {
@@ -277,13 +288,13 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
               CustomTextFormField(
                 labelText: 'Enter New Password',
                 controller: passwordController,
-           //     obscureText: true,
+                //     obscureText: true,
               ),
               SizedBox(height: 30),
               CustomTextFormField(
                 labelText: 'Re Enter Password',
                 controller: reEnterPasswordController,
-              //  obscureText: true,
+                //  obscureText: true,
               ),
               SizedBox(height: 30),
               CustomButton(
