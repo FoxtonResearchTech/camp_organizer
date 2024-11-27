@@ -35,8 +35,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       SignInRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
+      // Concatenate email with @gmail.com if not already present
+      String email = event.email.contains('@') ? event.email : '${event.email}@gmail.com';
+
       final user = await authRepository.signInWithEmailPassword(
-          event.email, event.password);
+          email, event.password);
       if (user != null) {
         await _fetchUserRole(user.uid); // Fetch role after successful sign-in
       } else {

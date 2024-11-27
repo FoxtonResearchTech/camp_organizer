@@ -20,34 +20,25 @@ class _SendEmailPageState extends State<SendEmailPage> {
   final String userId = 'TQGdgjJ19jJowlfxm';
 
   Future<void> sendEmail() async {
-    final Uri url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    const String url = 'http://10.0.2.2:3000/send-email'; // URL for Android Emulator
+    // URL of your backend server
+
     final response = await http.post(
-      url,
+      Uri.parse(url),
       headers: {
         'Content-Type': 'application/json',
       },
-      body: json.encode({
-        'service_id': serviceId,
-        'template_id': templateId,
-        'user_id': userId,
-        'template_params': {
-          'user_name': _nameController.text,
-          'user_email': _emailController.text,
-          'message': _messageController.text,
-        },
+      body: jsonEncode({
+        'to_email': 'nn0004481@gmail.com',
+        'subject': 'Subject of the email',
+        'message': 'Body of the email',
       }),
     );
 
     if (response.statusCode == 200) {
-      // Show a success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Email sent successfully!')),
-      );
+      print('Email sent successfully!');
     } else {
-      // Show an error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to send email!')),
-      );
+      print('Failed to send email: ${response.body}');
     }
   }
 
@@ -101,9 +92,7 @@ class _SendEmailPageState extends State<SendEmailPage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    sendEmail();
-                  }
+               sendEmail();
                 },
                 child: const Text('Send Email'),
               ),

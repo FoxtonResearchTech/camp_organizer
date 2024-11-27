@@ -25,7 +25,7 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
   void initState() {
   print("Emp id:${widget.documentId.toString()}");
   print("Camp id:${widget.campData.toString()}");
-  getEmployeeDocId(widget.campData);
+  //getEmployeeDocId(widget.campData);
     // TODO: implement initState
     super.initState();
   }
@@ -282,8 +282,28 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
                   CustomButton(
                     text: 'Submit Report',
                     onPressed: () {
+
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('This is a test SnackBar!')),
+                        SnackBar(
+                          content: Row(
+                            children: [
+                              Icon(Icons.check_circle_outline, color: Colors.white),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  'Report Submited successfully!',
+                                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                          backgroundColor: Colors.green,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          duration: Duration(seconds: 3),
+                        ),
                       );
                       final formData = {
                         'campName': _campNameController.text,
@@ -316,7 +336,7 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
                         //  data: formData,
                         //),
                       //);
-                   //   submitReport(context, widget.documentId, formData);
+                      submitReport(context, widget.documentId, formData);
                    //   getEmployeeDocId(widget.campData);
 
                     },

@@ -398,8 +398,8 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
       Text(
         "Concern Person1 Details :",
         style: TextStyle(
-          fontWeight: FontWeight.w500,
-          color: Colors.black54,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
           fontSize: screenWidth * 0.05,
         ),
       ),
@@ -412,8 +412,8 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
       Text(
         "Concern Person2 Details :",
         style: TextStyle(
-          fontWeight: FontWeight.w500,
-          color: Colors.black54,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
           fontSize: screenWidth * 0.05,
         ),
       ),
@@ -438,28 +438,35 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
     ];
   }
 
-  Widget _buildDetailRow(String label, String? value, double screenWidth) {
-    return FadeTransition(
-      opacity: _fadeAnimation,
-      child: SlideTransition(
-        position: _slideAnimation,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: Row(
-            children: [
-              Text(
-                '$label: ',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black54,
-                  fontSize: screenWidth * 0.05,
-                ),
-              ),
-              Text(value ?? 'N/A'),
-            ],
+  Widget _buildDetailRow(String label, String value, double screenWidth) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "${label}:",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+              fontSize: screenWidth * 0.045, // Adjust the font size responsively
+            ),
           ),
-        ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(
+                color: Colors.black54,fontWeight: FontWeight.w500,
+                fontSize: screenWidth * 0.045, // Adjust the font size responsively
+              ),
+              overflow: TextOverflow.ellipsis, // Handle long text overflow
+              maxLines: 2, // Optional: limit the number of lines
+            ),
+          ),
+        ],
       ),
     );
   }
+
 }

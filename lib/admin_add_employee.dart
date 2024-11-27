@@ -84,37 +84,37 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
       return;
     }
 
+    // Construct email from empCode
+    String email = '${empCodeController.text}@gmail.com';
+
     try {
-      // Register with Firebase Authentication using empCode as email and password
-      UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-        email: empCodeController.text, // empCode as email
-        password: passwordController.text, // password as password
+      // Register with Firebase Authentication using constructed email and password
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: passwordController.text,
       );
 
       // Save employee data to Firestore
-      await _firestore
-          .collection('employees')
-          .doc(userCredential.user?.uid)
-          .set({
+      await _firestore.collection('employees').doc(userCredential.user?.uid).set({
         'firstName': firstNameController.text,
         'lastName': lastNameController.text,
         'dob': dobController.text,
         'gender': selectedValue,
-        'position': positionController.text,
+        'notification': positionController.text,
         'empCode': empCodeController.text,
-        // email (empCode)
+        'email': email, // Use the constructed email
         'lane1': lane1Controller.text,
         'lane2': lane2Controller.text,
         'role': selectedrole,
         'state': stateController.text,
         'pinCode': pinCodeController.text,
         'password': passwordController.text,
-        // (not recommended to store password this way, use hash)
       });
 
+      // Show success snackbar
       _showSnackBar("Employee Registered Successfully!");
     } catch (e) {
+      // Catch and display errors
       _showSnackBar("Error: ${e.toString()}");
     }
   }
@@ -122,9 +122,29 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
   // Function to show snackbar messages
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(Icons.check_circle_outline, color: Colors.white),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                message,
+                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.green, // Green for success
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12), // Rounded corners
+        ),
+        duration: Duration(seconds: 3), // Visible for 3 seconds
+      ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -238,12 +258,12 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
               ),
               SizedBox(height: 30),
               CustomTextFormField(
-                labelText: 'Position',
+                labelText: 'Notification Email',
                 controller: positionController,
               ),
               SizedBox(height: 30),
               CustomTextFormField(
-                labelText: 'Emp Code',
+                labelText: 'Employee Code',
                 controller: empCodeController,
               ),
               SizedBox(height: 20),

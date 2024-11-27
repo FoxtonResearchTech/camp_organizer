@@ -604,7 +604,9 @@ class _AdminApprovalState extends State<AdminApproval>
           fontWeight: FontWeight.w500,
           color: Colors.black54,
           fontSize: screenWidth * 0.05, // Responsive font size
+
         ),
+        overflow: TextOverflow.ellipsis, maxLines: 1,
       ),
     ];
   }

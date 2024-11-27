@@ -1,35 +1,24 @@
-import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class HomeScreen extends StatelessWidget {
-  // Function to launch the email app
-  void _launchEmailApp() async {
-    final Uri emailUri = Uri(
-      scheme: 'mailto',
-      path: 'example@example.com',  // Replace with the recipient's email address
-      query: Uri.encodeFull('subject=Hello&body=I want to contact you'),  // Optional subject and body
-    );
+Future<void> sendEmail() async {
+  const String url = 'http://localhost:3000/send-email'; // URL of your backend server
 
-    if (await canLaunch(emailUri.toString())) {
-      await launch(emailUri.toString());
-    } else {
-      print("Could not launch email app.");
-    }
-  }
+  final response = await http.post(
+    Uri.parse(url),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode({
+      'to_email': 'nn0004481@gmail.com',
+      'subject': 'Subject of the email',
+      'message': 'Body of the email',
+    }),
+  );
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Open Email App'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: _launchEmailApp, // Call the function to open the email app
-          child: const Text('Open Email App'),
-        ),
-      ),
-    );
+  if (response.statusCode == 200) {
+    print('Email sent successfully!');
+  } else {
+    print('Failed to send email: ${response.body}');
   }
 }
-
