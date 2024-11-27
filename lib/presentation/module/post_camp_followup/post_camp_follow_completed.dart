@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../widgets/Text Form Field/custom_text_form_field.dart';
 import '../../../widgets/button/custom_button.dart';
@@ -8,16 +9,21 @@ class PostCampFollowCompleted extends StatefulWidget {
   final String documentId;
   final Map<String, dynamic> campData;
 
-
-  const PostCampFollowCompleted({Key? key, required this.documentId, required this.campData}) : super(key: key);
+  const PostCampFollowCompleted(
+      {Key? key, required this.documentId, required this.campData})
+      : super(key: key);
 
   @override
-  State<PostCampFollowCompleted> createState() => _PostCampFollowCompletedState();
+  State<PostCampFollowCompleted> createState() =>
+      _PostCampFollowCompletedState();
 }
 
 class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -49,47 +55,70 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              SizedBox(height: 30,),
-              _buildAnimatedSection(
-                context,
-                sectionTitle: 'Camp Info',
-                children: [
-                  _buildInfoCard('Camp Name', widget.campData['campName']),
-                  _buildInfoCard('phone', widget.campData['phone']),
-                  _buildInfoCard('Status', widget.campData['status']),
-                ],
+      body: widget.campData['patientsFollowUps'] == null
+          ? Container(
+              padding: EdgeInsets.only(top: screenHeight / 6),
+              child: Center(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                    Lottie.asset(
+                      'assets/no_records.json',
+                      width: screenWidth * 0.6,
+                      height: screenHeight * 0.4,
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      "No FollowUps found",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ])),
+            )
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 30,
+                    ),
+                    _buildAnimatedSection(
+                      context,
+                      sectionTitle: 'Camp Info',
+                      children: [
+                        _buildInfoCard(
+                            'Camp Name', widget.campData['campName']),
+                        _buildInfoCard('phone', widget.campData['phone']),
+                        _buildInfoCard('Status', widget.campData['status']),
+                      ],
+                    ),
+                    // Section for Patient Follow-Ups
+                    _buildAnimatedSection(
+                      context,
+                      sectionTitle: 'Patient Follow-Ups',
+                      children: _buildPatientFollowUpCards(
+                          widget.campData['patientFollowUps']),
+                    ),
+                    _buildAnimatedSection(
+                      context,
+                      sectionTitle: 'Added Follow Ups Info',
+                      children: [
+                        _buildInfoCard(
+                            'Follow up Info', widget.campData['followInfo']),
+                        _buildInfoCard('Follow up Remarks',
+                            widget.campData['followRemark']),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    CustomButton(text: 'Submit', onPressed: () {})
+                  ],
+                ),
               ),
-              // Section for Patient Follow-Ups
-              _buildAnimatedSection(
-                context,
-                sectionTitle: 'Patient Follow-Ups',
-                children: _buildPatientFollowUpCards(widget.campData['patientFollowUps']),
-              ),
-              _buildAnimatedSection(
-                context,
-                sectionTitle: 'Added Follow Ups Info',
-                children: [
-                  _buildInfoCard('Follow up Info', widget.campData['followInfo']),
-                  _buildInfoCard('Follow up Remarks', widget.campData['followRemark']),
-                ],
-              ),
-              SizedBox(height: 20),
-              CustomButton(text: 'Submit', onPressed: () {})
-
-            ],
-
-          ),
-        ),
-
-      ),
-
-
-
+            ),
     );
   }
 
@@ -136,7 +165,8 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
           ],
         ),
         child: ListTile(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
           title: Text(
             patient['name'] ?? 'N/A',
             style: const TextStyle(
@@ -164,7 +194,6 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
     }).toList();
   }
 
-
   // Helper method to build section titles with animation
   Widget _buildAnimatedSection(BuildContext context,
       {required String sectionTitle, required List<Widget> children}) {
@@ -187,7 +216,7 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
             },
           ),
           ...children.map(
-                (child) => TweenAnimationBuilder(
+            (child) => TweenAnimationBuilder(
               tween: Tween<double>(begin: 0, end: 1),
               duration: const Duration(milliseconds: 300),
               builder: (context, value, _) {

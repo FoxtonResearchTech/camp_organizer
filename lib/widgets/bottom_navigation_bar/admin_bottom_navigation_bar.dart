@@ -19,7 +19,7 @@ class _AdminBottomNavigationBarState extends State<AdminBottomNavigationBar> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-   AdminDashboardScreen(),
+    AnimatedRotatingPieChartWithGrid(),
     AddEvent(),
     AdminApproval(),
     AdminUserProfilePage(),

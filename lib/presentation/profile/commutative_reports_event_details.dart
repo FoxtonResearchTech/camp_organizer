@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/animation.dart';
+import 'package:flutter/services.dart';
 
 import '../../utils/app_colors.dart';
 import 'package:pdf/pdf.dart';
@@ -163,6 +164,7 @@ class _CommutativeReportsEventDetails
               color: AppColors.accentBlue,
               onPressed: () async {
                 final pdf = pw.Document();
+                final rows = await _generatePdfRows();
 
                 // Adding the content to the PDF
                 pdf.addPage(
@@ -171,14 +173,7 @@ class _CommutativeReportsEventDetails
                     build: (context) {
                       return pw.Column(
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        children: [
-                          pw.Text("Camp Details",
-                              style: pw.TextStyle(
-                                  fontSize: 35,
-                                  fontWeight: pw.FontWeight.bold)),
-                          pw.SizedBox(height: 20),
-                          ..._generatePdfRows(),
-                        ],
+                        children: rows,
                       );
                     },
                   ),
@@ -242,8 +237,37 @@ class _CommutativeReportsEventDetails
     );
   }
 
-  List<pw.Widget> _generatePdfRows() {
+  Future<List<pw.Widget>> _generatePdfRows() async {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    final imageBytes = await rootBundle.load('assets/logo3.png');
+    final logo = pw.MemoryImage(imageBytes.buffer.asUint8List());
     return [
+      pw.Container(
+        padding: pw.EdgeInsets.only(top: screenHeight * 0.02),
+        height: screenHeight / 8,
+        width: screenWidth,
+        decoration: pw.BoxDecoration(
+          image: pw.DecorationImage(
+            image: logo,
+          ),
+        ),
+      ),
+      pw.SizedBox(height: 25),
+      pw.Container(
+        child: pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.center,
+          // crossAxisAlignment: pw.CrossAxisAlignment.center,
+          children: [
+            pw.Text(
+              "Individual Report",
+              style: pw.TextStyle(
+                  fontWeight: pw.FontWeight.bold, fontSize: screenHeight / 50),
+            ),
+          ],
+        ),
+      ),
+      pw.SizedBox(height: 20),
       pw.Container(
           child: pw.Row(
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,

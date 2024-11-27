@@ -2,6 +2,7 @@ import 'package:camp_organizer/widgets/button/custom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../bloc/AddEvent/add_finance_bloc.dart';
 import '../../../bloc/AddEvent/add_finance_event.dart';
@@ -16,23 +17,25 @@ class PostCampFollow extends StatefulWidget {
   final String documentId;
   final Map<String, dynamic> campData;
 
-  const PostCampFollow({Key? key, required this.documentId, required this.campData}) : super(key: key);
+  const PostCampFollow(
+      {Key? key, required this.documentId, required this.campData})
+      : super(key: key);
 
   @override
   State<PostCampFollow> createState() => _PostCampFollowState();
 }
 
 class _PostCampFollowState extends State<PostCampFollow> {
-
   final TextEditingController additionalInfo = TextEditingController();
   final TextEditingController remarks = TextEditingController();
 
   void saveData(BuildContext context, documentId) {
     final Map<String, dynamic> data = {
       'followInfo': additionalInfo.text.trim(),
-      'followRemark':remarks.text.trim()
+      'followRemark': remarks.text.trim()
     };
-    context.read<PatientFollowUpsBloc>().add(AddPatientFollowUpsWithDocumentId(documentId: widget.documentId, data: data));
+    context.read<PatientFollowUpsBloc>().add(AddPatientFollowUpsWithDocumentId(
+        documentId: widget.documentId, data: data));
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Follow up data submitted successfully')),
     );
@@ -40,8 +43,11 @@ class _PostCampFollowState extends State<PostCampFollow> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return BlocProvider(
-      create: (_) => PatientFollowUpsBloc(firestore: FirebaseFirestore.instance),
+      create: (_) =>
+          PatientFollowUpsBloc(firestore: FirebaseFirestore.instance),
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -73,69 +79,94 @@ class _PostCampFollowState extends State<PostCampFollow> {
             ),
           ],
         ),
-        body: BlocListener<PatientFollowUpsBloc, PatientFollowUpsState>(
-          listener: (context,  state) {
-            if (state is PatientFollowUpsSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Data saved successfully!')),
-              );
-            } else if (state is PatientFollowUpsError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Error: ${state.message}')),
-              );
-            }
-          },
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  SizedBox(height: 30,),
-                  _buildAnimatedSection(
-                    context,
-                    sectionTitle: 'Camp Info',
-                    children: [
-                      _buildInfoCard('Camp Name', widget.campData['campName']),
-                      _buildInfoCard('phone', widget.campData['phone']),
-                      _buildInfoCard('Status', widget.campData['status']),
-                    ],
+        body: widget.campData['patientsFollowUps'] == null
+            ? Container(
+                padding: EdgeInsets.only(top: screenHeight / 6),
+                child: Center(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                      Lottie.asset(
+                        'assets/no_records.json',
+                        width: screenWidth * 0.6,
+                        height: screenHeight * 0.4,
+                      ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        "No FollowUps found",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ])),
+              )
+            : BlocListener<PatientFollowUpsBloc, PatientFollowUpsState>(
+                listener: (context, state) {
+                  if (state is PatientFollowUpsSuccess) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Data saved successfully!')),
+                    );
+                  } else if (state is PatientFollowUpsError) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error: ${state.message}')),
+                    );
+                  }
+                },
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 30,
+                        ),
+                        _buildAnimatedSection(
+                          context,
+                          sectionTitle: 'Camp Info',
+                          children: [
+                            _buildInfoCard(
+                                'Camp Name', widget.campData['campName']),
+                            _buildInfoCard('phone', widget.campData['phone']),
+                            _buildInfoCard('Status', widget.campData['status']),
+                          ],
+                        ),
+                        // Section for Patient Follow-Ups
+                        _buildAnimatedSection(
+                          context,
+                          sectionTitle: 'Patient Follow-Ups',
+                          children: _buildPatientFollowUpCards(
+                              widget.campData['patientFollowUps']),
+                        ),
+                        _buildAnimatedSection(
+                          context,
+                          sectionTitle: 'Add Follow Ups Info',
+                          children: [],
+                        ),
+                        SizedBox(height: 20),
+                        CustomTextFormField(
+                          labelText: 'Additional Info',
+                          controller: additionalInfo,
+                        ),
+                        SizedBox(height: 20),
+                        CustomTextFormField(
+                          labelText: 'Remarks',
+                          controller: remarks,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        CustomButton(
+                            text: 'Submit',
+                            onPressed: () {
+                              saveData(context, widget.documentId);
+                            }),
+                      ],
+                    ),
                   ),
-                  // Section for Patient Follow-Ups
-                  _buildAnimatedSection(
-                    context,
-                    sectionTitle: 'Patient Follow-Ups',
-                    children: _buildPatientFollowUpCards(widget.campData['patientFollowUps']),
-                  ),
-                  _buildAnimatedSection(
-                    context,
-                    sectionTitle: 'Add Follow Ups Info',
-                    children: [
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  CustomTextFormField(
-                    labelText: 'Additional Info',
-                    controller: additionalInfo,
-                  ),
-                  SizedBox(height: 20),
-                  CustomTextFormField(
-                    labelText: 'Remarks',
-                    controller: remarks,
-                  ),
-                  SizedBox(height: 20,),
-                  CustomButton(text: 'Submit', onPressed: () {
-                    saveData(context, widget.documentId);
-                  }),
-                ],
-
+                ),
               ),
-            ),
-
-          ),
-        ),
-
-
-
       ),
     );
   }
@@ -183,7 +214,8 @@ class _PostCampFollowState extends State<PostCampFollow> {
           ],
         ),
         child: ListTile(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
           title: Text(
             patient['name'] ?? 'N/A',
             style: const TextStyle(
@@ -211,7 +243,6 @@ class _PostCampFollowState extends State<PostCampFollow> {
     }).toList();
   }
 
-
   // Helper method to build section titles with animation
   Widget _buildAnimatedSection(BuildContext context,
       {required String sectionTitle, required List<Widget> children}) {
@@ -234,7 +265,7 @@ class _PostCampFollowState extends State<PostCampFollow> {
             },
           ),
           ...children.map(
-                (child) => TweenAnimationBuilder(
+            (child) => TweenAnimationBuilder(
               tween: Tween<double>(begin: 0, end: 1),
               duration: const Duration(milliseconds: 300),
               builder: (context, value, _) {

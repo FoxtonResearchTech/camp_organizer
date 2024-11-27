@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../bloc/approval/adminapproval_bloc.dart';
+import '../../../bloc/approval/adminapproval_event.dart';
 import '../../../widgets/button/custom_button.dart';
 import '../../notification/notification.dart';
 
@@ -29,8 +32,10 @@ class _FinanceDetailsState extends State<FinanceDetails> {
                 _buildInfoCard('Status', widget.campData['campStatus']),
                 _buildInfoCard('Date', widget.campData['campDate']),
                 _buildInfoCard('Time', widget.campData['campTime']),
-                _buildInfoCard('Camp Plan Type', widget.campData['campPlanType']),
-                _buildInfoCard('Last Camp Done', widget.campData['lastCampDone']),
+                _buildInfoCard(
+                    'Camp Plan Type', widget.campData['campPlanType']),
+                _buildInfoCard(
+                    'Last Camp Done', widget.campData['lastCampDone']),
               ],
             ),
             _buildAnimatedSection(
@@ -40,8 +45,10 @@ class _FinanceDetailsState extends State<FinanceDetails> {
                 _buildInfoCard('City', widget.campData['city']),
                 _buildInfoCard('State', widget.campData['state']),
                 _buildInfoCard('Road Access', widget.campData['roadAccess']),
-                _buildInfoCard('Water Availability', widget.campData['waterAvailability']),
-                _buildInfoCard('Total Square Feet', widget.campData['totalSquareFeet']),
+                _buildInfoCard(
+                    'Water Availability', widget.campData['waterAvailability']),
+                _buildInfoCard(
+                    'Total Square Feet', widget.campData['totalSquareFeet']),
                 _buildInfoCard('Pincode', widget.campData['pincode']),
                 _buildInfoCard('Address', widget.campData['address']),
               ],
@@ -53,7 +60,8 @@ class _FinanceDetailsState extends State<FinanceDetails> {
                 _buildInfoCard('In-Charge', widget.campData['incharge']),
                 _buildInfoCard('Doctor', widget.campData['doctor']),
                 _buildInfoCard('Driver', widget.campData['driver']),
-                _buildInfoCard('Teams', widget.campData['teams']?.join(', ') ?? 'N/A'),
+                _buildInfoCard(
+                    'Teams', widget.campData['teams']?.join(', ') ?? 'N/A'),
                 _buildInfoCard('Organization', widget.campData['organization']),
               ],
             ),
@@ -61,10 +69,14 @@ class _FinanceDetailsState extends State<FinanceDetails> {
               context,
               sectionTitle: 'Contact Details',
               children: [
-                _buildInfoCard('Primary Phone', widget.campData['phoneNumber1']),
-                _buildInfoCard('Alternate Phone', widget.campData['phoneNumber1_2']),
-                _buildInfoCard('Secondary Phone 1', widget.campData['phoneNumber2']),
-                _buildInfoCard('Secondary Phone 2', widget.campData['phoneNumber2_2']),
+                _buildInfoCard(
+                    'Primary Phone', widget.campData['phoneNumber1']),
+                _buildInfoCard(
+                    'Alternate Phone', widget.campData['phoneNumber1_2']),
+                _buildInfoCard(
+                    'Secondary Phone 1', widget.campData['phoneNumber2']),
+                _buildInfoCard(
+                    'Secondary Phone 2', widget.campData['phoneNumber2_2']),
                 _buildInfoCard('Employee Email', widget.campData['EmployeeId']),
               ],
             ),
@@ -72,28 +84,70 @@ class _FinanceDetailsState extends State<FinanceDetails> {
               context,
               sectionTitle: 'Additional Info',
               children: [
-                _buildInfoCard('Number of Patients Expected', widget.campData['noOfPatientExpected']),
+                _buildInfoCard('Number of Patients Expected',
+                    widget.campData['noOfPatientExpected']),
                 _buildInfoCard('Position', widget.campData['position']),
-                _buildInfoCard('Created On', widget.campData['CreatedOn']?.toString() ?? 'N/A'),
+                _buildInfoCard('Created On',
+                    widget.campData['CreatedOn']?.toString() ?? 'N/A'),
                 _buildInfoCard('Document ID', widget.campData['documentId']),
-                _buildInfoCard('AR', widget.campData['ar']?? 'N?A'),
+                _buildInfoCard('AR', widget.campData['ar'] ?? 'N?A'),
               ],
             ),
             _buildAnimatedSection(
               context,
               sectionTitle: 'Finance Information',
               children: [
-                _buildInfoCard('Other Expenses', widget.campData['otherExpenses']),
-                _buildInfoCard('Vehicle Expenses', widget.campData['vehicleExpenses']),
-      
+                _buildInfoCard(
+                    'Other Expenses', widget.campData['otherExpenses']),
+                _buildInfoCard(
+                    'Vehicle Expenses', widget.campData['vehicleExpenses']),
                 _buildInfoCard('Staff Salary', widget.campData['staffSalary']),
-                _buildInfoCard('OT X 750', widget.campData['ot']?? 'N?A'),
-                _buildInfoCard('CAT X 2000', widget.campData['cat']?? 'N?A'),
-                _buildInfoCard('GP Paying Case', widget.campData['gpPayingCase']?? 'N?A'),
-                _buildInfoCard('Remarks', widget.campData['remarks']?? 'N?A'),
+                _buildInfoCard('OT X 750', widget.campData['ot'] ?? 'N?A'),
+                _buildInfoCard('CAT X 2000', widget.campData['cat'] ?? 'N?A'),
+                _buildInfoCard(
+                    'GP Paying Case', widget.campData['gpPayingCase'] ?? 'N?A'),
+                _buildInfoCard('Remarks', widget.campData['remarks'] ?? 'N?A'),
               ],
             ),
-            Center(child: CustomButton(text: 'Approve', onPressed: () {})),
+            Center(
+              child: CustomButton(
+                text: 'Approve',
+                onPressed: () {
+                  try {
+                    BlocProvider.of<AdminApprovalBloc>(context).add(
+                      UpdateStatusEvent(
+                        employeeId: widget.campData['employeeDocId'],
+                        campDocId: widget.campData['documentId'],
+                        newStatus: 'Completed',
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Center(
+                          child: Text('Status changed to Completed',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500)),
+                        ),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Center(
+                          child: Text('Failed to update status ',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500)),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -122,7 +176,7 @@ class _FinanceDetailsState extends State<FinanceDetails> {
             },
           ),
           ...children.map(
-                (child) => TweenAnimationBuilder(
+            (child) => TweenAnimationBuilder(
               tween: Tween<double>(begin: 0, end: 1),
               duration: const Duration(milliseconds: 300),
               builder: (context, value, _) {
@@ -181,7 +235,8 @@ class _FinanceDetailsState extends State<FinanceDetails> {
           ],
         ),
         child: ListTile(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
           title: Text(
             label,
             style: const TextStyle(
@@ -197,5 +252,4 @@ class _FinanceDetailsState extends State<FinanceDetails> {
       ),
     );
   }
-
 }
