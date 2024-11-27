@@ -28,6 +28,7 @@ import 'presentation/module/logistics/logistics_timeline.dart';
 import 'presentation/module/post_camp_followup/post_camp_timeline.dart';
 import 'repository/auth_repository.dart';
 import 'services/notification/email_notification.dart';
+import 'widgets/bottom_navigation_bar/post_camp_nav_bar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -100,7 +101,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home:CampOrganizerLoginPage(), // Starting screen is the splash screen
+        home:PostCampNavBar(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),
