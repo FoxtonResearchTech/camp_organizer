@@ -318,12 +318,19 @@ class _EventDetailsPageState extends State<EventDetailsPage>
             fontSize: screenWidth * 0.04,
           ),
         ),
-        Text(
-          data,
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-            color: Colors.black54,
-            fontSize: screenWidth * 0.05,
+        SizedBox(
+          width: screenWidth / 10,
+        ),
+        Flexible(
+          child: Text(
+            data,
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: Colors.black54,
+              fontSize: screenWidth * 0.05,
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
           ),
         ),
       ],

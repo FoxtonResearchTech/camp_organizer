@@ -332,7 +332,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                         UpdateStatusEvent(
                           employeeId: widget.employeeID.toString(),
                           campDocId: widget.campID.toString(),
-                          newStatus: 'Approved',
+                          newStatus: 'Accepted',
                         ),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -449,24 +449,25 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.black87,
-              fontSize: screenWidth * 0.045, // Adjust the font size responsively
+              fontSize:
+                  screenWidth * 0.045, // Adjust the font size responsively
             ),
           ),
-          const SizedBox(width: 8),
-          Expanded(
+          SizedBox(width: screenWidth / 10),
+          Flexible(
             child: Text(
               value,
               style: TextStyle(
-                color: Colors.black54,fontWeight: FontWeight.w500,
-                fontSize: screenWidth * 0.045, // Adjust the font size responsively
+                color: Colors.black54, fontWeight: FontWeight.w500,
+                fontSize:
+                    screenWidth * 0.045, // Adjust the font size responsively
               ),
               overflow: TextOverflow.ellipsis, // Handle long text overflow
-              maxLines: 2, // Optional: limit the number of lines
+              maxLines: 1, // Optional: limit the number of lines
             ),
           ),
         ],
       ),
     );
   }
-
 }

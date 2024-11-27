@@ -23,7 +23,7 @@ class _SuperAdminBottomNavigationBarState
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-  AdminDashboardScreen(),
+    AnimatedRotatingPieChartWithGrid(),
     SuperAdminCampSearchScreen(),
     SuperAdminUserProfilePage(),
   ];

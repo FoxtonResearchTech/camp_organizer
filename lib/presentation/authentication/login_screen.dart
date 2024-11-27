@@ -121,7 +121,25 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Logo and Title
-                 Image.asset("assets/Newmodel[1].png").animate().scale(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.local_hospital,
+                        color: Colors.blueAccent,
+                        size: 40,
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Hospital Management System',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blueAccent,
+                        ),
+                      ),
+                    ],
+                  ).animate().scale(
                       duration: const Duration(milliseconds: 1200),
                       curve: Curves.elasticOut),
                   SizedBox(height: 40),

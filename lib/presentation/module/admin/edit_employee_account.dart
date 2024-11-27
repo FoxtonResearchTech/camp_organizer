@@ -119,7 +119,7 @@ class _EditEmployeeAccountState extends State<EditEmployeeAccount> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Edit Employee Account',
+          'Update User Account',
           style: TextStyle(
               color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
         ),
@@ -135,11 +135,15 @@ class _EditEmployeeAccountState extends State<EditEmployeeAccount> {
             ),
           ),
         ),
-        leading: IconButton(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications, color: Colors.white),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NotificationPage()));
             },
-            icon:Icon(Icons.arrow_back_ios,color: Colors.white,)),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

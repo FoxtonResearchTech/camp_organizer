@@ -1,9 +1,13 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/animation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 import '../../utils/app_colors.dart';
 import 'package:pdf/pdf.dart';
@@ -31,6 +35,7 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
   late Animation<double> _fadeAnimation;
   late Animation<double> _buttonScaleAnimation;
   late Animation<double> _buttonFadeAnimation;
+  String? employeeName;
 
   @override
   void initState() {
@@ -56,6 +61,36 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
     SchedulerBinding.instance.addPostFrameCallback((_) {
       _controller.forward();
     });
+    fetchEmployeeName();
+  }
+
+  Future<void> fetchEmployeeName() async {
+    try {
+      final employeeDocId = widget.employee['EmployeeDocId'];
+      if (employeeDocId != null) {
+        final employeeDoc = await FirebaseFirestore.instance
+            .collection('employees')
+            .doc(employeeDocId)
+            .get();
+
+        if (employeeDoc.exists) {
+          final employeeData = employeeDoc.data();
+          final employeeFirstName = employeeData?['firstName'] ?? '';
+          final employeeLastName = employeeData?['lastName'] ?? '';
+
+          setState(() {
+            employeeName =
+                '${employeeFirstName.trim()} ${employeeLastName.trim()}'.trim();
+          });
+        } else {
+          print("No such employee document exists.");
+        }
+      } else {
+        print("EmployeeDocId is null.");
+      }
+    } catch (e) {
+      print("Error fetching employee name: $e");
+    }
   }
 
   @override
@@ -153,7 +188,7 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(16.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildAnimatedButton(
               label: "Save as Pdf",
@@ -161,6 +196,7 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
               color: AppColors.accentBlue,
               onPressed: () async {
                 final pdf = pw.Document();
+                final rows = await _generatePdfRows();
 
                 // Adding the content to the PDF
                 pdf.addPage(
@@ -169,14 +205,7 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
                     build: (context) {
                       return pw.Column(
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        children: [
-                          pw.Text("Camp Details",
-                              style: pw.TextStyle(
-                                  fontSize: 35,
-                                  fontWeight: pw.FontWeight.bold)),
-                          pw.SizedBox(height: 20),
-                          ..._generatePdfRows(),
-                        ],
+                        children: rows,
                       );
                     },
                   ),
@@ -195,7 +224,10 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
                     print("PDF saved at $path");
 
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("PDF saved at $path")),
+                      SnackBar(
+                        content: Center(child: Text("PDF saved at $path")),
+                        backgroundColor: Colors.green,
+                      ),
                     );
                   } else {
                     throw Exception("Downloads folder not found.");
@@ -203,7 +235,10 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
                 } catch (e) {
                   // Handle errors
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Failed to save PDF: $e")),
+                    const SnackBar(
+                      content: Center(child: Text("Failed to save PDF ")),
+                      backgroundColor: Colors.red,
+                    ),
                   );
                 }
               },
@@ -241,8 +276,35 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
     );
   }
 
-  List<pw.Widget> _generatePdfRows() {
+  Future<List<pw.Widget>> _generatePdfRows() async {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    final imageBytes = await rootBundle.load('assets/logo3.png');
+    final logo = pw.MemoryImage(imageBytes.buffer.asUint8List());
     return [
+      pw.Container(
+        padding: pw.EdgeInsets.zero,
+        height: screenHeight / 8,
+        width: screenWidth,
+        decoration: pw.BoxDecoration(
+          image: pw.DecorationImage(
+            image: logo,
+          ),
+        ),
+      ),
+      pw.Container(
+        child: pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.center,
+          children: [
+            pw.Text(
+              "Individual Report",
+              style: pw.TextStyle(
+                  fontWeight: pw.FontWeight.bold, fontSize: screenHeight / 50),
+            ),
+          ],
+        ),
+      ),
+      pw.SizedBox(height: 15),
       pw.Container(
           child: pw.Row(
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -251,62 +313,146 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
           _buildPdfRow("Camp Time : ", widget.employee['campTime'] ?? "N/A"),
         ],
       )),
-      pw.SizedBox(height: 20),
+      pw.SizedBox(height: 10),
+      _buildPdfRow("Camp Name : ", employeeName ?? "N/A"),
+      pw.SizedBox(height: 5),
       _buildPdfRow("Camp Name : ", widget.employee['campName'] ?? "N/A"),
-      pw.SizedBox(height: 10),
+      pw.SizedBox(height: 5),
       _buildPdfRow("Organization : ", widget.employee['organization'] ?? "N/A"),
-      pw.SizedBox(height: 10),
+      pw.SizedBox(height: 5),
       _buildPdfRow("Address : ", widget.employee['address'] ?? "N/A"),
-      pw.SizedBox(height: 10),
-      _buildPdfRow("City : ", widget.employee['city'] ?? "N/A"),
-      pw.SizedBox(height: 10),
-      _buildPdfRow("State : ", widget.employee['state'] ?? "N/A"),
-      pw.SizedBox(height: 10),
-      _buildPdfRow("Pincode : ", widget.employee['pincode'] ?? "N/A"),
+      pw.SizedBox(height: 5),
+      pw.Container(
+        child: pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            _buildPdfRow("City : ", widget.employee['city'] ?? "N/A"),
+            _buildPdfRow("State : ", widget.employee['state'] ?? "N/A"),
+            _buildPdfRow("Pincode : ", widget.employee['pincode'] ?? "N/A"),
+          ],
+        ),
+      ),
       pw.SizedBox(height: 15),
-      pw.Text("Concern Person 1 Details :",
+      pw.Text("Concern Person 1 Details : ",
           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+      pw.SizedBox(height: 10),
+      pw.Container(
+        child: pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            _buildPdfRow("Name : ", widget.employee['name'] ?? "N/A"),
+            _buildPdfRow("Position : ", widget.employee['position'] ?? "N/A"),
+          ],
+        ),
+      ),
+      pw.SizedBox(height: 10),
+      pw.Container(
+        child: pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            _buildPdfRow(
+                "Phone Number 1 : ", widget.employee['phoneNumber1'] ?? "N/A"),
+            _buildPdfRow("Phone Number 2 : ",
+                widget.employee['phoneNumber1_2'] ?? "N/A"),
+          ],
+        ),
+      ),
       pw.SizedBox(height: 15),
-      _buildPdfRow("Name : ", widget.employee['name'] ?? "N/A"),
-      pw.SizedBox(height: 10),
-      _buildPdfRow("Position : ", widget.employee['position'] ?? "N/A"),
-      pw.SizedBox(height: 10),
-      _buildPdfRow(
-          "Phone Number 1 : ", widget.employee['phoneNumber1'] ?? "N/A"),
-      pw.SizedBox(height: 10),
-      _buildPdfRow(
-          "Phone Number 2 : ", widget.employee['phoneNumber1_2'] ?? "N/A"),
-      pw.SizedBox(height: 15),
-      pw.Text("Concern Person 2 Details :",
+      pw.Text("Concern Person 2 Details : ",
           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+      pw.SizedBox(height: 10),
+      pw.Container(
+        child: pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            _buildPdfRow("Name : ", widget.employee['name2'] ?? "N/A"),
+            _buildPdfRow("Position : ", widget.employee['position2'] ?? "N/A"),
+          ],
+        ),
+      ),
+      pw.SizedBox(height: 10),
+      pw.Container(
+        child: pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            _buildPdfRow(
+                "Phone Number 1 : ", widget.employee['phoneNumber2'] ?? "N/A"),
+            _buildPdfRow("Phone Number 2 : ",
+                widget.employee['phoneNumber2_2'] ?? "N/A"),
+          ],
+        ),
+      ),
       pw.SizedBox(height: 15),
-      _buildPdfRow("Name : ", widget.employee['name2'] ?? "N/A"),
+      pw.Text("Event Planning : ",
+          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
       pw.SizedBox(height: 10),
-      _buildPdfRow("Position : ", widget.employee['position2'] ?? "N/A"),
-      pw.SizedBox(height: 10),
-      _buildPdfRow(
-          "Phone Number 1 : ", widget.employee['phoneNumber2'] ?? "N/A"),
-      pw.SizedBox(height: 10),
-      _buildPdfRow(
-          "Phone Number 2 : ", widget.employee['phoneNumber2_2'] ?? "N/A"),
-      pw.SizedBox(height: 15),
       _buildPdfRow(
           "Camp Plan Type : ", widget.employee['campPlanType'] ?? "N/A"),
-      pw.SizedBox(height: 10),
-      _buildPdfRow("Road Access : ", widget.employee['roadAccess'] ?? "N/A"),
-      pw.SizedBox(height: 10),
-      _buildPdfRow(
-          "Total Square Feet : ", widget.employee['totalSquareFeet'] ?? "N/A"),
-      pw.SizedBox(height: 10),
-      _buildPdfRow("Water Availability : ",
-          widget.employee['waterAvailability'] ?? "N/A"),
-      pw.SizedBox(height: 10),
+      pw.SizedBox(height: 5),
+      pw.Container(
+        child: pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            _buildPdfRow(
+                "Road Access : ", widget.employee['roadAccess'] ?? "N/A"),
+            _buildPdfRow("Total Square Feet : ",
+                widget.employee['totalSquareFeet'] ?? "N/A"),
+            _buildPdfRow("Water Availability : ",
+                widget.employee['waterAvailability'] ?? "N/A"),
+          ],
+        ),
+      ),
+      pw.SizedBox(height: 5),
       _buildPdfRow("No Of Patients Expected : ",
           widget.employee['noOfPatientExpected'] ?? "N/A"),
-      pw.SizedBox(height: 10),
+      pw.SizedBox(height: 5),
       _buildPdfRow(
           "Last Camp Done : ", widget.employee['lastCampDone'] ?? "N/A"),
       pw.SizedBox(height: 10),
+      pw.Container(
+        child: pw.Column(
+          children: [
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow(
+                    "Team Doctor : ", widget.employee['doctor'] ?? "N/A"),
+                _buildPdfRow("AR : ", widget.employee['ar'] ?? "N/A"),
+              ],
+            ),
+            pw.SizedBox(height: 5),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow("InCharge : ",
+                    widget.employee['Inward_inChargeName'] ?? "N/A"),
+                _buildPdfRow("VnReg : ", widget.employee['vnReg'] ?? "N/A"),
+              ],
+            ),
+            pw.SizedBox(height: 5),
+            _buildPdfRow("Regnter : ", widget.employee['regnter'] ?? "N/A"),
+            pw.SizedBox(height: 5),
+            _buildPdfRow(
+                "Camp Organizer : ", widget.employee['campOrganizer'] ?? "N/A"),
+          ],
+        ),
+      ),
+      pw.SizedBox(height: 15),
+      pw.Container(
+        child: pw.Column(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
+          children: [
+            pw.Text("Bejan Singh Eye Hospital Private Limited"),
+            pw.SizedBox(height: 7.5),
+            pw.Text(
+                "2/313C - M.S Road, Vettoornimadam, Nagercoil, Kanyakumari District, Tamilnadu, India"),
+            pw.SizedBox(height: 7.5),
+            pw.Text("Info@bseh.org"),
+            pw.SizedBox(height: 7.5),
+            pw.Text("+91 9488409991 \n,+91 7871957881"),
+          ],
+        ),
+      ),
     ];
   }
 
@@ -390,12 +536,17 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
             fontSize: screenWidth * 0.04,
           ),
         ),
-        Text(
-          data ?? "N/A",
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-            color: Colors.black54,
-            fontSize: screenWidth * 0.05,
+        SizedBox(width: screenWidth / 10),
+        Flexible(
+          child: Text(
+            data ?? "N/A",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: Colors.black54,
+              fontSize: screenWidth * 0.05,
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
           ),
         ),
       ],

@@ -162,9 +162,9 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
               }
               if (_filteredEmployees.isEmpty) {
                 return Center(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
                       Lottie.asset(
                         'assets/no_records.json',
                         width: screenWidth * 0.6,
@@ -179,7 +179,9 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
                           color: Colors.grey,
                         ),
                       ),
-                    ]));
+                    ],
+                  ),
+                );
               }
               return RefreshIndicator(
                 onRefresh: () async {
@@ -341,16 +343,22 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                               const SnackBar(
-                                                content: Text(
-                                                    "Camp Deleted Successfully"),
+                                                content: Center(
+                                                  child: Text(
+                                                      "Camp Deleted Successfully"),
+                                                ),
+                                                backgroundColor: Colors.green,
                                               ),
                                             );
                                           } catch (e) {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                               const SnackBar(
-                                                content: Text(
-                                                    "Failed to delete the camp"),
+                                                content: Center(
+                                                  child: Text(
+                                                      "Failed to delete the camp"),
+                                                ),
+                                                backgroundColor: Colors.red,
                                               ),
                                             );
                                           }

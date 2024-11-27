@@ -130,7 +130,10 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
             .delete();
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Camp deleted successfully")),
+          const SnackBar(
+            content: Center(child: Text("Camp deleted successfully")),
+            backgroundColor: Colors.green,
+          ),
         );
         Navigator.pop(context);
       } else {
@@ -138,7 +141,14 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error deleting camp: $e")),
+        SnackBar(
+          content: Column(
+            children: [
+              Text("Error deleting camp: $e"),
+            ],
+          ),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }
@@ -187,12 +197,17 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
           'waterAvailability': _selectedValue2,
         });
 
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Data updated successfully")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Center(child: Text("Data updated successfully")),
+          backgroundColor: Colors.green,
+        ));
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error updating data: $e")),
+        SnackBar(
+          content: Center(child: Text("Error updating data: $e")),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }

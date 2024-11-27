@@ -4,6 +4,7 @@ import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
 import 'package:camp_organizer/presentation/profile/commutative_reports_event_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
@@ -138,6 +139,7 @@ class _SuperCommutativeReportsSearchScreen
             IconButton(
                 onPressed: () async {
                   final pdf = pw.Document();
+                  final rows = await _generatePdfRows();
 
                   // Adding the content to the PDF
                   pdf.addPage(
@@ -146,14 +148,7 @@ class _SuperCommutativeReportsSearchScreen
                       build: (context) {
                         return pw.Column(
                           crossAxisAlignment: pw.CrossAxisAlignment.start,
-                          children: [
-                            pw.Text("Camp Commutative Reports ",
-                                style: pw.TextStyle(
-                                    fontSize: 35,
-                                    fontWeight: pw.FontWeight.bold)),
-                            pw.SizedBox(height: 20),
-                            ..._generatePdfRows(),
-                          ],
+                          children: rows,
                         );
                       },
                     ),
@@ -164,8 +159,10 @@ class _SuperCommutativeReportsSearchScreen
                     // Get the Downloads folder directory
                     final directory = Directory('/storage/emulated/0/Download');
                     if (await directory.exists()) {
+                      final startingDate = _startDateController.text;
+                      final endingDate = _endDateController.text;
                       final path =
-                          "${directory.path}/SuperAdminCommutativeReports_${_startDateController.text}_to_${_endDateController.text}.pdf";
+                          "${directory.path}/SuperAdminCommutativeReports_${startingDate.isEmpty ? 0 : startingDate}_to_${endingDate.isEmpty ? 0 : endingDate}.pdf";
                       final file = File(path);
                       await file.writeAsBytes(await pdf.save());
 
@@ -341,6 +338,12 @@ class _SuperCommutativeReportsSearchScreen
         .length;
   }
 
+  int _noOfCampsWaiting() {
+    return _filteredEmployees
+        .where((employee) => employee['campStatus'] == 'Waiting')
+        .length;
+  }
+
   int _noOfCataractPatients() {
     return _filteredEmployees.fold<int>(
       0,
@@ -377,7 +380,11 @@ class _SuperCommutativeReportsSearchScreen
     );
   }
 
-  List<pw.Widget> _generatePdfRows() {
+  Future<List<pw.Widget>> _generatePdfRows() async {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    final imageBytes = await rootBundle.load('assets/logo3.png');
+    final logo = pw.MemoryImage(imageBytes.buffer.asUint8List());
     final startDateString = _startDate != null
         ? DateFormat('dd-MM-yyyy').format(_startDate!)
         : "Not Selected";
@@ -385,6 +392,30 @@ class _SuperCommutativeReportsSearchScreen
         ? DateFormat('dd-MM-yyyy').format(_endDate!)
         : "Not Selected";
     return [
+      pw.Container(
+        padding: pw.EdgeInsets.only(top: screenHeight * 0.02),
+        height: screenHeight / 8,
+        width: screenWidth,
+        decoration: pw.BoxDecoration(
+          image: pw.DecorationImage(
+            image: logo,
+          ),
+        ),
+      ),
+      pw.SizedBox(height: 20),
+      pw.Container(
+        child: pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.center,
+          // crossAxisAlignment: pw.CrossAxisAlignment.center,
+          children: [
+            pw.Text("Commutative Report",
+                style: pw.TextStyle(
+                    fontWeight: pw.FontWeight.bold,
+                    fontSize: screenHeight / 50)),
+          ],
+        ),
+      ),
+      pw.SizedBox(height: 25),
       pw.Container(
           child: pw.Row(
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -396,21 +427,52 @@ class _SuperCommutativeReportsSearchScreen
       pw.SizedBox(height: 20),
       _buildPdfRow("Name: ", widget.name),
       pw.SizedBox(height: 10),
-      _buildPdfRow("Position : ", widget.position),
-      pw.SizedBox(height: 10),
-      _buildPdfRow("EmpCode: ", widget.empCode),
+      pw.Container(
+        child: pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            _buildPdfRow("Position : ", widget.position),
+            _buildPdfRow("EmpCode: ", widget.empCode),
+          ],
+        ),
+      ),
       pw.SizedBox(height: 20),
-      _buildPdfRow(
-          "No Of Camp Initiated: ", _filteredEmployees.length.toString()),
-      pw.SizedBox(height: 10),
-      _buildPdfRow("No Of Camp Approved: ", _noOfCampsApproved().toString()),
-      pw.SizedBox(height: 10),
-      _buildPdfRow("No Of Camp Rejected: ", _noOfCampsRejected().toString()),
-      pw.SizedBox(height: 10),
-      _buildPdfRow("No Of Camp Completed: ", _noOfCampsCompleted().toString()),
+      pw.Container(
+        child: pw.Column(
+          children: [
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow("No Of Camp Initiated: ",
+                    _filteredEmployees.length.toString()),
+                _buildPdfRow(
+                    "No Of Camp Rejected: ", _noOfCampsRejected().toString()),
+              ],
+            ),
+            pw.SizedBox(height: 20),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow(
+                    "No Of Camp Approved: ", _noOfCampsApproved().toString()),
+                _buildPdfRow(
+                    "No Of Camp Completed: ", _noOfCampsCompleted().toString()),
+              ],
+            ),
+            pw.SizedBox(height: 20),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow(
+                    "No Of Camp Waiting: ", _noOfCampsWaiting().toString()),
+              ],
+            ),
+          ],
+        ),
+      ),
       pw.SizedBox(height: 20),
       _buildPdfRow("Camp results ", ""),
-      pw.SizedBox(height: 10),
+      pw.SizedBox(height: 15),
       _buildPdfRow("No Of OP : ", _noOfPatientsAttended().toString()),
       pw.SizedBox(height: 10),
       _buildPdfRow(
@@ -424,7 +486,22 @@ class _SuperCommutativeReportsSearchScreen
       pw.SizedBox(height: 10),
       _buildPdfRow(
           "No Of Glasses Supplied : ", _noOfGlassesSupplied().toString()),
-      pw.SizedBox(height: 10),
+      pw.SizedBox(height: 30),
+      pw.Container(
+        child: pw.Column(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
+          children: [
+            pw.Text("Bejan Singh Eye Hospital Private Limited"),
+            pw.SizedBox(height: 15),
+            pw.Text(
+                "2/313C - M.S Road, Vettoornimadam, Nagercoil, Kanyakumari District, Tamilnadu, India"),
+            pw.SizedBox(height: 15),
+            pw.Text("Info@bseh.org"),
+            pw.SizedBox(height: 15),
+            pw.Text("+91 9488409991 \n,+91 7871957881"),
+          ],
+        ),
+      ),
     ];
   }
 
@@ -611,13 +688,17 @@ class _SuperCommutativeReportsSearchScreen
                           });
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text("Camp Deleted Successfully"),
+                              content: Center(
+                                  child: Text("Camp Deleted Successfully")),
+                              backgroundColor: Colors.green,
                             ),
                           );
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text("Failed to delete the camp"),
+                              content: Center(
+                                  child: Text("Failed to delete the camp")),
+                              backgroundColor: Colors.red,
                             ),
                           );
                         }

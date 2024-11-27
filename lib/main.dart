@@ -6,7 +6,6 @@ import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
 import 'package:camp_organizer/bloc/approval/onsite_approval_bloc.dart';
 import 'package:camp_organizer/bloc/approval/onsite_approval_state.dart';
 import 'package:camp_organizer/camp_update/camp_update_bloc.dart';
-import 'package:camp_organizer/email.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
 import 'package:camp_organizer/presentation/module/Onsite_Management_team/onsite_camp_timeline.dart';
 import 'package:camp_organizer/widgets/bottom_navigation_bar/onsite_management_nav_bar.dart';
@@ -29,7 +28,6 @@ import 'presentation/module/logistics/logistics_timeline.dart';
 import 'presentation/module/post_camp_followup/post_camp_timeline.dart';
 import 'repository/auth_repository.dart';
 import 'services/notification/email_notification.dart';
-import 'widgets/bottom_navigation_bar/camp_incharge_nav_bar.dart';
 import 'widgets/bottom_navigation_bar/post_camp_nav_bar.dart';
 
 void main() async {
@@ -103,7 +101,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home:CampOrganizerLoginPage (), // Starting screen is the splash screen
+        home: CampOrganizerLoginPage(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),
