@@ -1,12 +1,13 @@
+import 'package:camp_organizer/bloc/AddEvent/add_finance_bloc.dart';
+import 'package:camp_organizer/bloc/AddEvent/add_logistics_bloc.dart';
+import 'package:camp_organizer/bloc/AddEvent/incharge_report_bloc.dart';
 import 'package:camp_organizer/bloc/AddEvent/onsite_add_team_bloc.dart';
 import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
+import 'package:camp_organizer/bloc/approval/onsite_approval_bloc.dart';
+import 'package:camp_organizer/bloc/approval/onsite_approval_state.dart';
 import 'package:camp_organizer/camp_update/camp_update_bloc.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
-import 'package:camp_organizer/presentation/module/Finance_Reports/finance_dashboard.dart';
 import 'package:camp_organizer/presentation/module/Onsite_Management_team/onsite_camp_timeline.dart';
-import 'package:camp_organizer/presentation/module/camp_incharge/camp_incharge_dashboard.dart';
-import 'package:camp_organizer/presentation/module/logistics/logistics_dashboard.dart';
-import 'package:camp_organizer/presentation/module/post_camp_followup/post_camp_dashboard.dart';
 import 'package:camp_organizer/widgets/bottom_navigation_bar/onsite_management_nav_bar.dart';
 import 'package:camp_organizer/widgets/bottom_navigation_bar/super_admin_bottom_navigation_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,6 +22,10 @@ import 'bloc/Employee_registration/employee_registration_bloc.dart';
 import 'bloc/Status/status_bloc.dart';
 import 'bloc/auth/auth_bloc.dart';
 import 'firebase_options.dart';
+import 'presentation/module/Finance_Reports/finance_timeline.dart';
+import 'presentation/module/camp_incharge/camp_incharge_timeline.dart';
+import 'presentation/module/logistics/logistics_timeline.dart';
+import 'presentation/module/post_camp_followup/post_camp_timeline.dart';
 import 'repository/auth_repository.dart';
 import 'services/notification/email_notification.dart';
 
@@ -72,6 +77,21 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               PatientFollowUpsBloc(firestore: FirebaseFirestore.instance),
         ),
+        BlocProvider(
+          create: (context) =>
+              AddLogisticsBloc(firestore: FirebaseFirestore.instance),
+        ),
+        BlocProvider(
+          create: (context) =>
+              InchargeReportBloc(firestore: FirebaseFirestore.instance),
+        ),
+        BlocProvider(
+          create: (context) => OnsiteApprovalBloc(),
+        ),
+        BlocProvider(
+          create: (context) =>
+              AddFinanceBloc(firestore: FirebaseFirestore.instance),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -80,7 +100,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home: PostCampDashboard(), // Starting screen is the splash screen
+        home: PostCampTimeline(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),

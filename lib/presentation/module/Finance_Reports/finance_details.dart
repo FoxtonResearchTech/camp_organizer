@@ -15,85 +15,87 @@ class FinanceDetails extends StatefulWidget {
 class _FinanceDetailsState extends State<FinanceDetails> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildAnimatedSection(
-            context,
-            sectionTitle: 'Camp Info',
-            children: [
-              _buildInfoCard('Camp Name', widget.campData['campName']),
-              _buildInfoCard('Status', widget.campData['campStatus']),
-              _buildInfoCard('Date', widget.campData['campDate']),
-              _buildInfoCard('Time', widget.campData['campTime']),
-              _buildInfoCard('Camp Plan Type', widget.campData['campPlanType']),
-              _buildInfoCard('Last Camp Done', widget.campData['lastCampDone']),
-            ],
-          ),
-          _buildAnimatedSection(
-            context,
-            sectionTitle: 'Location Info',
-            children: [
-              _buildInfoCard('City', widget.campData['city']),
-              _buildInfoCard('State', widget.campData['state']),
-              _buildInfoCard('Road Access', widget.campData['roadAccess']),
-              _buildInfoCard('Water Availability', widget.campData['waterAvailability']),
-              _buildInfoCard('Total Square Feet', widget.campData['totalSquareFeet']),
-              _buildInfoCard('Pincode', widget.campData['pincode']),
-              _buildInfoCard('Address', widget.campData['address']),
-            ],
-          ),
-          _buildAnimatedSection(
-            context,
-            sectionTitle: 'Team & Organization',
-            children: [
-              _buildInfoCard('In-Charge', widget.campData['incharge']),
-              _buildInfoCard('Doctor', widget.campData['doctor']),
-              _buildInfoCard('Driver', widget.campData['driver']),
-              _buildInfoCard('Teams', widget.campData['teams']?.join(', ') ?? 'N/A'),
-              _buildInfoCard('Organization', widget.campData['organization']),
-            ],
-          ),
-          _buildAnimatedSection(
-            context,
-            sectionTitle: 'Contact Details',
-            children: [
-              _buildInfoCard('Primary Phone', widget.campData['phoneNumber1']),
-              _buildInfoCard('Alternate Phone', widget.campData['phoneNumber1_2']),
-              _buildInfoCard('Secondary Phone 1', widget.campData['phoneNumber2']),
-              _buildInfoCard('Secondary Phone 2', widget.campData['phoneNumber2_2']),
-              _buildInfoCard('Employee Email', widget.campData['EmployeeId']),
-            ],
-          ),
-          _buildAnimatedSection(
-            context,
-            sectionTitle: 'Additional Info',
-            children: [
-              _buildInfoCard('Number of Patients Expected', widget.campData['noOfPatientExpected']),
-              _buildInfoCard('Position', widget.campData['position']),
-              _buildInfoCard('Created On', widget.campData['CreatedOn']?.toString() ?? 'N/A'),
-              _buildInfoCard('Document ID', widget.campData['documentId']),
-              _buildInfoCard('AR', widget.campData['ar']?? 'N?A'),
-            ],
-          ),
-          _buildAnimatedSection(
-            context,
-            sectionTitle: 'Finance Information',
-            children: [
-              _buildInfoCard('Other Expenses', widget.campData['otherExpenses']),
-              _buildInfoCard('Vehicle Expenses', widget.campData['vehicleExpenses']),
-
-              _buildInfoCard('Staff Salary', widget.campData['staffSalary']),
-              _buildInfoCard('OT X 750', widget.campData['ot']?? 'N?A'),
-              _buildInfoCard('CAT X 2000', widget.campData['cat']?? 'N?A'),
-              _buildInfoCard('GP Paying Case', widget.campData['gpPayingCase']?? 'N?A'),
-              _buildInfoCard('Remarks', widget.campData['remarks']?? 'N?A'),
-            ],
-          ),
-          Center(child: CustomButton(text: 'Approve', onPressed: () {})),
-        ],
+    return Scaffold(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildAnimatedSection(
+              context,
+              sectionTitle: 'Camp Info',
+              children: [
+                _buildInfoCard('Camp Name', widget.campData['campName']),
+                _buildInfoCard('Status', widget.campData['campStatus']),
+                _buildInfoCard('Date', widget.campData['campDate']),
+                _buildInfoCard('Time', widget.campData['campTime']),
+                _buildInfoCard('Camp Plan Type', widget.campData['campPlanType']),
+                _buildInfoCard('Last Camp Done', widget.campData['lastCampDone']),
+              ],
+            ),
+            _buildAnimatedSection(
+              context,
+              sectionTitle: 'Location Info',
+              children: [
+                _buildInfoCard('City', widget.campData['city']),
+                _buildInfoCard('State', widget.campData['state']),
+                _buildInfoCard('Road Access', widget.campData['roadAccess']),
+                _buildInfoCard('Water Availability', widget.campData['waterAvailability']),
+                _buildInfoCard('Total Square Feet', widget.campData['totalSquareFeet']),
+                _buildInfoCard('Pincode', widget.campData['pincode']),
+                _buildInfoCard('Address', widget.campData['address']),
+              ],
+            ),
+            _buildAnimatedSection(
+              context,
+              sectionTitle: 'Team & Organization',
+              children: [
+                _buildInfoCard('In-Charge', widget.campData['incharge']),
+                _buildInfoCard('Doctor', widget.campData['doctor']),
+                _buildInfoCard('Driver', widget.campData['driver']),
+                _buildInfoCard('Teams', widget.campData['teams']?.join(', ') ?? 'N/A'),
+                _buildInfoCard('Organization', widget.campData['organization']),
+              ],
+            ),
+            _buildAnimatedSection(
+              context,
+              sectionTitle: 'Contact Details',
+              children: [
+                _buildInfoCard('Primary Phone', widget.campData['phoneNumber1']),
+                _buildInfoCard('Alternate Phone', widget.campData['phoneNumber1_2']),
+                _buildInfoCard('Secondary Phone 1', widget.campData['phoneNumber2']),
+                _buildInfoCard('Secondary Phone 2', widget.campData['phoneNumber2_2']),
+                _buildInfoCard('Employee Email', widget.campData['EmployeeId']),
+              ],
+            ),
+            _buildAnimatedSection(
+              context,
+              sectionTitle: 'Additional Info',
+              children: [
+                _buildInfoCard('Number of Patients Expected', widget.campData['noOfPatientExpected']),
+                _buildInfoCard('Position', widget.campData['position']),
+                _buildInfoCard('Created On', widget.campData['CreatedOn']?.toString() ?? 'N/A'),
+                _buildInfoCard('Document ID', widget.campData['documentId']),
+                _buildInfoCard('AR', widget.campData['ar']?? 'N?A'),
+              ],
+            ),
+            _buildAnimatedSection(
+              context,
+              sectionTitle: 'Finance Information',
+              children: [
+                _buildInfoCard('Other Expenses', widget.campData['otherExpenses']),
+                _buildInfoCard('Vehicle Expenses', widget.campData['vehicleExpenses']),
+      
+                _buildInfoCard('Staff Salary', widget.campData['staffSalary']),
+                _buildInfoCard('OT X 750', widget.campData['ot']?? 'N?A'),
+                _buildInfoCard('CAT X 2000', widget.campData['cat']?? 'N?A'),
+                _buildInfoCard('GP Paying Case', widget.campData['gpPayingCase']?? 'N?A'),
+                _buildInfoCard('Remarks', widget.campData['remarks']?? 'N?A'),
+              ],
+            ),
+            Center(child: CustomButton(text: 'Approve', onPressed: () {})),
+          ],
+        ),
       ),
     );
   }

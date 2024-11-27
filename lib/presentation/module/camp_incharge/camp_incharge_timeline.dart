@@ -2,6 +2,7 @@ import 'package:camp_organizer/bloc/AddEvent/incharge_report_bloc.dart';
 import 'package:camp_organizer/bloc/AddEvent/incharge_report_state.dart';
 import 'package:camp_organizer/bloc/Status/status_event.dart';
 import 'package:camp_organizer/bloc/approval/onsite_approval_event.dart';
+import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,9 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline> with Single
   Widget build(BuildContext context) {
 
     // Screen size parameters
+   // double screenWidth = MediaQuery.of(context).size.width;
     double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
 
     return BlocListener<OnsiteApprovalBloc, OnsiteApprovalState>(
         listener: (context, state) {
@@ -114,141 +117,221 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline> with Single
                   itemCount: camps.length,
                   itemBuilder: (context, index) {
                     final camp = camps[index];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 16.0),
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.date_range,
-                                  size: screenWidth * 0.07,
-                                  color: Colors.lightBlueAccent,
-                                ),
-                                const SizedBox(width: 20),
-                                Text(
-                                  camps[index]['campDate'],
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
+                    return GestureDetector(
+                      onTap: () async {
+                        // Add debug logs to check the employee data and IDs being passed
+                        print('Employee: ${camps[index]}');
+                        print(
+                            'Employee Doc ID: ${state.employeeDocId[index]}');
+                        print('Camp Doc ID: ${state.campDocIds[index]}');
+
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EventDetailsPage(
+                              employee: camps[index],
+                              employeedocId:  camps[index]
+                              ['EmployeeDocId'],
+                              campId: state.campDocIds[index],
                             ),
-                            const SizedBox(height: 8.0),
-                            Row(
-                              children: [
-                                const Text(
-                                  "Camp Name: ",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black54,
+                          ),
+                        );
+                      },
+                      child: camps[index]
+                      ['campStatus'] ==
+                          "Approved"
+                          ?
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height:
+                              screenHeight / 3.2, // Responsive height
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    spreadRadius: 2,
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
                                   ),
-                                ),
-                                Text(
-                                  "${camps[index]['campName']}",
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8.0),
-                            Row(
-                              children: [
-                                const Text(
-                                  "Document ID: ",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                                Text(
-                                  "${camps[index]['documentId']}",
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8.0),
-                            Row(
-                              children: [
-                                const Text(
-                                  "Camp Time: ",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                                Text(
-                                  "${camps[index]['campTime']}",
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16.0),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      //_showAddCampTeamDialog(
-                                      // context, camp['documentId']);
-                                      final documentId = camp['documentId'];
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => CampInchargeReporting(
-                                              documentId: documentId,
-                                              campData: camp
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.date_range,
+                                              size: screenWidth * 0.07,
+                                              color: Colors.orange,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              camps[index]
+                                              ['campDate'],
+                                              style: TextStyle(
+                                                fontWeight:
+                                                FontWeight.w500,
+                                                color: Colors.black54,
+                                                fontSize:
+                                                screenWidth * 0.05,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.watch_later,
+                                              size: screenWidth * 0.07,
+                                              color: Colors.orange,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              camps[index]
+                                              ['campTime'],
+                                              style: TextStyle(
+                                                fontWeight:
+                                                FontWeight.w500,
+                                                color: Colors.black54,
+                                                fontSize:
+                                                screenWidth * 0.05,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 5),
+                                    ..._buildInfoText(
+                                      screenWidth,
+                                      camps[index]['campName'],
+                                    ),
+                                    ..._buildInfoText(
+                                      screenWidth,
+                                      camps[index]['address'],
+                                    ),
+                                    ..._buildInfoText(
+                                      screenWidth,
+                                      camps[index]['name'],
+                                    ),
+                                    ..._buildInfoText(
+                                      screenWidth,
+                                      camps[index]['phoneNumber1'],
+                                    ),
+                                    SizedBox(height: 20,),
+                                    // Horizontal Timeline Container
+
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              final documentId = camp['documentId'];
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => CampInchargeReporting(
+                                                    documentId: documentId,
+                                                    campData: camp,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.lightBlueAccent,
+                                              elevation: 5,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(20),
+                                              ),
+                                              padding: const EdgeInsets.symmetric(vertical: 15),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: const [
+                                                Icon(Icons.add_chart, color: Colors.white), // Add icon
+                                                SizedBox(width: 8),
+                                                Text(
+                                                  'Add Reports',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      );
-                                    },
-                                    child: const Text(
-                                      'Add Reports',
-                                      style: TextStyle(
-                                          color: Colors.black87, fontSize: 19),
-                                    ),
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent), // Set the background color
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-
-                                Expanded(
-                                  child: ElevatedButton(
-
-                                    onPressed: () {
-                                          Navigator.push(context,MaterialPageRoute(
-                                          builder: (context) => InchargeDetailsPage(
-                                              inchargeData: camp),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => InchargeDetailsPage(inchargeData: camp),
+                                                ),
+                                              );
+                                              print(camp);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.deepOrangeAccent, // Vibrant orange color
+                                              elevation: 5,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(20),
+                                              ),
+                                              padding: const EdgeInsets.symmetric(vertical: 15),
                                             ),
-                                          );
-                                      print(camp);
-                                    },
-                                    child: const Text(
-                                      'View Reports',
-                                      style: TextStyle(
-                                          color: Colors.black87, fontSize: 19),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: const [
+                                                Icon(Icons.view_list, color: Colors.white), // View icon
+                                                SizedBox(width: 8),
+                                                Text(
+                                                  'View Reports',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent), // Set the background color
-                                    ),
-                                  ),
+
+
+
+
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+
+                        ],
+                      ) : Center(
+
                       ),
                     );
                   },
@@ -270,5 +353,18 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline> with Single
         ),
     ),
     );
+
+  }
+  List<Widget> _buildInfoText(double screenWidth, String text) {
+    return [
+      Text(
+        text,
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: Colors.black54,
+          fontSize: screenWidth * 0.05, // Responsive font size
+        ),
+      ),
+    ];
   }
 }

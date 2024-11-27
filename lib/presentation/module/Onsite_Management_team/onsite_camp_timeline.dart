@@ -115,7 +115,8 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                           MaterialPageRoute(
                             builder: (context) => EventDetailsPage(
                               employee: camps[index],
-                              employeedocId: state.employeeDocId[index],
+                              employeedocId:  camps[index]
+                              ['EmployeeDocId'],
                               campId: state.campDocIds[index],
                             ),
                           ),
