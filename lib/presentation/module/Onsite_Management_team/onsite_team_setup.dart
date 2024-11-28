@@ -44,26 +44,33 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
 
   void saveData(BuildContext context, documentId) {
     final Map<String, dynamic> data = {
-      'date': dateController.text.trim(),
-      'time': timeController.text.trim(),
-      'campName': campNameController.text.trim(),
-      'organization': organizationController.text.trim(),
+     // 'date': dateController.text.trim(),
+     // 'time': timeController.text.trim(),
+     // 'campName': campNameController.text.trim(),
+    //  'organization': organizationController.text.trim(),
       'doctor': doctorController.text.trim(),
       'driver': driverController.text.trim(),
-      'incharge': inchargeController.text.trim(),
+      'incharge': selectedEmployee,
       'vnReg': vnRegController.text.trim(),
       'ar': arController.text.trim(),
       'regnter': regnterController.text.trim(),
       'drRoom': drRoomController.text.trim(),
       'counselling': counsellingController.text.trim(),
-      'optical': selectedOpticals ?? '',
+      'optical': selectedOpticals,
     };
 
     context
         .read<AddTeamBloc>()
         .add(AddTeamWithDocumentId(documentId: widget.documentId, data: data));
   }
+  String? selectedEmployee;
+  List<String> employeeNames = [];
 
+  @override
+  void initState() {
+    fetchEmployees();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -132,6 +139,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
                     sectionTitle: 'Add Team Info',
                     children: [],
                   ),
+                /*
                   Row(
                     children: [
                       Expanded(
@@ -164,6 +172,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
                     'Team Info',
                     style: TextStyle(fontSize: 20),
                   ),
+                 */
                   SizedBox(height: 20),
                   CustomTextFormField(
                     labelText: 'Doctor',
@@ -175,22 +184,28 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
                     controller: driverController,
                   ),
                   SizedBox(height: 30),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomTextFormField(
-                          labelText: 'Incharge',
-                          controller: inchargeController,
-                        ),
-                      ),
-                      SizedBox(width: 20),
-                      Expanded(
-                        child: CustomTextFormField(
-                          labelText: 'VN Reg',
-                          controller: vnRegController,
-                        ),
-                      ),
-                    ],
+                  CustomDropdownFormField(
+                    labelText: "Camp Incharge",
+                    icon: Icons.person_pin,
+                    items: employeeNames,
+                    value: selectedEmployee,
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedEmployee = newValue;
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please select an option';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 30),
+                  SizedBox(width: 20),
+                  CustomTextFormField(
+                    labelText: 'VN Reg',
+                    controller: vnRegController,
                   ),
                   SizedBox(height: 20),
                   CustomTextFormField(
@@ -340,5 +355,23 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
         ),
       ),
     );
+  }
+  Future<void> fetchEmployees() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('employees')
+          .where('role', isEqualTo: 'campIncharge') // Filter by role
+          .get();
+
+      List<String> names = querySnapshot.docs
+          .map((doc) => doc['firstName'] as String) // Extract names
+          .toList();
+
+      setState(() {
+        employeeNames = names; // Update the list
+      });
+    } catch (e) {
+      print('Error fetching employees: $e');
+    }
   }
 }
