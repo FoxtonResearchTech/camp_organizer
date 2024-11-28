@@ -216,8 +216,9 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
                   // Get the Downloads folder directory
                   final directory = Directory('/storage/emulated/0/Download');
                   if (await directory.exists()) {
+                    final timestamp = DateTime.now().millisecondsSinceEpoch;
                     final path =
-                        "${directory.path}/${widget.employee['campName']}.pdf";
+                        "${directory.path}/${widget.employee['campName']}_$timestamp.pdf";
                     final file = File(path);
                     await file.writeAsBytes(await pdf.save());
 

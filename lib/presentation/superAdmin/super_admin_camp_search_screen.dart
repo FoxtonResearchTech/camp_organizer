@@ -160,230 +160,246 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
               if (_searchQuery.isEmpty) {
                 _filteredEmployees = state.allCamps;
               }
-              if (_filteredEmployees.isEmpty) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Lottie.asset(
-                        'assets/no_records.json',
-                        width: screenWidth * 0.6,
-                        height: screenHeight * 0.4,
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        "No matching record found",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }
               return RefreshIndicator(
                 onRefresh: () async {
                   context.read<AdminApprovalBloc>().add(FetchDataEvents());
                 },
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(16.0),
-                  itemCount: _filteredEmployees.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                      onTap: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CampSearchEventDetailsPage(
-                              employee: _filteredEmployees[index],
-                              // employeedocId: state.employeeDocId[1],
-                              campId: state.campDocIds[index],
-                            ),
-                          ),
-                        );
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            height: screenHeight / 3.6,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  spreadRadius: 2,
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
+                child: _filteredEmployees.isEmpty
+                    ? SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Center(
+                          child: Container(
+                            padding: EdgeInsets.only(top: screenHeight / 4),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Lottie.asset(
+                                  'assets/no_records.json',
+                                  width: screenWidth * 0.6,
+                                  height: screenHeight * 0.4,
+                                ),
+                                const SizedBox(height: 10),
+                                const Text(
+                                  "No matching record found",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ],
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.date_range,
-                                            size: screenWidth * 0.07,
-                                            color: Colors.orange,
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            _filteredEmployees[index]
-                                                ['campDate'],
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black54,
-                                              fontSize: screenWidth * 0.05,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.watch_later,
-                                            size: screenWidth * 0.07,
-                                            color: Colors.orange,
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            _filteredEmployees[index]
-                                                ['campTime'],
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black54,
-                                              fontSize: screenWidth * 0.05,
-                                            ),
-                                          ),
-                                        ],
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.all(16.0),
+                        itemCount: _filteredEmployees.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return GestureDetector(
+                            onTap: () async {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      CampSearchEventDetailsPage(
+                                    employee: _filteredEmployees[index],
+                                    // employeedocId: state.employeeDocId[1],
+                                    campId: state.campDocIds[index],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: screenHeight / 3.6,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        spreadRadius: 2,
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 4),
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 5),
-                                  ..._buildInfoText(
-                                    screenWidth,
-                                    _filteredEmployees[index]['campName'],
-                                  ),
-                                  ..._buildInfoText(
-                                    screenWidth,
-                                    _filteredEmployees[index]['address'],
-                                  ),
-                                  ..._buildInfoText(
-                                    screenWidth,
-                                    _filteredEmployees[index]['name'],
-                                  ),
-                                  ..._buildInfoText(
-                                    screenWidth,
-                                    _filteredEmployees[index]['phoneNumber1'],
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.only(
-                                        left: screenWidth / 10,
-                                        right: screenWidth / 10),
-                                    width: double.maxFinite,
-                                    child: ElevatedButton.icon(
-                                      icon: const Icon(Icons.delete),
-                                      onPressed: () async {
-                                        bool? confirmDelete = await showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              title: const Text('Delete Camp'),
-                                              content: const Text(
-                                                  'Are you sure you want to delete this camp?'),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(
-                                                          context, false),
-                                                  child: Text('Cancel',
-                                                      style: TextStyle(
-                                                          color: Colors.blue)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.date_range,
+                                                  size: screenWidth * 0.07,
+                                                  color: Colors.orange,
                                                 ),
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(
-                                                          context, true),
-                                                  child: Text('Delete',
-                                                      style: TextStyle(
-                                                          color: Colors.blue)),
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  _filteredEmployees[index]
+                                                      ['campDate'],
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.black54,
+                                                    fontSize:
+                                                        screenWidth * 0.05,
+                                                  ),
                                                 ),
                                               ],
-                                            );
-                                          },
-                                        );
-                                        if (confirmDelete == true) {
-                                          try {
-                                            final employeeId =
-                                                _filteredEmployees[index]
-                                                    ['employeeDocId'];
-                                            final campDocId =
-                                                _filteredEmployees[index]
-                                                    ['documentId'];
-
-                                            context
-                                                .read<AdminApprovalBloc>()
-                                                .add(DeleteCampEvent(
-                                                  employeeId: employeeId,
-                                                  campDocId: campDocId,
-                                                ));
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                content: Center(
-                                                  child: Text(
-                                                      "Camp Deleted Successfully"),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.watch_later,
+                                                  size: screenWidth * 0.07,
+                                                  color: Colors.orange,
                                                 ),
-                                                backgroundColor: Colors.green,
-                                              ),
-                                            );
-                                          } catch (e) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                content: Center(
-                                                  child: Text(
-                                                      "Failed to delete the camp"),
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  _filteredEmployees[index]
+                                                      ['campTime'],
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.black54,
+                                                    fontSize:
+                                                        screenWidth * 0.05,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 5),
+                                        ..._buildInfoText(
+                                          screenWidth,
+                                          _filteredEmployees[index]['campName'],
+                                        ),
+                                        ..._buildInfoText(
+                                          screenWidth,
+                                          _filteredEmployees[index]['address'],
+                                        ),
+                                        ..._buildInfoText(
+                                          screenWidth,
+                                          _filteredEmployees[index]['name'],
+                                        ),
+                                        ..._buildInfoText(
+                                          screenWidth,
+                                          _filteredEmployees[index]
+                                              ['phoneNumber1'],
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.only(
+                                              left: screenWidth / 10,
+                                              right: screenWidth / 10),
+                                          width: double.maxFinite,
+                                          child: ElevatedButton.icon(
+                                            icon: const Icon(Icons.delete),
+                                            onPressed: () async {
+                                              bool? confirmDelete =
+                                                  await showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: const Text(
+                                                        'Delete Camp'),
+                                                    content: const Text(
+                                                        'Are you sure you want to delete this camp?'),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                context, false),
+                                                        child: Text('Cancel',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .blue)),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                context, true),
+                                                        child: Text('Delete',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .blue)),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                              if (confirmDelete == true) {
+                                                try {
+                                                  final employeeId =
+                                                      _filteredEmployees[index]
+                                                          ['employeeDocId'];
+                                                  final campDocId =
+                                                      _filteredEmployees[index]
+                                                          ['documentId'];
+
+                                                  context
+                                                      .read<AdminApprovalBloc>()
+                                                      .add(DeleteCampEvent(
+                                                        employeeId: employeeId,
+                                                        campDocId: campDocId,
+                                                      ));
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                      content: Center(
+                                                        child: Text(
+                                                            "Camp Deleted Successfully"),
+                                                      ),
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                    ),
+                                                  );
+                                                } catch (e) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                      content: Center(
+                                                        child: Text(
+                                                            "Failed to delete the camp"),
+                                                      ),
+                                                      backgroundColor:
+                                                          Colors.red,
+                                                    ),
+                                                  );
+                                                }
+                                              }
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
                                                 ),
                                                 backgroundColor: Colors.red,
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
+                                                foregroundColor: Colors.white),
+                                            label: const Text("Delete"),
                                           ),
-                                          backgroundColor: Colors.red,
-                                          foregroundColor: Colors.white),
-                                      label: const Text("Delete"),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                                const SizedBox(height: 20),
+                              ],
                             ),
-                          ),
-                          const SizedBox(height: 20),
-                        ],
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
               );
             } else if (state is AdminApprovalError) {
               return const Center(

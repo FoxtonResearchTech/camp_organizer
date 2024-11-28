@@ -159,9 +159,9 @@ class _CommutativeReportsSearchScreen
                     if (await directory.exists()) {
                       final startingDate = _startDateController.text;
                       final endingDate = _endDateController.text;
-
+                      final timestamp = DateTime.now().millisecondsSinceEpoch;
                       final path =
-                          "${directory.path}/CommutativeReports_${startingDate.isEmpty ? 0 : startingDate}_to_${endingDate.isEmpty ? 0 : endingDate}.pdf";
+                          "${directory.path}/CommutativeReports_${startingDate.isEmpty ? 0 : startingDate}_to_${endingDate.isEmpty ? 0 : endingDate}_$timestamp.pdf";
                       final file = File(path);
                       await file.writeAsBytes(await pdf.save());
 

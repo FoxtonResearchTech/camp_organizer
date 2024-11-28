@@ -47,15 +47,13 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
     });
   }
 
-
-
   @override
   void dispose() {
     _inchargeReportBloc.close();
     super.dispose();
   }
-  String? employeeName;
 
+  String? employeeName;
 
   @override
   Widget build(BuildContext context) {
@@ -68,15 +66,24 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
       listener: (context, state) {
         if (state is InchargeReportLoading) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Loading reports...')),
+            const SnackBar(
+              content: Center(child: Text('Loading reports...')),
+              backgroundColor: Colors.orange,
+            ),
           );
         } else if (state is InchargeReportUpdated) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Report updated successfully!')),
+            const SnackBar(
+              content: Center(child: Text('Report updated successfully!')),
+              backgroundColor: Colors.green,
+            ),
           );
         } else if (state is InchargeReportError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${'state.message'}')),
+            SnackBar(
+              content: Center(child: Text('Error: ${'state.message'}')),
+              backgroundColor: Colors.red,
+            ),
           );
         }
       },
@@ -108,7 +115,6 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
                 ),
               ),
             ),
-
           ),
           body: BlocBuilder<OnsiteApprovalBloc, OnsiteApprovalState>(
             builder: (context, state) {
@@ -146,7 +152,7 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
                               ),
                             );
                           },
-                          child:employeeName == camps[index]['incharge']
+                          child: employeeName == camps[index]['incharge']
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -414,10 +420,12 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
       ),
     ];
   }
+
   Future<String?> getCurrentEmployeeName() async {
     try {
       // Reference to the Firestore collection
-      CollectionReference employees = FirebaseFirestore.instance.collection('employees');
+      CollectionReference employees =
+          FirebaseFirestore.instance.collection('employees');
 
       // Query to fetch the employee with role 'campincharge'
       QuerySnapshot querySnapshot = await employees
@@ -428,7 +436,8 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
       // Check if any documents match the query
       if (querySnapshot.docs.isNotEmpty) {
         // Access the first document and extract the name field
-        var employeeData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+        var employeeData =
+            querySnapshot.docs.first.data() as Map<String, dynamic>;
         return employeeData['firstName'] as String?;
       } else {
         // No employee found

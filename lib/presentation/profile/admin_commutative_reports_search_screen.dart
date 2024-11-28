@@ -161,8 +161,9 @@ class _CommutativeReportsSearchScreen
                     if (await directory.exists()) {
                       final startingDate = _startDateController.text;
                       final endingDate = _endDateController.text;
+                      final timestamp = DateTime.now().millisecondsSinceEpoch;
                       final path =
-                          "${directory.path}/AdminCommutativeReports_${startingDate.isEmpty ? 0 : startingDate}_to_${endingDate.isEmpty ? 0 : endingDate}.pdf";
+                          "${directory.path}/AdminCommutativeReports_${startingDate.isEmpty ? 0 : startingDate}_to_${endingDate.isEmpty ? 0 : endingDate}_$timestamp.pdf";
                       final file = File(path);
                       await file.writeAsBytes(await pdf.save());
 
@@ -529,9 +530,9 @@ class _CommutativeReportsSearchScreen
         child: Container(
           padding: EdgeInsets.only(top: screenHeight / 6),
           child: Center(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
                 Lottie.asset(
                   'assets/no_records.json',
                   width: screenWidth * 0.6,
@@ -546,7 +547,9 @@ class _CommutativeReportsSearchScreen
                     color: Colors.grey,
                   ),
                 ),
-              ])),
+              ],
+            ),
+          ),
         ),
       );
     }

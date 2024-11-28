@@ -46,16 +46,25 @@ class _FinanceTimelineState extends State<FinanceTimeline>
       listener: (context, state) {
         if (state is AddFinanceLoading) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Loading Finance Details...')),
+            const SnackBar(
+              content: Center(child: Text('Loading Finance Details...')),
+              backgroundColor: Colors.orange,
+            ),
           );
         } else if (state is AddFinanceSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-                content: Text('Finance Details Loaded successfully!')),
+              content:
+                  Center(child: Text('Finance Details Loaded successfully!')),
+              backgroundColor: Colors.green,
+            ),
           );
         } else if (state is AddFinanceError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${state.message}')),
+            SnackBar(
+              content: Center(child: Text('Error: ${state.message}')),
+              backgroundColor: Colors.red,
+            ),
           );
         }
       },

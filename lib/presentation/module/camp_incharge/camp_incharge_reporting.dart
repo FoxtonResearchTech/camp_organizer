@@ -229,11 +229,18 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
           listener: (context, state) {
             if (state is InchargeReportUpdated) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Report Submitted Successfully!')),
+                const SnackBar(
+                  content:
+                      Center(child: Text('Report Submitted Successfully!')),
+                  backgroundColor: Colors.green,
+                ),
               );
             } else if (state is InchargeReportError) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Error: ${state.message}')),
+                SnackBar(
+                  content: Center(child: Text('Error: ${state.message}')),
+                  backgroundColor: Colors.red,
+                ),
               );
             }
           },

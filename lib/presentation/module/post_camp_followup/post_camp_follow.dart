@@ -95,11 +95,18 @@ class _PostCampFollowState extends State<PostCampFollow> {
                 listener: (context, state) {
                   if (state is PatientFollowUpsSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Data saved successfully!')),
+                      const SnackBar(
+                        content:
+                            Center(child: Text('Data saved successfully!')),
+                        backgroundColor: Colors.green,
+                      ),
                     );
                   } else if (state is PatientFollowUpsError) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: ${state.message}')),
+                      SnackBar(
+                        content: Center(child: Text('Error: ${state.message}')),
+                        backgroundColor: Colors.red,
+                      ),
                     );
                   }
                 },

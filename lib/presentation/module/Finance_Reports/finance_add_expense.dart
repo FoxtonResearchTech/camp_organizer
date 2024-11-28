@@ -60,11 +60,17 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
           documentId: widget.documentId, data: expenseData));
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Expense data submitted successfully')),
+        const SnackBar(
+          content: Center(child: Text('Expense data submitted successfully')),
+          backgroundColor: Colors.green,
+        ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all required fields')),
+        const SnackBar(
+          content: Center(child: Text('Please fill all required fields')),
+          backgroundColor: Colors.green,
+        ),
       );
     }
   }

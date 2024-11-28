@@ -44,10 +44,10 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
 
   void saveData(BuildContext context, documentId) {
     final Map<String, dynamic> data = {
-     // 'date': dateController.text.trim(),
-     // 'time': timeController.text.trim(),
-     // 'campName': campNameController.text.trim(),
-    //  'organization': organizationController.text.trim(),
+      // 'date': dateController.text.trim(),
+      // 'time': timeController.text.trim(),
+      // 'campName': campNameController.text.trim(),
+      //  'organization': organizationController.text.trim(),
       'doctor': doctorController.text.trim(),
       'driver': driverController.text.trim(),
       'incharge': selectedEmployee,
@@ -63,6 +63,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
         .read<AddTeamBloc>()
         .add(AddTeamWithDocumentId(documentId: widget.documentId, data: data));
   }
+
   String? selectedEmployee;
   List<String> employeeNames = [];
 
@@ -71,6 +72,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
     fetchEmployees();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -109,11 +111,17 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
           listener: (context, state) {
             if (state is AddTeamSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Data saved successfully!')),
+                const SnackBar(
+                  content: Center(child: Text('Data saved successfully!')),
+                  backgroundColor: Colors.green,
+                ),
               );
             } else if (state is AddTeamError) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Error: ${state.message}')),
+                SnackBar(
+                  content: Center(child: Text('Error: ${state.message}')),
+                  backgroundColor: Colors.red,
+                ),
               );
             }
           },
@@ -139,7 +147,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
                     sectionTitle: 'Add Team Info',
                     children: [],
                   ),
-                /*
+                  /*
                   Row(
                     children: [
                       Expanded(
@@ -356,6 +364,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
       ),
     );
   }
+
   Future<void> fetchEmployees() async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance

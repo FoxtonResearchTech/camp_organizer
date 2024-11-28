@@ -50,15 +50,24 @@ class _LogisticsTimelineState extends State<LogisticsTimeline>
       listener: (context, state) {
         if (state is AddLogisticsLoading) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Adding Logistics...')),
+            const SnackBar(
+              content: Center(child: Text('Adding Logistics...')),
+              backgroundColor: Colors.orange,
+            ),
           );
         } else if (state is AddLogisticsSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Logistics added successfully!')),
+            const SnackBar(
+              content: Center(child: Text('Logistics added successfully!')),
+              backgroundColor: Colors.green,
+            ),
           );
         } else if (state is AddLogisticsError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${state.message}')),
+            SnackBar(
+              content: Center(child: Text('Error: ${state.message}')),
+              backgroundColor: Colors.red,
+            ),
           );
         }
       },

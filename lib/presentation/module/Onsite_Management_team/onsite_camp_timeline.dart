@@ -48,15 +48,24 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
       listener: (context, state) {
         if (state is AddTeamLoading) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Adding team...')),
+            const SnackBar(
+              content: Center(child: Text('Adding team...')),
+              backgroundColor: Colors.orange,
+            ),
           );
         } else if (state is AddTeamSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Team added successfully!')),
+            const SnackBar(
+              content: Center(child: Text('Team added successfully!')),
+              backgroundColor: Colors.green,
+            ),
           );
         } else if (state is AddTeamError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${state.message}')),
+            SnackBar(
+              content: Center(child: Text('Error: ${state.message}')),
+              backgroundColor: Colors.red,
+            ),
           );
         }
       },

@@ -161,8 +161,9 @@ class _SuperCommutativeReportsSearchScreen
                     if (await directory.exists()) {
                       final startingDate = _startDateController.text;
                       final endingDate = _endDateController.text;
+                      final timestamp = DateTime.now().millisecondsSinceEpoch;
                       final path =
-                          "${directory.path}/SuperAdminCommutativeReports_${startingDate.isEmpty ? 0 : startingDate}_to_${endingDate.isEmpty ? 0 : endingDate}.pdf";
+                          "${directory.path}/SuperAdminCommutativeReports_${startingDate.isEmpty ? 0 : startingDate}_to_${endingDate.isEmpty ? 0 : endingDate}_$timestamp.pdf";
                       final file = File(path);
                       await file.writeAsBytes(await pdf.save());
 
@@ -524,23 +525,33 @@ class _SuperCommutativeReportsSearchScreen
   Widget _buildEmployeeList(
       AdminApprovalLoaded state, double screenWidth, double screenHeight) {
     if (_filteredEmployees.isEmpty) {
-      return Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Lottie.asset(
-          'assets/no_records.json',
-          width: screenWidth * 0.6,
-          height: screenHeight * 0.4,
-        ),
-        const SizedBox(height: 10),
-        const Text(
-          "No matching record found",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey,
+      return SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Container(
+          padding: EdgeInsets.only(top: screenHeight / 6),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Lottie.asset(
+                  'assets/no_records.json',
+                  width: screenWidth * 0.6,
+                  height: screenHeight * 0.4,
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  "No matching record found",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ]));
+      );
     }
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
