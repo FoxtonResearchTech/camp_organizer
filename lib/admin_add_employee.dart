@@ -34,10 +34,10 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
   final List<String> role = [
     'CampOrganizer',
     'OnSiteManagement',
-    'SupportService',
-    'PostCampActivity',
-    'Opthamologist',
-    'Report',
+    'CampIncharge',
+    'Accountant',
+    'Logistics',
+    'Followup',
   ];
   String? selectedrole;
 
