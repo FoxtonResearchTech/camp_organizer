@@ -1,4 +1,5 @@
 import 'package:camp_organizer/bloc/Profile/profile_state.dart';
+import 'package:camp_organizer/presentation/Admin/admin_camp_search_screen.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
 import 'package:camp_organizer/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
@@ -192,11 +193,22 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
                                     subtitle: employee['empCode'] ?? 'N/A',
                                     slideAnimation: _slideAnimation,
                                   ),
-                                  ProfileInfoTile(
-                                    icon: Icons.search,
-                                    title: 'Camp Reports',
-                                    subtitle: 'Search',
-                                    slideAnimation: _slideAnimation,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              AdminCampSearchScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: ProfileInfoTile(
+                                      icon: Icons.search,
+                                      title: 'Camp Reports',
+                                      subtitle: 'Search',
+                                      slideAnimation: _slideAnimation,
+                                    ),
                                   ),
                                   GestureDetector(
                                     onTap: () async {

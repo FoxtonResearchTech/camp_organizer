@@ -1,5 +1,6 @@
 import 'package:camp_organizer/bloc/Profile/profile_state.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
+import 'package:camp_organizer/presentation/dashboard/CampSearchScreen.dart';
 import 'package:camp_organizer/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,10 +106,8 @@ class _UserProfilePageState extends State<UserProfilePage>
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
-                          child: Text(employee['firstName'] +
-                                  " " +
-                                  employee['lastName'] ??
-                              'N/A'),
+                          child: Text(
+                              '${employee['firstName'] ?? 'N/A'} ${employee['lastName'] ?? 'N/A'}'),
                         ),
                         AnimatedDefaultTextStyle(
                           duration: const Duration(milliseconds: 500),
@@ -190,11 +189,22 @@ class _UserProfilePageState extends State<UserProfilePage>
                                     subtitle: employee['empCode'] ?? 'N/A',
                                     slideAnimation: _slideAnimation,
                                   ),
-                                  ProfileInfoTile(
-                                    icon: Icons.search,
-                                    title: 'Camp Reports',
-                                    subtitle: 'Search',
-                                    slideAnimation: _slideAnimation,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              CampSearchScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: ProfileInfoTile(
+                                      icon: Icons.search,
+                                      title: 'Camp Reports',
+                                      subtitle: 'Search',
+                                      slideAnimation: _slideAnimation,
+                                    ),
                                   ),
                                   GestureDetector(
                                     onTap: () async {
@@ -204,7 +214,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                                             builder: (context) =>
                                                 CommutativeReportsSearchScreen(
                                                   name:
-                                                      '${employee['firstName']} ${employee['lastName']}',
+                                                      '${employee['firstName'] ?? "N/A"} ${employee['lastName'] ?? "N/A"}',
                                                   position:
                                                       employee['role'] ?? 'N/A',
                                                   empCode:

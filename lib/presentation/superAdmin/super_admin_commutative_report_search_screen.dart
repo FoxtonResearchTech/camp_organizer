@@ -169,14 +169,20 @@ class _SuperCommutativeReportsSearchScreen
                       print("PDF saved at $path");
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("PDF saved at $path")),
+                        SnackBar(
+                          content: Center(child: Text("PDF saved at $path")),
+                          backgroundColor: Colors.green,
+                        ),
                       );
                     } else {
                       throw Exception("Downloads folder not found.");
                     }
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Failed to save PDF: $e")),
+                      SnackBar(
+                        content: Center(child: Text("Failed to save PDF")),
+                        backgroundColor: Colors.red,
+                      ),
                     );
                   }
                 },
