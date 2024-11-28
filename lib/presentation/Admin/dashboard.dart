@@ -318,7 +318,7 @@ class _AdminDashboardScreenState
                           color: Colors.black54),
                     ),
                   ),
-                  BlocBuilder<StatusBloc, StatusState>(
+                  BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
                     builder: (context, state) {
                       if (state is StatusLoading) {
                         return Center(
@@ -339,9 +339,9 @@ class _AdminDashboardScreenState
                             displayFullTextOnTap: true,
                           ),
                         );
-                      } else if (state is StatusLoaded) {
+                      } else if (state is AdminApprovalLoaded) {
                         // Filter employees with "Approved" campStatus
-                        final approvedEmployees = state.employees
+                        final approvedEmployees = state.allCamps
                             .where((employee) => employee['campStatus'] == "Approved")
                             .toList();
 
@@ -388,7 +388,7 @@ class _AdminDashboardScreenState
                                       onTap: () async {
                                         print('Employee: ${approvedEmployees[index]}');
                                         print('Employee Doc ID: ${state.employeeDocId[index]}');
-                                        print('Camp Doc ID: ${state.campDocId[index]}');
+                                        print('Camp Doc ID: ${ state.campDocIds[index]}');
 
                                         await Navigator.push(
                                           context,
@@ -396,7 +396,7 @@ class _AdminDashboardScreenState
                                             builder: (context) => EventDetailsPage(
                                               employee: approvedEmployees[index],
                                               employeedocId: state.employeeDocId[index],
-                                              campId: state.campDocId[index],
+                                              campId:  state.campDocIds[index],
                                             ),
                                           ),
                                         );
@@ -484,7 +484,7 @@ class _AdminDashboardScreenState
                         );
                       } else if (state is StatusError) {
                         return Center(
-                          child: Text('Error: ${state.errorMessage}'),
+                          child: Text('Error: '),
                         );
                       }
                       return Center(

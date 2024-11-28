@@ -150,12 +150,13 @@ class _EventDetailsPageState extends State<EventDetailsPage>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            widget.employee['campStatus'] == 'Waiting'
+                ?
             _buildAnimatedButton(
               label: "Edit",
               icon: Icons.edit,
-              color: widget.employee['campStatus'] == 'Waiting'
-                  ? AppColors.accentBlue
-                  : Colors.grey,
+              color: AppColors.accentBlue
+                ,
               onPressed: () {
                 final eventDocRef = FirebaseFirestore.instance
                     .collection('employees')
@@ -175,7 +176,9 @@ class _EventDetailsPageState extends State<EventDetailsPage>
               },
               screenWidth: screenWidth,
               screenHeight: screenHeight,
-            ),
+            ):SizedBox(),
+            widget.employee['campStatus'] == 'Rejected'
+                ?
             _buildAnimatedButton(
               label: "Reason",
               icon: Icons.question_answer,
@@ -222,7 +225,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
               },
               screenWidth: screenWidth,
               screenHeight: screenHeight,
-            ),
+            ):SizedBox(),
           ],
         ),
       ),

@@ -34,10 +34,10 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
   final List<String> role = [
     'CampOrganizer',
     'OnSiteManagement',
-    'SupportService',
-    'PostCampActivity',
-    'Opthamologist',
-    'Report',
+    'CampIncharge',
+    'Accountant',
+    'Logistics',
+    'Followup',
   ];
   String? selectedrole;
 
@@ -89,13 +89,17 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
 
     try {
       // Register with Firebase Authentication using constructed email and password
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: email,
         password: passwordController.text,
       );
 
       // Save employee data to Firestore
-      await _firestore.collection('employees').doc(userCredential.user?.uid).set({
+      await _firestore
+          .collection('employees')
+          .doc(userCredential.user?.uid)
+          .set({
         'firstName': firstNameController.text,
         'lastName': lastNameController.text,
         'dob': dobController.text,
@@ -130,7 +134,10 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
             Expanded(
               child: Text(
                 message,
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -145,7 +152,6 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,7 +160,10 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon:Icon(Icons.arrow_back_ios,color: Colors.white,)),
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+            )),
         title: const Text(
           'Employee Registration',
           style: TextStyle(
@@ -172,7 +181,6 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
             ),
           ),
         ),
-
       ),
       body: SingleChildScrollView(
         child: Padding(
