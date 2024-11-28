@@ -1,5 +1,11 @@
 import 'package:camp_organizer/bloc/auth/auth_bloc.dart';
+import 'package:camp_organizer/widgets/bottom_navigation_bar/camp_incharge_nav_bar.dart';
+import 'package:camp_organizer/widgets/bottom_navigation_bar/finance_nav_bar.dart';
 import 'package:camp_organizer/widgets/bottom_navigation_bar/fluid_bottom_navigation_bar.dart';
+import 'package:camp_organizer/widgets/bottom_navigation_bar/logistics_nav_bar.dart';
+import 'package:camp_organizer/widgets/bottom_navigation_bar/onsite_management_nav_bar.dart';
+import 'package:camp_organizer/widgets/bottom_navigation_bar/post_camp_nav_bar.dart';
+import 'package:camp_organizer/widgets/bottom_navigation_bar/super_admin_bottom_navigation_bar.dart';
 import 'package:camp_organizer/widgets/button/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -52,8 +58,10 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
     _controller.dispose();
     super.dispose();
   }
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,19 +70,76 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
         listener: (context, state) {
           if (state is AuthAuthenticated) {
             if (state.role == 'CampOrganizer') {
-
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => CurvedBottomNavigationBar()),
-                    (Route<dynamic> route) => false,  // This removes all previous routes
+                MaterialPageRoute(
+                    builder: (context) => CurvedBottomNavigationBar()),
+                (Route<dynamic> route) =>
+                    false, // This removes all previous routes
               );
-            } else {
+            }else if(state.role == 'OnSiteManagement'){
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) =>AdminBottomNavigationBar()),
-                    (Route<dynamic> route) => false,  // This removes all previous routes
+                MaterialPageRoute(
+                    builder: (context) => OnSiteManagement()),
+                    (Route<dynamic> route) =>
+                false, // This removes all previous routes
               );
             }
+            else if(state.role == 'CampIncharge'){
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CampInchargeNavBar()),
+                    (Route<dynamic> route) =>
+                false, // This removes all previous routes
+              );
+            }
+            else if(state.role == 'Accountant'){
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FinanceNavBar()),
+                    (Route<dynamic> route) =>
+                false, // This removes all previous routes
+              );
+            }
+            else if(state.role == 'Logistics'){
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>LogisticsNavBar()),
+                    (Route<dynamic> route) =>
+                false, // This removes all previous routes
+              );
+            }
+            else if(state.role == 'Followup'){
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PostCampNavBar()),
+                    (Route<dynamic> route) =>
+                false, // This removes all previous routes
+              );
+            }
+            else if(state.role == 'admin'){
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AdminBottomNavigationBar()),
+                    (Route<dynamic> route) =>
+                false, // This removes all previous routes
+              );
+            }else{
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => SuperAdminBottomNavigationBar()),
+                    (Route<dynamic> route) =>
+                false, // This removes all previous routes
+              );
+            }
+
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -100,114 +165,99 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
               ),
             );
           }
-
         },
         builder: (context, state) {
           if (state is AuthLoading) {
             return Center(
               child: Lottie.asset(
-               'assets/loading.json',
+                'assets/loading.json',
               ),
             );
           }
-    return Center(
-        child: FadeTransition(
-          opacity: _fadeInAnimation,
-          child: SlideTransition(
-            position: _slideInAnimation,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Logo and Title
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+          return Center(
+            child: FadeTransition(
+              opacity: _fadeInAnimation,
+              child: SlideTransition(
+                position: _slideInAnimation,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        Icons.local_hospital,
-                        color: Colors.blueAccent,
-                        size: 40,
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        'Hospital Management System',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blueAccent,
+                      // Logo and Title
+                      Image.asset("assets/logo3.png").animate().scale(
+                          duration: const Duration(milliseconds: 1200),
+                          curve: Curves.elasticOut),
+                      SizedBox(height: 40),
+
+                      // Username Field
+                      TextField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          prefixIcon:
+                              Icon(Icons.person, color: Colors.blueAccent),
+                          labelText: 'Username',
+                          labelStyle: TextStyle(color: Colors.blueAccent),
+                          filled: true,
+                          fillColor: Colors.blue[50],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
+                          ),
                         ),
-                      ),
+                      ).animate().fade(
+                          duration: const Duration(milliseconds: 1000),
+                          curve: Curves.easeInOut),
+                      SizedBox(height: 20),
+
+                      // Password Field
+                      TextField(
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                          prefixIcon:
+                              Icon(Icons.lock, color: Colors.blueAccent),
+                          labelText: 'Password',
+                          labelStyle: TextStyle(color: Colors.blueAccent),
+                          filled: true,
+                          fillColor: Colors.blue[50],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        obscureText: true,
+                      ).animate().fade(
+                          delay: const Duration(milliseconds: 200),
+                          duration: const Duration(milliseconds: 1000),
+                          curve: Curves.easeInOut),
+                      SizedBox(height: 30),
+
+                      // Login Button
+                      CustomButton(
+                              text: "Login",
+                              onPressed: () {
+                                final email = _emailController.text;
+                                final password = _passwordController.text;
+                                BlocProvider.of<AuthBloc>(context).add(
+                                  SignInRequested(email, password),
+                                );
+                              })
+                          .animate()
+                          .move(
+                              delay: const Duration(milliseconds: 400),
+                              duration: const Duration(milliseconds: 1000),
+                              curve: Curves.easeInOut),
+
+                      // Forgot Password Link
+                      SizedBox(height: 20),
                     ],
-                  ).animate().scale(
-                      duration: const Duration(milliseconds: 1200),
-                      curve: Curves.elasticOut),
-                  SizedBox(height: 40),
-
-                  // Username Field
-                  TextField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.person, color: Colors.blueAccent),
-
-                      labelText: 'Username',
-                      labelStyle: TextStyle(color: Colors.blueAccent),
-                      filled: true,
-                      fillColor: Colors.blue[50],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ).animate().fade(
-                      duration: const Duration(milliseconds: 1000),
-                      curve: Curves.easeInOut),
-                  SizedBox(height: 20),
-
-                  // Password Field
-                  TextField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.lock, color: Colors.blueAccent),
-                      labelText: 'Password',
-                      labelStyle: TextStyle(color: Colors.blueAccent),
-                      filled: true,
-                      fillColor: Colors.blue[50],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                    obscureText: true,
-                  ).animate().fade(
-                      delay: const Duration(milliseconds: 200),
-                      duration: const Duration(milliseconds: 1000),
-                      curve: Curves.easeInOut),
-                  SizedBox(height: 30),
-
-                  // Login Button
-                  CustomButton(text: "Login", onPressed: () {
-                    final email = _emailController.text;
-                    final password = _passwordController.text;
-                    BlocProvider.of<AuthBloc>(context).add(
-                      SignInRequested(email, password),
-                    );
-
-                  }).animate().move(
-                      delay: const Duration(milliseconds: 400),
-                      duration: const Duration(milliseconds: 1000),
-                      curve: Curves.easeInOut),
-
-                  // Forgot Password Link
-                  SizedBox(height: 20),
-                ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-      );
-  },
-),
+          );
+        },
+      ),
     );
   }
 }

@@ -9,9 +9,26 @@ class InchargeDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Incharge Details'),
-        backgroundColor: Colors.lightBlue[600],
+      appBar:AppBar(
+        leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+        title: const Text(
+          'Incharge Details',
+          style: TextStyle(
+              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: false,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10.0),
@@ -30,9 +47,9 @@ class InchargeDetailsPage extends StatelessWidget {
                 _buildInfoCard('Camp Status', inchargeData['campStatus']),
                 _buildInfoCard('Camp Date', inchargeData['campDate']),
                 _buildInfoCard('Camp Time', inchargeData['campTime']),
-                _buildInfoCard('Created On', inchargeData['CreatedOn']?.toString() ?? 'N/A'),
+
                 _buildInfoCard('Camp Plan Type', inchargeData['campPlanType']),
-                _buildInfoCard('Camp Organizer', inchargeData['campOrganizer']),
+
                 _buildInfoCard('Doctor', inchargeData['doctor']),
                 _buildInfoCard('Last Camp Done', inchargeData['lastCampDone']),
               ],
@@ -75,7 +92,7 @@ class InchargeDetailsPage extends StatelessWidget {
                 _buildInfoCard('Secondary Phone 2', inchargeData['phoneNumber2_2']),
                 _buildInfoCard('Alternate Phone', inchargeData['phoneNumber1_2']),
                 _buildInfoCard('Employee Email', inchargeData['EmployeeId']),
-                _buildInfoCard('Employee Doc ID', inchargeData['employeeDocId']),
+
               ],
             ),
             _buildAnimatedSection(
@@ -92,7 +109,7 @@ class InchargeDetailsPage extends StatelessWidget {
                 _buildInfoCard('Date', inchargeData['date']),
                 _buildInfoCard('Time', inchargeData['time']),
                 _buildInfoCard('Patient Follow-ups', inchargeData['patientFollowUps']?.join(', ') ?? 'N/A'),
-                _buildInfoCard('Document ID', inchargeData['documentId']),
+
                 _buildInfoCard('AR', inchargeData['ar'] ?? 'N/A'),
                 _buildInfoCard('VN Reg', inchargeData['vnReg'] ?? 'N/A'),
                 _buildInfoCard('Name 2', inchargeData['name2']),

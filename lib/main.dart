@@ -103,7 +103,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home:AdminAddEmployee (), // Starting screen is the splash screen
+        home:CampOrganizerLoginPage (), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),

@@ -21,14 +21,7 @@ class CampInchargeReporting extends StatefulWidget {
 }
 
 class _CampInchargeReportingState extends State<CampInchargeReporting> {
-@override
-  void initState() {
-  print("Emp id:${widget.documentId.toString()}");
-  print("Camp id:${widget.campData.toString()}");
-  //getEmployeeDocId(widget.campData);
-    // TODO: implement initState
-    super.initState();
-  }
+
   // TextEditingControllers for the form fields
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
@@ -47,6 +40,67 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
   final List<Widget> _patientFollowUpFields = [];
   List<Map<String, TextEditingController>> _followUpControllers = [];
 
+  @override
+  void initState() {
+    super.initState();
+    // Initialize all fields with existing data if available
+    _dateController.text = widget.campData['campDate'] ?? '';
+    _timeController.text = widget.campData['campTime'] ?? '';
+    _campNameController.text = widget.campData['campName'] ?? '';
+    _organizationController.text = widget.campData['organization'] ?? '';
+    _placeController.text = widget.campData['place'] ?? '';
+    _campOrganizerController.text = widget.campData['campOrganizer'] ?? '';
+    _patientsAttendedController.text = (widget.campData['patientsAttended'] ?? '').toString();
+    _cataractPatientsController.text = (widget.campData['cataractPatients'] ?? '').toString();
+    _patientsSelectedForSurgeryController.text = (widget.campData['patientsSelectedForSurgery'] ?? '').toString();
+    _diabeticPatientsController.text = (widget.campData['diabeticPatients'] ?? '').toString();
+    _glassesSuppliedController.text = (widget.campData['glassesSupplied'] ?? '').toString();
+    _vehicleNumberController.text = widget.campData['vehicleNumber'] ?? '';
+    _kmRunController.text = (widget.campData['kmRun'] ?? '').toString();
+    // Initialize follow-up fields with existing data
+    if (widget.campData['patientFollowUps'] != null) {
+      for (var followUp in widget.campData['patientFollowUps']) {
+        TextEditingController nameController = TextEditingController(text: followUp['name']);
+        TextEditingController phoneController = TextEditingController(text: followUp['phone']);
+        TextEditingController statusController = TextEditingController(text: followUp['status']);
+
+        // Add controllers to the list
+        _followUpControllers.add({
+          'name': nameController,
+          'phone': phoneController,
+          'status': statusController,
+        });
+
+        // Add widgets for these fields
+        _patientFollowUpFields.addAll([
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextFormField(
+                  controller: nameController,
+                  labelText: 'Name',
+                ),
+              ),
+              SizedBox(width: 15),
+              Expanded(
+                child: CustomTextFormField(
+                  controller: phoneController,
+                  labelText: 'Phone Number',
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          CustomTextFormField(
+            controller: statusController,
+            labelText: 'Status',
+          ),
+          SizedBox(height: 20),
+        ]);
+      }
+    }
+  }
+
   void _addFollowUpField() {
     setState(() {
       // Create new controllers for this set of fields
@@ -60,6 +114,8 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
         'phone': phoneController,
         'status': statusController,
       });
+
+      // Add new widgets to the follow-up list
       _patientFollowUpFields.addAll([
         Row(
           children: [
@@ -69,7 +125,7 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
                 labelText: 'Name',
               ),
             ),
-            SizedBox(width: 15), // Space between columns
+            SizedBox(width: 15),
             Expanded(
               child: CustomTextFormField(
                 controller: phoneController,
@@ -82,9 +138,8 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
         CustomTextFormField(
           controller: statusController,
           labelText: 'Status',
-
         ),
-        SizedBox(height: 20), // Space between rows
+        SizedBox(height: 20),
       ]);
     });
   }
@@ -98,17 +153,6 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
     );
   }
 
-void getEmployeeDocId(Map<String, dynamic> campData) {
-  // Access the 'EmployeeDocId' or 'employeeDocId' field from the map
-  String? employeeDocId = campData['employeeDocId'] ?? campData['employeeDocId'];
-
-  if (employeeDocId != null) {
-    print('Employee Document ID: $employeeDocId');
-    saveFollowUpsToEmployeeCamp(employeeDocId,widget.documentId, _followUpControllers);
-  } else {
-    print('Employee Document ID not found.');
-  }
-}
 
   @override
   void dispose() {
@@ -134,13 +178,13 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => InchargeReportBloc(firestore: FirebaseFirestore.instance),
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
           title: const Text(
             'Camp Incharge Reporting',
             style: TextStyle(
@@ -158,17 +202,7 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
               ),
             ),
           ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.notifications, color: Colors.white),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NotificationPage()),
-                );
-              },
-            ),
-          ],
+
         ),
         body: BlocListener<InchargeReportBloc, InchargeReportState>(
           listener: (context, state) {
@@ -200,27 +234,11 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
                     ],
                   ),
 
-                  _buildAnimatedSection(
-                    context,
-                    sectionTitle: 'Add Team Info',
-                    children: [
 
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  CustomTextFormField(
-                    labelText: 'Place',
-                    controller: _placeController,
-                  ),
-                  SizedBox(height: 20),
-                  CustomTextFormField(
-                    labelText: 'Camp Organizer',
-                    controller: _campOrganizerController,
-                  ),
                   SizedBox(height: 20),
                   Text(
                     'Camp Reports',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: 20),
                   CustomTextFormField(
@@ -232,7 +250,6 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
                     labelText: 'Number of Catract Patient identified',
                     controller: _cataractPatientsController,
                   ),
-
 
                   SizedBox(height: 20),
                   CustomTextFormField(
@@ -267,7 +284,7 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
                   SizedBox(height: 20),
                   Text(
                     'Patient Follow Up List',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),
                   ),
 
                   SizedBox(height: 30),
@@ -282,34 +299,31 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
                   CustomButton(
                     text: 'Submit Report',
                     onPressed: () {
-
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Row(
                             children: [
-                              Icon(Icons.check_circle_outline, color: Colors.white),
-                              SizedBox(width: 8),
+                              Icon(Icons.check_circle, color: Colors.white, size: 24), // Add an icon
+                              SizedBox(width: 10), // Add spacing
                               Expanded(
                                 child: Text(
-                                  'Report Submited successfully!',
-                                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                                  'Data Submited Successfully...!',
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ],
                           ),
-                          backgroundColor: Colors.green,
-                          behavior: SnackBarBehavior.floating,
+                          backgroundColor: Colors.green, // Set green background color
+                          behavior: SnackBarBehavior.floating, // Make it floating
+                          margin: EdgeInsets.all(16), // Add margin for a floating SnackBar
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(12), // Rounded corners
                           ),
-                          duration: Duration(seconds: 3),
+                          duration: Duration(seconds: 3), // Set duration
                         ),
                       );
+
                       final formData = {
-                        'campName': _campNameController.text,
-                        'organization': _organizationController.text,
-                        'place': _placeController.text,
-                        'campOrganizer': _campOrganizerController.text,
                         'patientsAttended': int.tryParse(_patientsAttendedController.text) ?? 0,
                         'cataractPatients': int.tryParse(_cataractPatientsController.text) ?? 0,
                         'patientsSelectedForSurgery': int.tryParse(_patientsSelectedForSurgeryController.text) ?? 0,
@@ -317,7 +331,6 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
                         'glassesSupplied': int.tryParse(_glassesSuppliedController.text) ?? 0,
                         'vehicleNumber': _vehicleNumberController.text,
                         'kmRun': double.tryParse(_kmRunController.text) ?? 0.0,
-
                         'patientFollowUps': _followUpControllers.map((controllerMap) {
                           return {
                             'name': controllerMap['name']?.text ?? '',
@@ -326,19 +339,16 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
                           };
                         }).toList(),
 
-
                       };
 
                       // Dispatch the event with form data
                       //context.read<InchargeReportBloc>().add(
-                        //UpdateInchargeReport(
-                        //  documentId: widget.documentId,
-                        //  data: formData,
-                        //),
+                      //UpdateInchargeReport(
+                      //  documentId: widget.documentId,
+                      //  data: formData,
+                      //),
                       //);
                       submitReport(context, widget.documentId, formData);
-                   //   getEmployeeDocId(widget.campData);
-
                     },
                   ),
                 ],
@@ -346,7 +356,7 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
             ),
           ),
         ),
-      
+
       ),
     );
   }
@@ -410,70 +420,40 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
   // Helper method to build information cards
   Widget _buildInfoCard(String label, dynamic value) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 7.0),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Colors.cyan[100]!,
-            Colors.cyan[50]!,
+        margin: const EdgeInsets.symmetric(vertical: 7.0),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.cyan[100]!,
+              Colors.cyan[50]!,
+            ],
+            begin: Alignment.bottomRight,
+            end: Alignment.topLeft,
+          ),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.cyan[200]!.withOpacity(0.5),
+              blurRadius: 5,
+              offset: const Offset(2, 3),
+            ),
           ],
-          begin: Alignment.bottomRight,
-          end: Alignment.topLeft,
         ),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.cyan[200]!.withOpacity(0.5),
-            blurRadius: 5,
-            offset: const Offset(2, 3),
+        child: ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+          title: Text(
+            label,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
           ),
-        ],
-      ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
-        title: Text(
-          label,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
+          subtitle: Text(
+            value?.toString() ?? 'N/A',
+            style: const TextStyle(color: Colors.black54),
           ),
         ),
-        subtitle: Text(
-          value?.toString() ?? 'N/A',
-          style: const TextStyle(color: Colors.black54),
-        ),
-      ),
-    );
-  }
-Future<void> saveFollowUpsToEmployeeCamp(
-    String employeeId,
-    String campDocId,
-    List<Map<String, TextEditingController?>> followUpControllers) async {
-  try {
-    // Convert the controller data to a list of maps
-    final patientFollowUps = followUpControllers.map((controllerMap) {
-      return {
-        'name': controllerMap['name']?.text ?? '',
-        'phone': controllerMap['phone']?.text ?? '',
-        'status': controllerMap['status']?.text ?? '',
-      };
-    }).toList();
-
-    // Reference the specific camp document in the 'camps' subcollection
-    DocumentReference campDocRef = FirebaseFirestore.instance
-        .collection('employees') // Main collection
-        .doc(employeeId)         // Employee document
-        .collection('camps')     // Subcollection
-        .doc(campDocId);         // Specific camp document
-
-    // Set the follow-up data in the specified camp document
-    await campDocRef.set({'followUps': patientFollowUps});
-
-    print('Follow-ups added successfully to Firestore with camp ID: $campDocId!');
-  } catch (e) {
-    print('Error adding follow-ups to Firestore: $e');
-  }
-}
-
+        );
+    }
 
 }
