@@ -47,7 +47,10 @@ class _UserProfilePageState extends State<UserProfilePage>
           title: const Text(
             'Profile',
             style: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'LeagueSpartan'),
           ),
           centerTitle: false,
           backgroundColor: Colors.transparent,
@@ -104,6 +107,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                           style: const TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
+                            fontFamily: 'LeagueSpartan',
                             color: Colors.white,
                           ),
                           child: Text(
@@ -114,6 +118,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                           style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
+                              fontFamily: 'LeagueSpartan',
                               fontSize: 15),
                           child: Text(employee['role'] ?? 'N/A'),
                         ),
@@ -236,17 +241,29 @@ class _UserProfilePageState extends State<UserProfilePage>
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
-                                            title: const Text('Logout'),
+                                            title: const Text(
+                                              'Logout',
+                                              style: TextStyle(
+                                                fontFamily: 'LeagueSpartan',
+                                              ),
+                                            ),
                                             content: const Text(
-                                                'Are you sure you want to Logout?'),
+                                              'Are you sure you want to Logout?',
+                                              style: TextStyle(
+                                                fontFamily: 'LeagueSpartan',
+                                              ),
+                                            ),
                                             actions: [
                                               TextButton(
                                                 onPressed: () => Navigator.pop(
                                                     context, false),
                                                 child: const Text('Cancel',
                                                     style: TextStyle(
-                                                        color: AppColors
-                                                            .accentBlue)),
+                                                      color:
+                                                          AppColors.accentBlue,
+                                                      fontFamily:
+                                                          'LeagueSpartan',
+                                                    )),
                                               ),
                                               TextButton(
                                                 onPressed: () {
@@ -259,8 +276,11 @@ class _UserProfilePageState extends State<UserProfilePage>
                                                 },
                                                 child: const Text('Logout',
                                                     style: TextStyle(
-                                                        color: AppColors
-                                                            .accentBlue)),
+                                                      color:
+                                                          AppColors.accentBlue,
+                                                      fontFamily:
+                                                          'LeagueSpartan',
+                                                    )),
                                               ),
                                             ],
                                           );
@@ -285,11 +305,21 @@ class _UserProfilePageState extends State<UserProfilePage>
                     );
                   } else if (state is ProfileError) {
                     return Center(
-                      child: Text('Error+${state.errorMessage}'),
+                      child: Text(
+                        'Error+${state.errorMessage}',
+                        style: TextStyle(
+                          fontFamily: 'LeagueSpartan',
+                        ),
+                      ),
                     );
                   }
                   return const Center(
-                    child: Text("No data available"),
+                    child: Text(
+                      "No data available",
+                      style: TextStyle(
+                        fontFamily: 'LeagueSpartan',
+                      ),
+                    ),
                   );
                 },
               ),
@@ -332,9 +362,13 @@ class ProfileInfoTile extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(
+              fontWeight: FontWeight.bold, fontFamily: 'LeagueSpartan'),
         ),
-        subtitle: Text(subtitle),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(fontFamily: 'LeagueSpartan'),
+        ),
       ),
     );
   }

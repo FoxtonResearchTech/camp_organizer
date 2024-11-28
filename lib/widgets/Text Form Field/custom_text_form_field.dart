@@ -21,7 +21,6 @@ class CustomTextFormField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.onTap, // Initialize onTap
     this.onSaved, // Initialize onSaved
-
   }) : super(key: key);
 
   @override
@@ -36,17 +35,25 @@ class CustomTextFormField extends StatelessWidget {
       readOnly: onTap != null, // Make the field read-only if onTap is set
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: TextStyle(color: AppColors.textBlue), // Updated color for label
-        prefixIcon: icon != null ? Icon(icon, color: AppColors.primaryBlue) : null, // Updated icon color
+        labelStyle: TextStyle(
+          color: AppColors.textBlue,
+          fontFamily: 'LeagueSpartan',
+        ), // Updated color for label
+        prefixIcon: icon != null
+            ? Icon(icon, color: AppColors.primaryBlue)
+            : null, // Updated icon color
         filled: false,
         fillColor: AppColors.lightBlue, // Updated background color
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.accentBlue), // Accent color for the outline border
+          borderSide: BorderSide(
+              color:
+                  AppColors.accentBlue), // Accent color for the outline border
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.primaryBlue, width: 2), // Focus color
+          borderSide:
+              BorderSide(color: AppColors.primaryBlue, width: 2), // Focus color
         ),
       ),
     );

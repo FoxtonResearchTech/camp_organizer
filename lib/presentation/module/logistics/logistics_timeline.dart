@@ -79,6 +79,7 @@ class _LogisticsTimelineState extends State<LogisticsTimeline>
               'Logistics Timeline',
               style: TextStyle(
                   color: Colors.white,
+                  fontFamily: 'LeagueSpartan',
                   fontSize: 22,
                   fontWeight: FontWeight.bold),
             ),
@@ -185,6 +186,8 @@ class _LogisticsTimelineState extends State<LogisticsTimeline>
                                                         style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.w500,
+                                                          fontFamily:
+                                                              'LeagueSpartan',
                                                           color: Colors.black54,
                                                           fontSize:
                                                               screenWidth *
@@ -208,6 +211,8 @@ class _LogisticsTimelineState extends State<LogisticsTimeline>
                                                         style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.w500,
+                                                          fontFamily:
+                                                              'LeagueSpartan',
                                                           color: Colors.black54,
                                                           fontSize:
                                                               screenWidth *
@@ -275,6 +280,8 @@ class _LogisticsTimelineState extends State<LogisticsTimeline>
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .white,
+                                                                fontFamily:
+                                                                    'LeagueSpartan',
                                                                 fontSize: 18,
                                                                 fontWeight:
                                                                     FontWeight
@@ -345,6 +352,8 @@ class _LogisticsTimelineState extends State<LogisticsTimeline>
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .white,
+                                                                fontFamily:
+                                                                    'LeagueSpartan',
                                                                 fontSize: 18,
                                                                 fontWeight:
                                                                     FontWeight
@@ -426,6 +435,8 @@ class _LogisticsTimelineState extends State<LogisticsTimeline>
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .white,
+                                                                fontFamily:
+                                                                    'LeagueSpartan',
                                                                 fontSize: 18,
                                                                 fontWeight:
                                                                     FontWeight
@@ -496,6 +507,8 @@ class _LogisticsTimelineState extends State<LogisticsTimeline>
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .white,
+                                                                fontFamily:
+                                                                    'LeagueSpartan',
                                                                 fontSize: 18,
                                                                 fontWeight:
                                                                     FontWeight
@@ -555,12 +568,21 @@ class _LogisticsTimelineState extends State<LogisticsTimeline>
                 return Center(
                   child: Text(
                     '$state.errorMessage',
-                    style: const TextStyle(color: Colors.red, fontSize: 16),
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
+                      fontFamily: 'LeagueSpartan',
+                    ),
                   ),
                 );
               } else {
                 return const Center(
-                  child: Text('No Camps Found'),
+                  child: Text(
+                    'No Camps Found',
+                    style: TextStyle(
+                      fontFamily: 'LeagueSpartan',
+                    ),
+                  ),
                 );
               }
             },
@@ -577,6 +599,7 @@ class _LogisticsTimelineState extends State<LogisticsTimeline>
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black54,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05, // Responsive font size
         ),
       ),

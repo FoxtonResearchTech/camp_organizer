@@ -100,7 +100,10 @@ class _CampSearchScreenState extends State<CampSearchScreen>
                 _filterEmployees((_statusBloc.state as StatusLoaded).employees);
               }
             },
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(
+              color: Colors.white,
+              fontFamily: 'LeagueSpartan',
+            ),
             decoration: InputDecoration(
               hintText: "Search by camp name or date...",
               hintStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
@@ -180,6 +183,7 @@ class _CampSearchScreenState extends State<CampSearchScreen>
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: 'LeagueSpartan',
                                     color: Colors.grey,
                                   ),
                                 ),
@@ -247,6 +251,7 @@ class _CampSearchScreenState extends State<CampSearchScreen>
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.black54,
+                                                    fontFamily: 'LeagueSpartan',
                                                     fontSize:
                                                         screenWidth * 0.05,
                                                   ),
@@ -266,6 +271,7 @@ class _CampSearchScreenState extends State<CampSearchScreen>
                                                       ['campTime'],
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w500,
+                                                    fontFamily: 'LeagueSpartan',
                                                     color: Colors.black54,
                                                     fontSize:
                                                         screenWidth * 0.05,
@@ -323,6 +329,7 @@ class _CampSearchScreenState extends State<CampSearchScreen>
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black54,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05,
         ),
       ),

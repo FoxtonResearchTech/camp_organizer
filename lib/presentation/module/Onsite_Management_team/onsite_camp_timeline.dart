@@ -78,6 +78,7 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,
+                  fontFamily: 'LeagueSpartan',
                   fontWeight: FontWeight.bold),
             ),
             centerTitle: false,
@@ -182,6 +183,8 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                                                         camps[index]
                                                             ['campDate'],
                                                         style: TextStyle(
+                                                          fontFamily:
+                                                              'LeagueSpartan',
                                                           fontWeight:
                                                               FontWeight.w500,
                                                           color: Colors.black54,
@@ -205,6 +208,8 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                                                         camps[index]
                                                             ['campTime'],
                                                         style: TextStyle(
+                                                          fontFamily:
+                                                              'LeagueSpartan',
                                                           fontWeight:
                                                               FontWeight.w500,
                                                           color: Colors.black54,
@@ -293,6 +298,8 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                                                           const Text(
                                                             'Add Team',
                                                             style: TextStyle(
+                                                              fontFamily:
+                                                                  'LeagueSpartan',
                                                               color:
                                                                   Colors.white,
                                                               fontSize: 18,
@@ -354,6 +361,8 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                                                           const Text(
                                                             'View Team',
                                                             style: TextStyle(
+                                                              fontFamily:
+                                                                  'LeagueSpartan',
                                                               color:
                                                                   Colors.white,
                                                               fontSize: 18,
@@ -383,12 +392,21 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
                 return Center(
                   child: Text(
                     '$state.errorMessage',
-                    style: const TextStyle(color: Colors.red, fontSize: 16),
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
+                      fontFamily: 'LeagueSpartan',
+                    ),
                   ),
                 );
               } else {
                 return const Center(
-                  child: Text('No Camps Found'),
+                  child: Text(
+                    'No Camps Found',
+                    style: TextStyle(
+                      fontFamily: 'LeagueSpartan',
+                    ),
+                  ),
                 );
               }
             },
@@ -404,7 +422,12 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Add Team'),
+        title: const Text(
+          'Add Team',
+          style: TextStyle(
+            fontFamily: 'LeagueSpartan',
+          ),
+        ),
         content: TextField(
           controller: teamController,
           decoration: const InputDecoration(
@@ -417,7 +440,12 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Cancel'),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(
+                fontFamily: 'LeagueSpartan',
+              ),
+            ),
           ),
           ElevatedButton(
             onPressed: () {
@@ -433,7 +461,12 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
               // Navigator.pop(context);
               //}
             },
-            child: const Text('Add'),
+            child: const Text(
+              'Add',
+              style: TextStyle(
+                fontFamily: 'LeagueSpartan',
+              ),
+            ),
           ),
         ],
       ),
@@ -453,6 +486,7 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black54,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05, // Responsive font size
         ),
       ),

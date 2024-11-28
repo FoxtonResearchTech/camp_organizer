@@ -4,17 +4,29 @@ import 'package:camp_organizer/widgets/button/custom_button.dart';
 class InchargeDetailsPage extends StatelessWidget {
   final Map<String, dynamic> inchargeData;
 
-  const InchargeDetailsPage({Key? key, required this.inchargeData}) : super(key: key);
+  const InchargeDetailsPage({Key? key, required this.inchargeData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:AppBar(
-        leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+            )),
         title: const Text(
           'Incharge Details',
           style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -28,7 +40,6 @@ class InchargeDetailsPage extends StatelessWidget {
             ),
           ),
         ),
-
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10.0),
@@ -47,9 +58,7 @@ class InchargeDetailsPage extends StatelessWidget {
                 _buildInfoCard('Camp Status', inchargeData['campStatus']),
                 _buildInfoCard('Camp Date', inchargeData['campDate']),
                 _buildInfoCard('Camp Time', inchargeData['campTime']),
-
                 _buildInfoCard('Camp Plan Type', inchargeData['campPlanType']),
-
                 _buildInfoCard('Doctor', inchargeData['doctor']),
                 _buildInfoCard('Last Camp Done', inchargeData['lastCampDone']),
               ],
@@ -63,8 +72,10 @@ class InchargeDetailsPage extends StatelessWidget {
                 _buildInfoCard('Address', inchargeData['address']),
                 _buildInfoCard('Pincode', inchargeData['pincode']),
                 _buildInfoCard('Road Access', inchargeData['roadAccess']),
-                _buildInfoCard('Water Availability', inchargeData['waterAvailability']),
-                _buildInfoCard('Total Square Feet', inchargeData['totalSquareFeet']),
+                _buildInfoCard(
+                    'Water Availability', inchargeData['waterAvailability']),
+                _buildInfoCard(
+                    'Total Square Feet', inchargeData['totalSquareFeet']),
                 _buildInfoCard('Place', inchargeData['place']),
                 _buildInfoCard('Vehicle Number', inchargeData['vehicleNumber']),
               ],
@@ -74,7 +85,8 @@ class InchargeDetailsPage extends StatelessWidget {
               sectionTitle: 'Team & Organization',
               children: [
                 _buildInfoCard('Driver', inchargeData['driver']),
-                _buildInfoCard('Teams', inchargeData['teams']?.join(', ') ?? 'N/A'),
+                _buildInfoCard(
+                    'Teams', inchargeData['teams']?.join(', ') ?? 'N/A'),
                 _buildInfoCard('Organization', inchargeData['organization']),
                 _buildInfoCard('Position 2', inchargeData['position2']),
                 _buildInfoCard('Regnter', inchargeData['regnter']),
@@ -88,28 +100,36 @@ class InchargeDetailsPage extends StatelessWidget {
               sectionTitle: 'Contact Details',
               children: [
                 _buildInfoCard('Primary Phone', inchargeData['phoneNumber1']),
-                _buildInfoCard('Secondary Phone 1', inchargeData['phoneNumber2']),
-                _buildInfoCard('Secondary Phone 2', inchargeData['phoneNumber2_2']),
-                _buildInfoCard('Alternate Phone', inchargeData['phoneNumber1_2']),
+                _buildInfoCard(
+                    'Secondary Phone 1', inchargeData['phoneNumber2']),
+                _buildInfoCard(
+                    'Secondary Phone 2', inchargeData['phoneNumber2_2']),
+                _buildInfoCard(
+                    'Alternate Phone', inchargeData['phoneNumber1_2']),
                 _buildInfoCard('Employee Email', inchargeData['EmployeeId']),
-
               ],
             ),
             _buildAnimatedSection(
               context,
               sectionTitle: 'Additional Info',
               children: [
-                _buildInfoCard('Number of Patients Expected', inchargeData['noOfPatientExpected']),
-                _buildInfoCard('Cataract Patients', inchargeData['cataractPatients']),
-                _buildInfoCard('Diabetic Patients', inchargeData['diabeticPatients']),
-                _buildInfoCard('Patients Attended', inchargeData['patientsAttended']),
-                _buildInfoCard('Patients Selected for Surgery', inchargeData['patientsSelectedForSurgery']),
-                _buildInfoCard('Number of Glasses Supplied', inchargeData['glassesSupplied']),
+                _buildInfoCard('Number of Patients Expected',
+                    inchargeData['noOfPatientExpected']),
+                _buildInfoCard(
+                    'Cataract Patients', inchargeData['cataractPatients']),
+                _buildInfoCard(
+                    'Diabetic Patients', inchargeData['diabeticPatients']),
+                _buildInfoCard(
+                    'Patients Attended', inchargeData['patientsAttended']),
+                _buildInfoCard('Patients Selected for Surgery',
+                    inchargeData['patientsSelectedForSurgery']),
+                _buildInfoCard('Number of Glasses Supplied',
+                    inchargeData['glassesSupplied']),
                 _buildInfoCard('Km Run', inchargeData['kmRun']),
                 _buildInfoCard('Date', inchargeData['date']),
                 _buildInfoCard('Time', inchargeData['time']),
-                _buildInfoCard('Patient Follow-ups', inchargeData['patientFollowUps']?.join(', ') ?? 'N/A'),
-
+                _buildInfoCard('Patient Follow-ups',
+                    inchargeData['patientFollowUps']?.join(', ') ?? 'N/A'),
                 _buildInfoCard('AR', inchargeData['ar'] ?? 'N/A'),
                 _buildInfoCard('VN Reg', inchargeData['vnReg'] ?? 'N/A'),
                 _buildInfoCard('Name 2', inchargeData['name2']),
@@ -144,7 +164,7 @@ class InchargeDetailsPage extends StatelessWidget {
             },
           ),
           ...children.map(
-                (child) => TweenAnimationBuilder(
+            (child) => TweenAnimationBuilder(
               tween: Tween<double>(begin: 0, end: 1),
               duration: const Duration(milliseconds: 300),
               builder: (context, value, _) {
@@ -172,6 +192,7 @@ class InchargeDetailsPage extends StatelessWidget {
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
+          fontFamily: 'LeagueSpartan',
           color: Colors.lightBlue[800],
         ),
       ),
@@ -207,11 +228,15 @@ class InchargeDetailsPage extends StatelessWidget {
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black87,
+            fontFamily: 'LeagueSpartan',
           ),
         ),
         subtitle: Text(
           value?.toString() ?? 'N/A',
-          style: const TextStyle(color: Colors.black54),
+          style: const TextStyle(
+            color: Colors.black54,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
       ),
     );

@@ -46,7 +46,11 @@ class _LogisticsProfile extends State<LogisticsProfile>
           title: const Text(
             'Profile',
             style: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'LeagueSpartan',
+            ),
           ),
           centerTitle: false,
           backgroundColor: Colors.transparent,
@@ -105,10 +109,15 @@ class _LogisticsProfile extends State<LogisticsProfile>
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
-                          child: Text(employee['firstName'] +
-                                  " " +
-                                  employee['lastName'] ??
-                              'N/A'),
+                          child: Text(
+                            employee['firstName'] +
+                                    " " +
+                                    employee['lastName'] ??
+                                'N/A',
+                            style: TextStyle(
+                              fontFamily: 'LeagueSpartan',
+                            ),
+                          ),
                         ),
                         AnimatedDefaultTextStyle(
                           duration: const Duration(milliseconds: 500),
@@ -116,7 +125,12 @@ class _LogisticsProfile extends State<LogisticsProfile>
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
                               fontSize: 15),
-                          child: Text(employee['role'] ?? 'N/A'),
+                          child: Text(
+                            employee['role'] ?? 'N/A',
+                            style: TextStyle(
+                              fontFamily: 'LeagueSpartan',
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 30),
                         Expanded(
@@ -196,17 +210,29 @@ class _LogisticsProfile extends State<LogisticsProfile>
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
-                                            title: const Text('Logout'),
+                                            title: const Text(
+                                              'Logout',
+                                              style: TextStyle(
+                                                fontFamily: 'LeagueSpartan',
+                                              ),
+                                            ),
                                             content: const Text(
-                                                'Are you sure you want to Logout?'),
+                                              'Are you sure you want to Logout?',
+                                              style: TextStyle(
+                                                fontFamily: 'LeagueSpartan',
+                                              ),
+                                            ),
                                             actions: [
                                               TextButton(
                                                 onPressed: () => Navigator.pop(
                                                     context, false),
                                                 child: const Text('Cancel',
                                                     style: TextStyle(
-                                                        color: AppColors
-                                                            .accentBlue)),
+                                                      color:
+                                                          AppColors.accentBlue,
+                                                      fontFamily:
+                                                          'LeagueSpartan',
+                                                    )),
                                               ),
                                               TextButton(
                                                 onPressed: () {
@@ -219,8 +245,11 @@ class _LogisticsProfile extends State<LogisticsProfile>
                                                 },
                                                 child: const Text('Logout',
                                                     style: TextStyle(
-                                                        color: AppColors
-                                                            .accentBlue)),
+                                                      color:
+                                                          AppColors.accentBlue,
+                                                      fontFamily:
+                                                          'LeagueSpartan',
+                                                    )),
                                               ),
                                             ],
                                           );
@@ -245,11 +274,21 @@ class _LogisticsProfile extends State<LogisticsProfile>
                     );
                   } else if (state is LogisticsProfileError) {
                     return Center(
-                      child: Text('Error+${state.errorMessage}'),
+                      child: Text(
+                        'Error+${state.errorMessage}',
+                        style: TextStyle(
+                          fontFamily: 'LeagueSpartan',
+                        ),
+                      ),
                     );
                   }
                   return const Center(
-                    child: Text("No data available"),
+                    child: Text(
+                      "No data available",
+                      style: TextStyle(
+                        fontFamily: 'LeagueSpartan',
+                      ),
+                    ),
                   );
                 },
               ),
@@ -292,9 +331,17 @@ class ProfileInfoTile extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
-        subtitle: Text(subtitle),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(
+            fontFamily: 'LeagueSpartan',
+          ),
+        ),
       ),
     );
   }

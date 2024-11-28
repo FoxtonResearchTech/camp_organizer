@@ -112,7 +112,11 @@ class _SuperCommutativeReportsSearchScreen
           title: const Text(
             "Commutative Reports",
             style: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+              fontFamily: 'LeagueSpartan',
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           centerTitle: true,
           backgroundColor: Colors.blue,
@@ -134,6 +138,15 @@ class _SuperCommutativeReportsSearchScreen
                 end: Alignment.bottomRight,
               ),
             ),
+          ),
+          leading: IconButton(
+            icon: const Icon(
+              CupertinoIcons.back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
           actions: [
             IconButton(
@@ -231,6 +244,7 @@ class _SuperCommutativeReportsSearchScreen
                                     ? Colors.black
                                     : Colors.grey[600],
                                 fontSize: 16,
+                                fontFamily: 'LeagueSpartan',
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -273,6 +287,7 @@ class _SuperCommutativeReportsSearchScreen
                                     ? Colors.black
                                     : Colors.grey[600],
                                 fontSize: 16,
+                                fontFamily: 'LeagueSpartan',
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -314,10 +329,21 @@ class _SuperCommutativeReportsSearchScreen
                     // return _buildEmployeeList(state, screenWidth, screenHeight);
                   } else if (state is AdminApprovalError) {
                     return const Center(
-                      child: Text('Failed to load camps. Please try again.'),
+                      child: Text(
+                        'Failed to load camps. Please try again.',
+                        style: TextStyle(
+                          fontFamily: 'LeagueSpartan',
+                        ),
+                      ),
                     );
                   }
-                  return const Center(child: Text('No data available.'));
+                  return const Center(
+                      child: Text(
+                    'No data available.',
+                    style: TextStyle(
+                      fontFamily: 'LeagueSpartan',
+                    ),
+                  ));
                 },
               ),
             ),
@@ -544,6 +570,7 @@ class _SuperCommutativeReportsSearchScreen
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'LeagueSpartan',
                     color: Colors.grey,
                   ),
                 ),
@@ -616,6 +643,7 @@ class _SuperCommutativeReportsSearchScreen
                           _filteredEmployees[index]['campDate'],
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
+                            fontFamily: 'LeagueSpartan',
                             color: Colors.black54,
                             fontSize: screenWidth * 0.05,
                           ),
@@ -634,6 +662,7 @@ class _SuperCommutativeReportsSearchScreen
                           _filteredEmployees[index]['campTime'],
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
+                            fontFamily: 'LeagueSpartan',
                             color: Colors.black54,
                             fontSize: screenWidth * 0.05,
                           ),
@@ -671,19 +700,34 @@ class _SuperCommutativeReportsSearchScreen
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: const Text('Delete Camp'),
+                            title: const Text(
+                              'Delete Camp',
+                              style: TextStyle(
+                                fontFamily: 'LeagueSpartan',
+                              ),
+                            ),
                             content: const Text(
-                                'Are you sure you want to delete this camp?'),
+                              'Are you sure you want to delete this camp?',
+                              style: TextStyle(
+                                fontFamily: 'LeagueSpartan',
+                              ),
+                            ),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context, false),
                                 child: Text('Cancel',
-                                    style: TextStyle(color: Colors.blue)),
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontFamily: 'LeagueSpartan',
+                                    )),
                               ),
                               TextButton(
                                 onPressed: () => Navigator.pop(context, true),
                                 child: Text('Delete',
-                                    style: TextStyle(color: Colors.blue)),
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontFamily: 'LeagueSpartan',
+                                    )),
                               ),
                             ],
                           );
@@ -727,7 +771,12 @@ class _SuperCommutativeReportsSearchScreen
                         ),
                         backgroundColor: Colors.red,
                         foregroundColor: Colors.white),
-                    label: Text("Delete"),
+                    label: Text(
+                      "Delete",
+                      style: TextStyle(
+                        fontFamily: 'LeagueSpartan',
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -746,6 +795,7 @@ class _SuperCommutativeReportsSearchScreen
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black54,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05,
         ),
       ),

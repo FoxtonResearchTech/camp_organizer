@@ -12,6 +12,7 @@ import '../../bloc/Status/status_event.dart';
 import '../../bloc/approval/adminapproval_event.dart';
 import '../../utils/app_colors.dart';
 import 'package:http/http.dart' as http;
+
 class AdminEventDetailsPage extends StatefulWidget {
   final Map<String, dynamic> employee;
   final String? campID;
@@ -20,8 +21,15 @@ class AdminEventDetailsPage extends StatefulWidget {
   final String? campDate;
   final String? employeemail;
 
-  const AdminEventDetailsPage({Key? key, required this.employee, this.campID, this.employeeID, this.campDate, this.campName,this.employeemail})
-      : super(key:key);
+  const AdminEventDetailsPage(
+      {Key? key,
+      required this.employee,
+      this.campID,
+      this.employeeID,
+      this.campDate,
+      this.campName,
+      this.employeemail})
+      : super(key: key);
   @override
   _AdminEventDetailsPageState createState() => _AdminEventDetailsPageState();
 }
@@ -81,7 +89,11 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
         title: const Text(
           'Camp Details',
           style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -145,6 +157,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                             Text(
                               widget.employee['campDate'],
                               style: TextStyle(
+                                fontFamily: 'LeagueSpartan',
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black54,
                                 fontSize: screenWidth * 0.05,
@@ -163,6 +176,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                             Text(
                               widget.employee['campTime'],
                               style: TextStyle(
+                                fontFamily: 'LeagueSpartan',
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black54,
                                 fontSize: screenWidth * 0.05,
@@ -187,17 +201,20 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
             bottom: screenHeight / 25,
             left: screenWidth / 25,
             right: screenWidth / 25),
-        child:      SizedBox(
+        child: SizedBox(
           width: screenWidth / 2.5,
           height: screenHeight / 17.5,
           child: ElevatedButton.icon(
-            icon: const Icon(Icons.verified,color: Colors.white,),
-            onPressed: () async{
+            icon: const Icon(
+              Icons.verified,
+              color: Colors.white,
+            ),
+            onPressed: () async {
               final employeeId = widget.employeemail;
 
               final dest1 = 'foxton.rt@gmail.com';
               final dest2 = widget.employeemail;
-              final destId = [dest1,dest2];
+              final destId = [dest1, dest2];
 
               final campname = widget.campName;
               final campdate = widget.campDate;
@@ -209,7 +226,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                   newStatus: 'Approved',
                 ),
               );
-              await sendAcceptEmail(employeeId! ,destId, campname!, campdate!);
+              await sendAcceptEmail(employeeId!, destId, campname!, campdate!);
               print(destId);
               print(employeeId);
               try {
@@ -227,6 +244,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                           style: TextStyle(
                               fontSize: 18,
                               color: Colors.white,
+                              fontFamily: 'LeagueSpartan',
                               fontWeight: FontWeight.w500)),
                     ),
                     backgroundColor: AppColors.lightGreen,
@@ -240,6 +258,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
                           style: TextStyle(
                               fontSize: 18,
                               color: Colors.white,
+                              fontFamily: 'LeagueSpartan',
                               fontWeight: FontWeight.w500)),
                     ),
                   ),
@@ -248,8 +267,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
             },
             style: ElevatedButton.styleFrom(
               iconColor: Colors.green,
-              padding:
-              const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               backgroundColor: Color(0xff4CAF50),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -259,6 +277,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
               "Approve Camp",
               style: TextStyle(
                   fontSize: 18,
+                  fontFamily: 'LeagueSpartan',
                   color: Colors.white,
                   fontWeight: FontWeight.w500),
             ),
@@ -281,6 +300,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
         "Concern Person1 Details :",
         style: TextStyle(
           fontWeight: FontWeight.bold,
+          fontFamily: 'LeagueSpartan',
           color: Colors.black87,
           fontSize: screenWidth * 0.05,
         ),
@@ -297,6 +317,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
           fontWeight: FontWeight.bold,
           color: Colors.black87,
           fontSize: screenWidth * 0.05,
+          fontFamily: 'LeagueSpartan',
         ),
       ),
       _buildDetailRow('Name', widget.employee['name2'], screenWidth),
@@ -331,6 +352,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.black87,
+              fontFamily: 'LeagueSpartan',
               fontSize:
                   screenWidth * 0.045, // Adjust the font size responsively
             ),
@@ -341,6 +363,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
               value,
               style: TextStyle(
                 color: Colors.black54, fontWeight: FontWeight.w500,
+                fontFamily: 'LeagueSpartan',
                 fontSize:
                     screenWidth * 0.045, // Adjust the font size responsively
               ),
@@ -352,12 +375,13 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
       ),
     );
   }
+
   Future<void> sendAcceptEmail(
-      String employeeId,
-      List<dynamic> destId,
-      String campName,
-      String campDate,
-      ) async {
+    String employeeId,
+    List<dynamic> destId,
+    String campName,
+    String campDate,
+  ) async {
     const String serviceId = 'service_m66gp4c'; // Your EmailJS Service ID
     const String templateId = 'template_gmya15j'; // Your EmailJS Template ID
     const String user_id = 'zA3pjW03a2sLLo51c'; // Public Key (user_id)
@@ -370,7 +394,8 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
         url,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $privateKey', // Send the private key as Bearer token
+          'Authorization':
+              'Bearer $privateKey', // Send the private key as Bearer token
         },
         body: jsonEncode({
           'service_id': serviceId,
@@ -392,7 +417,8 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
         print('Failed to send email: ${response.statusCode}, ${response.body}');
       }
     } catch (error) {
-      print('Error sending email: $error');}
+      print('Error sending email: $error');
+    }
   }
 }
 /*

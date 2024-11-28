@@ -204,6 +204,7 @@ class _FinanceDetailsState extends State<FinanceDetails> {
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
+          fontFamily: 'LeagueSpartan',
           color: Colors.lightBlue[800],
         ),
       ),
@@ -241,12 +242,16 @@ class _FinanceDetailsState extends State<FinanceDetails> {
             label,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
+              fontFamily: 'LeagueSpartan',
               color: Colors.black87,
             ),
           ),
           subtitle: Text(
             value?.toString() ?? 'N/A',
-            style: const TextStyle(color: Colors.black54),
+            style: const TextStyle(
+              color: Colors.black54,
+              fontFamily: 'LeagueSpartan',
+            ),
           ),
         ),
       ),

@@ -46,7 +46,11 @@ class _PostCampProfile extends State<PostCampProfile>
           title: const Text(
             'Profile',
             style: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'LeagueSpartan',
+            ),
           ),
           centerTitle: false,
           backgroundColor: Colors.transparent,
@@ -101,22 +105,34 @@ class _PostCampProfile extends State<PostCampProfile>
                         AnimatedDefaultTextStyle(
                           duration: const Duration(milliseconds: 500),
                           style: const TextStyle(
+                            fontFamily: 'LeagueSpartan',
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
-                          child: Text(employee['firstName'] +
-                                  " " +
-                                  employee['lastName'] ??
-                              'N/A'),
+                          child: Text(
+                            employee['firstName'] +
+                                    " " +
+                                    employee['lastName'] ??
+                                'N/A',
+                            style: TextStyle(
+                              fontFamily: 'LeagueSpartan',
+                            ),
+                          ),
                         ),
                         AnimatedDefaultTextStyle(
                           duration: const Duration(milliseconds: 500),
                           style: const TextStyle(
+                              fontFamily: 'LeagueSpartan',
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
                               fontSize: 15),
-                          child: Text(employee['role'] ?? 'N/A'),
+                          child: Text(
+                            employee['role'] ?? 'N/A',
+                            style: TextStyle(
+                              fontFamily: 'LeagueSpartan',
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 30),
                         Expanded(
@@ -196,15 +212,26 @@ class _PostCampProfile extends State<PostCampProfile>
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
-                                            title: const Text('Logout'),
+                                            title: const Text(
+                                              'Logout',
+                                              style: TextStyle(
+                                                fontFamily: 'LeagueSpartan',
+                                              ),
+                                            ),
                                             content: const Text(
-                                                'Are you sure you want to Logout?'),
+                                              'Are you sure you want to Logout?',
+                                              style: TextStyle(
+                                                fontFamily: 'LeagueSpartan',
+                                              ),
+                                            ),
                                             actions: [
                                               TextButton(
                                                 onPressed: () => Navigator.pop(
                                                     context, false),
                                                 child: const Text('Cancel',
                                                     style: TextStyle(
+                                                        fontFamily:
+                                                            'LeagueSpartan',
                                                         color: AppColors
                                                             .accentBlue)),
                                               ),
@@ -219,6 +246,8 @@ class _PostCampProfile extends State<PostCampProfile>
                                                 },
                                                 child: const Text('Logout',
                                                     style: TextStyle(
+                                                        fontFamily:
+                                                            'LeagueSpartan',
                                                         color: AppColors
                                                             .accentBlue)),
                                               ),
@@ -245,11 +274,21 @@ class _PostCampProfile extends State<PostCampProfile>
                     );
                   } else if (state is PostCampProfileError) {
                     return Center(
-                      child: Text('Error+${state.errorMessage}'),
+                      child: Text(
+                        'Error+${state.errorMessage}',
+                        style: TextStyle(
+                          fontFamily: 'LeagueSpartan',
+                        ),
+                      ),
                     );
                   }
                   return const Center(
-                    child: Text("No data available"),
+                    child: Text(
+                      "No data available",
+                      style: TextStyle(
+                        fontFamily: 'LeagueSpartan',
+                      ),
+                    ),
                   );
                 },
               ),
@@ -292,9 +331,17 @@ class ProfileInfoTile extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
-        subtitle: Text(subtitle),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(
+            fontFamily: 'LeagueSpartan',
+          ),
+        ),
       ),
     );
   }

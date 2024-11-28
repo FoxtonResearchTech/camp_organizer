@@ -73,6 +73,7 @@ class _PostCampTimelineState extends State<PostCampTimeline>
             title: const Text(
               'FollowUp Camp Timeline',
               style: TextStyle(
+                  fontFamily: 'LeagueSpartan',
                   color: Colors.white,
                   fontSize: 22,
                   fontWeight: FontWeight.bold),
@@ -175,6 +176,8 @@ class _PostCampTimelineState extends State<PostCampTimeline>
                                                     Text(
                                                       camps[index]['campDate'],
                                                       style: TextStyle(
+                                                        fontFamily:
+                                                            'LeagueSpartan',
                                                         fontWeight:
                                                             FontWeight.w500,
                                                         color: Colors.black54,
@@ -195,6 +198,8 @@ class _PostCampTimelineState extends State<PostCampTimeline>
                                                     Text(
                                                       camps[index]['campTime'],
                                                       style: TextStyle(
+                                                        fontFamily:
+                                                            'LeagueSpartan',
                                                         fontWeight:
                                                             FontWeight.w500,
                                                         color: Colors.black54,
@@ -280,6 +285,8 @@ class _PostCampTimelineState extends State<PostCampTimeline>
                                                         Text(
                                                           'Follow Report',
                                                           style: TextStyle(
+                                                            fontFamily:
+                                                                'LeagueSpartan',
                                                             color: Colors.white,
                                                             fontSize: 18,
                                                             fontWeight:
@@ -336,6 +343,8 @@ class _PostCampTimelineState extends State<PostCampTimeline>
                                                         Text(
                                                           'View Report',
                                                           style: TextStyle(
+                                                            fontFamily:
+                                                                'LeagueSpartan',
                                                             color: Colors.white,
                                                             fontSize: 18,
                                                             fontWeight:
@@ -364,12 +373,21 @@ class _PostCampTimelineState extends State<PostCampTimeline>
                 return Center(
                   child: Text(
                     '$state.errorMessage',
-                    style: const TextStyle(color: Colors.red, fontSize: 16),
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
+                      fontFamily: 'LeagueSpartan',
+                    ),
                   ),
                 );
               } else {
                 return const Center(
-                  child: Text('No Camps Found'),
+                  child: Text(
+                    'No Camps Found',
+                    style: TextStyle(
+                      fontFamily: 'LeagueSpartan',
+                    ),
+                  ),
                 );
               }
             },
@@ -386,6 +404,7 @@ class _PostCampTimelineState extends State<PostCampTimeline>
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black54,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05, // Responsive font size
         ),
       ),

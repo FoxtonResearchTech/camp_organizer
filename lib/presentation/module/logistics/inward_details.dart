@@ -20,7 +20,11 @@ class _InwardDetailsState extends State<InwardDetails> {
         title: const Text(
           'Logistics Inward Details',
           style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            color: Colors.white,
+            fontFamily: 'LeagueSpartan',
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -123,6 +127,7 @@ class _InwardDetailsState extends State<InwardDetails> {
             Text(
               title,
               style: TextStyle(
+                fontFamily: 'LeagueSpartan',
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.lightBlue[800],
@@ -140,7 +145,12 @@ class _InwardDetailsState extends State<InwardDetails> {
   List<Widget> _buildCheckList(Map<String, dynamic> items) {
     return items.entries.map((entry) {
       return CheckboxListTile(
-        title: Text(entry.key),
+        title: Text(
+          entry.key,
+          style: TextStyle(
+            fontFamily: 'LeagueSpartan',
+          ),
+        ),
         value: entry.value,
         onChanged: (bool? value) {
           // Logic for handling checkbox state change can be added here

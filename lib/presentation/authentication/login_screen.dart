@@ -77,69 +77,58 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
                 (Route<dynamic> route) =>
                     false, // This removes all previous routes
               );
-            }else if(state.role == 'OnSiteManagement'){
+            } else if (state.role == 'OnSiteManagement') {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => OnSiteManagement()),
-                    (Route<dynamic> route) =>
-                false, // This removes all previous routes
+                MaterialPageRoute(builder: (context) => OnSiteManagement()),
+                (Route<dynamic> route) =>
+                    false, // This removes all previous routes
               );
-            }
-            else if(state.role == 'CampIncharge'){
+            } else if (state.role == 'CampIncharge') {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => CampInchargeNavBar()),
-                    (Route<dynamic> route) =>
-                false, // This removes all previous routes
+                MaterialPageRoute(builder: (context) => CampInchargeNavBar()),
+                (Route<dynamic> route) =>
+                    false, // This removes all previous routes
               );
-            }
-            else if(state.role == 'Accountant'){
+            } else if (state.role == 'Accountant') {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => FinanceNavBar()),
-                    (Route<dynamic> route) =>
-                false, // This removes all previous routes
+                MaterialPageRoute(builder: (context) => FinanceNavBar()),
+                (Route<dynamic> route) =>
+                    false, // This removes all previous routes
               );
-            }
-            else if(state.role == 'Logistics'){
+            } else if (state.role == 'Logistics') {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                    builder: (context) =>LogisticsNavBar()),
-                    (Route<dynamic> route) =>
-                false, // This removes all previous routes
+                MaterialPageRoute(builder: (context) => LogisticsNavBar()),
+                (Route<dynamic> route) =>
+                    false, // This removes all previous routes
               );
-            }
-            else if(state.role == 'Followup'){
+            } else if (state.role == 'Followup') {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => PostCampNavBar()),
-                    (Route<dynamic> route) =>
-                false, // This removes all previous routes
+                MaterialPageRoute(builder: (context) => PostCampNavBar()),
+                (Route<dynamic> route) =>
+                    false, // This removes all previous routes
               );
-            }
-            else if(state.role == 'admin'){
+            } else if (state.role == 'admin') {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
                     builder: (context) => AdminBottomNavigationBar()),
-                    (Route<dynamic> route) =>
-                false, // This removes all previous routes
+                (Route<dynamic> route) =>
+                    false, // This removes all previous routes
               );
-            }else{
+            } else {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
                     builder: (context) => SuperAdminBottomNavigationBar()),
-                    (Route<dynamic> route) =>
-                false, // This removes all previous routes
+                (Route<dynamic> route) =>
+                    false, // This removes all previous routes
               );
             }
-
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -197,7 +186,10 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
                           prefixIcon:
                               Icon(Icons.person, color: Colors.blueAccent),
                           labelText: 'Username',
-                          labelStyle: TextStyle(color: Colors.blueAccent),
+                          labelStyle: TextStyle(
+                            color: Colors.blueAccent,
+                            fontFamily: 'LeagueSpartan',
+                          ),
                           filled: true,
                           fillColor: Colors.blue[50],
                           border: OutlineInputBorder(
@@ -217,7 +209,10 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
                           prefixIcon:
                               Icon(Icons.lock, color: Colors.blueAccent),
                           labelText: 'Password',
-                          labelStyle: TextStyle(color: Colors.blueAccent),
+                          labelStyle: TextStyle(
+                            color: Colors.blueAccent,
+                            fontFamily: 'LeagueSpartan',
+                          ),
                           filled: true,
                           fillColor: Colors.blue[50],
                           border: OutlineInputBorder(

@@ -103,7 +103,10 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
                     (_AdminApprovalBloc.state as AdminApprovalLoaded).allCamps);
               }
             },
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(
+              color: Colors.white,
+              fontFamily: 'LeagueSpartan',
+            ),
             decoration: InputDecoration(
               hintText: "Search by camp name or date...",
               hintStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
@@ -184,6 +187,7 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: 'LeagueSpartan',
                                     color: Colors.grey,
                                   ),
                                 ),
@@ -253,6 +257,7 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.black54,
+                                                    fontFamily: 'LeagueSpartan',
                                                     fontSize:
                                                         screenWidth * 0.05,
                                                   ),
@@ -272,6 +277,7 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
                                                       ['campTime'],
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w500,
+                                                    fontFamily: 'LeagueSpartan',
                                                     color: Colors.black54,
                                                     fontSize:
                                                         screenWidth * 0.05,
@@ -313,9 +319,19 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
                                                 builder: (context) {
                                                   return AlertDialog(
                                                     title: const Text(
-                                                        'Delete Camp'),
+                                                      'Delete Camp',
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'LeagueSpartan',
+                                                      ),
+                                                    ),
                                                     content: const Text(
-                                                        'Are you sure you want to delete this camp?'),
+                                                      'Are you sure you want to delete this camp?',
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'LeagueSpartan',
+                                                      ),
+                                                    ),
                                                     actions: [
                                                       TextButton(
                                                         onPressed: () =>
@@ -323,8 +339,11 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
                                                                 context, false),
                                                         child: Text('Cancel',
                                                             style: TextStyle(
-                                                                color: Colors
-                                                                    .blue)),
+                                                              color:
+                                                                  Colors.blue,
+                                                              fontFamily:
+                                                                  'LeagueSpartan',
+                                                            )),
                                                       ),
                                                       TextButton(
                                                         onPressed: () =>
@@ -332,8 +351,11 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
                                                                 context, true),
                                                         child: Text('Delete',
                                                             style: TextStyle(
-                                                                color: Colors
-                                                                    .blue)),
+                                                              color:
+                                                                  Colors.blue,
+                                                              fontFamily:
+                                                                  'LeagueSpartan',
+                                                            )),
                                                       ),
                                                     ],
                                                   );
@@ -387,7 +409,12 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
                                                 ),
                                                 backgroundColor: Colors.red,
                                                 foregroundColor: Colors.white),
-                                            label: const Text("Delete"),
+                                            label: const Text(
+                                              "Delete",
+                                              style: TextStyle(
+                                                fontFamily: 'LeagueSpartan',
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -403,10 +430,21 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
               );
             } else if (state is AdminApprovalError) {
               return const Center(
-                child: Text('Failed to load camps. Please try again.'),
+                child: Text(
+                  'Failed to load camps. Please try again.',
+                  style: TextStyle(
+                    fontFamily: 'LeagueSpartan',
+                  ),
+                ),
               );
             }
-            return const Center(child: Text('No data available.'));
+            return const Center(
+                child: Text(
+              'No data available.',
+              style: TextStyle(
+                fontFamily: 'LeagueSpartan',
+              ),
+            ));
           },
         ),
       ),
@@ -420,6 +458,7 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black54,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05,
         ),
       ),

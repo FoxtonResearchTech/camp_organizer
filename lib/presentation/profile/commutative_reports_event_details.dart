@@ -108,7 +108,11 @@ class _CommutativeReportsEventDetails
         title: const Text(
           'Camp Details',
           style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -272,6 +276,7 @@ class _CommutativeReportsEventDetails
           style: TextStyle(
             fontWeight: FontWeight.w500,
             color: Colors.black54,
+            fontFamily: 'LeagueSpartan',
             fontSize: screenWidth * 0.05,
           ),
         ),
@@ -481,6 +486,7 @@ class _CommutativeReportsEventDetails
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05,
         ),
       ),
@@ -495,6 +501,7 @@ class _CommutativeReportsEventDetails
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05,
         ),
       ),
@@ -528,6 +535,7 @@ class _CommutativeReportsEventDetails
           style: TextStyle(
             fontWeight: FontWeight.w500,
             color: Colors.black54,
+            fontFamily: 'LeagueSpartan',
             fontSize: screenWidth * 0.04,
           ),
         ),
@@ -540,6 +548,7 @@ class _CommutativeReportsEventDetails
             style: TextStyle(
               fontWeight: FontWeight.w500,
               color: Colors.black54,
+              fontFamily: 'LeagueSpartan',
               fontSize: screenWidth * 0.05,
             ),
             overflow: TextOverflow.ellipsis,
@@ -574,6 +583,7 @@ class _CommutativeReportsEventDetails
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: screenWidth * 0.05,
+              fontFamily: 'LeagueSpartan',
               color: Colors.white,
             ),
           ),

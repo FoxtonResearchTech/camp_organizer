@@ -118,7 +118,11 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
           title: const Text(
             'Dashboard',
             style: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'LeagueSpartan',
+            ),
           ),
           centerTitle: false,
           backgroundColor: Colors.transparent,
@@ -169,7 +173,10 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                 ListTile(
                   leading: const Icon(Icons.create, color: Colors.white),
                   title: const Text('Create Employee',
-                      style: TextStyle(color: Colors.white)),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'LeagueSpartan',
+                      )),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -182,7 +189,10 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                   leading:
                       const Icon(Icons.manage_accounts, color: Colors.white),
                   title: const Text('Manage Employee',
-                      style: TextStyle(color: Colors.white)),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'LeagueSpartan',
+                      )),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -386,6 +396,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                       "Upcoming Camps",
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
+                          fontFamily: 'LeagueSpartan',
                           fontSize: 25,
                           color: Colors.black54),
                     ),
@@ -401,6 +412,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                                 textStyle: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
+                                  fontFamily: 'LeagueSpartan',
                                   color: Colors.grey,
                                 ),
                                 speed: Duration(
@@ -429,6 +441,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w500,
+                                fontFamily: 'LeagueSpartan',
                                 color: Colors.grey,
                               ),
                             ),
@@ -536,6 +549,8 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                                                           style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w500,
+                                                            fontFamily:
+                                                                'LeagueSpartan',
                                                             color:
                                                                 Colors.black54,
                                                             fontSize:
@@ -564,6 +579,8 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                                                                 FontWeight.w500,
                                                             color:
                                                                 Colors.black54,
+                                                            fontFamily:
+                                                                'LeagueSpartan',
                                                             fontSize:
                                                                 screenWidth *
                                                                     0.05,
@@ -604,7 +621,12 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                         );
                       } else if (state is StatusError) {
                         return Center(
-                          child: Text('Error: '),
+                          child: Text(
+                            'Error: ',
+                            style: TextStyle(
+                              fontFamily: 'LeagueSpartan',
+                            ),
+                          ),
                         );
                       }
                       return Center(
@@ -614,6 +636,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
                             color: Colors.grey,
+                            fontFamily: 'LeagueSpartan',
                           ),
                         ),
                       );
@@ -662,6 +685,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
               count.toString(),
               style: TextStyle(
                 fontSize: 24,
+                fontFamily: 'LeagueSpartan',
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
@@ -671,6 +695,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
               label,
               style: TextStyle(
                 fontSize: 16,
+                fontFamily: 'LeagueSpartan',
                 color: Colors.white70,
               ),
             ),
@@ -691,6 +716,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
           style: TextStyle(
             fontWeight: FontWeight.w500,
             color: Colors.black54,
+            fontFamily: 'LeagueSpartan',
             fontSize: constraints.maxWidth * 0.05,
           ),
         ),
@@ -705,6 +731,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black54,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05, // Responsive font size
         ),
       ),

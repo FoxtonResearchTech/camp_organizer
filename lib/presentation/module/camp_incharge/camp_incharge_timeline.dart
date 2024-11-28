@@ -97,6 +97,7 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,
+                  fontFamily: 'LeagueSpartan',
                   fontWeight: FontWeight.bold),
             ),
             centerTitle: false,
