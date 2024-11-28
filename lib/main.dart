@@ -6,12 +6,8 @@ import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
 import 'package:camp_organizer/bloc/approval/onsite_approval_bloc.dart';
 import 'package:camp_organizer/bloc/approval/onsite_approval_state.dart';
 import 'package:camp_organizer/camp_update/camp_update_bloc.dart';
-import 'package:camp_organizer/email.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
-import 'package:camp_organizer/presentation/module/Onsite_Management_team/onsite_camp_timeline.dart';
-import 'package:camp_organizer/presentation/module/admin/manage_employee_account.dart';
-import 'package:camp_organizer/widgets/bottom_navigation_bar/admin_bottom_navigation_bar.dart';
-import 'package:camp_organizer/widgets/bottom_navigation_bar/onsite_management_nav_bar.dart';
+
 import 'package:camp_organizer/widgets/bottom_navigation_bar/super_admin_bottom_navigation_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -106,7 +102,7 @@ class MyApp extends StatelessWidget {
         ),
 
         home:
-            SuperAdminBottomNavigationBar(), // Starting screen is the splash screen
+           CampOrganizerLoginPage(), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),

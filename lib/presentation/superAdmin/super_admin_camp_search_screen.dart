@@ -207,7 +207,7 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
                       child: Column(
                         children: [
                           Container(
-                            height: screenHeight / 4,
+                            height: screenHeight / 3.6,
                             width: double.infinity,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
