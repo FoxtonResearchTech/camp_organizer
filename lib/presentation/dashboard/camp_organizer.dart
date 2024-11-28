@@ -80,15 +80,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                     );
                   },
                   icon: const Icon(Icons.search, color: Colors.white)),
-              IconButton(
-                icon: const Icon(Icons.notifications, color: Colors.white),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NotificationPage()));
-                },
-              ),
             ],
           ),
           body: BlocBuilder<StatusBloc, StatusState>(

@@ -81,15 +81,6 @@ class _AdminApprovalState extends State<AdminApproval>
                   );
                 },
                 icon: const Icon(Icons.search, color: Colors.white)),
-            IconButton(
-              icon: const Icon(Icons.notifications, color: Colors.white),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NotificationPage()));
-              },
-            ),
           ],
         ),
         body: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
@@ -604,9 +595,9 @@ class _AdminApprovalState extends State<AdminApproval>
           fontWeight: FontWeight.w500,
           color: Colors.black54,
           fontSize: screenWidth * 0.05, // Responsive font size
-
         ),
-        overflow: TextOverflow.ellipsis, maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
       ),
     ];
   }

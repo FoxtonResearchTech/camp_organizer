@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:bloc/bloc.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+
 class AnimatedRotatingPieChartWithGrid extends StatefulWidget {
   const AnimatedRotatingPieChartWithGrid({Key? key}) : super(key: key);
 
@@ -33,8 +34,6 @@ class _AnimatedRotatingPieChartWithGridState
       approvedCount.toDouble(),
       waitingQueueCount.toDouble(),
       rejectedCount.toDouble(),
-
-
     ];
   }
 
@@ -44,13 +43,11 @@ class _AnimatedRotatingPieChartWithGridState
     Colors.purpleAccent,
     Colors.orangeAccent,
 
-   // Colors.redAccent,
-
-
+    // Colors.redAccent,
   ];
   final List<String> titles = [
-   // 'Total Camp Target',
-   'Total Camp Initiated',
+    // 'Total Camp Target',
+    'Total Camp Initiated',
     'Total Camp Confirmed',
     'Waiting Queue',
     'Total Camp Rejected'
@@ -128,17 +125,6 @@ class _AnimatedRotatingPieChartWithGridState
               ),
             ),
           ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.notifications, color: Colors.white),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NotificationPage()));
-              },
-            ),
-          ],
         ),
         body: LayoutBuilder(
           builder: (context, constraints) {
@@ -203,27 +189,33 @@ class _AnimatedRotatingPieChartWithGridState
                             if (state is StatusLoading) {
                               return Center(
                                 key: ValueKey('loading'),
-                                child: CircularProgressIndicator(color: Colors.blue,),
+                                child: CircularProgressIndicator(
+                                  color: Colors.blue,
+                                ),
                               );
                             } else if (state is StatusLoaded) {
                               final employees = state.employees;
 
                               // Calculate the approved count once
                               approvedCount = employees
-                                  .where((employee) => employee["campStatus"] == "Approved")
+                                  .where((employee) =>
+                                      employee["campStatus"] == "Approved")
                                   .length;
                               rejectedCount = employees
-                                  .where((employee) => employee["campStatus"] == "Rejected")
+                                  .where((employee) =>
+                                      employee["campStatus"] == "Rejected")
                                   .length;
                               waitingQueueCount = employees
-                                  .where((employee) => employee["campStatus"] == "Waiting")
+                                  .where((employee) =>
+                                      employee["campStatus"] == "Waiting")
                                   .length;
 
                               return Column(
                                 key: ValueKey('loaded'),
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       // Approved Card
                                       Expanded(
@@ -232,7 +224,10 @@ class _AnimatedRotatingPieChartWithGridState
                                           label: 'Approved',
                                           icon: Icons.check_circle,
                                           gradient: LinearGradient(
-                                            colors: [Colors.blueAccent, Colors.lightBlue],
+                                            colors: [
+                                              Colors.blueAccent,
+                                              Colors.lightBlue
+                                            ],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
                                           ),
@@ -245,7 +240,10 @@ class _AnimatedRotatingPieChartWithGridState
                                           label: 'Rejected',
                                           icon: Icons.cancel,
                                           gradient: LinearGradient(
-                                            colors: [Colors.redAccent, Colors.orangeAccent],
+                                            colors: [
+                                              Colors.redAccent,
+                                              Colors.orangeAccent
+                                            ],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
                                           ),
@@ -254,7 +252,8 @@ class _AnimatedRotatingPieChartWithGridState
                                     ],
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       // Waiting Queue Card
                                       Expanded(
@@ -263,7 +262,10 @@ class _AnimatedRotatingPieChartWithGridState
                                           label: 'Waiting Queue',
                                           icon: Icons.hourglass_top,
                                           gradient: LinearGradient(
-                                            colors: [Colors.purpleAccent, Colors.deepPurple],
+                                            colors: [
+                                              Colors.purpleAccent,
+                                              Colors.deepPurple
+                                            ],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
                                           ),
@@ -276,7 +278,10 @@ class _AnimatedRotatingPieChartWithGridState
                                           label: 'Initiated',
                                           icon: Icons.play_circle_fill,
                                           gradient: LinearGradient(
-                                            colors: [Colors.tealAccent, Colors.teal],
+                                            colors: [
+                                              Colors.tealAccent,
+                                              Colors.teal
+                                            ],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
                                           ),
@@ -303,7 +308,6 @@ class _AnimatedRotatingPieChartWithGridState
                     ),
                   ),
 
-
                   //  _buildDetailsGrid(gridAspectRatio, fontSizeFactor),
                   const Padding(
                     padding: EdgeInsets.all(20),
@@ -328,18 +332,22 @@ class _AnimatedRotatingPieChartWithGridState
                                   fontWeight: FontWeight.bold,
                                   color: Colors.grey,
                                 ),
-                                speed: Duration(milliseconds: 150), // Adjust speed here
+                                speed: Duration(
+                                    milliseconds: 150), // Adjust speed here
                               ),
                             ],
-                            totalRepeatCount: 1, // Set to `1` for single loop, or `0` for infinite
-                            pause: Duration(milliseconds: 500), // Pause between loops
+                            totalRepeatCount:
+                                1, // Set to `1` for single loop, or `0` for infinite
+                            pause: Duration(
+                                milliseconds: 500), // Pause between loops
                             displayFullTextOnTap: true,
                           ),
                         );
                       } else if (state is StatusLoaded) {
                         // Filter employees with "Approved" campStatus
                         final approvedEmployees = state.employees
-                            .where((employee) => employee['campStatus'] == "Approved")
+                            .where((employee) =>
+                                employee['campStatus'] == "Approved")
                             .toList();
 
                         if (approvedEmployees.isEmpty) {
@@ -383,32 +391,44 @@ class _AnimatedRotatingPieChartWithGridState
                                     ).animate(animation),
                                     child: GestureDetector(
                                       onTap: () async {
-                                        print('Employee: ${approvedEmployees[index]}');
-                                        print('Employee Doc ID: ${state.employeeDocId[index]}');
-                                        print('Camp Doc ID: ${state.campDocId[index]}');
+                                        print(
+                                            'Employee: ${approvedEmployees[index]}');
+                                        print(
+                                            'Employee Doc ID: ${state.employeeDocId[index]}');
+                                        print(
+                                            'Camp Doc ID: ${state.campDocId[index]}');
 
                                         await Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => EventDetailsPage(
-                                              employee: approvedEmployees[index],
-                                              employeedocId: state.employeeDocId[index],
+                                            builder: (context) =>
+                                                EventDetailsPage(
+                                              employee:
+                                                  approvedEmployees[index],
+                                              employeedocId:
+                                                  state.employeeDocId[index],
                                               campId: state.campDocId[index],
                                             ),
                                           ),
                                         );
                                       },
                                       child: Padding(
-                                        padding: const EdgeInsets.only(bottom: 20),
+                                        padding:
+                                            const EdgeInsets.only(bottom: 20),
                                         child: Container(
-                                          height: MediaQuery.of(context).size.height * 0.25,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.25,
                                           width: double.infinity,
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                             color: Colors.white,
                                             boxShadow: [
                                               BoxShadow(
-                                                color: Colors.black.withOpacity(0.1),
+                                                color: Colors.black
+                                                    .withOpacity(0.1),
                                                 spreadRadius: 2,
                                                 blurRadius: 10,
                                                 offset: const Offset(0, 4),
@@ -418,26 +438,38 @@ class _AnimatedRotatingPieChartWithGridState
                                           child: Padding(
                                             padding: const EdgeInsets.all(12),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
                                                     Row(
                                                       children: [
                                                         Icon(
                                                           Icons.date_range,
-                                                          size: screenWidth * 0.07,
+                                                          size: screenWidth *
+                                                              0.07,
                                                           color: Colors.orange,
                                                         ),
-                                                        const SizedBox(width: 8),
+                                                        const SizedBox(
+                                                            width: 8),
                                                         Text(
-                                                          approvedEmployees[index]['campDate'],
+                                                          approvedEmployees[
+                                                                  index]
+                                                              ['campDate'],
                                                           style: TextStyle(
-                                                            fontWeight: FontWeight.w500,
-                                                            color: Colors.black54,
-                                                            fontSize: screenWidth * 0.05,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color:
+                                                                Colors.black54,
+                                                            fontSize:
+                                                                screenWidth *
+                                                                    0.05,
                                                           ),
                                                         ),
                                                       ],
@@ -446,16 +478,24 @@ class _AnimatedRotatingPieChartWithGridState
                                                       children: [
                                                         Icon(
                                                           Icons.watch_later,
-                                                          size: screenWidth * 0.07,
+                                                          size: screenWidth *
+                                                              0.07,
                                                           color: Colors.orange,
                                                         ),
-                                                        const SizedBox(width: 8),
+                                                        const SizedBox(
+                                                            width: 8),
                                                         Text(
-                                                          approvedEmployees[index]['campTime'],
+                                                          approvedEmployees[
+                                                                  index]
+                                                              ['campTime'],
                                                           style: TextStyle(
-                                                            fontWeight: FontWeight.w500,
-                                                            color: Colors.black54,
-                                                            fontSize: screenWidth * 0.05,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color:
+                                                                Colors.black54,
+                                                            fontSize:
+                                                                screenWidth *
+                                                                    0.05,
                                                           ),
                                                         ),
                                                       ],
@@ -463,10 +503,22 @@ class _AnimatedRotatingPieChartWithGridState
                                                   ],
                                                 ),
                                                 const SizedBox(height: 5),
-                                                ..._buildInfoText(screenWidth, approvedEmployees[index]['campName']),
-                                                ..._buildInfoText(screenWidth, approvedEmployees[index]['address']),
-                                                ..._buildInfoText(screenWidth, approvedEmployees[index]['name']),
-                                                ..._buildInfoText(screenWidth, approvedEmployees[index]['phoneNumber1']),
+                                                ..._buildInfoText(
+                                                    screenWidth,
+                                                    approvedEmployees[index]
+                                                        ['campName']),
+                                                ..._buildInfoText(
+                                                    screenWidth,
+                                                    approvedEmployees[index]
+                                                        ['address']),
+                                                ..._buildInfoText(
+                                                    screenWidth,
+                                                    approvedEmployees[index]
+                                                        ['name']),
+                                                ..._buildInfoText(
+                                                    screenWidth,
+                                                    approvedEmployees[index]
+                                                        ['phoneNumber1']),
                                               ],
                                             ),
                                           ),
@@ -496,8 +548,6 @@ class _AnimatedRotatingPieChartWithGridState
                       );
                     },
                   ),
-
-
                 ],
               ),
             );
@@ -506,6 +556,7 @@ class _AnimatedRotatingPieChartWithGridState
       ),
     );
   }
+
   Widget _buildStatusCard({
     required int count,
     required String label,

@@ -9,7 +9,9 @@ class LogisticsOutward extends StatefulWidget {
   final String documentId;
   final Map<String, dynamic> campData;
 
-  const LogisticsOutward({Key? key, required this.documentId, required this.campData}) : super(key: key);
+  const LogisticsOutward(
+      {Key? key, required this.documentId, required this.campData})
+      : super(key: key);
 
   @override
   State<LogisticsOutward> createState() => _LogisticsOutwardState();
@@ -108,7 +110,8 @@ class _LogisticsOutwardState extends State<LogisticsOutward> {
     };
 
     // Dispatch the data to the BLoC
-    context.read<AddLogisticsBloc>().add(AddLogisticsWithDocumentId(documentId: widget.documentId, data: data));
+    context.read<AddLogisticsBloc>().add(
+        AddLogisticsWithDocumentId(documentId: widget.documentId, data: data));
   }
 
   // Function to build a checklist
@@ -164,17 +167,6 @@ class _LogisticsOutwardState extends State<LogisticsOutward> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NotificationPage()),
-              );
-            },
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

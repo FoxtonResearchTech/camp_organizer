@@ -33,60 +33,40 @@ class _FinanceEditExpenseState extends State<FinanceEditExpense> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NotificationPage()),
-              );
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-
               SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
                     child: CustomTextFormField(
                       labelText: 'Date',
-
                     ),
                   ),
                   SizedBox(width: 15),
                   Expanded(
                     child: CustomTextFormField(
                       labelText: 'Time',
-
                     ),
                   ),
                 ],
               ),
-
-
               SizedBox(height: 20),
               CustomTextFormField(
                 labelText: 'Camp Name',
-
               ),
               SizedBox(height: 20),
               CustomTextFormField(
                 labelText: 'Organization',
-
               ),
               SizedBox(height: 20),
               CustomTextFormField(
                 labelText: 'Place',
-
               ),
-
               SizedBox(height: 20),
               Text(
                 'Camp Expenses',
@@ -95,15 +75,11 @@ class _FinanceEditExpenseState extends State<FinanceEditExpense> {
               SizedBox(height: 20),
               CustomTextFormField(
                 labelText: 'Other Expenses',
-
               ),
               SizedBox(height: 20),
               CustomTextFormField(
                 labelText: 'Vehicle Expenses',
-
               ),
-
-
               SizedBox(height: 20),
               CustomTextFormField(
                 labelText: 'Staff Salary',
@@ -134,9 +110,6 @@ class _FinanceEditExpenseState extends State<FinanceEditExpense> {
 
                 //  obscureText: true,
               ),
-
-
-
               SizedBox(height: 30),
               CustomButton(
                 text: 'Submit Expenses',

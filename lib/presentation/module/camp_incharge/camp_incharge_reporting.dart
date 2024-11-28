@@ -14,34 +14,43 @@ class CampInchargeReporting extends StatefulWidget {
   final String documentId;
   final Map<String, dynamic> campData;
 
-  const CampInchargeReporting({super.key, required this.documentId, required this.campData});
+  const CampInchargeReporting(
+      {super.key, required this.documentId, required this.campData});
 
   @override
   State<CampInchargeReporting> createState() => _CampInchargeReportingState();
 }
 
 class _CampInchargeReportingState extends State<CampInchargeReporting> {
-@override
+  @override
   void initState() {
-  print("Emp id:${widget.documentId.toString()}");
-  print("Camp id:${widget.campData.toString()}");
-  //getEmployeeDocId(widget.campData);
+    print("Emp id:${widget.documentId.toString()}");
+    print("Camp id:${widget.campData.toString()}");
+    //getEmployeeDocId(widget.campData);
     // TODO: implement initState
     super.initState();
   }
+
   // TextEditingControllers for the form fields
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   final TextEditingController _campNameController = TextEditingController();
   final TextEditingController _organizationController = TextEditingController();
   final TextEditingController _placeController = TextEditingController();
-  final TextEditingController _campOrganizerController = TextEditingController();
-  final TextEditingController _patientsAttendedController = TextEditingController();
-  final TextEditingController _cataractPatientsController = TextEditingController();
-  final TextEditingController _patientsSelectedForSurgeryController = TextEditingController();
-  final TextEditingController _diabeticPatientsController = TextEditingController();
-  final TextEditingController _glassesSuppliedController = TextEditingController();
-  final TextEditingController _vehicleNumberController = TextEditingController();
+  final TextEditingController _campOrganizerController =
+      TextEditingController();
+  final TextEditingController _patientsAttendedController =
+      TextEditingController();
+  final TextEditingController _cataractPatientsController =
+      TextEditingController();
+  final TextEditingController _patientsSelectedForSurgeryController =
+      TextEditingController();
+  final TextEditingController _diabeticPatientsController =
+      TextEditingController();
+  final TextEditingController _glassesSuppliedController =
+      TextEditingController();
+  final TextEditingController _vehicleNumberController =
+      TextEditingController();
   final TextEditingController _kmRunController = TextEditingController();
 
   final List<Widget> _patientFollowUpFields = [];
@@ -82,33 +91,35 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
         CustomTextFormField(
           controller: statusController,
           labelText: 'Status',
-
         ),
         SizedBox(height: 20), // Space between rows
       ]);
     });
   }
 
-  void submitReport(BuildContext context, String documentId, Map<String, dynamic> formData) {
+  void submitReport(
+      BuildContext context, String documentId, Map<String, dynamic> formData) {
     context.read<InchargeReportBloc>().add(
-      UpdateInchargeReport(
-        documentId: documentId,
-        data: formData,
-      ),
-    );
+          UpdateInchargeReport(
+            documentId: documentId,
+            data: formData,
+          ),
+        );
   }
 
-void getEmployeeDocId(Map<String, dynamic> campData) {
-  // Access the 'EmployeeDocId' or 'employeeDocId' field from the map
-  String? employeeDocId = campData['employeeDocId'] ?? campData['employeeDocId'];
+  void getEmployeeDocId(Map<String, dynamic> campData) {
+    // Access the 'EmployeeDocId' or 'employeeDocId' field from the map
+    String? employeeDocId =
+        campData['employeeDocId'] ?? campData['employeeDocId'];
 
-  if (employeeDocId != null) {
-    print('Employee Document ID: $employeeDocId');
-    saveFollowUpsToEmployeeCamp(employeeDocId,widget.documentId, _followUpControllers);
-  } else {
-    print('Employee Document ID not found.');
+    if (employeeDocId != null) {
+      print('Employee Document ID: $employeeDocId');
+      saveFollowUpsToEmployeeCamp(
+          employeeDocId, widget.documentId, _followUpControllers);
+    } else {
+      print('Employee Document ID not found.');
+    }
   }
-}
 
   @override
   void dispose() {
@@ -134,7 +145,6 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -158,17 +168,6 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
               ),
             ),
           ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.notifications, color: Colors.white),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NotificationPage()),
-                );
-              },
-            ),
-          ],
         ),
         body: BlocListener<InchargeReportBloc, InchargeReportState>(
           listener: (context, state) {
@@ -187,7 +186,6 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-
                   _buildAnimatedSection(
                     context,
                     sectionTitle: 'Camp Info',
@@ -196,16 +194,14 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
                       _buildInfoCard('Status', widget.campData['campStatus']),
                       _buildInfoCard('Date', widget.campData['campDate']),
                       _buildInfoCard('Time', widget.campData['campTime']),
-                      _buildInfoCard('Organization', widget.campData['organization']),
+                      _buildInfoCard(
+                          'Organization', widget.campData['organization']),
                     ],
                   ),
-
                   _buildAnimatedSection(
                     context,
                     sectionTitle: 'Add Team Info',
-                    children: [
-
-                    ],
+                    children: [],
                   ),
                   SizedBox(height: 20),
                   CustomTextFormField(
@@ -232,8 +228,6 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
                     labelText: 'Number of Catract Patient identified',
                     controller: _cataractPatientsController,
                   ),
-
-
                   SizedBox(height: 20),
                   CustomTextFormField(
                     labelText: 'Number of Patients Selected for Surgery',
@@ -269,7 +263,6 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
                     'Patient Follow Up List',
                     style: TextStyle(fontSize: 20),
                   ),
-
                   SizedBox(height: 30),
                   ..._patientFollowUpFields,
                   SizedBox(height: 20),
@@ -277,22 +270,24 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
                     text: ' + Add Patient',
                     onPressed: _addFollowUpField,
                   ),
-
                   SizedBox(height: 30),
                   CustomButton(
                     text: 'Submit Report',
                     onPressed: () {
-
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Row(
                             children: [
-                              Icon(Icons.check_circle_outline, color: Colors.white),
+                              Icon(Icons.check_circle_outline,
+                                  color: Colors.white),
                               SizedBox(width: 8),
                               Expanded(
                                 child: Text(
                                   'Report Submited successfully!',
-                                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ],
@@ -310,35 +305,38 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
                         'organization': _organizationController.text,
                         'place': _placeController.text,
                         'campOrganizer': _campOrganizerController.text,
-                        'patientsAttended': int.tryParse(_patientsAttendedController.text) ?? 0,
-                        'cataractPatients': int.tryParse(_cataractPatientsController.text) ?? 0,
-                        'patientsSelectedForSurgery': int.tryParse(_patientsSelectedForSurgeryController.text) ?? 0,
-                        'diabeticPatients': int.tryParse(_diabeticPatientsController.text) ?? 0,
-                        'glassesSupplied': int.tryParse(_glassesSuppliedController.text) ?? 0,
+                        'patientsAttended':
+                            int.tryParse(_patientsAttendedController.text) ?? 0,
+                        'cataractPatients':
+                            int.tryParse(_cataractPatientsController.text) ?? 0,
+                        'patientsSelectedForSurgery': int.tryParse(
+                                _patientsSelectedForSurgeryController.text) ??
+                            0,
+                        'diabeticPatients':
+                            int.tryParse(_diabeticPatientsController.text) ?? 0,
+                        'glassesSupplied':
+                            int.tryParse(_glassesSuppliedController.text) ?? 0,
                         'vehicleNumber': _vehicleNumberController.text,
                         'kmRun': double.tryParse(_kmRunController.text) ?? 0.0,
-
-                        'patientFollowUps': _followUpControllers.map((controllerMap) {
+                        'patientFollowUps':
+                            _followUpControllers.map((controllerMap) {
                           return {
                             'name': controllerMap['name']?.text ?? '',
                             'phone': controllerMap['phone']?.text ?? '',
                             'status': controllerMap['status']?.text ?? '',
                           };
                         }).toList(),
-
-
                       };
 
                       // Dispatch the event with form data
                       //context.read<InchargeReportBloc>().add(
-                        //UpdateInchargeReport(
-                        //  documentId: widget.documentId,
-                        //  data: formData,
-                        //),
+                      //UpdateInchargeReport(
+                      //  documentId: widget.documentId,
+                      //  data: formData,
+                      //),
                       //);
                       submitReport(context, widget.documentId, formData);
-                   //   getEmployeeDocId(widget.campData);
-
+                      //   getEmployeeDocId(widget.campData);
                     },
                   ),
                 ],
@@ -346,7 +344,6 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
             ),
           ),
         ),
-      
       ),
     );
   }
@@ -373,7 +370,7 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
             },
           ),
           ...children.map(
-                (child) => TweenAnimationBuilder(
+            (child) => TweenAnimationBuilder(
               tween: Tween<double>(begin: 0, end: 1),
               duration: const Duration(milliseconds: 300),
               builder: (context, value, _) {
@@ -445,35 +442,33 @@ void getEmployeeDocId(Map<String, dynamic> campData) {
       ),
     );
   }
-Future<void> saveFollowUpsToEmployeeCamp(
-    String employeeId,
-    String campDocId,
-    List<Map<String, TextEditingController?>> followUpControllers) async {
-  try {
-    // Convert the controller data to a list of maps
-    final patientFollowUps = followUpControllers.map((controllerMap) {
-      return {
-        'name': controllerMap['name']?.text ?? '',
-        'phone': controllerMap['phone']?.text ?? '',
-        'status': controllerMap['status']?.text ?? '',
-      };
-    }).toList();
 
-    // Reference the specific camp document in the 'camps' subcollection
-    DocumentReference campDocRef = FirebaseFirestore.instance
-        .collection('employees') // Main collection
-        .doc(employeeId)         // Employee document
-        .collection('camps')     // Subcollection
-        .doc(campDocId);         // Specific camp document
+  Future<void> saveFollowUpsToEmployeeCamp(String employeeId, String campDocId,
+      List<Map<String, TextEditingController?>> followUpControllers) async {
+    try {
+      // Convert the controller data to a list of maps
+      final patientFollowUps = followUpControllers.map((controllerMap) {
+        return {
+          'name': controllerMap['name']?.text ?? '',
+          'phone': controllerMap['phone']?.text ?? '',
+          'status': controllerMap['status']?.text ?? '',
+        };
+      }).toList();
 
-    // Set the follow-up data in the specified camp document
-    await campDocRef.set({'followUps': patientFollowUps});
+      // Reference the specific camp document in the 'camps' subcollection
+      DocumentReference campDocRef = FirebaseFirestore.instance
+          .collection('employees') // Main collection
+          .doc(employeeId) // Employee document
+          .collection('camps') // Subcollection
+          .doc(campDocId); // Specific camp document
 
-    print('Follow-ups added successfully to Firestore with camp ID: $campDocId!');
-  } catch (e) {
-    print('Error adding follow-ups to Firestore: $e');
+      // Set the follow-up data in the specified camp document
+      await campDocRef.set({'followUps': patientFollowUps});
+
+      print(
+          'Follow-ups added successfully to Firestore with camp ID: $campDocId!');
+    } catch (e) {
+      print('Error adding follow-ups to Firestore: $e');
+    }
   }
-}
-
-
 }

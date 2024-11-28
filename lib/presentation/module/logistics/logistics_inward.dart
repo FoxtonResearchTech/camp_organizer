@@ -10,7 +10,9 @@ class LogisticsInward extends StatefulWidget {
   final String documentId;
   final Map<String, dynamic> campData;
 
-  const LogisticsInward({Key? key, required this.documentId, required this.campData}) : super(key: key);
+  const LogisticsInward(
+      {Key? key, required this.documentId, required this.campData})
+      : super(key: key);
 
   @override
   State<LogisticsInward> createState() => _LogisticsInwardState();
@@ -108,7 +110,8 @@ class _LogisticsInwardState extends State<LogisticsInward> {
       'Inward_others': others,
     };
     // Dispatch the data to the BLoC
-    context.read<AddLogisticsBloc>().add(AddLogisticsWithDocumentId(documentId: widget.documentId, data: data));
+    context.read<AddLogisticsBloc>().add(
+        AddLogisticsWithDocumentId(documentId: widget.documentId, data: data));
   }
 
   // Function to build a checklist
@@ -164,17 +167,6 @@ class _LogisticsInwardState extends State<LogisticsInward> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NotificationPage()),
-              );
-            },
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -183,11 +175,20 @@ class _LogisticsInwardState extends State<LogisticsInward> {
           child: ListView(
             children: [
               // Input for camp place and date
-              SizedBox(height: 20,),
-              CustomTextFormField(labelText: "Camp Place",controller: campPlaceController,),
-              SizedBox(height: 20,),
-              CustomTextFormField(labelText: "Date", controller: dateController,),
-
+              SizedBox(
+                height: 20,
+              ),
+              CustomTextFormField(
+                labelText: "Camp Place",
+                controller: campPlaceController,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              CustomTextFormField(
+                labelText: "Date",
+                controller: dateController,
+              ),
 
               SizedBox(height: 20),
 
@@ -203,21 +204,42 @@ class _LogisticsInwardState extends State<LogisticsInward> {
               SizedBox(height: 20),
 
               // Fields for camera in/out
-              CustomTextFormField(labelText: 'Camera In',controller: cameraInController,),
+              CustomTextFormField(
+                labelText: 'Camera In',
+                controller: cameraInController,
+              ),
               SizedBox(height: 20),
-              CustomTextFormField(labelText: 'Camera Out',controller: cameraOutController,),
+              CustomTextFormField(
+                labelText: 'Camera Out',
+                controller: cameraOutController,
+              ),
 
               SizedBox(height: 20),
 
               // Input for in-charge names
-              CustomTextFormField(labelText: 'In-Charge Name', controller: inChargeNameController,),
-              SizedBox(height: 20,),
-              CustomTextFormField(labelText: 'Duty In-Charge 1',controller: dutyInCharge1Controller,),
-              SizedBox(height: 20,),
-              CustomTextFormField(labelText: 'Duty In-Charge 2',controller: dutyInCharge2Controller,),
+              CustomTextFormField(
+                labelText: 'In-Charge Name',
+                controller: inChargeNameController,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              CustomTextFormField(
+                labelText: 'Duty In-Charge 1',
+                controller: dutyInCharge1Controller,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              CustomTextFormField(
+                labelText: 'Duty In-Charge 2',
+                controller: dutyInCharge2Controller,
+              ),
               SizedBox(height: 20),
-              CustomTextFormField(labelText: 'Remarks',controller: remarksController,),
-
+              CustomTextFormField(
+                labelText: 'Remarks',
+                controller: remarksController,
+              ),
 
               SizedBox(height: 20),
 

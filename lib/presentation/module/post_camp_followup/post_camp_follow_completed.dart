@@ -43,17 +43,6 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NotificationPage()),
-              );
-            },
-          ),
-        ],
       ),
       body: widget.campData['patientsFollowUps'] == null
           ? Container(

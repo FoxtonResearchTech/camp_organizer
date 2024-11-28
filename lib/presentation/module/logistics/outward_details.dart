@@ -6,7 +6,8 @@ import '../../notification/notification.dart';
 class LogisticsOutwardPage extends StatelessWidget {
   final Map<String, dynamic> campData;
 
-  const LogisticsOutwardPage({Key? key, required this.campData}) : super(key: key);
+  const LogisticsOutwardPage({Key? key, required this.campData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,17 +30,6 @@ class LogisticsOutwardPage extends StatelessWidget {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NotificationPage()),
-              );
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10.0),
@@ -49,7 +39,8 @@ class LogisticsOutwardPage extends StatelessWidget {
             _buildGradientCard(
               context,
               title: 'Outward Doctor Room Things',
-              content: _buildCheckList(campData['Outward_doctorRoomThings'] ?? {}),
+              content:
+                  _buildCheckList(campData['Outward_doctorRoomThings'] ?? {}),
             ),
             _buildGradientCard(
               context,
@@ -69,23 +60,28 @@ class LogisticsOutwardPage extends StatelessWidget {
             _buildGradientCard(
               context,
               title: 'Outward Vision Room Things',
-              content: _buildCheckList(campData['Outward_visionRoomThings'] ?? {}),
+              content:
+                  _buildCheckList(campData['Outward_visionRoomThings'] ?? {}),
             ),
             _buildGradientCard(
               context,
               title: 'Outward T&Duct Things',
               content: _buildCheckList(campData['Outward_tnDuctThings'] ?? {}),
             ),
-
             _buildGradientCard(
               context,
               title: 'Other Items',
               content: _buildCheckList(campData['Outward_others'] ?? {}),
             ),
-            SizedBox(height: 30,),
-            Center(child: CustomButton(text: 'Submit', onPressed: () {}),
+            SizedBox(
+              height: 30,
             ),
-            SizedBox(height: 20,),
+            Center(
+              child: CustomButton(text: 'Submit', onPressed: () {}),
+            ),
+            SizedBox(
+              height: 20,
+            ),
           ],
         ),
       ),

@@ -29,11 +29,19 @@ class EmployeeUpdateBloc
           // Assuming only one document matches the empCode
           final documentIdToDelete = querySnapshot.docs.first.id;
 
-          // Delete the document using its ID
-          await FirebaseFirestore.instance
+          // Reference to the employee document
+          final employeeDocRef = FirebaseFirestore.instance
               .collection('employees')
-              .doc(documentIdToDelete)
-              .delete();
+              .doc(documentIdToDelete);
+
+          // Delete the 'camps' subcollection documents first
+          final campsSnapshot = await employeeDocRef.collection('camps').get();
+          for (final doc in campsSnapshot.docs) {
+            await doc.reference.delete();
+          }
+
+          // After deleting the subcollection, delete the main employee document
+          await employeeDocRef.delete();
 
           // Fetch updated employee data after deletion
           final updatedEmployeesData = await _fetchEmployeesFromFirestore();

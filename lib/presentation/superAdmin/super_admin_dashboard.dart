@@ -3,7 +3,7 @@ import 'package:camp_organizer/bloc/Status/status_event.dart';
 import 'package:camp_organizer/bloc/Status/status_state.dart';
 import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
 import 'package:camp_organizer/presentation/Event/event_details.dart';
-import 'package:camp_organizer/presentation/module/admin/manage_employee_account.dart';
+import 'package:camp_organizer/presentation/module/super_admin/super_admin_manage_employee_account.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:camp_organizer/utils/app_colors.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -17,15 +17,17 @@ import '../../admin_add_employee.dart';
 import '../../bloc/approval/adminapproval_event.dart';
 import '../../bloc/approval/adminapproval_state.dart';
 import '../module/admin/add_employee.dart';
+import '../module/admin/manage_employee_account.dart';
 
-class AdminDashboardScreen extends StatefulWidget {
-  const AdminDashboardScreen({Key? key}) : super(key: key);
+class SuperAdminDashboardScreen extends StatefulWidget {
+  const SuperAdminDashboardScreen({Key? key}) : super(key: key);
 
   @override
-  State<AdminDashboardScreen> createState() => _AdminDashboardScreenState();
+  State<SuperAdminDashboardScreen> createState() =>
+      _SuperAdminDashboardScreenState();
 }
 
-class _AdminDashboardScreenState extends State<AdminDashboardScreen>
+class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
     with SingleTickerProviderStateMixin {
   int touchedIndex = -1;
   late AnimationController _controller;
@@ -122,7 +124,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
                 begin: Alignment.topLeft,
@@ -185,7 +187,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ManageEmployeeAccount()),
+                          builder: (context) =>
+                              SuperAdminManageEmployeeAccount()),
                     );
                   },
                 ),
@@ -249,12 +252,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                     child: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
                       builder: (context, state) {
                         return AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 500),
+                          duration: Duration(milliseconds: 500),
                           switchInCurve: Curves.easeIn,
                           switchOutCurve: Curves.easeOut,
                           child: () {
                             if (state is StatusLoading) {
-                              return const Center(
+                              return Center(
                                 key: ValueKey('loading'),
                                 child: CircularProgressIndicator(
                                   color: Colors.blue,
@@ -277,7 +280,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                   .length;
 
                               return Column(
-                                key: const ValueKey('loaded'),
+                                key: ValueKey('loaded'),
                                 children: [
                                   Row(
                                     mainAxisAlignment:
@@ -289,7 +292,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                           count: approvedCount,
                                           label: 'Approved',
                                           icon: Icons.check_circle,
-                                          gradient: const LinearGradient(
+                                          gradient: LinearGradient(
                                             colors: [
                                               Colors.blueAccent,
                                               Colors.lightBlue
@@ -305,7 +308,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                           count: rejectedCount,
                                           label: 'Rejected',
                                           icon: Icons.cancel,
-                                          gradient: const LinearGradient(
+                                          gradient: LinearGradient(
                                             colors: [
                                               Colors.redAccent,
                                               Colors.orangeAccent
@@ -327,7 +330,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                           count: waitingQueueCount,
                                           label: 'Waiting Queue',
                                           icon: Icons.hourglass_top,
-                                          gradient: const LinearGradient(
+                                          gradient: LinearGradient(
                                             colors: [
                                               Colors.purpleAccent,
                                               Colors.deepPurple
@@ -343,7 +346,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                           count: employees.length,
                                           label: 'Initiated',
                                           icon: Icons.play_circle_fill,
-                                          gradient: const LinearGradient(
+                                          gradient: LinearGradient(
                                             colors: [
                                               Colors.tealAccent,
                                               Colors.teal
@@ -358,13 +361,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                 ],
                               );
                             } else if (state is StatusError) {
-                              return const Center(
+                              return Center(
                                 key: ValueKey('error'),
                                 child: Text('Error: '),
                               );
                             }
 
-                            return const Center(
+                            return Center(
                               key: ValueKey('empty'),
                               child: CircularProgressIndicator(
                                 color: Colors.blue,
@@ -395,18 +398,18 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                             animatedTexts: [
                               TypewriterAnimatedText(
                                 'Loading...',
-                                textStyle: const TextStyle(
+                                textStyle: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.grey,
                                 ),
-                                speed: const Duration(
+                                speed: Duration(
                                     milliseconds: 150), // Adjust speed here
                               ),
                             ],
                             totalRepeatCount:
                                 1, // Set to `1` for single loop, or `0` for infinite
-                            pause: const Duration(
+                            pause: Duration(
                                 milliseconds: 500), // Pause between loops
                             displayFullTextOnTap: true,
                           ),
@@ -420,7 +423,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
 
                         if (approvedEmployees.isEmpty) {
                           // Display "No camp found" when no employees meet the criteria
-                          return const Center(
+                          return Center(
                             child: Text(
                               "No camp found",
                               style: TextStyle(
@@ -433,11 +436,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                         }
 
                         return Padding(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: EdgeInsets.all(16.0),
                           child: SizedBox(
                             height: constraints.maxHeight * 0.6,
                             child: ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
+                              physics: NeverScrollableScrollPhysics(),
                               itemCount: approvedEmployees.length,
                               itemBuilder: (BuildContext context, int index) {
                                 Animation<double> animation = CurvedAnimation(
@@ -454,7 +457,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                   opacity: animation,
                                   child: SlideTransition(
                                     position: Tween<Offset>(
-                                      begin: const Offset(0, 0.2),
+                                      begin: Offset(0, 0.2),
                                       end: Offset.zero,
                                     ).animate(animation),
                                     child: GestureDetector(
@@ -600,11 +603,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                           ),
                         );
                       } else if (state is StatusError) {
-                        return const Center(
+                        return Center(
                           child: Text('Error: '),
                         );
                       }
-                      return const Center(
+                      return Center(
                         child: Text(
                           "No data available",
                           style: TextStyle(
@@ -657,7 +660,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
             const SizedBox(height: 12),
             Text(
               count.toString(),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -666,7 +669,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
             const SizedBox(height: 8),
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 color: Colors.white70,
               ),
@@ -769,7 +772,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
       child: BlocBuilder<StatusBloc, StatusState>(
         builder: (context, state) {
           if (state is StatusLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
           } else if (state is StatusLoaded) {
             final employees = state.employees;
 
@@ -791,7 +794,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                   scale: Tween<double>(begin: 0.0, end: 1.0)
                       .animate(CurvedAnimation(
                     parent: _controller,
-                    curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
+                    curve: Interval(0.5, 1.0, curve: Curves.easeOut),
                   )),
                   child: Container(
                     decoration: BoxDecoration(
@@ -835,7 +838,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
               child: Text('Error+${state.errorMessage}'),
             );
           }
-          return const Center(
+          return Center(
             child: Text("No data available"),
           );
         },

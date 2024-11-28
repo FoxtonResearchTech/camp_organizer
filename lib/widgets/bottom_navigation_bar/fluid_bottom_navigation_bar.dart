@@ -17,7 +17,6 @@ class _CurvedBottomNavigationBarState extends State<CurvedBottomNavigationBar> {
 
   final List<Widget> _pages = [
     AnimatedRotatingPieChartWithGrid(),
-
     AddEvent(),
     DashboardScreen(),
     UserProfilePage(),

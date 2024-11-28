@@ -11,7 +11,9 @@ class FinanceAddExpense extends StatefulWidget {
   final String documentId;
   final Map<String, dynamic> campData;
 
-  const FinanceAddExpense({Key? key, required this.documentId, required this.campData}) : super(key: key);
+  const FinanceAddExpense(
+      {Key? key, required this.documentId, required this.campData})
+      : super(key: key);
 
   @override
   State<FinanceAddExpense> createState() => _FinanceAddExpenseState();
@@ -28,7 +30,8 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
   final TextEditingController organizationController = TextEditingController();
   final TextEditingController placeController = TextEditingController();
   final TextEditingController otherExpensesController = TextEditingController();
-  final TextEditingController vehicleExpensesController = TextEditingController();
+  final TextEditingController vehicleExpensesController =
+      TextEditingController();
   final TextEditingController staffSalaryController = TextEditingController();
   final TextEditingController otController = TextEditingController();
   final TextEditingController catController = TextEditingController();
@@ -53,7 +56,8 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
       };
 
       // Dispatch the data to the BLoC
-      context.read<AddFinanceBloc>().add(AddFinanceWithDocumentId(documentId: widget.documentId, data: expenseData));
+      context.read<AddFinanceBloc>().add(AddFinanceWithDocumentId(
+          documentId: widget.documentId, data: expenseData));
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Expense data submitted successfully')),
@@ -107,17 +111,6 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NotificationPage()),
-              );
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -133,8 +126,9 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
                       child: CustomTextFormField(
                         labelText: 'Date',
                         controller: dateController,
-                        validator: (value) =>
-                        value == null || value.isEmpty ? 'Enter date' : null,
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'Enter date'
+                            : null,
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -142,8 +136,9 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
                       child: CustomTextFormField(
                         labelText: 'Time',
                         controller: timeController,
-                        validator: (value) =>
-                        value == null || value.isEmpty ? 'Enter time' : null,
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'Enter time'
+                            : null,
                       ),
                     ),
                   ],
@@ -153,21 +148,22 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
                   labelText: 'Camp Name',
                   controller: campNameController,
                   validator: (value) =>
-                  value == null || value.isEmpty ? 'Enter camp name' : null,
+                      value == null || value.isEmpty ? 'Enter camp name' : null,
                 ),
                 const SizedBox(height: 20),
                 CustomTextFormField(
                   labelText: 'Organization',
                   controller: organizationController,
-                  validator: (value) =>
-                  value == null || value.isEmpty ? 'Enter organization' : null,
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'Enter organization'
+                      : null,
                 ),
                 const SizedBox(height: 20),
                 CustomTextFormField(
                   labelText: 'Place',
                   controller: placeController,
                   validator: (value) =>
-                  value == null || value.isEmpty ? 'Enter place' : null,
+                      value == null || value.isEmpty ? 'Enter place' : null,
                 ),
                 const SizedBox(height: 20),
                 const Text(

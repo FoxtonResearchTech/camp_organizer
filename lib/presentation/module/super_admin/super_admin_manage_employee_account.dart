@@ -1,6 +1,6 @@
 import 'package:camp_organizer/bloc/Employee/employee_update_bloc.dart';
 import 'package:camp_organizer/bloc/Employee/employee_update_state.dart';
-import 'package:camp_organizer/presentation/module/admin/edit_employee_account.dart';
+import 'package:camp_organizer/presentation/module/super_admin/super_admin_edit_employee_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,23 +8,29 @@ import '../../../bloc/Employee/employee_update_event.dart';
 import '../../../utils/app_colors.dart';
 import '../../notification/notification.dart';
 
-class ManageEmployeeAccount extends StatefulWidget {
-  const ManageEmployeeAccount({super.key});
+class SuperAdminManageEmployeeAccount extends StatefulWidget {
+  const SuperAdminManageEmployeeAccount({super.key});
 
   @override
-  State<ManageEmployeeAccount> createState() => _ManageEmployeeAccountState();
+  State<SuperAdminManageEmployeeAccount> createState() =>
+      _SuperAdminManageEmployeeAccountState();
 }
 
 class Employee {
   final String name;
   final String empCode;
   final String designation;
+  final String password;
 
   Employee(
-      {required this.name, required this.empCode, required this.designation});
+      {required this.name,
+      required this.empCode,
+      required this.designation,
+      required this.password});
 }
 
-class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
+class _SuperAdminManageEmployeeAccountState
+    extends State<SuperAdminManageEmployeeAccount> {
   late EmployeeUpdateBloc _employeeUpdateBloc;
 
   @override
@@ -97,13 +103,18 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => EditEmployeeAccount(
+                                      builder: (context) =>
+                                          SuperAdminEditEmployeeAccount(
                                         employee: Employee(
-                                          name: employee['firstName'] ?? "N/A",
-                                          empCode: employee['empCode'] ?? "N/A",
-                                          designation:
-                                              employee['designation'] ?? "N/A",
-                                        ),
+                                            name:
+                                                employee['firstName'] ?? "N/A",
+                                            empCode:
+                                                employee['empCode'] ?? "N/A",
+                                            designation:
+                                                employee['designation'] ??
+                                                    "N/A",
+                                            password:
+                                                employee['password' ?? "N/A"]),
                                         index: index,
                                         onUpdate:
                                             (updatedIndex, updatedEmployee) {
@@ -114,6 +125,8 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
                                                   updatedEmployee.empCode,
                                               'designation':
                                                   updatedEmployee.designation,
+                                              'password':
+                                                  updatedEmployee.password
                                             };
                                           });
                                         },

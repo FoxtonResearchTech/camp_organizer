@@ -34,17 +34,6 @@ class _InwardDetailsState extends State<InwardDetails> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NotificationPage()),
-              );
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10.0),
@@ -54,43 +43,53 @@ class _InwardDetailsState extends State<InwardDetails> {
             _buildGradientCard(
               context,
               title: 'Inward Doctor Room Things',
-              content: _buildCheckList(widget.campData['Inward_doctorRoomThings'] ?? {}),
+              content: _buildCheckList(
+                  widget.campData['Inward_doctorRoomThings'] ?? {}),
             ),
             _buildGradientCard(
               context,
               title: 'Inward CR Room Things',
-              content: _buildCheckList(widget.campData['Inward_crRoomThings'] ?? {}),
+              content:
+                  _buildCheckList(widget.campData['Inward_crRoomThings'] ?? {}),
             ),
             _buildGradientCard(
               context,
               title: 'Inward Optical Things',
-              content: _buildCheckList(widget.campData['Inward_opticalThings'] ?? {}),
+              content: _buildCheckList(
+                  widget.campData['Inward_opticalThings'] ?? {}),
             ),
             _buildGradientCard(
               context,
               title: 'Inward Fitting Things',
-              content: _buildCheckList(widget.campData['Inward_fittingThings'] ?? {}),
+              content: _buildCheckList(
+                  widget.campData['Inward_fittingThings'] ?? {}),
             ),
             _buildGradientCard(
               context,
               title: 'Inward Vision Room Things',
-              content: _buildCheckList(widget.campData['Inward_visionRoomThings'] ?? {}),
+              content: _buildCheckList(
+                  widget.campData['Inward_visionRoomThings'] ?? {}),
             ),
             _buildGradientCard(
               context,
               title: 'Inward T&Duct Things',
-              content: _buildCheckList(widget.campData['Inward_tnDuctThings'] ?? {}),
+              content:
+                  _buildCheckList(widget.campData['Inward_tnDuctThings'] ?? {}),
             ),
-
             _buildGradientCard(
               context,
               title: 'Other Inward Items',
               content: _buildCheckList(widget.campData['Inward_others'] ?? {}),
             ),
-            SizedBox(height: 30,),
-            Center(child: CustomButton(text: 'Submit', onPressed: () {}),
+            SizedBox(
+              height: 30,
             ),
-            SizedBox(height: 20,),
+            Center(
+              child: CustomButton(text: 'Submit', onPressed: () {}),
+            ),
+            SizedBox(
+              height: 20,
+            ),
           ],
         ),
       ),
@@ -149,5 +148,4 @@ class _InwardDetailsState extends State<InwardDetails> {
       );
     }).toList();
   }
-
 }

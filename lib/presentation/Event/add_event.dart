@@ -120,10 +120,8 @@ class _AddEventState extends State<AddEvent>
   final TextEditingController name2Controller = TextEditingController();
   final TextEditingController phoneNumber1_2Controller =
       TextEditingController();
-  final TextEditingController positionController =
-  TextEditingController();
-  final TextEditingController position2Controller =
-  TextEditingController();
+  final TextEditingController positionController = TextEditingController();
+  final TextEditingController position2Controller = TextEditingController();
   final TextEditingController phoneNumber2_2Controller =
       TextEditingController();
   final TextEditingController totalSquareFeetController =
@@ -152,15 +150,6 @@ class _AddEventState extends State<AddEvent>
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationPage()));
-            },
-          ),
-        ],
       ),
       body: FadeTransition(
         opacity: _opacityAnimation,

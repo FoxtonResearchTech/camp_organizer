@@ -84,17 +84,6 @@ class _PostCampTimelineState extends State<PostCampTimeline>
                 ),
               ),
             ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.notifications, color: Colors.white),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => NotificationPage()),
-                  );
-                },
-              ),
-            ],
           ),
           body: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
             builder: (context, state) {

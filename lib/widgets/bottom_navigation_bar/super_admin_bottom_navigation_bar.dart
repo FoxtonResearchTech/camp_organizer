@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 import '../../presentation/Admin/dashboard.dart';
+import '../../presentation/superAdmin/super_admin_dashboard.dart';
 
 class SuperAdminBottomNavigationBar extends StatefulWidget {
   @override
@@ -23,7 +24,7 @@ class _SuperAdminBottomNavigationBarState
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    AnimatedRotatingPieChartWithGrid(),
+    SuperAdminDashboardScreen(),
     SuperAdminCampSearchScreen(),
     SuperAdminUserProfilePage(),
   ];

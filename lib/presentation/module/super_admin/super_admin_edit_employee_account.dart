@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import '../../../utils/app_colors.dart';
 import '../../../widgets/Text Form Field/custom_text_form_field.dart';
 import '../../notification/notification.dart';
-import 'manage_employee_account.dart';
+import '../super_admin/super_admin_manage_employee_account.dart';
 
-class EditEmployeeAccount extends StatefulWidget {
+class SuperAdminEditEmployeeAccount extends StatefulWidget {
   final Employee employee;
   final int index;
   final Function(int, Employee) onUpdate;
   final Function(int) onDelete;
 
-  const EditEmployeeAccount({
+  const SuperAdminEditEmployeeAccount({
     Key? key,
     required this.employee,
     required this.index,
@@ -21,13 +21,16 @@ class EditEmployeeAccount extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<EditEmployeeAccount> createState() => _EditEmployeeAccountState();
+  State<SuperAdminEditEmployeeAccount> createState() =>
+      _SuperAdminEditEmployeeAccountState();
 }
 
-class _EditEmployeeAccountState extends State<EditEmployeeAccount> {
+class _SuperAdminEditEmployeeAccountState
+    extends State<SuperAdminEditEmployeeAccount> {
   late TextEditingController nameController;
   late TextEditingController empCodeController;
   late TextEditingController designationController;
+  late TextEditingController passwordController;
 
   @override
   void initState() {
@@ -36,6 +39,7 @@ class _EditEmployeeAccountState extends State<EditEmployeeAccount> {
     empCodeController = TextEditingController(text: widget.employee.empCode);
     designationController =
         TextEditingController(text: widget.employee.designation);
+    passwordController = TextEditingController(text: widget.employee.password);
   }
 
   void _updateEmployee() async {
@@ -54,6 +58,7 @@ class _EditEmployeeAccountState extends State<EditEmployeeAccount> {
           'firstName': nameController.text,
           'empCode': empCodeController.text,
           'designation': designationController.text,
+          'password': passwordController.text,
         });
 
         widget.onUpdate(
@@ -62,6 +67,7 @@ class _EditEmployeeAccountState extends State<EditEmployeeAccount> {
             name: nameController.text,
             empCode: empCodeController.text,
             designation: designationController.text,
+            password: passwordController.text,
           ),
         );
 
@@ -218,6 +224,13 @@ class _EditEmployeeAccountState extends State<EditEmployeeAccount> {
             CustomTextFormField(
               labelText: 'Designation',
               controller: designationController,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            CustomTextFormField(
+              labelText: 'Password',
+              controller: passwordController,
             ),
             const SizedBox(height: 30),
             Row(

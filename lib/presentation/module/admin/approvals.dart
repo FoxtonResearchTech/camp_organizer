@@ -79,7 +79,8 @@ class _ApprovalsState extends State<Approvals> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           title: Text("Reason for Rejection",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
           content: Column(
@@ -161,10 +162,6 @@ class _ApprovalsState extends State<Approvals> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {},
-          ),
-          IconButton(
             icon: Icon(Icons.settings, color: Colors.white),
             onPressed: () {},
           ),
@@ -227,30 +224,37 @@ class _ApprovalsState extends State<Approvals> {
                             children: [
                               CircleAvatar(
                                 radius: 50,
-                                backgroundImage: AssetImage('assets/avatar.png'),
+                                backgroundImage:
+                                    AssetImage('assets/avatar.png'),
                               ),
                               SizedBox(width: 30),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    _buildDetailRow("Employee Name", approval['employeeName'] ?? ''),
+                                    _buildDetailRow("Employee Name",
+                                        approval['employeeName'] ?? ''),
                                     SizedBox(height: 20),
                                     Row(
                                       children: [
-                                        _buildDetailRowWithIcon(Icons.date_range, approval['date'] ?? ''),
-
+                                        _buildDetailRowWithIcon(
+                                            Icons.date_range,
+                                            approval['date'] ?? ''),
                                         SizedBox(width: 100),
-
-                                        _buildDetailRowWithIcon(Icons.access_time, approval['time'] ?? ''),
+                                        _buildDetailRowWithIcon(
+                                            Icons.access_time,
+                                            approval['time'] ?? ''),
                                       ],
                                     ),
                                     SizedBox(height: 20),
-                                    _buildDetailRow("Organization Name", approval['organizationName'] ?? ''),
+                                    _buildDetailRow("Organization Name",
+                                        approval['organizationName'] ?? ''),
                                     SizedBox(height: 20),
-                                    _buildDetailRow("Address", approval['address'] ?? ''),
+                                    _buildDetailRow(
+                                        "Address", approval['address'] ?? ''),
                                     SizedBox(height: 20),
-                                    _buildDetailRow("Phone", approval['phone'] ?? ''),
+                                    _buildDetailRow(
+                                        "Phone", approval['phone'] ?? ''),
                                   ],
                                 ),
                               ),
@@ -260,8 +264,15 @@ class _ApprovalsState extends State<Approvals> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              _buildCustomActionButton(Icons.verified_user_outlined, "Accept", Colors.green), // Use custom button
-                              _buildCustomActionButton(Icons.remove_moderator_outlined, "Reject", Colors.red, _showRejectDialog),
+                              _buildCustomActionButton(
+                                  Icons.verified_user_outlined,
+                                  "Accept",
+                                  Colors.green), // Use custom button
+                              _buildCustomActionButton(
+                                  Icons.remove_moderator_outlined,
+                                  "Reject",
+                                  Colors.red,
+                                  _showRejectDialog),
                             ],
                           ),
                         ],
@@ -321,13 +332,14 @@ class _ApprovalsState extends State<Approvals> {
     );
   }
 
-  Widget _buildCustomActionButton(IconData icon, String label, Color color, [VoidCallback? onPressed]) {
+  Widget _buildCustomActionButton(IconData icon, String label, Color color,
+      [VoidCallback? onPressed]) {
     return InkWell(
       onTap: onPressed,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 24),
         decoration: BoxDecoration(
-          color: color,  // Set your custom background color here
+          color: color, // Set your custom background color here
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
@@ -341,7 +353,6 @@ class _ApprovalsState extends State<Approvals> {
       ),
     );
   }
-
 
   Drawer _buildMobileDrawer() {
     return Drawer(

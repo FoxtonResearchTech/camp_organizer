@@ -4,16 +4,22 @@ import 'package:flutter/material.dart';
 class OnsiteCampDetailsPage extends StatelessWidget {
   final Map<String, dynamic> campData;
 
-  const OnsiteCampDetailsPage({Key? key, required this.campData}) : super(key: key);
+  const OnsiteCampDetailsPage({Key? key, required this.campData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        leading: IconButton(onPressed:(){
-          Navigator.pop(context);
-        }, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+            )),
         title: const Text(
           'Camp Details',
           style: TextStyle(
@@ -31,9 +37,6 @@ class OnsiteCampDetailsPage extends StatelessWidget {
             ),
           ),
         ),
-        actions: [
-
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10.0),
@@ -59,8 +62,10 @@ class OnsiteCampDetailsPage extends StatelessWidget {
                 _buildInfoCard('City', campData['city']),
                 _buildInfoCard('State', campData['state']),
                 _buildInfoCard('Road Access', campData['roadAccess']),
-                _buildInfoCard('Water Availability', campData['waterAvailability']),
-                _buildInfoCard('Total Square Feet', campData['totalSquareFeet']),
+                _buildInfoCard(
+                    'Water Availability', campData['waterAvailability']),
+                _buildInfoCard(
+                    'Total Square Feet', campData['totalSquareFeet']),
                 _buildInfoCard('Pincode', campData['pincode']),
                 _buildInfoCard('Address', campData['address']),
               ],
@@ -91,11 +96,13 @@ class OnsiteCampDetailsPage extends StatelessWidget {
               context,
               sectionTitle: 'Additional Info',
               children: [
-                _buildInfoCard('Number of Patients Expected', campData['noOfPatientExpected']),
+                _buildInfoCard('Number of Patients Expected',
+                    campData['noOfPatientExpected']),
                 _buildInfoCard('Position', campData['position']),
-                _buildInfoCard('Created On', campData['CreatedOn']?.toString() ?? 'N/A'),
+                _buildInfoCard(
+                    'Created On', campData['CreatedOn']?.toString() ?? 'N/A'),
                 _buildInfoCard('Document ID', campData['documentId']),
-                _buildInfoCard('AR', campData['ar']?? 'N?A'),
+                _buildInfoCard('AR', campData['ar'] ?? 'N?A'),
               ],
             ),
             Center(child: CustomButton(text: 'Approve', onPressed: () {})),
@@ -127,7 +134,7 @@ class OnsiteCampDetailsPage extends StatelessWidget {
             },
           ),
           ...children.map(
-                (child) => TweenAnimationBuilder(
+            (child) => TweenAnimationBuilder(
               tween: Tween<double>(begin: 0, end: 1),
               duration: const Duration(milliseconds: 300),
               builder: (context, value, _) {
@@ -199,5 +206,4 @@ class OnsiteCampDetailsPage extends StatelessWidget {
       ),
     );
   }
-
 }

@@ -60,9 +60,9 @@ class _AdminAddEventState extends State<AdminAddEvent>
     _slideAnimation =
         Tween<Offset>(begin: const Offset(0.0, 0.1), end: Offset.zero)
             .animate(CurvedAnimation(
-          parent: _controller,
-          curve: Curves.easeInOut,
-        ));
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
     _controller.forward();
   }
 
@@ -119,17 +119,15 @@ class _AdminAddEventState extends State<AdminAddEvent>
   final TextEditingController phoneNumber2Controller = TextEditingController();
   final TextEditingController name2Controller = TextEditingController();
   final TextEditingController phoneNumber1_2Controller =
-  TextEditingController();
-  final TextEditingController positionController =
-  TextEditingController();
-  final TextEditingController position2Controller =
-  TextEditingController();
+      TextEditingController();
+  final TextEditingController positionController = TextEditingController();
+  final TextEditingController position2Controller = TextEditingController();
   final TextEditingController phoneNumber2_2Controller =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController totalSquareFeetController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController noOfPatientExpectedController =
-  TextEditingController();
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -152,15 +150,6 @@ class _AdminAddEventState extends State<AdminAddEvent>
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationPage()));
-            },
-          ),
-        ],
       ),
       body: FadeTransition(
         opacity: _opacityAnimation,
@@ -320,11 +309,11 @@ class _AdminAddEventState extends State<AdminAddEvent>
           totalSquareFeetController),
       SizedBox(height: 20),
       _buildRadioOption('Water Availability:', _options, _selectedValue2,
-              (value) {
-            setState(() {
-              _selectedValue2 = value;
-            });
-          }),
+          (value) {
+        setState(() {
+          _selectedValue2 = value;
+        });
+      }),
       SizedBox(height: 20),
       _buildCustomTextFormField('No Of Patient Expected', Icons.person,
           noOfPatientExpectedController),
@@ -380,40 +369,40 @@ class _AdminAddEventState extends State<AdminAddEvent>
           builder: (context, currentState) {
             return currentState is FormSubmitting
                 ? Center(
-              child: SpinKitPumpingHeart(
-                color: Colors.blue,
-                size: 50.0,
-              ),
-            )
+                    child: SpinKitPumpingHeart(
+                      color: Colors.blue,
+                      size: 50.0,
+                    ),
+                  )
                 : CustomButton(
-              text: "Submit",
-              onPressed: () {
-                bloc.add(SubmitForm(
-                  campName: campNameController.text,
-                  organization: organizationController.text,
-                  address: addressController.text,
-                  city: cityController.text,
-                  state: stateController.text,
-                  pincode: pincodeController.text,
-                  name: nameController.text,
-                  phoneNumber1: phoneNumber1Controller.text,
-                  phoneNumber2: phoneNumber2Controller.text,
-                  name2: name2Controller.text,
-                  phoneNumber1_2: phoneNumber1_2Controller.text,
-                  phoneNumber2_2: phoneNumber2_2Controller.text,
-                  totalSquareFeet: totalSquareFeetController.text,
-                  noOfPatientExpected: noOfPatientExpectedController.text,
-                  position2: position2Controller.text,
-                  campPlanType: campPlanselectedValue.toString(),
-                  roadAccess: _selectedValue.toString(),
-                  waterAvailability: _selectedValue2.toString(),
-                  lastCampDone: lastselectedValue.toString(),
-                  campDate: _dateController.text,
-                  campTime: timeController.text,
-                  position: positionController.text,
-                ));
-              },
-            );
+                    text: "Submit",
+                    onPressed: () {
+                      bloc.add(SubmitForm(
+                        campName: campNameController.text,
+                        organization: organizationController.text,
+                        address: addressController.text,
+                        city: cityController.text,
+                        state: stateController.text,
+                        pincode: pincodeController.text,
+                        name: nameController.text,
+                        phoneNumber1: phoneNumber1Controller.text,
+                        phoneNumber2: phoneNumber2Controller.text,
+                        name2: name2Controller.text,
+                        phoneNumber1_2: phoneNumber1_2Controller.text,
+                        phoneNumber2_2: phoneNumber2_2Controller.text,
+                        totalSquareFeet: totalSquareFeetController.text,
+                        noOfPatientExpected: noOfPatientExpectedController.text,
+                        position2: position2Controller.text,
+                        campPlanType: campPlanselectedValue.toString(),
+                        roadAccess: _selectedValue.toString(),
+                        waterAvailability: _selectedValue2.toString(),
+                        lastCampDone: lastselectedValue.toString(),
+                        campDate: _dateController.text,
+                        campTime: timeController.text,
+                        position: positionController.text,
+                      ));
+                    },
+                  );
           },
         ),
       ),

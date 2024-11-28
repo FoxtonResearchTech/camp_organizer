@@ -9,7 +9,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-
   @override
   Widget build(BuildContext context) {
     final bool isDesktop = MediaQuery.of(context).size.width > 800;
@@ -41,12 +40,6 @@ class _DashboardState extends State<Dashboard> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              // Handle notification button press
-            },
-          ),
-          IconButton(
             icon: Icon(Icons.settings, color: Colors.white),
             onPressed: () {
               // Handle settings button press
@@ -57,7 +50,7 @@ class _DashboardState extends State<Dashboard> {
       body: Row(
         children: [
           if (isDesktop)
-          // Always-visible drawer for desktop view
+            // Always-visible drawer for desktop view
             Expanded(
               flex: 1,
               child: Container(
@@ -66,7 +59,8 @@ class _DashboardState extends State<Dashboard> {
                   children: [
                     DrawerHeader(
                       decoration: BoxDecoration(color: Colors.lightBlueAccent),
-                      child: Text("SCMS-PHP", style: TextStyle(color: Colors.white, fontSize: 24)),
+                      child: Text("SCMS-PHP",
+                          style: TextStyle(color: Colors.white, fontSize: 24)),
                     ),
                     _buildDrawerItem(Icons.dashboard, "Dashboard"),
                     _buildDrawerItem(Icons.people, "Add Employee"),
@@ -86,7 +80,8 @@ class _DashboardState extends State<Dashboard> {
               padding: const EdgeInsets.all(16.0),
               child: Card(
                 elevation: 4,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -94,14 +89,18 @@ class _DashboardState extends State<Dashboard> {
                     children: [
                       Text(
                         "Client Details",
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.teal),
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.teal),
                       ),
                       SizedBox(height: 20),
                       Row(
                         children: [
                           CircleAvatar(
                             radius: 50,
-                            backgroundImage: AssetImage('assets/avatar.png'), // Add client avatar image here
+                            backgroundImage: AssetImage(
+                                'assets/avatar.png'), // Add client avatar image here
                           ),
                           SizedBox(width: 30),
                           Expanded(
@@ -110,9 +109,14 @@ class _DashboardState extends State<Dashboard> {
                               children: [
                                 Row(
                                   children: [
-                                    Text("Client:", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                    Text("Client:",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold)),
                                     SizedBox(width: 5),
-                                    Text("20210002", style: TextStyle(fontSize: 18, color: Colors.teal)),
+                                    Text("20210002",
+                                        style: TextStyle(
+                                            fontSize: 18, color: Colors.teal)),
                                   ],
                                 ),
                                 SizedBox(height: 10),
@@ -120,21 +124,28 @@ class _DashboardState extends State<Dashboard> {
                                   children: [
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          _buildDetailRow("Name", "Lou, Samantha Jane C"),
+                                          _buildDetailRow(
+                                              "Name", "Lou, Samantha Jane C"),
                                           _buildDetailRow("Gender", "Female"),
-                                          _buildDetailRow("Date of Birth", "October 14, 1997"),
+                                          _buildDetailRow("Date of Birth",
+                                              "October 14, 1997"),
                                         ],
                                       ),
                                     ),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          _buildDetailRow("Email", "sjlou@sample.com"),
-                                          _buildDetailRow("Contact #", "097876546522"),
-                                          _buildDetailRow("Address", "Sample Address Only, Anywhere, 2306"),
+                                          _buildDetailRow(
+                                              "Email", "sjlou@sample.com"),
+                                          _buildDetailRow(
+                                              "Contact #", "097876546522"),
+                                          _buildDetailRow("Address",
+                                              "Sample Address Only, Anywhere, 2306"),
                                         ],
                                       ),
                                     ),
@@ -151,10 +162,13 @@ class _DashboardState extends State<Dashboard> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          _buildActionButton(Icons.print, "Print", Colors.green),
-                          _buildActionButton(Icons.lock_reset, "Reset Password", Colors.blue),
+                          _buildActionButton(
+                              Icons.print, "Print", Colors.green),
+                          _buildActionButton(
+                              Icons.lock_reset, "Reset Password", Colors.blue),
                           _buildActionButton(Icons.edit, "Edit", Colors.orange),
-                          _buildActionButton(Icons.arrow_back, "Back to List", Colors.grey),
+                          _buildActionButton(
+                              Icons.arrow_back, "Back to List", Colors.grey),
                         ],
                       ),
                     ],
@@ -167,7 +181,6 @@ class _DashboardState extends State<Dashboard> {
       ),
       drawer: isDesktop ? null : _buildMobileDrawer(),
     );
-
   }
 
   Widget _buildDrawerItem(IconData icon, String title) {
@@ -187,7 +200,8 @@ class _DashboardState extends State<Dashboard> {
         children: [
           Text(
             "$label: ",
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[700]),
+            style:
+                TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[700]),
           ),
           Text(value, style: TextStyle(color: Colors.black)),
         ],
@@ -200,7 +214,8 @@ class _DashboardState extends State<Dashboard> {
       children: [
         Text(
           "$label: ",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[700]),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[700]),
         ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -238,7 +253,8 @@ class _DashboardState extends State<Dashboard> {
         children: [
           DrawerHeader(
             decoration: BoxDecoration(color: Colors.teal),
-            child: Text("SCMS-PHP", style: TextStyle(color: Colors.white, fontSize: 24)),
+            child: Text("SCMS-PHP",
+                style: TextStyle(color: Colors.white, fontSize: 24)),
           ),
           _buildDrawerItem(Icons.dashboard, "Dashboard"),
           _buildDrawerItem(Icons.people, "Add Employee"),
@@ -251,9 +267,4 @@ class _DashboardState extends State<Dashboard> {
       ),
     );
   }
-
-
 }
-
-
-
