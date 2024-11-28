@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,15 +11,17 @@ import '../../bloc/Status/status_bloc.dart';
 import '../../bloc/Status/status_event.dart';
 import '../../bloc/approval/adminapproval_event.dart';
 import '../../utils/app_colors.dart';
-
+import 'package:http/http.dart' as http;
 class AdminEventDetailsPage extends StatefulWidget {
   final Map<String, dynamic> employee;
   final String? campID;
   final String? employeeID;
-  const AdminEventDetailsPage(
-      {Key? key, required this.employee, this.campID, this.employeeID})
-      : super(key: key);
+  final String? campName;
+  final String? campDate;
+  final String? employeemail;
 
+  const AdminEventDetailsPage({Key? key, required this.employee, this.campID, this.employeeID, this.campDate, this.campName,this.employeemail})
+      : super(key:key);
   @override
   _AdminEventDetailsPageState createState() => _AdminEventDetailsPageState();
 }
@@ -183,7 +187,216 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
             bottom: screenHeight / 25,
             left: screenWidth / 25,
             right: screenWidth / 25),
-        child: Row(
+        child:      SizedBox(
+          width: screenWidth / 2.5,
+          height: screenHeight / 17.5,
+          child: ElevatedButton.icon(
+            icon: const Icon(Icons.verified,color: Colors.white,),
+            onPressed: () async{
+              final employeeId = widget.employeemail;
+
+              final dest1 = 'foxton.rt@gmail.com';
+              final dest2 = widget.employeemail;
+              final destId = [dest1,dest2];
+
+              final campname = widget.campName;
+              final campdate = widget.campDate;
+
+              BlocProvider.of<AdminApprovalBloc>(context).add(
+                UpdateStatusEvent(
+                  employeeId: widget.employeeID.toString(),
+                  campDocId: widget.campID.toString(),
+                  newStatus: 'Approved',
+                ),
+              );
+              await sendAcceptEmail(employeeId! ,destId, campname!, campdate!);
+              print(destId);
+              print(employeeId);
+              try {
+                BlocProvider.of<AdminApprovalBloc>(context).add(
+                  UpdateStatusEvent(
+                    employeeId: widget.employeeID.toString(),
+                    campDocId: widget.campID.toString(),
+                    newStatus: 'Approved',
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Center(
+                      child: Text('Camp Approved',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500)),
+                    ),
+                    backgroundColor: AppColors.lightGreen,
+                  ),
+                );
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Center(
+                      child: Text('Failed to Accept ',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500)),
+                    ),
+                  ),
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              iconColor: Colors.green,
+              padding:
+              const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              backgroundColor: Color(0xff4CAF50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            label: const Text(
+              "Approve Camp",
+              style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildDetailRows(double screenWidth) {
+    return [
+      _buildDetailRow('Camp Name', widget.employee['campName'], screenWidth),
+      _buildDetailRow(
+          'Organization', widget.employee['organization'], screenWidth),
+      _buildDetailRow('Address', widget.employee['address'], screenWidth),
+      _buildDetailRow('City', widget.employee['city'], screenWidth),
+      _buildDetailRow('State', widget.employee['state'], screenWidth),
+      _buildDetailRow('Pincode', widget.employee['pincode'], screenWidth),
+      Text(
+        "Concern Person1 Details :",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+          fontSize: screenWidth * 0.05,
+        ),
+      ),
+      _buildDetailRow('Name', widget.employee['name'], screenWidth),
+      _buildDetailRow('Position', widget.employee['position'], screenWidth),
+      _buildDetailRow(
+          'Phone Number 1', widget.employee['phoneNumber1'], screenWidth),
+      _buildDetailRow(
+          'Phone Number 2', widget.employee['phoneNumber1_2'], screenWidth),
+      Text(
+        "Concern Person2 Details :",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+          fontSize: screenWidth * 0.05,
+        ),
+      ),
+      _buildDetailRow('Name', widget.employee['name2'], screenWidth),
+      _buildDetailRow('Position', widget.employee['position2'], screenWidth),
+      _buildDetailRow(
+          'Phone Number 1', widget.employee['phoneNumber2'], screenWidth),
+      _buildDetailRow(
+          'Phone Number 2', widget.employee['phoneNumber2_2'], screenWidth),
+      _buildDetailRow(
+          'Camp Plan Type', widget.employee['campPlanType'], screenWidth),
+      _buildDetailRow(
+          'Road Access', widget.employee['roadAccess'], screenWidth),
+      _buildDetailRow(
+          'Total Square Feet', widget.employee['totalSquareFeet'], screenWidth),
+      _buildDetailRow('Water Availability',
+          widget.employee['waterAvailability'], screenWidth),
+      _buildDetailRow('No Of Patients Expected',
+          widget.employee['noOfPatientExpected'], screenWidth),
+      _buildDetailRow(
+          'Last Camp Done', widget.employee['lastCampDone'], screenWidth),
+    ];
+  }
+
+  Widget _buildDetailRow(String label, String value, double screenWidth) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "${label}:",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+              fontSize:
+                  screenWidth * 0.045, // Adjust the font size responsively
+            ),
+          ),
+          SizedBox(width: screenWidth / 10),
+          Flexible(
+            child: Text(
+              value,
+              style: TextStyle(
+                color: Colors.black54, fontWeight: FontWeight.w500,
+                fontSize:
+                    screenWidth * 0.045, // Adjust the font size responsively
+              ),
+              overflow: TextOverflow.ellipsis, // Handle long text overflow
+              maxLines: 1, // Optional: limit the number of lines
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Future<void> sendAcceptEmail(
+      String employeeId,
+      List<dynamic> destId,
+      String campName,
+      String campDate,
+      ) async {
+    const String serviceId = 'service_m66gp4c'; // Your EmailJS Service ID
+    const String templateId = 'template_gmya15j'; // Your EmailJS Template ID
+    const String user_id = 'zA3pjW03a2sLLo51c'; // Public Key (user_id)
+    const String privateKey = 'K2p5DmTapkR6qYcMPGhTQ'; // Private Key (API Key)
+
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $privateKey', // Send the private key as Bearer token
+        },
+        body: jsonEncode({
+          'service_id': serviceId,
+          'template_id': templateId,
+          'user_id': user_id, // Use the Public Key (user_id)
+          'template_params': {
+            'to_email': destId, // Recipient's email
+            'employeeId': employeeId,
+            'campName': campName,
+            'campDate': campDate,
+            'status': 'Accepted',
+          },
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Email sent successfully!');
+      } else {
+        print('Failed to send email: ${response.statusCode}, ${response.body}');
+      }
+    } catch (error) {
+      print('Error sending email: $error');}
+  }
+}
+/*
+Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
@@ -382,92 +595,4 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  List<Widget> _buildDetailRows(double screenWidth) {
-    return [
-      _buildDetailRow('Camp Name', widget.employee['campName'], screenWidth),
-      _buildDetailRow(
-          'Organization', widget.employee['organization'], screenWidth),
-      _buildDetailRow('Address', widget.employee['address'], screenWidth),
-      _buildDetailRow('City', widget.employee['city'], screenWidth),
-      _buildDetailRow('State', widget.employee['state'], screenWidth),
-      _buildDetailRow('Pincode', widget.employee['pincode'], screenWidth),
-      Text(
-        "Concern Person1 Details :",
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.black87,
-          fontSize: screenWidth * 0.05,
-        ),
-      ),
-      _buildDetailRow('Name', widget.employee['name'], screenWidth),
-      _buildDetailRow('Position', widget.employee['position'], screenWidth),
-      _buildDetailRow(
-          'Phone Number 1', widget.employee['phoneNumber1'], screenWidth),
-      _buildDetailRow(
-          'Phone Number 2', widget.employee['phoneNumber1_2'], screenWidth),
-      Text(
-        "Concern Person2 Details :",
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.black87,
-          fontSize: screenWidth * 0.05,
-        ),
-      ),
-      _buildDetailRow('Name', widget.employee['name2'], screenWidth),
-      _buildDetailRow('Position', widget.employee['position2'], screenWidth),
-      _buildDetailRow(
-          'Phone Number 1', widget.employee['phoneNumber2'], screenWidth),
-      _buildDetailRow(
-          'Phone Number 2', widget.employee['phoneNumber2_2'], screenWidth),
-      _buildDetailRow(
-          'Camp Plan Type', widget.employee['campPlanType'], screenWidth),
-      _buildDetailRow(
-          'Road Access', widget.employee['roadAccess'], screenWidth),
-      _buildDetailRow(
-          'Total Square Feet', widget.employee['totalSquareFeet'], screenWidth),
-      _buildDetailRow('Water Availability',
-          widget.employee['waterAvailability'], screenWidth),
-      _buildDetailRow('No Of Patients Expected',
-          widget.employee['noOfPatientExpected'], screenWidth),
-      _buildDetailRow(
-          'Last Camp Done', widget.employee['lastCampDone'], screenWidth),
-    ];
-  }
-
-  Widget _buildDetailRow(String label, String value, double screenWidth) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "${label}:",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-              fontSize:
-                  screenWidth * 0.045, // Adjust the font size responsively
-            ),
-          ),
-          SizedBox(width: screenWidth / 10),
-          Flexible(
-            child: Text(
-              value,
-              style: TextStyle(
-                color: Colors.black54, fontWeight: FontWeight.w500,
-                fontSize:
-                    screenWidth * 0.045, // Adjust the font size responsively
-              ),
-              overflow: TextOverflow.ellipsis, // Handle long text overflow
-              maxLines: 1, // Optional: limit the number of lines
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+ */

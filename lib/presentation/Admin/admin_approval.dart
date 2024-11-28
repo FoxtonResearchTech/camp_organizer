@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:camp_organizer/presentation/Admin/admin_camp_search_screen.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:camp_organizer/utils/app_colors.dart';
@@ -14,7 +16,7 @@ import '../../bloc/approval/adminapproval_bloc.dart';
 import '../../bloc/approval/adminapproval_event.dart';
 import '../../bloc/approval/adminapproval_state.dart';
 import '../Event/admin_event_details.dart';
-
+import 'package:http/http.dart' as http;
 class AdminApproval extends StatefulWidget {
   @override
   State<AdminApproval> createState() => _AdminApprovalState();
@@ -44,7 +46,44 @@ class _AdminApprovalState extends State<AdminApproval>
     _StatusBloc.close();
     super.dispose();
   }
+  Future<void> sendRejectionEmail(String employeeId, String campDocId, List<dynamic> destId, String reason,String campname, String campdate) async {
+    const String serviceId = 'service_m66gp4c';
+    const String templateId = 'template_02yy857';
+    const String user_id = 'zA3pjW03a2sLLo51c'; // Public Key (user_id)
+    const String privateKey = 'K2p5DmTapkR6qYcMPGhTQ'; // Private Key (API Key)
 
+
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $privateKey', // Send the private key as Bearer token
+      },
+      body: jsonEncode({
+        'service_id': serviceId,
+        'template_id': templateId,
+        'user_id': user_id,
+
+        'template_params': {
+          'to_email': destId, // Recipient's email
+          'employeeId': employeeId,
+          'campDocId': campDocId,
+          'campName': campname,
+          'campDate':campdate,
+          'status': 'Rejected',
+          'reason':reason,
+        },
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('Email sent successfully!');
+    } else {
+      print('Failed to send email: ${response.body}');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     // Screen size parameters
@@ -132,7 +171,7 @@ class _AdminApprovalState extends State<AdminApproval>
                         : ListView.builder(
                             itemCount: camps.length,
                             itemBuilder: (BuildContext context, int index) {
-                              print("doc Id:${state.employeeDocId[2]}");
+                            //  print("doc Id:${state.employeeDocId[2]}");
                               Animation<double> animation = CurvedAnimation(
                                 parent: _controller,
                                 curve: Interval(
@@ -354,11 +393,33 @@ class _AdminApprovalState extends State<AdminApproval>
                                                                         ),
                                                                         TextButton(
                                                                           onPressed:
-                                                                              () {
+                                                                              () async{
+                                                                                final employeeId =camps[index]['EmployeeDocId'];
+                                                                                final campDocId = state.campDocIds[index];
+                                                                                final dest1 = 'foxton.rt@gmail.com';
+                                                                                final dest2 = camps[index]['EmployeeId'];
+                                                                                final destId = [dest1,dest2];
+                                                                                final reason = _reason.text;
+                                                                                final campname = camps[index]['campName'];
+                                                                                final campdate = camps[index]['campDate'];
+
+                                                                                BlocProvider.of<AdminApprovalBloc>(context).add(
+                                                                                  UpdateStatusEvent(
+                                                                                    employeeId: employeeId,
+                                                                                    campDocId: campDocId,
+                                                                                    newStatus: 'Rejected',
+                                                                                  ),
+                                                                                );
+                                                                                // Send email notification
+                                                                                await sendRejectionEmail(employeeId, campDocId,destId,reason,campname,campdate);
+                                                                                print(employeeId);
+                                                                                print(campDocId);
+                                                                                print(camps[index]['EmployeeId']);
+                                                                                print(_reason.text);
                                                                             try {
                                                                               BlocProvider.of<AdminApprovalBloc>(context).add(
                                                                                 UpdateStatusEvent(
-                                                                                  employeeId: state.employeeDocId[index],
+                                                                                  employeeId:  camps[index]['EmployeeDocId'],
                                                                                   campDocId: state.campDocIds[index],
                                                                                   newStatus: 'Rejected',
                                                                                 ),
@@ -367,7 +428,7 @@ class _AdminApprovalState extends State<AdminApproval>
                                                                               BlocProvider.of<AdminApprovalBloc>(context).add(
                                                                                 AddReasonEvent(
                                                                                   reasonText: reasonText,
-                                                                                  employeeId: state.employeeDocId[index],
+                                                                                  employeeId:  camps[index]['EmployeeDocId'],
                                                                                   campDocId: state.campDocIds[index],
                                                                                 ),
                                                                               );
@@ -463,6 +524,9 @@ class _AdminApprovalState extends State<AdminApproval>
                                                                       builder:
                                                                           (context) =>
                                                                               AdminEventDetailsPage(
+                                                                                employeemail: camps[index]['EmployeeId'],
+                                                                                campDate: camps[index]['campDate'],
+                                                                                campName: camps[index]['campName'],
                                                                         employeeID:
                                                                             camps[index]['EmployeeDocId'],
                                                                         campID:

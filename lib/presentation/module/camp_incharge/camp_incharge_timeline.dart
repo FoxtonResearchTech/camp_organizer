@@ -37,13 +37,25 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
     _inchargeReportBloc =
         InchargeReportBloc(firestore: FirebaseFirestore.instance)
           ..add(FetchInchargeReport(employeeId: '', campId: ''));
+    fetchEmployeeName();
   }
+
+  Future<void> fetchEmployeeName() async {
+    String? name = await getCurrentEmployeeName();
+    setState(() {
+      employeeName = name ?? 'No employee found';
+    });
+  }
+
+
 
   @override
   void dispose() {
     _inchargeReportBloc.close();
     super.dispose();
   }
+  String? employeeName;
+
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +108,7 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
                 ),
               ),
             ),
+
           ),
           body: BlocBuilder<OnsiteApprovalBloc, OnsiteApprovalState>(
             builder: (context, state) {
@@ -133,7 +146,7 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
                               ),
                             );
                           },
-                          child: camps[index]['campStatus'] == "Approved"
+                          child:employeeName == camps[index]['incharge']
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -400,5 +413,30 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
         ),
       ),
     ];
+  }
+  Future<String?> getCurrentEmployeeName() async {
+    try {
+      // Reference to the Firestore collection
+      CollectionReference employees = FirebaseFirestore.instance.collection('employees');
+
+      // Query to fetch the employee with role 'campincharge'
+      QuerySnapshot querySnapshot = await employees
+          .where('role', isEqualTo: 'campIncharge')
+          .limit(1) // Limit to one result for current employee
+          .get();
+
+      // Check if any documents match the query
+      if (querySnapshot.docs.isNotEmpty) {
+        // Access the first document and extract the name field
+        var employeeData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+        return employeeData['firstName'] as String?;
+      } else {
+        // No employee found
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching employee name: $e');
+      return null;
+    }
   }
 }
