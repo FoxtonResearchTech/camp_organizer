@@ -1,5 +1,6 @@
 import 'package:camp_organizer/bloc/Profile/profile_state.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
+import 'package:camp_organizer/presentation/dashboard/CampSearchScreen.dart';
 import 'package:camp_organizer/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,15 +47,18 @@ class _UserProfilePageState extends State<UserProfilePage>
           title: const Text(
             'Profile',
             style: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'LeagueSpartan'),
           ),
           centerTitle: false,
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Container(
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -66,15 +70,13 @@ class _UserProfilePageState extends State<UserProfilePage>
           children: [
             // Header Background with transition animation
             AnimatedContainer(
+
               duration: const Duration(seconds: 1),
               height: 250,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
+
                 gradient: LinearGradient(
-                  colors: [
-                    Colors.blue,
-                    Colors.lightBlueAccent,
-                    Colors.lightBlue
-                  ],
+                  colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -92,7 +94,7 @@ class _UserProfilePageState extends State<UserProfilePage>
               child: BlocBuilder<ProfileBloc, ProfileState>(
                 builder: (context, state) {
                   if (state is ProfileLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator( color: Color(0xff0097b2),));
                   } else if (state is ProfileLoaded) {
                     final employee = state.employee;
                     return Column(
@@ -103,18 +105,18 @@ class _UserProfilePageState extends State<UserProfilePage>
                           style: const TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
+                            fontFamily: 'LeagueSpartan',
                             color: Colors.white,
                           ),
-                          child: Text(employee['firstName'] +
-                                  " " +
-                                  employee['lastName'] ??
-                              'N/A'),
+                          child: Text(
+                              '${employee['firstName'] ?? 'N/A'} ${employee['lastName'] ?? 'N/A'}'),
                         ),
                         AnimatedDefaultTextStyle(
                           duration: const Duration(milliseconds: 500),
                           style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
+                              fontFamily: 'LeagueSpartan',
                               fontSize: 15),
                           child: Text(employee['role'] ?? 'N/A'),
                         ),
@@ -190,11 +192,22 @@ class _UserProfilePageState extends State<UserProfilePage>
                                     subtitle: employee['empCode'] ?? 'N/A',
                                     slideAnimation: _slideAnimation,
                                   ),
-                                  ProfileInfoTile(
-                                    icon: Icons.search,
-                                    title: 'Camp Reports',
-                                    subtitle: 'Search',
-                                    slideAnimation: _slideAnimation,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              CampSearchScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: ProfileInfoTile(
+                                      icon: Icons.search,
+                                      title: 'Camp Reports',
+                                      subtitle: 'Search',
+                                      slideAnimation: _slideAnimation,
+                                    ),
                                   ),
                                   GestureDetector(
                                     onTap: () async {
@@ -204,7 +217,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                                             builder: (context) =>
                                                 CommutativeReportsSearchScreen(
                                                   name:
-                                                      '${employee['firstName']} ${employee['lastName']}',
+                                                      '${employee['firstName'] ?? "N/A"} ${employee['lastName'] ?? "N/A"}',
                                                   position:
                                                       employee['role'] ?? 'N/A',
                                                   empCode:
@@ -226,17 +239,29 @@ class _UserProfilePageState extends State<UserProfilePage>
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
-                                            title: const Text('Logout'),
+                                            title: const Text(
+                                              'Logout',
+                                              style: TextStyle(
+                                                fontFamily: 'LeagueSpartan',
+                                              ),
+                                            ),
                                             content: const Text(
-                                                'Are you sure you want to Logout?'),
+                                              'Are you sure you want to Logout?',
+                                              style: TextStyle(
+                                                fontFamily: 'LeagueSpartan',
+                                              ),
+                                            ),
                                             actions: [
                                               TextButton(
                                                 onPressed: () => Navigator.pop(
                                                     context, false),
                                                 child: const Text('Cancel',
                                                     style: TextStyle(
-                                                        color: AppColors
-                                                            .accentBlue)),
+                                                      color:
+                                                          AppColors.accentBlue,
+                                                      fontFamily:
+                                                          'LeagueSpartan',
+                                                    )),
                                               ),
                                               TextButton(
                                                 onPressed: () {
@@ -249,8 +274,11 @@ class _UserProfilePageState extends State<UserProfilePage>
                                                 },
                                                 child: const Text('Logout',
                                                     style: TextStyle(
-                                                        color: AppColors
-                                                            .accentBlue)),
+                                                      color:
+                                                          AppColors.accentBlue,
+                                                      fontFamily:
+                                                          'LeagueSpartan',
+                                                    )),
                                               ),
                                             ],
                                           );
@@ -275,11 +303,21 @@ class _UserProfilePageState extends State<UserProfilePage>
                     );
                   } else if (state is ProfileError) {
                     return Center(
-                      child: Text('Error+${state.errorMessage}'),
+                      child: Text(
+                        'Error+${state.errorMessage}',
+                        style: TextStyle(
+                          fontFamily: 'LeagueSpartan',
+                        ),
+                      ),
                     );
                   }
                   return const Center(
-                    child: Text("No data available"),
+                    child: Text(
+                      "No data available",
+                      style: TextStyle(
+                        fontFamily: 'LeagueSpartan',
+                      ),
+                    ),
                   );
                 },
               ),
@@ -312,19 +350,23 @@ class ProfileInfoTile extends StatelessWidget {
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.blueAccent.withOpacity(0.1),
+            color:  Color(0xff0097b2).withOpacity(0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
             icon,
-            color: Colors.blueAccent,
+              color: Color(0xff0097b2),
           ),
         ),
         title: Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(
+              fontWeight: FontWeight.bold, fontFamily: 'LeagueSpartan'),
         ),
-        subtitle: Text(subtitle),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(fontFamily: 'LeagueSpartan'),
+        ),
       ),
     );
   }

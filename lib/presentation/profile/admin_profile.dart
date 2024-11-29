@@ -1,4 +1,5 @@
 import 'package:camp_organizer/bloc/Profile/profile_state.dart';
+import 'package:camp_organizer/presentation/Admin/admin_camp_search_screen.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
 import 'package:camp_organizer/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,11 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
           title: const Text(
             'Profile',
             style: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'LeagueSpartan',
+            ),
           ),
           centerTitle: false,
           backgroundColor: Colors.transparent,
@@ -105,6 +110,7 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
                           style: const TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
+                            fontFamily: 'LeagueSpartan',
                             color: Colors.white,
                           ),
                           child: Text(employee['firstName'] +
@@ -117,6 +123,7 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
                           style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
+                              fontFamily: 'LeagueSpartan',
                               fontSize: 15),
                           child: Text(employee['role'] ?? 'N/A'),
                         ),
@@ -192,11 +199,22 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
                                     subtitle: employee['empCode'] ?? 'N/A',
                                     slideAnimation: _slideAnimation,
                                   ),
-                                  ProfileInfoTile(
-                                    icon: Icons.search,
-                                    title: 'Camp Reports',
-                                    subtitle: 'Search',
-                                    slideAnimation: _slideAnimation,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              AdminCampSearchScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: ProfileInfoTile(
+                                      icon: Icons.search,
+                                      title: 'Camp Reports',
+                                      subtitle: 'Search',
+                                      slideAnimation: _slideAnimation,
+                                    ),
                                   ),
                                   GestureDetector(
                                     onTap: () async {
@@ -228,17 +246,29 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
-                                            title: const Text('Logout'),
+                                            title: const Text(
+                                              'Logout',
+                                              style: TextStyle(
+                                                fontFamily: 'LeagueSpartan',
+                                              ),
+                                            ),
                                             content: const Text(
-                                                'Are you sure you want to Logout?'),
+                                              'Are you sure you want to Logout?',
+                                              style: TextStyle(
+                                                fontFamily: 'LeagueSpartan',
+                                              ),
+                                            ),
                                             actions: [
                                               TextButton(
                                                 onPressed: () => Navigator.pop(
                                                     context, false),
                                                 child: const Text('Cancel',
                                                     style: TextStyle(
-                                                        color: AppColors
-                                                            .accentBlue)),
+                                                      color:
+                                                          AppColors.accentBlue,
+                                                      fontFamily:
+                                                          'LeagueSpartan',
+                                                    )),
                                               ),
                                               TextButton(
                                                 onPressed: () {
@@ -251,8 +281,11 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
                                                 },
                                                 child: const Text('Logout',
                                                     style: TextStyle(
-                                                        color: AppColors
-                                                            .accentBlue)),
+                                                      color:
+                                                          AppColors.accentBlue,
+                                                      fontFamily:
+                                                          'LeagueSpartan',
+                                                    )),
                                               ),
                                             ],
                                           );
@@ -324,9 +357,17 @@ class ProfileInfoTile extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
-        subtitle: Text(subtitle),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(
+            fontFamily: 'LeagueSpartan',
+          ),
+        ),
       ),
     );
   }

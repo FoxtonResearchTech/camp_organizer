@@ -111,7 +111,11 @@ class _AnimatedRotatingPieChartWithGridState
           title: const Text(
             'Dashboard',
             style: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'LeagueSpartan',
+            ),
           ),
           centerTitle: false,
           backgroundColor: Colors.transparent,
@@ -119,7 +123,7 @@ class _AnimatedRotatingPieChartWithGridState
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -190,7 +194,7 @@ class _AnimatedRotatingPieChartWithGridState
                               return Center(
                                 key: ValueKey('loading'),
                                 child: CircularProgressIndicator(
-                                  color: Colors.blue,
+                                  color: Color(0xff0097b2),
                                 ),
                               );
                             } else if (state is StatusLoaded) {
@@ -316,6 +320,7 @@ class _AnimatedRotatingPieChartWithGridState
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 25,
+                          fontFamily: 'LeagueSpartan',
                           color: Colors.black54),
                     ),
                   ),
@@ -330,6 +335,7 @@ class _AnimatedRotatingPieChartWithGridState
                                 textStyle: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
+                                  fontFamily: 'LeagueSpartan',
                                   color: Colors.grey,
                                 ),
                                 speed: Duration(
@@ -358,6 +364,7 @@ class _AnimatedRotatingPieChartWithGridState
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w500,
+                                fontFamily: 'LeagueSpartan',
                                 color: Colors.grey,
                               ),
                             ),
@@ -465,6 +472,8 @@ class _AnimatedRotatingPieChartWithGridState
                                                           style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w500,
+                                                            fontFamily:
+                                                                'LeagueSpartan',
                                                             color:
                                                                 Colors.black54,
                                                             fontSize:
@@ -491,6 +500,8 @@ class _AnimatedRotatingPieChartWithGridState
                                                           style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w500,
+                                                            fontFamily:
+                                                                'LeagueSpartan',
                                                             color:
                                                                 Colors.black54,
                                                             fontSize:
@@ -592,6 +603,7 @@ class _AnimatedRotatingPieChartWithGridState
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
+                fontFamily: 'LeagueSpartan',
                 color: Colors.white,
               ),
             ),
@@ -601,6 +613,7 @@ class _AnimatedRotatingPieChartWithGridState
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.white70,
+                fontFamily: 'LeagueSpartan',
               ),
             ),
           ],
@@ -634,6 +647,7 @@ class _AnimatedRotatingPieChartWithGridState
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black54,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05, // Responsive font size
         ),
       ),
@@ -655,6 +669,7 @@ class _AnimatedRotatingPieChartWithGridState
         titleStyle: TextStyle(
           fontSize: fontSize,
           fontWeight: FontWeight.bold,
+          fontFamily: 'LeagueSpartan',
           color: Colors.white,
         ),
       );
@@ -687,7 +702,10 @@ class _AnimatedRotatingPieChartWithGridState
             Text(
               titles[index],
               style: TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 14 * fontSizeFactor),
+                fontWeight: FontWeight.bold,
+                fontSize: 14 * fontSizeFactor,
+                fontFamily: 'LeagueSpartan',
+              ),
             ),
           ],
         );
@@ -746,6 +764,7 @@ class _AnimatedRotatingPieChartWithGridState
                             approvedCount.toString(),
                             style: TextStyle(
                                 fontSize: 22 * fontSizeFactor,
+                                fontFamily: 'LeagueSpartan',
                                 fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 8),
@@ -753,6 +772,7 @@ class _AnimatedRotatingPieChartWithGridState
                             titles[index],
                             style: TextStyle(
                                 fontSize: 16 * fontSizeFactor,
+                                fontFamily: 'LeagueSpartan',
                                 color: Colors.black54),
                           ),
                         ],

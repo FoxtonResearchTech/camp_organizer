@@ -44,10 +44,10 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
 
   void saveData(BuildContext context, documentId) {
     final Map<String, dynamic> data = {
-     // 'date': dateController.text.trim(),
-     // 'time': timeController.text.trim(),
-     // 'campName': campNameController.text.trim(),
-    //  'organization': organizationController.text.trim(),
+      // 'date': dateController.text.trim(),
+      // 'time': timeController.text.trim(),
+      // 'campName': campNameController.text.trim(),
+      //  'organization': organizationController.text.trim(),
       'doctor': doctorController.text.trim(),
       'driver': driverController.text.trim(),
       'incharge': selectedEmployee,
@@ -63,6 +63,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
         .read<AddTeamBloc>()
         .add(AddTeamWithDocumentId(documentId: widget.documentId, data: data));
   }
+
   String? selectedEmployee;
   List<String> employeeNames = [];
 
@@ -71,6 +72,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
     fetchEmployees();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -89,7 +91,11 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
           title: const Text(
             'Onsite Team Setup',
             style: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'LeagueSpartan',
+            ),
           ),
           centerTitle: false,
           backgroundColor: Colors.transparent,
@@ -97,7 +103,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -109,11 +115,17 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
           listener: (context, state) {
             if (state is AddTeamSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Data saved successfully!')),
+                const SnackBar(
+                  content: Center(child: Text('Data saved successfully!')),
+                  backgroundColor: Colors.green,
+                ),
               );
             } else if (state is AddTeamError) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Error: ${state.message}')),
+                SnackBar(
+                  content: Center(child: Text('Error: ${state.message}')),
+                  backgroundColor: Colors.red,
+                ),
               );
             }
           },
@@ -139,7 +151,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
                     sectionTitle: 'Add Team Info',
                     children: [],
                   ),
-                /*
+                  /*
                   Row(
                     children: [
                       Expanded(
@@ -312,6 +324,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
+          fontFamily: 'LeagueSpartan',
           color: Colors.lightBlue[800],
         ),
       ),
@@ -325,8 +338,8 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.cyan[100]!,
-            Colors.cyan[50]!,
+            Color(0xff0097b2),
+            Color(0xff0097b2).withOpacity(0.5)!,
           ],
           begin: Alignment.bottomRight,
           end: Alignment.topLeft,
@@ -345,17 +358,22 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
         title: Text(
           label,
           style: const TextStyle(
+            fontFamily: 'LeagueSpartan',
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: Colors.white,
           ),
         ),
         subtitle: Text(
           value?.toString() ?? 'N/A',
-          style: const TextStyle(color: Colors.black54),
+          style: const TextStyle(
+            color: Colors.white,fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
       ),
     );
   }
+
   Future<void> fetchEmployees() async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance

@@ -283,7 +283,11 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
         title: const Text(
           'Camp Details',
           style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -313,19 +317,34 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text('Delete Camp'),
+                    title: const Text(
+                      'Delete Camp',
+                      style: TextStyle(
+                        fontFamily: 'LeagueSpartan',
+                      ),
+                    ),
                     content: const Text(
-                        'Are you sure you want to delete this camp?'),
+                      'Are you sure you want to delete this camp?',
+                      style: TextStyle(
+                        fontFamily: 'LeagueSpartan',
+                      ),
+                    ),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(context, false),
                         child: const Text('Cancel',
-                            style: TextStyle(color: AppColors.accentBlue)),
+                            style: TextStyle(
+                              color: AppColors.accentBlue,
+                              fontFamily: 'LeagueSpartan',
+                            )),
                       ),
                       TextButton(
                         onPressed: () => Navigator.pop(context, true),
                         child: const Text('Delete',
-                            style: TextStyle(color: AppColors.accentBlue)),
+                            style: TextStyle(
+                              color: AppColors.accentBlue,
+                              fontFamily: 'LeagueSpartan',
+                            )),
                       ),
                     ],
                   );
@@ -415,7 +434,11 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
             const SizedBox(height: 20),
             const Text(
               "Concern Person1 Details",
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 20,
+                fontFamily: 'LeagueSpartan',
+              ),
             ),
             const SizedBox(height: 20),
             _buildCustomTextFormField(
@@ -433,7 +456,11 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
             const SizedBox(height: 20),
             const Text(
               "Concern Person2 Details",
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 20,
+                fontFamily: 'LeagueSpartan',
+              ),
             ),
             const SizedBox(height: 20),
             _buildCustomTextFormField(
@@ -450,7 +477,11 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
             const SizedBox(height: 20),
             const Text(
               "Event Planning",
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 20,
+                fontFamily: 'LeagueSpartan',
+              ),
             ),
             const SizedBox(height: 20),
             CustomDropdownFormField(
@@ -531,7 +562,11 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
               ),
               label: Text(
                 _isEditing ? "Save" : "Edit",
-                style: const TextStyle(fontSize: 18, color: Colors.white),
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontFamily: 'LeagueSpartan',
+                ),
               ),
             ),
           ],

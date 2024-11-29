@@ -46,15 +46,19 @@ class _OnsiteProfile extends State<OnsiteProfile>
           title: const Text(
             'Profile',
             style: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'LeagueSpartan',
+            ),
           ),
           centerTitle: false,
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Container(
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -68,13 +72,9 @@ class _OnsiteProfile extends State<OnsiteProfile>
             AnimatedContainer(
               duration: const Duration(seconds: 1),
               height: 250,
-              decoration: const BoxDecoration(
+              decoration:  BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Colors.blue,
-                    Colors.lightBlueAccent,
-                    Colors.lightBlue
-                  ],
+                  colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -101,22 +101,34 @@ class _OnsiteProfile extends State<OnsiteProfile>
                         AnimatedDefaultTextStyle(
                           duration: const Duration(milliseconds: 500),
                           style: const TextStyle(
+                            fontFamily: 'LeagueSpartan',
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
-                          child: Text(employee['firstName'] +
-                                  " " +
-                                  employee['lastName'] ??
-                              'N/A'),
+                          child: Text(
+                            employee['firstName'] +
+                                    " " +
+                                    employee['lastName'] ??
+                                'N/A',
+                            style: TextStyle(
+                              fontFamily: 'LeagueSpartan',
+                            ),
+                          ),
                         ),
                         AnimatedDefaultTextStyle(
                           duration: const Duration(milliseconds: 500),
                           style: const TextStyle(
                               color: Colors.white,
+                              fontFamily: 'LeagueSpartan',
                               fontWeight: FontWeight.w500,
                               fontSize: 15),
-                          child: Text(employee['role'] ?? 'N/A'),
+                          child: Text(
+                            employee['role'] ?? 'N/A',
+                            style: TextStyle(
+                              fontFamily: 'LeagueSpartan',
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 30),
                         Expanded(
@@ -196,15 +208,26 @@ class _OnsiteProfile extends State<OnsiteProfile>
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
-                                            title: const Text('Logout'),
+                                            title: const Text(
+                                              'Logout',
+                                              style: TextStyle(
+                                                fontFamily: 'LeagueSpartan',
+                                              ),
+                                            ),
                                             content: const Text(
-                                                'Are you sure you want to Logout?'),
+                                              'Are you sure you want to Logout?',
+                                              style: TextStyle(
+                                                fontFamily: 'LeagueSpartan',
+                                              ),
+                                            ),
                                             actions: [
                                               TextButton(
                                                 onPressed: () => Navigator.pop(
                                                     context, false),
                                                 child: const Text('Cancel',
                                                     style: TextStyle(
+                                                        fontFamily:
+                                                            'LeagueSpartan',
                                                         color: AppColors
                                                             .accentBlue)),
                                               ),
@@ -219,6 +242,8 @@ class _OnsiteProfile extends State<OnsiteProfile>
                                                 },
                                                 child: const Text('Logout',
                                                     style: TextStyle(
+                                                        fontFamily:
+                                                            'LeagueSpartan',
                                                         color: AppColors
                                                             .accentBlue)),
                                               ),
@@ -245,11 +270,21 @@ class _OnsiteProfile extends State<OnsiteProfile>
                     );
                   } else if (state is OnsiteProfileError) {
                     return Center(
-                      child: Text('Error+${state.errorMessage}'),
+                      child: Text(
+                        'Error+${state.errorMessage}',
+                        style: TextStyle(
+                          fontFamily: 'LeagueSpartan',
+                        ),
+                      ),
                     );
                   }
                   return const Center(
-                    child: Text("No data available"),
+                    child: Text(
+                      "No data available",
+                      style: TextStyle(
+                        fontFamily: 'LeagueSpartan',
+                      ),
+                    ),
                   );
                 },
               ),
@@ -282,19 +317,27 @@ class ProfileInfoTile extends StatelessWidget {
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.blueAccent.withOpacity(0.1),
+            color: Color(0xff0097b2).withOpacity(0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
             icon,
-            color: Colors.blueAccent,
+            color: Color(0xff0097b2),
           ),
         ),
         title: Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
-        subtitle: Text(subtitle),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(
+            fontFamily: 'LeagueSpartan',
+          ),
+        ),
       ),
     );
   }

@@ -109,7 +109,11 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
         title: const Text(
           'Camp Details',
           style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -216,8 +220,9 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
                   // Get the Downloads folder directory
                   final directory = Directory('/storage/emulated/0/Download');
                   if (await directory.exists()) {
+                    final timestamp = DateTime.now().millisecondsSinceEpoch;
                     final path =
-                        "${directory.path}/${widget.employee['campName']}.pdf";
+                        "${directory.path}/${widget.employee['campName']}_$timestamp.pdf";
                     final file = File(path);
                     await file.writeAsBytes(await pdf.save());
 
@@ -269,6 +274,7 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
           style: TextStyle(
             fontWeight: FontWeight.w500,
             color: Colors.black54,
+            fontFamily: 'LeagueSpartan',
             fontSize: screenWidth * 0.05,
           ),
         ),
@@ -299,7 +305,9 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
             pw.Text(
               "Individual Report",
               style: pw.TextStyle(
-                  fontWeight: pw.FontWeight.bold, fontSize: screenHeight / 50),
+                fontWeight: pw.FontWeight.bold,
+                fontSize: screenHeight / 50,
+              ),
             ),
           ],
         ),
@@ -461,7 +469,9 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
       children: [
         pw.Text(title ?? "N/A",
-            style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            )),
         pw.Text(data),
       ],
     );
@@ -484,6 +494,7 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05,
         ),
       ),
@@ -499,6 +510,7 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05,
         ),
       ),
@@ -533,6 +545,7 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
           style: TextStyle(
             fontWeight: FontWeight.w500,
             color: Colors.black54,
+            fontFamily: 'LeagueSpartan',
             fontSize: screenWidth * 0.04,
           ),
         ),
@@ -543,6 +556,7 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
             style: TextStyle(
               fontWeight: FontWeight.w500,
               color: Colors.black54,
+              fontFamily: 'LeagueSpartan',
               fontSize: screenWidth * 0.05,
             ),
             overflow: TextOverflow.ellipsis,
@@ -577,6 +591,7 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: screenWidth * 0.05,
+              fontFamily: 'LeagueSpartan',
               color: Colors.white,
             ),
           ),

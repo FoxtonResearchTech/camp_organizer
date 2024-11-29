@@ -23,7 +23,11 @@ class OnsiteCampDetailsPage extends StatelessWidget {
         title: const Text(
           'Camp Details',
           style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -31,7 +35,7 @@ class OnsiteCampDetailsPage extends StatelessWidget {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -99,13 +103,15 @@ class OnsiteCampDetailsPage extends StatelessWidget {
                 _buildInfoCard('Number of Patients Expected',
                     campData['noOfPatientExpected']),
                 _buildInfoCard('Position', campData['position']),
-                _buildInfoCard(
-                    'Created On', campData['CreatedOn']?.toString() ?? 'N/A'),
-                _buildInfoCard('Document ID', campData['documentId']),
+             //   _buildInfoCard('Created On', campData['CreatedOn']?.toString() ?? 'N/A'),
+            //    _buildInfoCard('Document ID', campData['documentId']),
                 _buildInfoCard('AR', campData['ar'] ?? 'N?A'),
               ],
             ),
-            Center(child: CustomButton(text: 'Approve', onPressed: () {})),
+            Center(child:SizedBox()
+
+       //     CustomButton(text: 'Approve', onPressed: () {})
+            ),
           ],
         ),
       ),
@@ -160,6 +166,7 @@ class OnsiteCampDetailsPage extends StatelessWidget {
       child: Text(
         title,
         style: TextStyle(
+          fontFamily: 'LeagueSpartan',
           fontSize: 18,
           fontWeight: FontWeight.bold,
           color: Colors.lightBlue[800],
@@ -175,8 +182,8 @@ class OnsiteCampDetailsPage extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.cyan[100]!,
-            Colors.cyan[50]!,
+          Color(0xff0097b2),
+           Color(0xff0097b2).withOpacity(0.5)!,
           ],
           begin: Alignment.bottomRight,
           end: Alignment.topLeft,
@@ -195,13 +202,17 @@ class OnsiteCampDetailsPage extends StatelessWidget {
         title: Text(
           label,
           style: const TextStyle(
+            fontFamily: 'LeagueSpartan',
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: Colors.white,
           ),
         ),
         subtitle: Text(
           value?.toString() ?? 'N/A',
-          style: const TextStyle(color: Colors.black54),
+          style: const TextStyle(
+            color: Colors.white,fontWeight: FontWeight.w500,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
       ),
     );

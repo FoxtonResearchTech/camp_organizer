@@ -46,16 +46,25 @@ class _FinanceTimelineState extends State<FinanceTimeline>
       listener: (context, state) {
         if (state is AddFinanceLoading) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Loading Finance Details...')),
+            const SnackBar(
+              content: Center(child: Text('Loading Finance Details...')),
+              backgroundColor: Colors.orange,
+            ),
           );
         } else if (state is AddFinanceSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-                content: Text('Finance Details Loaded successfully!')),
+              content:
+                  Center(child: Text('Finance Details Loaded successfully!')),
+              backgroundColor: Colors.green,
+            ),
           );
         } else if (state is AddFinanceError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${state.message}')),
+            SnackBar(
+              content: Center(child: Text('Error: ${state.message}')),
+              backgroundColor: Colors.red,
+            ),
           );
         }
       },
@@ -68,6 +77,7 @@ class _FinanceTimelineState extends State<FinanceTimeline>
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,
+                  fontFamily: 'LeagueSpartan',
                   fontWeight: FontWeight.bold),
             ),
             centerTitle: false,
@@ -174,6 +184,8 @@ class _FinanceTimelineState extends State<FinanceTimeline>
                                                           fontWeight:
                                                               FontWeight.w500,
                                                           color: Colors.black54,
+                                                          fontFamily:
+                                                              'LeagueSpartan',
                                                           fontSize:
                                                               screenWidth *
                                                                   0.05,
@@ -197,6 +209,8 @@ class _FinanceTimelineState extends State<FinanceTimeline>
                                                           fontWeight:
                                                               FontWeight.w500,
                                                           color: Colors.black54,
+                                                          fontFamily:
+                                                              'LeagueSpartan',
                                                           fontSize:
                                                               screenWidth *
                                                                   0.05,
@@ -279,6 +293,8 @@ class _FinanceTimelineState extends State<FinanceTimeline>
                                                             style: TextStyle(
                                                               color:
                                                                   Colors.white,
+                                                              fontFamily:
+                                                                  'LeagueSpartan',
                                                               fontSize: 18,
                                                               fontWeight:
                                                                   FontWeight
@@ -335,6 +351,8 @@ class _FinanceTimelineState extends State<FinanceTimeline>
                                                             style: TextStyle(
                                                               color:
                                                                   Colors.white,
+                                                              fontFamily:
+                                                                  'LeagueSpartan',
                                                               fontSize: 18,
                                                               fontWeight:
                                                                   FontWeight
@@ -362,12 +380,21 @@ class _FinanceTimelineState extends State<FinanceTimeline>
                 return Center(
                   child: Text(
                     '$state.errorMessage',
-                    style: const TextStyle(color: Colors.red, fontSize: 16),
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
+                      fontFamily: 'LeagueSpartan',
+                    ),
                   ),
                 );
               } else {
                 return const Center(
-                  child: Text('No Camps Found'),
+                  child: Text(
+                    'No Camps Found',
+                    style: TextStyle(
+                      fontFamily: 'LeagueSpartan',
+                    ),
+                  ),
                 );
               }
             },
@@ -383,7 +410,12 @@ class _FinanceTimelineState extends State<FinanceTimeline>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Add Team'),
+        title: const Text(
+          'Add Team',
+          style: TextStyle(
+            fontFamily: 'LeagueSpartan',
+          ),
+        ),
         content: TextField(
           controller: teamController,
           decoration: const InputDecoration(
@@ -396,7 +428,12 @@ class _FinanceTimelineState extends State<FinanceTimeline>
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Cancel'),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(
+                fontFamily: 'LeagueSpartan',
+              ),
+            ),
           ),
           ElevatedButton(
             onPressed: () {
@@ -412,7 +449,12 @@ class _FinanceTimelineState extends State<FinanceTimeline>
               // Navigator.pop(context);
               //}
             },
-            child: const Text('Add'),
+            child: const Text(
+              'Add',
+              style: TextStyle(
+                fontFamily: 'LeagueSpartan',
+              ),
+            ),
           ),
         ],
       ),
@@ -421,7 +463,7 @@ class _FinanceTimelineState extends State<FinanceTimeline>
 
   void _addTeamToCamp(dynamic camp, String teamInfo) {
     // Logic to add team information to the selected camp
-    print('Team "$teamInfo" added to camp: ${camp.name}');
+    print('Team "$teamInfo" added to camp: ${camp.name},');
     // Integrate with your bloc or backend logic here
   }
 
@@ -432,6 +474,7 @@ class _FinanceTimelineState extends State<FinanceTimeline>
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black54,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05, // Responsive font size
         ),
       ),

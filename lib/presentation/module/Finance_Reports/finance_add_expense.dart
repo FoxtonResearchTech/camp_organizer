@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -60,11 +61,17 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
           documentId: widget.documentId, data: expenseData));
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Expense data submitted successfully')),
+        const SnackBar(
+          content: Center(child: Text('Expense data submitted successfully')),
+          backgroundColor: Colors.green,
+        ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all required fields')),
+        const SnackBar(
+          content: Center(child: Text('Please fill all required fields')),
+          backgroundColor: Colors.green,
+        ),
       );
     }
   }
@@ -95,6 +102,7 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
           'Camp Expenses',
           style: TextStyle(
             color: Colors.white,
+            fontFamily: 'LeagueSpartan',
             fontSize: 22,
             fontWeight: FontWeight.bold,
           ),
@@ -110,6 +118,15 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
               end: Alignment.bottomRight,
             ),
           ),
+        ),
+        leading: IconButton(
+          icon: const Icon(
+            CupertinoIcons.back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: SingleChildScrollView(
@@ -168,7 +185,10 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
                 const SizedBox(height: 20),
                 const Text(
                   'Camp Expenses',
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'LeagueSpartan',
+                  ),
                 ),
                 const SizedBox(height: 20),
                 CustomTextFormField(

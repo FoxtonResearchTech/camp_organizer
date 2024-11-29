@@ -19,7 +19,7 @@ import '../../../bloc/approval/onsite_approval_state.dart';
 import '../../notification/notification.dart';
 import 'camp_incharge_reporting.dart';
 import 'incharge_details_page.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 class CampInchargeTimeline extends StatefulWidget {
   const CampInchargeTimeline({super.key});
 
@@ -38,14 +38,9 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
         InchargeReportBloc(firestore: FirebaseFirestore.instance)
           ..add(FetchInchargeReport(employeeId: '', campId: ''));
     fetchEmployeeName();
+
   }
 
-  Future<void> fetchEmployeeName() async {
-    String? name = await getCurrentEmployeeName();
-    setState(() {
-      employeeName = name ?? 'No employee found';
-    });
-  }
 
 
 
@@ -54,8 +49,63 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
     _inchargeReportBloc.close();
     super.dispose();
   }
-  String? employeeName;
 
+  String? employeeName;
+  Future<void> fetchEmployeeName() async {
+    try {
+      // Get the current user's UID from FirebaseAuth
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      String? currentEmployeeId = currentUser?.uid;
+
+      if (currentEmployeeId == null) {
+        setState(() {
+          employeeName = 'User not logged in';
+          print("Error: $employeeName");
+        });
+        return;
+      }
+
+      // Reference to Firestore
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      // Fetch the document for the current employee using their UID
+      DocumentSnapshot employeeDoc = await firestore
+          .collection('employees')
+          .doc(currentEmployeeId)
+          .get();
+
+      if (employeeDoc.exists) {
+        // Safely cast the document data to Map<String, dynamic>
+        Map<String, dynamic>? data = employeeDoc.data() as Map<String, dynamic>?;
+
+        if (data != null) {
+          // Access the 'firstName' field
+          String? firstName = data['firstName'];
+
+          setState(() {
+            employeeName = firstName ?? 'No employee found';
+            print("Employee's Name: $employeeName");
+          });
+        } else {
+          setState(() {
+            employeeName = 'No data in employee document';
+            print("Error: $employeeName");
+          });
+        }
+      } else {
+        setState(() {
+          employeeName = 'Employee document not found';
+          print("Error: $employeeName");
+        });
+      }
+    } catch (e) {
+      // Handle exceptions
+      setState(() {
+        employeeName = 'Error fetching employee name';
+        print("Error: $e");
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,15 +118,24 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
       listener: (context, state) {
         if (state is InchargeReportLoading) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Loading reports...')),
+            const SnackBar(
+              content: Center(child: Text('Loading reports...')),
+              backgroundColor: Colors.orange,
+            ),
           );
         } else if (state is InchargeReportUpdated) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Report updated successfully!')),
+            const SnackBar(
+              content: Center(child: Text('Report updated successfully!')),
+              backgroundColor: Colors.green,
+            ),
           );
         } else if (state is InchargeReportError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${'state.message'}')),
+            SnackBar(
+              content: Center(child: Text('Error: ${'state.message'}')),
+              backgroundColor: Colors.red,
+            ),
           );
         }
       },
@@ -90,6 +149,7 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,
+                  fontFamily: 'LeagueSpartan',
                   fontWeight: FontWeight.bold),
             ),
             centerTitle: false,
@@ -108,7 +168,6 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
                 ),
               ),
             ),
-
           ),
           body: BlocBuilder<OnsiteApprovalBloc, OnsiteApprovalState>(
             builder: (context, state) {
@@ -146,7 +205,7 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
                               ),
                             );
                           },
-                          child:employeeName == camps[index]['incharge']
+                          child: employeeName == camps[index]['incharge']
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -414,10 +473,12 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
       ),
     ];
   }
+
   Future<String?> getCurrentEmployeeName() async {
     try {
       // Reference to the Firestore collection
-      CollectionReference employees = FirebaseFirestore.instance.collection('employees');
+      CollectionReference employees =
+          FirebaseFirestore.instance.collection('employees');
 
       // Query to fetch the employee with role 'campincharge'
       QuerySnapshot querySnapshot = await employees
@@ -428,7 +489,8 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
       // Check if any documents match the query
       if (querySnapshot.docs.isNotEmpty) {
         // Access the first document and extract the name field
-        var employeeData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+        var employeeData =
+            querySnapshot.docs.first.data() as Map<String, dynamic>;
         return employeeData['firstName'] as String?;
       } else {
         // No employee found

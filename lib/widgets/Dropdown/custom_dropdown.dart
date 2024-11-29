@@ -26,8 +26,12 @@ class CustomDropdownFormField extends StatelessWidget {
       validator: validator,
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: TextStyle(color: AppColors.textBlue),
-        prefixIcon: icon != null ? Icon(icon, color: AppColors.primaryBlue) : null,
+        labelStyle: TextStyle(
+          color: AppColors.textBlue,
+          fontFamily: 'LeagueSpartan',
+        ),
+        prefixIcon:
+            icon != null ? Icon(icon, color: AppColors.primaryBlue) : null,
         filled: true,
         fillColor: AppColors.lightBlue,
         border: OutlineInputBorder(
@@ -42,7 +46,12 @@ class CustomDropdownFormField extends StatelessWidget {
       items: items.map((String item) {
         return DropdownMenuItem<String>(
           value: item,
-          child: Text(item),
+          child: Text(
+            item,
+            style: TextStyle(
+              fontFamily: 'LeagueSpartan',
+            ),
+          ),
         );
       }).toList(),
       onChanged: onChanged,

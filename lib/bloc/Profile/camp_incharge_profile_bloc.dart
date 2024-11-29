@@ -13,9 +13,11 @@ class CampInChargeProfileBloc
       try {
         final currentUser = FirebaseAuth.instance.currentUser;
         if (currentUser != null) {
+          final empCode = currentUser.email;
+          final normalizedEmpCode = empCode?.split('@').first ?? '';
           final querySnapshot = await FirebaseFirestore.instance
               .collection('employees')
-              .where('empCode', isEqualTo: currentUser.email)
+              .where('empCode', isEqualTo: normalizedEmpCode)
               .get();
 
           final employeeData = querySnapshot.docs.isNotEmpty

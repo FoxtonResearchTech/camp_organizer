@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primaryBlue =
-      Color(0xFF1565C0); // Medical-themed primary blue
+  static const Color primaryBlue = Color(0xFF0097b2);
+     // Color(0xFF1565C0);  Medical-themed primary blue
   static const Color lightBlue = Color(0xFFE3F2FD); // Light background blue
-  static const Color buttonBlue = Color(0xFF1E88E5); // Button color
-  static const Color textBlue = Color(0xFF0D47A1); // Text color
+  static const Color buttonBlue = Color(0xff0098b2);
+  //Color(0xFF1E88E5); // Button color
+  static const Color textBlue = Color(0xff0097b2);
+  //Color(0xFF0D47A1); // Text color
   static const Color accentBlue =
       Color(0xFF42A5F5); // Accent color for highlights
   static const Color lightGray =

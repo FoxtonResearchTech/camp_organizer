@@ -17,10 +17,16 @@ class CustomButton extends StatelessWidget {
       onPressed: onPressed,
       child: Text(
         text,
-        style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.w500),
+        style: TextStyle(
+          fontSize: 18,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'LeagueSpartan',
+        ),
       ),
       style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(horizontal: 100, vertical: 20), backgroundColor: AppColors.buttonBlue,
+        padding: EdgeInsets.symmetric(horizontal: 100, vertical: 20),
+        backgroundColor: AppColors.buttonBlue,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),

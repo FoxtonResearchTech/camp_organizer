@@ -52,18 +52,19 @@ class _DashboardScreenState extends State<DashboardScreen>
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,
+                  fontFamily: 'LeagueSpartan',
                   fontWeight: FontWeight.bold),
             ),
             centerTitle: false,
             backgroundColor: Colors.transparent,
             elevation: 0,
             flexibleSpace: Container(
-              decoration: const BoxDecoration(
+              decoration:  BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Colors.blue,
-                    Colors.lightBlueAccent,
-                    Colors.lightBlue
+                    Color(0xFF0097b2),
+                    Color(0xFF0097b2).withOpacity(1),
+                    Color(0xFF0097b2).withOpacity(0.8)
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -85,16 +86,20 @@ class _DashboardScreenState extends State<DashboardScreen>
           body: BlocBuilder<StatusBloc, StatusState>(
             builder: (context, state) {
               if (state is StatusLoading) {
-                return Center(child: CircularProgressIndicator());
+                return Center(child: CircularProgressIndicator(
+                  color: Color(0xff0097b2),
+                ),);
               } else if (state is StatusLoaded) {
                 final employees = state.employees;
 
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: RefreshIndicator(
+                    color:  Color(0xff0097b2),
                     onRefresh: () async {
                       // Trigger the refresh event in your bloc or reload the data here
                       context.read<StatusBloc>().add(FetchDataEvent());
+
                     },
                     child: employees.isEmpty
                         ? SingleChildScrollView(
@@ -116,6 +121,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
+                                        fontFamily: 'LeagueSpartan',
                                         color: Colors.grey,
                                       ),
                                     ),
@@ -219,6 +225,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                           style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w500,
+                                                            fontFamily:
+                                                                'LeagueSpartan',
                                                             color:
                                                                 Colors.black54,
                                                             fontSize:
@@ -244,6 +252,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                           style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w500,
+                                                            fontFamily:
+                                                                'LeagueSpartan',
                                                             color:
                                                                 Colors.black54,
                                                             fontSize:
@@ -586,6 +596,7 @@ class _DashboardScreenState extends State<DashboardScreen>
           style: TextStyle(
             fontWeight: FontWeight.w500,
             color: Colors.black54,
+            fontFamily: 'LeagueSpartan',
             fontSize:
                 screenWidth * 0.05, // Increased font size for timeline text
           ),
@@ -605,6 +616,7 @@ class _DashboardScreenState extends State<DashboardScreen>
       Text(
         text,
         style: TextStyle(
+          fontFamily: 'LeagueSpartan',
           fontWeight: FontWeight.w500,
           color: Colors.black54,
           fontSize: screenWidth * 0.05, // Responsive font size
