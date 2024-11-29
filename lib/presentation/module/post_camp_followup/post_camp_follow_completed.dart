@@ -29,7 +29,10 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
         title: const Text(
           'Completed Followup',
           style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+              fontFamily: 'LeagueSpartan',
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold),
         ),
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -60,6 +63,7 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
                     const Text(
                       "No FollowUps found",
                       style: TextStyle(
+                        fontFamily: 'LeagueSpartan',
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.grey,
@@ -121,6 +125,7 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
           child: Text(
             'No follow-up data available',
             style: TextStyle(
+              fontFamily: 'LeagueSpartan',
               fontSize: 16,
               fontWeight: FontWeight.w500,
               color: Colors.grey[600],
@@ -159,6 +164,7 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
           title: Text(
             patient['name'] ?? 'N/A',
             style: const TextStyle(
+              fontFamily: 'LeagueSpartan',
               fontWeight: FontWeight.bold,
               color: Colors.black87,
             ),
@@ -169,12 +175,18 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
               const SizedBox(height: 5),
               Text(
                 'Phone: ${patient['phone'] ?? 'N/A'}',
-                style: const TextStyle(color: Colors.black54),
+                style: const TextStyle(
+                  color: Colors.black54,
+                  fontFamily: 'LeagueSpartan',
+                ),
               ),
               const SizedBox(height: 5),
               Text(
                 'Status: ${patient['status'] ?? 'N/A'}',
-                style: const TextStyle(color: Colors.black54),
+                style: const TextStyle(
+                  color: Colors.black54,
+                  fontFamily: 'LeagueSpartan',
+                ),
               ),
             ],
           ),
@@ -231,6 +243,7 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
       child: Text(
         title,
         style: TextStyle(
+          fontFamily: 'LeagueSpartan',
           fontSize: 18,
           fontWeight: FontWeight.bold,
           color: Colors.lightBlue[800],
@@ -266,13 +279,17 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
         title: Text(
           label,
           style: const TextStyle(
+            fontFamily: 'LeagueSpartan',
             fontWeight: FontWeight.bold,
             color: Colors.black87,
           ),
         ),
         subtitle: Text(
           value?.toString() ?? 'N/A',
-          style: const TextStyle(color: Colors.black54),
+          style: const TextStyle(
+            color: Colors.black54,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
       ),
     );

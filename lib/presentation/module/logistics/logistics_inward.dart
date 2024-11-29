@@ -117,10 +117,19 @@ class _LogisticsInwardState extends State<LogisticsInward> {
   // Function to build a checklist
   Widget buildChecklistCategory(String title, Map<String, bool> items) {
     return ExpansionTile(
-      title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+      title: Text(title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          )),
       children: items.keys.map((item) {
         return CheckboxListTile(
-          title: Text(item),
+          title: Text(
+            item,
+            style: TextStyle(
+              fontFamily: 'LeagueSpartan',
+            ),
+          ),
           value: items[item],
           onChanged: (bool? value) {
             setState(() {
@@ -153,7 +162,11 @@ class _LogisticsInwardState extends State<LogisticsInward> {
         title: const Text(
           'Inward Checklist',
           style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -249,7 +262,12 @@ class _LogisticsInwardState extends State<LogisticsInward> {
                   saveData(context, widget.documentId);
                   print(widget.documentId);
                 },
-                child: Text("Submit"),
+                child: Text(
+                  "Submit",
+                  style: TextStyle(
+                    fontFamily: 'LeagueSpartan',
+                  ),
+                ),
               ),
             ],
           ),

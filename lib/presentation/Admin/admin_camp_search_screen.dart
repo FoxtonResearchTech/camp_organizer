@@ -105,7 +105,10 @@ class _AdminCampSearchScreenState extends State<AdminCampSearchScreen>
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
               hintText: "Search by camp name or date...",
-              hintStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
+              hintStyle: TextStyle(
+                color: Colors.white.withOpacity(0.8),
+                fontFamily: 'LeagueSpartan',
+              ),
               border: InputBorder.none,
             ),
           ),
@@ -183,6 +186,7 @@ class _AdminCampSearchScreenState extends State<AdminCampSearchScreen>
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: 'LeagueSpartan',
                                     color: Colors.grey,
                                   ),
                                 ),
@@ -252,6 +256,7 @@ class _AdminCampSearchScreenState extends State<AdminCampSearchScreen>
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.black54,
+                                                    fontFamily: 'LeagueSpartan',
                                                     fontSize:
                                                         screenWidth * 0.05,
                                                   ),
@@ -272,6 +277,7 @@ class _AdminCampSearchScreenState extends State<AdminCampSearchScreen>
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.black54,
+                                                    fontFamily: 'LeagueSpartan',
                                                     fontSize:
                                                         screenWidth * 0.05,
                                                   ),
@@ -311,10 +317,21 @@ class _AdminCampSearchScreenState extends State<AdminCampSearchScreen>
               );
             } else if (state is AdminApprovalError) {
               return const Center(
-                child: Text('Failed to load camps. Please try again.'),
+                child: Text(
+                  'Failed to load camps. Please try again.',
+                  style: TextStyle(
+                    fontFamily: 'LeagueSpartan',
+                  ),
+                ),
               );
             }
-            return const Center(child: Text('No data available.'));
+            return const Center(
+                child: Text(
+              'No data available.',
+              style: TextStyle(
+                fontFamily: 'LeagueSpartan',
+              ),
+            ));
           },
         ),
       ),
@@ -328,6 +345,7 @@ class _AdminCampSearchScreenState extends State<AdminCampSearchScreen>
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black54,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05,
         ),
       ),

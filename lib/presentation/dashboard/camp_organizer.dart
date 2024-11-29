@@ -52,6 +52,7 @@ class _DashboardScreenState extends State<DashboardScreen>
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,
+                  fontFamily: 'LeagueSpartan',
                   fontWeight: FontWeight.bold),
             ),
             centerTitle: false,
@@ -116,6 +117,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
+                                        fontFamily: 'LeagueSpartan',
                                         color: Colors.grey,
                                       ),
                                     ),
@@ -219,6 +221,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                           style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w500,
+                                                            fontFamily:
+                                                                'LeagueSpartan',
                                                             color:
                                                                 Colors.black54,
                                                             fontSize:
@@ -244,6 +248,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                           style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w500,
+                                                            fontFamily:
+                                                                'LeagueSpartan',
                                                             color:
                                                                 Colors.black54,
                                                             fontSize:
@@ -586,6 +592,7 @@ class _DashboardScreenState extends State<DashboardScreen>
           style: TextStyle(
             fontWeight: FontWeight.w500,
             color: Colors.black54,
+            fontFamily: 'LeagueSpartan',
             fontSize:
                 screenWidth * 0.05, // Increased font size for timeline text
           ),
@@ -605,6 +612,7 @@ class _DashboardScreenState extends State<DashboardScreen>
       Text(
         text,
         style: TextStyle(
+          fontFamily: 'LeagueSpartan',
           fontWeight: FontWeight.w500,
           color: Colors.black54,
           fontSize: screenWidth * 0.05, // Responsive font size
