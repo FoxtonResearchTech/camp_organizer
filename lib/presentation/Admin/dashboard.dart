@@ -116,7 +116,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
           title: const Text(
             'Dashboard',
             style: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'LeagueSpartan',
+            ),
           ),
           centerTitle: false,
           backgroundColor: Colors.transparent,
@@ -167,7 +171,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                 ListTile(
                   leading: const Icon(Icons.create, color: Colors.white),
                   title: const Text('Create Employee',
-                      style: TextStyle(color: Colors.white)),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'LeagueSpartan',
+                      )),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -180,7 +187,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                   leading:
                       const Icon(Icons.manage_accounts, color: Colors.white),
                   title: const Text('Manage Employee',
-                      style: TextStyle(color: Colors.white)),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'LeagueSpartan',
+                      )),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -384,6 +394,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 25,
+                          fontFamily: 'LeagueSpartan',
                           color: Colors.black54),
                     ),
                   ),
@@ -398,6 +409,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                 textStyle: const TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
+                                  fontFamily: 'LeagueSpartan',
                                   color: Colors.grey,
                                 ),
                                 speed: const Duration(
@@ -426,6 +438,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w500,
+                                fontFamily: 'LeagueSpartan',
                                 color: Colors.grey,
                               ),
                             ),
@@ -533,6 +546,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                                           style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w500,
+                                                            fontFamily:
+                                                                'LeagueSpartan',
                                                             color:
                                                                 Colors.black54,
                                                             fontSize:
@@ -559,6 +574,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                                           style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w500,
+                                                            fontFamily:
+                                                                'LeagueSpartan',
                                                             color:
                                                                 Colors.black54,
                                                             fontSize:
@@ -601,7 +618,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                         );
                       } else if (state is StatusError) {
                         return const Center(
-                          child: Text('Error: '),
+                          child: Text(
+                            'Error: ',
+                            style: TextStyle(
+                              fontFamily: 'LeagueSpartan',
+                            ),
+                          ),
                         );
                       }
                       return const Center(
@@ -610,6 +632,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
+                            fontFamily: 'LeagueSpartan',
                             color: Colors.grey,
                           ),
                         ),
@@ -660,6 +683,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
+                fontFamily: 'LeagueSpartan',
                 color: Colors.white,
               ),
             ),
@@ -669,6 +693,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
               style: const TextStyle(
                 fontSize: 16,
                 color: Colors.white70,
+                fontFamily: 'LeagueSpartan',
               ),
             ),
           ],
@@ -689,6 +714,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
             fontWeight: FontWeight.w500,
             color: Colors.black54,
             fontSize: constraints.maxWidth * 0.05,
+            fontFamily: 'LeagueSpartan',
           ),
         ),
       ],
@@ -702,6 +728,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black54,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05, // Responsive font size
         ),
       ),
@@ -723,6 +750,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
         titleStyle: TextStyle(
           fontSize: fontSize,
           fontWeight: FontWeight.bold,
+          fontFamily: 'LeagueSpartan',
           color: Colors.white,
         ),
       );
@@ -755,7 +783,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
             Text(
               titles[index],
               style: TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 14 * fontSizeFactor),
+                fontWeight: FontWeight.bold,
+                fontSize: 14 * fontSizeFactor,
+                fontFamily: 'LeagueSpartan',
+              ),
             ),
           ],
         );
@@ -814,6 +845,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                             approvedCount.toString(),
                             style: TextStyle(
                                 fontSize: 22 * fontSizeFactor,
+                                fontFamily: 'LeagueSpartan',
                                 fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 8),
@@ -821,6 +853,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                             titles[index],
                             style: TextStyle(
                                 fontSize: 16 * fontSizeFactor,
+                                fontFamily: 'LeagueSpartan',
                                 color: Colors.black54),
                           ),
                         ],
@@ -832,11 +865,21 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
             );
           } else if (state is StatusError) {
             return Center(
-              child: Text('Error+${state.errorMessage}'),
+              child: Text(
+                'Error+${state.errorMessage}',
+                style: TextStyle(
+                  fontFamily: 'LeagueSpartan',
+                ),
+              ),
             );
           }
           return const Center(
-            child: Text("No data available"),
+            child: Text(
+              "No data available",
+              style: TextStyle(
+                fontFamily: 'LeagueSpartan',
+              ),
+            ),
           );
         },
       ),

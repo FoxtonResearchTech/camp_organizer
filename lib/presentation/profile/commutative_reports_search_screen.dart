@@ -110,7 +110,11 @@ class _CommutativeReportsSearchScreen
           title: const Text(
             "Commutative Reports",
             style: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'LeagueSpartan',
+            ),
           ),
           centerTitle: true,
           backgroundColor: Colors.blue,
@@ -159,9 +163,9 @@ class _CommutativeReportsSearchScreen
                     if (await directory.exists()) {
                       final startingDate = _startDateController.text;
                       final endingDate = _endDateController.text;
-
+                      final timestamp = DateTime.now().millisecondsSinceEpoch;
                       final path =
-                          "${directory.path}/CommutativeReports_${startingDate.isEmpty ? 0 : startingDate}_to_${endingDate.isEmpty ? 0 : endingDate}.pdf";
+                          "${directory.path}/CommutativeReports_${startingDate.isEmpty ? 0 : startingDate}_to_${endingDate.isEmpty ? 0 : endingDate}_$timestamp.pdf";
                       final file = File(path);
                       await file.writeAsBytes(await pdf.save());
 
@@ -230,6 +234,7 @@ class _CommutativeReportsSearchScreen
                                     : Colors.grey[600],
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
+                                fontFamily: 'LeagueSpartan',
                               ),
                             ),
                             Icon(Icons.calendar_today,
@@ -271,6 +276,7 @@ class _CommutativeReportsSearchScreen
                                     ? Colors.black
                                     : Colors.grey[600],
                                 fontSize: 16,
+                                fontFamily: 'LeagueSpartan',
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -310,10 +316,21 @@ class _CommutativeReportsSearchScreen
                     );
                   } else if (state is StatusError) {
                     return const Center(
-                      child: Text('Failed to load camps. Please try again.'),
+                      child: Text(
+                        'Failed to load camps. Please try again.',
+                        style: TextStyle(
+                          fontFamily: 'LeagueSpartan',
+                        ),
+                      ),
                     );
                   }
-                  return const Center(child: Text('No data available.'));
+                  return const Center(
+                      child: Text(
+                    'No data available.',
+                    style: TextStyle(
+                      fontFamily: 'LeagueSpartan',
+                    ),
+                  ));
                 },
               ),
             ),
@@ -540,6 +557,7 @@ class _CommutativeReportsSearchScreen
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'LeagueSpartan',
                     color: Colors.grey,
                   ),
                 ),
@@ -613,6 +631,7 @@ class _CommutativeReportsSearchScreen
                             fontWeight: FontWeight.w500,
                             color: Colors.black54,
                             fontSize: screenWidth * 0.05,
+                            fontFamily: 'LeagueSpartan',
                           ),
                         ),
                       ],
@@ -631,6 +650,7 @@ class _CommutativeReportsSearchScreen
                             fontWeight: FontWeight.w500,
                             color: Colors.black54,
                             fontSize: screenWidth * 0.05,
+                            fontFamily: 'LeagueSpartan',
                           ),
                         ),
                       ],
@@ -670,6 +690,7 @@ class _CommutativeReportsSearchScreen
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black54,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05,
         ),
       ),

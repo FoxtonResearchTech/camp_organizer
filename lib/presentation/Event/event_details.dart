@@ -69,7 +69,11 @@ class _EventDetailsPageState extends State<EventDetailsPage>
         title: const Text(
           'Camp Details',
           style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -151,81 +155,89 @@ class _EventDetailsPageState extends State<EventDetailsPage>
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             widget.employee['campStatus'] == 'Waiting'
-                ?
-            _buildAnimatedButton(
-              label: "Edit",
-              icon: Icons.edit,
-              color: AppColors.accentBlue
-                ,
-              onPressed: () {
-                final eventDocRef = FirebaseFirestore.instance
-                    .collection('employees')
-                    .doc(widget.employeedocId)
-                    .collection("camps")
-                    .doc(widget.campId);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EventDetailsEditing(
-                      employee: widget.employee,
-                      docRef: eventDocRef,
-                      campId: widget.campId,
-                    ),
-                  ),
-                );
-              },
-              screenWidth: screenWidth,
-              screenHeight: screenHeight,
-            ):SizedBox(),
-            widget.employee['campStatus'] == 'Rejected'
-                ?
-            _buildAnimatedButton(
-              label: "Reason",
-              icon: Icons.question_answer,
-              color: AppColors.accentBlue,
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text("Reason"),
-                      content: Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'Reason for rejection : ${widget.employee['reason']}',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black54,
-                                fontSize:
-                                    screenWidth * 0.04, // Responsive font size
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                          ],
-                        ),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text(
-                            'Ok',
-                            style: TextStyle(color: AppColors.accentBlue),
+                ? _buildAnimatedButton(
+                    label: "Edit",
+                    icon: Icons.edit,
+                    color: AppColors.accentBlue,
+                    onPressed: () {
+                      final eventDocRef = FirebaseFirestore.instance
+                          .collection('employees')
+                          .doc(widget.employeedocId)
+                          .collection("camps")
+                          .doc(widget.campId);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EventDetailsEditing(
+                            employee: widget.employee,
+                            docRef: eventDocRef,
+                            campId: widget.campId,
                           ),
                         ),
-                      ],
-                    );
-                  },
-                );
-              },
-              screenWidth: screenWidth,
-              screenHeight: screenHeight,
-            ):SizedBox(),
+                      );
+                    },
+                    screenWidth: screenWidth,
+                    screenHeight: screenHeight,
+                  )
+                : SizedBox(),
+            widget.employee['campStatus'] == 'Rejected'
+                ? _buildAnimatedButton(
+                    label: "Reason",
+                    icon: Icons.question_answer,
+                    color: AppColors.accentBlue,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(
+                              "Reason",
+                              style: TextStyle(
+                                fontFamily: 'LeagueSpartan',
+                              ),
+                            ),
+                            content: Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'Reason for rejection : ${widget.employee['reason']}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black54,
+                                      fontFamily: 'LeagueSpartan',
+                                      fontSize: screenWidth *
+                                          0.04, // Responsive font size
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                ],
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text(
+                                  'Ok',
+                                  style: TextStyle(
+                                    color: AppColors.accentBlue,
+                                    fontFamily: 'LeagueSpartan',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    screenWidth: screenWidth,
+                    screenHeight: screenHeight,
+                  )
+                : SizedBox(),
           ],
         ),
       ),
@@ -249,6 +261,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
           text,
           style: TextStyle(
             fontWeight: FontWeight.w500,
+            fontFamily: 'LeagueSpartan',
             color: Colors.black54,
             fontSize: screenWidth * 0.05,
           ),
@@ -271,6 +284,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05,
         ),
       ),
@@ -285,6 +299,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05,
         ),
       ),
@@ -318,6 +333,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
           style: TextStyle(
             fontWeight: FontWeight.w500,
             color: Colors.black54,
+            fontFamily: 'LeagueSpartan',
             fontSize: screenWidth * 0.04,
           ),
         ),
@@ -330,6 +346,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
             style: TextStyle(
               fontWeight: FontWeight.w500,
               color: Colors.black54,
+              fontFamily: 'LeagueSpartan',
               fontSize: screenWidth * 0.05,
             ),
             overflow: TextOverflow.ellipsis,
@@ -364,6 +381,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: screenWidth * 0.05,
+              fontFamily: 'LeagueSpartan',
               color: Colors.white,
             ),
           ),

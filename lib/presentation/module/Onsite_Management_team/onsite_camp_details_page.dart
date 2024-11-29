@@ -23,7 +23,11 @@ class OnsiteCampDetailsPage extends StatelessWidget {
         title: const Text(
           'Camp Details',
           style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -160,6 +164,7 @@ class OnsiteCampDetailsPage extends StatelessWidget {
       child: Text(
         title,
         style: TextStyle(
+          fontFamily: 'LeagueSpartan',
           fontSize: 18,
           fontWeight: FontWeight.bold,
           color: Colors.lightBlue[800],
@@ -195,13 +200,17 @@ class OnsiteCampDetailsPage extends StatelessWidget {
         title: Text(
           label,
           style: const TextStyle(
+            fontFamily: 'LeagueSpartan',
             fontWeight: FontWeight.bold,
             color: Colors.black87,
           ),
         ),
         subtitle: Text(
           value?.toString() ?? 'N/A',
-          style: const TextStyle(color: Colors.black54),
+          style: const TextStyle(
+            color: Colors.black54,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
       ),
     );

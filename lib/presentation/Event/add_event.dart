@@ -136,7 +136,11 @@ class _AddEventState extends State<AddEvent>
         title: const Text(
           'Create Camp',
           style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -163,7 +167,11 @@ class _AddEventState extends State<AddEvent>
                 children: [
                   Text(
                     "Event Details",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 22,
+                      fontFamily: 'LeagueSpartan',
+                    ),
                   ),
                   SizedBox(height: 20),
                   Row(
@@ -245,7 +253,11 @@ class _AddEventState extends State<AddEvent>
       SizedBox(height: 20),
       Text(
         "Concern Person1 Details",
-        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 20,
+          fontFamily: 'LeagueSpartan',
+        ),
       ),
       SizedBox(height: 20),
       _buildCustomTextFormField('Name', Icons.location_city, nameController),
@@ -262,7 +274,11 @@ class _AddEventState extends State<AddEvent>
       SizedBox(height: 20),
       Text(
         "Concern Person2 Details",
-        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 20,
+          fontFamily: 'LeagueSpartan',
+        ),
       ),
       SizedBox(height: 20),
       _buildCustomTextFormField('Name', Icons.location_city, name2Controller),
@@ -278,7 +294,11 @@ class _AddEventState extends State<AddEvent>
       SizedBox(height: 20),
       Text(
         "Event Planning",
-        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 20,
+          fontFamily: 'LeagueSpartan',
+        ),
       ),
       SizedBox(height: 20),
       CustomDropdownFormField(
@@ -429,7 +449,11 @@ class _AddEventState extends State<AddEvent>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
+        Text(label,
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontFamily: 'LeagueSpartan',
+            )),
         Row(
           children: options.map((option) {
             return Row(
@@ -440,7 +464,12 @@ class _AddEventState extends State<AddEvent>
                   groupValue: selectedValue,
                   onChanged: onChanged,
                 ),
-                Text(option),
+                Text(
+                  option,
+                  style: TextStyle(
+                    fontFamily: 'LeagueSpartan',
+                  ),
+                ),
               ],
             );
           }).toList(),

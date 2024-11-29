@@ -210,7 +210,11 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
           title: const Text(
             'Camp Incharge Reporting',
             style: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'LeagueSpartan',
+            ),
           ),
           centerTitle: false,
           backgroundColor: Colors.transparent,
@@ -229,11 +233,18 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
           listener: (context, state) {
             if (state is InchargeReportUpdated) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Report Submitted Successfully!')),
+                const SnackBar(
+                  content:
+                      Center(child: Text('Report Submitted Successfully!')),
+                  backgroundColor: Colors.green,
+                ),
               );
             } else if (state is InchargeReportError) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Error: ${state.message}')),
+                SnackBar(
+                  content: Center(child: Text('Error: ${state.message}')),
+                  backgroundColor: Colors.red,
+                ),
               );
             }
           },
@@ -257,7 +268,11 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
                   SizedBox(height: 20),
                   Text(
                     'Camp Reports',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'LeagueSpartan',
+                    ),
                   ),
                   SizedBox(height: 20),
                   CustomTextFormField(
@@ -302,7 +317,11 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
                   SizedBox(height: 20),
                   Text(
                     'Patient Follow Up List',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'LeagueSpartan',
+                    ),
                   ),
                   SizedBox(height: 30),
                   ..._patientFollowUpFields,
@@ -439,6 +458,7 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
+          fontFamily: 'LeagueSpartan',
           color: Colors.lightBlue[800],
         ),
       ),
@@ -473,12 +493,16 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
           label,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
             color: Colors.black87,
           ),
         ),
         subtitle: Text(
           value?.toString() ?? 'N/A',
-          style: const TextStyle(color: Colors.black54),
+          style: const TextStyle(
+            color: Colors.black54,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
       ),
     );

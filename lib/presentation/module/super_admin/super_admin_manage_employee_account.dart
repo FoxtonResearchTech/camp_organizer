@@ -1,6 +1,7 @@
 import 'package:camp_organizer/bloc/Employee/employee_update_bloc.dart';
 import 'package:camp_organizer/bloc/Employee/employee_update_state.dart';
 import 'package:camp_organizer/presentation/module/super_admin/super_admin_edit_employee_account.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -55,7 +56,11 @@ class _SuperAdminManageEmployeeAccountState
           title: const Text(
             'User Registration',
             style: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'LeagueSpartan',
+            ),
           ),
           centerTitle: false,
           backgroundColor: Colors.transparent,
@@ -68,6 +73,15 @@ class _SuperAdminManageEmployeeAccountState
                 end: Alignment.bottomRight,
               ),
             ),
+          ),
+          leading: IconButton(
+            icon: const Icon(
+              CupertinoIcons.back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
         body: BlocBuilder<EmployeeUpdateBloc, EmployeeUpdateState>(
@@ -90,9 +104,18 @@ class _SuperAdminManageEmployeeAccountState
                         margin: const EdgeInsets.symmetric(
                             vertical: 16, horizontal: 16),
                         child: ListTile(
-                          title: Text(employee['firstName'] ?? "N/A"),
+                          title: Text(
+                            employee['firstName'] ?? "N/A",
+                            style: TextStyle(
+                              fontFamily: 'LeagueSpartan',
+                            ),
+                          ),
                           subtitle: Text(
-                              'Code: ${employee['empCode'] ?? "N/A"} | Designation: ${employee['designation'] ?? "N/A"}'),
+                            'Code: ${employee['empCode'] ?? "N/A"} | Designation: ${employee['designation'] ?? "N/A"}',
+                            style: TextStyle(
+                              fontFamily: 'LeagueSpartan',
+                            ),
+                          ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -148,25 +171,38 @@ class _SuperAdminManageEmployeeAccountState
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
-                                        title: const Text('Delete'),
+                                        title: const Text(
+                                          'Delete',
+                                          style: TextStyle(
+                                            fontFamily: 'LeagueSpartan',
+                                          ),
+                                        ),
                                         content: const Text(
-                                            'Are you sure you want to Delete?'),
+                                          'Are you sure you want to Delete?',
+                                          style: TextStyle(
+                                            fontFamily: 'LeagueSpartan',
+                                          ),
+                                        ),
                                         actions: [
                                           TextButton(
                                             onPressed: () =>
                                                 Navigator.pop(context, false),
-                                            child: const Text('Cancel',
-                                                style: TextStyle(
-                                                    color:
-                                                        AppColors.accentBlue)),
+                                            child: const Text(
+                                              'Cancel',
+                                              style: TextStyle(
+                                                color: AppColors.accentBlue,
+                                                fontFamily: 'LeagueSpartan',
+                                              ),
+                                            ),
                                           ),
                                           TextButton(
                                             onPressed: () =>
                                                 Navigator.pop(context, true),
                                             child: const Text('Delete',
                                                 style: TextStyle(
-                                                    color:
-                                                        AppColors.accentBlue)),
+                                                  color: AppColors.accentBlue,
+                                                  fontFamily: 'LeagueSpartan',
+                                                )),
                                           ),
                                         ],
                                       );
@@ -208,11 +244,21 @@ class _SuperAdminManageEmployeeAccountState
                   ));
             } else if (state is EmployeeUpdateError) {
               return Center(
-                child: Text('Error: ${state.errorMessage}'),
+                child: Text(
+                  'Error: ${state.errorMessage}',
+                  style: TextStyle(
+                    fontFamily: 'LeagueSpartan',
+                  ),
+                ),
               );
             }
             return const Center(
-              child: Text("No data available"),
+              child: Text(
+                "No data available",
+                style: TextStyle(
+                  fontFamily: 'LeagueSpartan',
+                ),
+              ),
             );
           },
         ),

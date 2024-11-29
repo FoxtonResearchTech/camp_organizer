@@ -17,6 +17,7 @@ import '../../bloc/approval/adminapproval_event.dart';
 import '../../bloc/approval/adminapproval_state.dart';
 import '../Event/admin_event_details.dart';
 import 'package:http/http.dart' as http;
+
 class AdminApproval extends StatefulWidget {
   @override
   State<AdminApproval> createState() => _AdminApprovalState();
@@ -46,12 +47,18 @@ class _AdminApprovalState extends State<AdminApproval>
     _StatusBloc.close();
     super.dispose();
   }
-  Future<void> sendRejectionEmail(String employeeId, String campDocId, List<dynamic> destId, String reason,String campname, String campdate) async {
+
+  Future<void> sendRejectionEmail(
+      String employeeId,
+      String campDocId,
+      List<dynamic> destId,
+      String reason,
+      String campname,
+      String campdate) async {
     const String serviceId = 'service_m66gp4c';
     const String templateId = 'template_02yy857';
     const String user_id = 'zA3pjW03a2sLLo51c'; // Public Key (user_id)
     const String privateKey = 'K2p5DmTapkR6qYcMPGhTQ'; // Private Key (API Key)
-
 
     final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
 
@@ -59,21 +66,21 @@ class _AdminApprovalState extends State<AdminApproval>
       url,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $privateKey', // Send the private key as Bearer token
+        'Authorization':
+            'Bearer $privateKey', // Send the private key as Bearer token
       },
       body: jsonEncode({
         'service_id': serviceId,
         'template_id': templateId,
         'user_id': user_id,
-
         'template_params': {
           'to_email': destId, // Recipient's email
           'employeeId': employeeId,
           'campDocId': campDocId,
           'campName': campname,
-          'campDate':campdate,
+          'campDate': campdate,
           'status': 'Rejected',
-          'reason':reason,
+          'reason': reason,
         },
       }),
     );
@@ -84,6 +91,7 @@ class _AdminApprovalState extends State<AdminApproval>
       print('Failed to send email: ${response.body}');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     // Screen size parameters
@@ -96,7 +104,11 @@ class _AdminApprovalState extends State<AdminApproval>
           title: const Text(
             'Status',
             style: TextStyle(
-                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'LeagueSpartan',
+            ),
           ),
           centerTitle: false,
           backgroundColor: Colors.transparent,
@@ -160,6 +172,7 @@ class _AdminApprovalState extends State<AdminApproval>
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
+                                        fontFamily: 'LeagueSpartan',
                                         color: Colors.grey,
                                       ),
                                     ),
@@ -171,7 +184,7 @@ class _AdminApprovalState extends State<AdminApproval>
                         : ListView.builder(
                             itemCount: camps.length,
                             itemBuilder: (BuildContext context, int index) {
-                            //  print("doc Id:${state.employeeDocId[2]}");
+                              //  print("doc Id:${state.employeeDocId[2]}");
                               Animation<double> animation = CurvedAnimation(
                                 parent: _controller,
                                 curve: Interval(
@@ -250,6 +263,8 @@ class _AdminApprovalState extends State<AdminApproval>
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w500,
+                                                                fontFamily:
+                                                                    'LeagueSpartan',
                                                                 color: Colors
                                                                     .black54,
                                                                 fontSize:
@@ -277,6 +292,8 @@ class _AdminApprovalState extends State<AdminApproval>
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w500,
+                                                                fontFamily:
+                                                                    'LeagueSpartan',
                                                                 color: Colors
                                                                     .black54,
                                                                 fontSize:
@@ -336,9 +353,12 @@ class _AdminApprovalState extends State<AdminApproval>
                                                                           Text(
                                                                         'Reason',
                                                                         style: TextStyle(
-                                                                            fontWeight:
-                                                                                FontWeight.w500,
-                                                                            color: Colors.black54,
+                                                                            fontWeight: FontWeight
+                                                                                .w500,
+                                                                            fontFamily:
+                                                                                'LeagueSpartan',
+                                                                            color:
+                                                                                Colors.black54,
                                                                             fontSize: screenWidth * 0.05 // Responsive font size
                                                                             ),
                                                                       ),
@@ -355,6 +375,7 @@ class _AdminApprovalState extends State<AdminApproval>
                                                                                 TextStyle(
                                                                               fontWeight: FontWeight.w500,
                                                                               color: Colors.black54,
+                                                                              fontFamily: 'LeagueSpartan',
                                                                               fontSize: screenWidth * 0.04, // Responsive font size
                                                                             ),
                                                                           ),
@@ -369,6 +390,7 @@ class _AdminApprovalState extends State<AdminApproval>
                                                                               suffixStyle: TextStyle(
                                                                                 fontWeight: FontWeight.w500,
                                                                                 color: Colors.black54,
+                                                                                fontFamily: 'LeagueSpartan',
                                                                                 fontSize: screenWidth * 0.10, // Responsive font size
                                                                               ),
                                                                               border: const OutlineInputBorder(),
@@ -388,38 +410,58 @@ class _AdminApprovalState extends State<AdminApproval>
                                                                               const Text(
                                                                             'Cancel',
                                                                             style:
-                                                                                TextStyle(color: AppColors.accentBlue),
+                                                                                TextStyle(
+                                                                              color: AppColors.accentBlue,
+                                                                              fontFamily: 'LeagueSpartan',
+                                                                            ),
                                                                           ),
                                                                         ),
                                                                         TextButton(
                                                                           onPressed:
-                                                                              () async{
-                                                                                final employeeId =camps[index]['EmployeeDocId'];
-                                                                                final campDocId = state.campDocIds[index];
-                                                                                final dest1 = 'foxton.rt@gmail.com';
-                                                                                final dest2 = camps[index]['EmployeeId'];
-                                                                                final destId = [dest1,dest2];
-                                                                                final reason = _reason.text;
-                                                                                final campname = camps[index]['campName'];
-                                                                                final campdate = camps[index]['campDate'];
+                                                                              () async {
+                                                                            final employeeId =
+                                                                                camps[index]['EmployeeDocId'];
+                                                                            final campDocId =
+                                                                                state.campDocIds[index];
+                                                                            final dest1 =
+                                                                                'foxton.rt@gmail.com';
+                                                                            final dest2 =
+                                                                                camps[index]['EmployeeId'];
+                                                                            final destId =
+                                                                                [
+                                                                              dest1,
+                                                                              dest2
+                                                                            ];
+                                                                            final reason =
+                                                                                _reason.text;
+                                                                            final campname =
+                                                                                camps[index]['campName'];
+                                                                            final campdate =
+                                                                                camps[index]['campDate'];
 
-                                                                                BlocProvider.of<AdminApprovalBloc>(context).add(
-                                                                                  UpdateStatusEvent(
-                                                                                    employeeId: employeeId,
-                                                                                    campDocId: campDocId,
-                                                                                    newStatus: 'Rejected',
-                                                                                  ),
-                                                                                );
-                                                                                // Send email notification
-                                                                                await sendRejectionEmail(employeeId, campDocId,destId,reason,campname,campdate);
-                                                                                print(employeeId);
-                                                                                print(campDocId);
-                                                                                print(camps[index]['EmployeeId']);
-                                                                                print(_reason.text);
+                                                                            BlocProvider.of<AdminApprovalBloc>(context).add(
+                                                                              UpdateStatusEvent(
+                                                                                employeeId: employeeId,
+                                                                                campDocId: campDocId,
+                                                                                newStatus: 'Rejected',
+                                                                              ),
+                                                                            );
+                                                                            // Send email notification
+                                                                            await sendRejectionEmail(
+                                                                                employeeId,
+                                                                                campDocId,
+                                                                                destId,
+                                                                                reason,
+                                                                                campname,
+                                                                                campdate);
+                                                                            print(employeeId);
+                                                                            print(campDocId);
+                                                                            print(camps[index]['EmployeeId']);
+                                                                            print(_reason.text);
                                                                             try {
                                                                               BlocProvider.of<AdminApprovalBloc>(context).add(
                                                                                 UpdateStatusEvent(
-                                                                                  employeeId:  camps[index]['EmployeeDocId'],
+                                                                                  employeeId: camps[index]['EmployeeDocId'],
                                                                                   campDocId: state.campDocIds[index],
                                                                                   newStatus: 'Rejected',
                                                                                 ),
@@ -428,7 +470,7 @@ class _AdminApprovalState extends State<AdminApproval>
                                                                               BlocProvider.of<AdminApprovalBloc>(context).add(
                                                                                 AddReasonEvent(
                                                                                   reasonText: reasonText,
-                                                                                  employeeId:  camps[index]['EmployeeDocId'],
+                                                                                  employeeId: camps[index]['EmployeeDocId'],
                                                                                   campDocId: state.campDocIds[index],
                                                                                 ),
                                                                               );
@@ -456,7 +498,10 @@ class _AdminApprovalState extends State<AdminApproval>
                                                                               const Text(
                                                                             'Submit',
                                                                             style:
-                                                                                TextStyle(color: AppColors.accentBlue),
+                                                                                TextStyle(
+                                                                              color: AppColors.accentBlue,
+                                                                              fontFamily: 'LeagueSpartan',
+                                                                            ),
                                                                           ),
                                                                         ),
                                                                       ],
@@ -493,6 +538,8 @@ class _AdminApprovalState extends State<AdminApproval>
                                                                         18,
                                                                     color: Colors
                                                                         .white,
+                                                                    fontFamily:
+                                                                        'LeagueSpartan',
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w500),
@@ -524,9 +571,12 @@ class _AdminApprovalState extends State<AdminApproval>
                                                                       builder:
                                                                           (context) =>
                                                                               AdminEventDetailsPage(
-                                                                                employeemail: camps[index]['EmployeeId'],
-                                                                                campDate: camps[index]['campDate'],
-                                                                                campName: camps[index]['campName'],
+                                                                        employeemail:
+                                                                            camps[index]['EmployeeId'],
+                                                                        campDate:
+                                                                            camps[index]['campDate'],
+                                                                        campName:
+                                                                            camps[index]['campName'],
                                                                         employeeID:
                                                                             camps[index]['EmployeeDocId'],
                                                                         campID:
@@ -566,6 +616,8 @@ class _AdminApprovalState extends State<AdminApproval>
                                                                           18,
                                                                       color: Colors
                                                                           .white,
+                                                                      fontFamily:
+                                                                          'LeagueSpartan',
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w500),
@@ -592,11 +644,21 @@ class _AdminApprovalState extends State<AdminApproval>
                   ));
             } else if (state is AdminApprovalError) {
               return const Center(
-                child: Text('Error'),
+                child: Text(
+                  'Error',
+                  style: TextStyle(
+                    fontFamily: 'LeagueSpartan',
+                  ),
+                ),
               );
             }
             return const Center(
-              child: Text("No data available"),
+              child: Text(
+                "No data available",
+                style: TextStyle(
+                  fontFamily: 'LeagueSpartan',
+                ),
+              ),
             );
           },
         ),
@@ -637,6 +699,7 @@ class _AdminApprovalState extends State<AdminApproval>
           style: TextStyle(
             fontWeight: FontWeight.w500,
             color: Colors.black54,
+            fontFamily: 'LeagueSpartan',
             fontSize:
                 screenWidth * 0.05, // Increased font size for timeline text
           ),
@@ -658,6 +721,7 @@ class _AdminApprovalState extends State<AdminApproval>
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black54,
+          fontFamily: 'LeagueSpartan',
           fontSize: screenWidth * 0.05, // Responsive font size
         ),
         overflow: TextOverflow.ellipsis,

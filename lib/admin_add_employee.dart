@@ -137,6 +137,7 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
+                    fontFamily: 'LeagueSpartan',
                     fontWeight: FontWeight.bold),
               ),
             ),
@@ -167,7 +168,11 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
         title: const Text(
           'Employee Registration',
           style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LeagueSpartan',
+          ),
         ),
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -189,7 +194,11 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
             children: [
               Text(
                 'Create Accounts',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'LeagueSpartan',
+                ),
               ),
               SizedBox(height: 30),
               Row(
