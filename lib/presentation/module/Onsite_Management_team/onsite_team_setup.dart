@@ -360,7 +360,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('employees')
-          .where('role', isEqualTo: 'campIncharge') // Filter by role
+          .where('role', isEqualTo: 'CampIncharge') // Filter by role
           .get();
 
       List<String> names = querySnapshot.docs
