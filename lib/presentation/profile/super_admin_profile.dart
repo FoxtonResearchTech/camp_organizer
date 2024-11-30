@@ -61,9 +61,9 @@ class _SuperAdminUserProfilePageState extends State<SuperAdminUserProfilePage>
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Container(
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -77,13 +77,9 @@ class _SuperAdminUserProfilePageState extends State<SuperAdminUserProfilePage>
             AnimatedContainer(
               duration: const Duration(seconds: 1),
               height: 250,
-              decoration: const BoxDecoration(
+              decoration:  BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Colors.blue,
-                    Colors.lightBlueAccent,
-                    Colors.lightBlue
-                  ],
+                  colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -368,7 +364,7 @@ class ProfileInfoTile extends StatelessWidget {
           ),
           child: Icon(
             icon,
-            color: Colors.blueAccent,
+            color:Color(0xFF0097b2),
           ),
         ),
         title: Text(

@@ -34,7 +34,11 @@ class InchargeDetailsPage extends StatelessWidget {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+              colors: [
+                Color(0xFF0097b2),
+                Color(0xFF0097b2).withOpacity(1),
+                Color(0xFF0097b2).withOpacity(0.8)
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -135,7 +139,12 @@ class InchargeDetailsPage extends StatelessWidget {
                 _buildInfoCard('Name 2', inchargeData['name2']),
               ],
             ),
-            Center(child: CustomButton(text: 'Approve', onPressed: () {})),
+            Center(
+                child: CustomButton(
+                    text: 'Done',
+                    onPressed: () {
+                      Navigator.pop(context);
+                    })),
           ],
         ),
       ),
@@ -206,8 +215,8 @@ class InchargeDetailsPage extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.cyan[100]!,
-            Colors.cyan[50]!,
+            Color(0xff0097b2),
+            Color(0xff0097b2).withOpacity(0.5)!,
           ],
           begin: Alignment.bottomRight,
           end: Alignment.topLeft,
@@ -227,14 +236,15 @@ class InchargeDetailsPage extends StatelessWidget {
           label,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: Colors.white,
             fontFamily: 'LeagueSpartan',
           ),
         ),
         subtitle: Text(
           value?.toString() ?? 'N/A',
           style: const TextStyle(
-            color: Colors.black54,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
             fontFamily: 'LeagueSpartan',
           ),
         ),

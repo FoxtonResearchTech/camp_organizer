@@ -43,7 +43,7 @@ class _SuperAdminBottomNavigationBarState
           Icon(Icons.checklist,
               size: 30,
               color: _currentIndex == 1 ? AppColors.textBlue : Colors.white),
-          Icon(Icons.filter_list_alt,
+          Icon(Icons.person,
               size: 30,
               color: _currentIndex == 2 ? AppColors.textBlue : Colors.white),
         ],

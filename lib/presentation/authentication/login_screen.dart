@@ -159,7 +159,7 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
           if (state is AuthLoading) {
             return Center(
               child: Lottie.asset(
-                'assets/loading.json',
+                'assets/preloader.json',
               ),
             );
           }

@@ -66,9 +66,9 @@ class _SuperAdminManageEmployeeAccountState
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),

@@ -116,9 +116,9 @@ class _AdminCampSearchScreenState extends State<AdminCampSearchScreen>
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Container(
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -157,12 +157,15 @@ class _AdminCampSearchScreenState extends State<AdminCampSearchScreen>
         body: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
           builder: (context, state) {
             if (state is AdminApprovalLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator(
+                color: Color(0xFF0097b2),
+              ));
             } else if (state is AdminApprovalLoaded) {
               if (_searchQuery.isEmpty) {
                 _filteredEmployees = state.allCamps;
               }
               return RefreshIndicator(
+                color: Color(0xFF0097b2),
                 onRefresh: () async {
                   context.read<AdminApprovalBloc>().add(FetchDataEvents());
                 },
@@ -216,7 +219,7 @@ class _AdminCampSearchScreenState extends State<AdminCampSearchScreen>
                             child: Column(
                               children: [
                                 Container(
-                                  height: screenHeight / 5,
+                                  height: screenHeight / 4.5,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),

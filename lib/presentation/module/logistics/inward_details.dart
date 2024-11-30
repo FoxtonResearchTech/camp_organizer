@@ -17,6 +17,7 @@ class _InwardDetailsState extends State<InwardDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
         title: const Text(
           'Logistics Inward Details',
           style: TextStyle(
@@ -32,7 +33,7 @@ class _InwardDetailsState extends State<InwardDetails> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -123,7 +124,8 @@ class _InwardDetailsState extends State<InwardDetails> {
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.cyan[100]!, Colors.cyan[50]!],
+          colors: [Color(0xff0097b2),
+            Color(0xff0097b2).withOpacity(0.5)!,],
           begin: Alignment.bottomRight,
           end: Alignment.topLeft,
         ),
@@ -165,7 +167,7 @@ class _InwardDetailsState extends State<InwardDetails> {
         title: Text(
           entry.key,
           style: TextStyle(
-            fontFamily: 'LeagueSpartan',
+            fontFamily: 'LeagueSpartan',fontWeight: FontWeight.bold,color: Colors.white
           ),
         ),
         value: entry.value,
@@ -238,8 +240,8 @@ class _InwardDetailsState extends State<InwardDetails> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.cyan[100]!,
-            Colors.cyan[50]!,
+            Color(0xff0097b2),
+            Color(0xff0097b2).withOpacity(0.5)!,
           ],
           begin: Alignment.bottomRight,
           end: Alignment.topLeft,
@@ -260,13 +262,13 @@ class _InwardDetailsState extends State<InwardDetails> {
           style: const TextStyle(
             fontFamily: 'LeagueSpartan',
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: Colors.white,
           ),
         ),
         subtitle: Text(
           value?.toString() ?? 'N/A',
           style: const TextStyle(
-            color: Colors.black54,
+            color: Colors.white,fontWeight: FontWeight.bold,
             fontFamily: 'LeagueSpartan',
           ),
         ),

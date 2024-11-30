@@ -1,3 +1,4 @@
+import 'package:camp_organizer/widgets/button/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:camp_organizer/widgets/Text%20Form%20Field/custom_text_form_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -156,17 +157,22 @@ class _LogisticsOutwardState extends State<LogisticsOutward> {
     remarksController.text = data['Outward_remarks'] ?? '';
 
     // Initialize checkbox states
-    doctorRoomThings = Map<String, bool>.from(data['Outward_doctorRoomThings'] ?? doctorRoomThings);
-    visionRoomThings = Map<String, bool>.from(data['Outward_visionRoomThings'] ?? visionRoomThings);
-    crRoomThings = Map<String, bool>.from(data['Outward_crRoomThings'] ?? crRoomThings);
-    tnDuctThings = Map<String, bool>.from(data['Outward_tnDuctThings'] ?? tnDuctThings);
-    opticalThings = Map<String, bool>.from(data['Outward_opticalThings'] ?? opticalThings);
-    fittingThings = Map<String, bool>.from(data['Outward_fittingThings'] ?? fittingThings);
+    doctorRoomThings = Map<String, bool>.from(
+        data['Outward_doctorRoomThings'] ?? doctorRoomThings);
+    visionRoomThings = Map<String, bool>.from(
+        data['Outward_visionRoomThings'] ?? visionRoomThings);
+    crRoomThings =
+        Map<String, bool>.from(data['Outward_crRoomThings'] ?? crRoomThings);
+    tnDuctThings =
+        Map<String, bool>.from(data['Outward_tnDuctThings'] ?? tnDuctThings);
+    opticalThings =
+        Map<String, bool>.from(data['Outward_opticalThings'] ?? opticalThings);
+    fittingThings =
+        Map<String, bool>.from(data['Outward_fittingThings'] ?? fittingThings);
     others = Map<String, bool>.from(data['Outward_others'] ?? others);
 
     setState(() {});
   }
-
 
   @override
   void dispose() {
@@ -186,6 +192,7 @@ class _LogisticsOutwardState extends State<LogisticsOutward> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
         title: const Text(
           'Outward Requirement',
           style: TextStyle(
@@ -201,7 +208,7 @@ class _LogisticsOutwardState extends State<LogisticsOutward> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -214,7 +221,6 @@ class _LogisticsOutwardState extends State<LogisticsOutward> {
           key: _formKey,
           child: ListView(
             children: [
-
               SizedBox(height: 20),
 
               // Checklists for each category
@@ -225,7 +231,6 @@ class _LogisticsOutwardState extends State<LogisticsOutward> {
               buildChecklistCategory("Optical Things", opticalThings),
               buildChecklistCategory("Fitting Things", fittingThings),
               buildChecklistCategory("Others", others),
-
 
               SizedBox(height: 20),
               CustomTextFormField(
@@ -255,19 +260,16 @@ class _LogisticsOutwardState extends State<LogisticsOutward> {
               ),
 
               SizedBox(height: 20),
-
-              ElevatedButton(
-                onPressed: () {
-                  saveData(context, widget.documentId);
-                  print(widget.documentId);
-                },
-                child: Text(
-                  "Submit",
-                  style: TextStyle(
-                    fontFamily: 'LeagueSpartan',
-                  ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CustomButton(
+                  text: "Submit",
+                  onPressed: () {
+                    saveData(context, widget.documentId);
+                    print(widget.documentId);
+                  },
                 ),
-              ),
+              )
             ],
           ),
         ),

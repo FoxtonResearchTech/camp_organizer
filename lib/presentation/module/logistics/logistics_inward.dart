@@ -1,3 +1,4 @@
+import 'package:camp_organizer/widgets/button/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -184,6 +185,7 @@ class _LogisticsInwardState extends State<LogisticsInward> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
         title: const Text(
           'Inward Checklist',
           style: TextStyle(
@@ -199,7 +201,7 @@ class _LogisticsInwardState extends State<LogisticsInward> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -263,18 +265,18 @@ class _LogisticsInwardState extends State<LogisticsInward> {
               SizedBox(height: 20),
 
               // Submit button
-              ElevatedButton(
-                onPressed: () {
-                  saveData(context, widget.documentId);
-                  print(widget.documentId);
-                },
-                child: Text(
-                  "Submit",
-                  style: TextStyle(
-                    fontFamily: 'LeagueSpartan',
-                  ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CustomButton(
+                  text: "Submit",
+                  onPressed: () {
+                    saveData(context, widget.documentId);
+                    print(widget.documentId);
+                  },
                 ),
-              ),
+              )
+
             ],
           ),
         ),

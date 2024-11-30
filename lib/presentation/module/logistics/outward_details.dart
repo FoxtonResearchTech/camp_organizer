@@ -13,6 +13,7 @@ class LogisticsOutwardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
         title: const Text(
           'Logistics Outward Details',
           style: TextStyle(
@@ -28,7 +29,7 @@ class LogisticsOutwardPage extends StatelessWidget {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -113,7 +114,8 @@ class LogisticsOutwardPage extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.cyan[100]!, Colors.cyan[50]!],
+          colors: [Color(0xff0097b2),
+            Color(0xff0097b2).withOpacity(0.5)!,],
           begin: Alignment.bottomRight,
           end: Alignment.topLeft,
         ),
@@ -155,7 +157,7 @@ class LogisticsOutwardPage extends StatelessWidget {
         title: Text(
           entry.key,
           style: TextStyle(
-            fontFamily: 'LeagueSpartan',
+            fontFamily: 'LeagueSpartan',color: Colors.white,fontWeight: FontWeight.bold
           ),
         ),
         value: entry.value,
@@ -228,8 +230,8 @@ class LogisticsOutwardPage extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.cyan[100]!,
-            Colors.cyan[50]!,
+            Color(0xff0097b2),
+            Color(0xff0097b2).withOpacity(0.5)!,
           ],
           begin: Alignment.bottomRight,
           end: Alignment.topLeft,
@@ -250,13 +252,13 @@ class LogisticsOutwardPage extends StatelessWidget {
           style: const TextStyle(
             fontFamily: 'LeagueSpartan',
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: Colors.white,
           ),
         ),
         subtitle: Text(
           value?.toString() ?? 'N/A',
           style: const TextStyle(
-            color: Colors.black54,
+            color: Colors.white,fontWeight: FontWeight.bold,
             fontFamily: 'LeagueSpartan',
           ),
         ),

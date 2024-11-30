@@ -1,4 +1,5 @@
 import 'package:camp_organizer/presentation/Admin/admin_approval.dart';
+import 'package:camp_organizer/presentation/Admin/approved_camps.dart';
 import 'package:camp_organizer/presentation/Analytics/dashboard_analytics.dart';
 import 'package:camp_organizer/presentation/Event/add_event.dart';
 import 'package:camp_organizer/presentation/profile/admin_profile.dart';
@@ -22,6 +23,7 @@ class _AdminBottomNavigationBarState extends State<AdminBottomNavigationBar> {
    AdminDashboardScreen(),
     AddEvent(),
     AdminApproval(),
+    ApprovedCamps(),
     AdminUserProfilePage(),
   ];
 
@@ -42,9 +44,12 @@ class _AdminBottomNavigationBarState extends State<AdminBottomNavigationBar> {
           Icon(Icons.fact_check_rounded,
               size: 30,
               color: _currentIndex == 2 ? AppColors.textBlue : Colors.white),
-          Icon(Icons.person,
+          Icon(Icons.check_circle,
               size: 30,
               color: _currentIndex == 3 ? AppColors.textBlue : Colors.white),
+          Icon(Icons.person,
+              size: 30,
+              color: _currentIndex == 4 ? AppColors.textBlue : Colors.white),
         ],
         color: AppColors.primaryBlue,
         buttonBackgroundColor: AppColors.lightGray,

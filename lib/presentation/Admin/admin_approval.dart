@@ -114,9 +114,9 @@ class _AdminApprovalState extends State<AdminApproval>
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -137,7 +137,9 @@ class _AdminApprovalState extends State<AdminApproval>
         body: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
           builder: (context, state) {
             if (state is AdminApprovalLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator(
+                color:   Color(0xFF0097b2)
+              ));
             } else if (state is AdminApprovalLoaded) {
               final camps = state.allCamps;
 
@@ -148,6 +150,7 @@ class _AdminApprovalState extends State<AdminApproval>
               return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: RefreshIndicator(
+                    color: Color(0xFF0097b2),
                     onRefresh: () async {
                       // Trigger the refresh event in your bloc or reload the data here
                       context.read<AdminApprovalBloc>().add(FetchDataEvents());

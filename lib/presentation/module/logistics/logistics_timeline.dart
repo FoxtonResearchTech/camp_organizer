@@ -3,6 +3,7 @@ import 'package:camp_organizer/bloc/AddEvent/add_logistics_state.dart';
 import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../bloc/Status/status_bloc.dart';
 import '../../../bloc/Status/status_event.dart';
@@ -76,7 +77,7 @@ class _LogisticsTimelineState extends State<LogisticsTimeline>
         child: Scaffold(
           appBar: AppBar(
             title: const Text(
-              'Logistics Timeline',
+              'Logistics Status',
               style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'LeagueSpartan',
@@ -87,13 +88,9 @@ class _LogisticsTimelineState extends State<LogisticsTimeline>
             backgroundColor: Colors.transparent,
             elevation: 0,
             flexibleSpace: Container(
-              decoration: const BoxDecoration(
+              decoration:  BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Colors.blue,
-                    Colors.lightBlueAccent,
-                    Colors.lightBlue
-                  ],
+                  colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -103,15 +100,47 @@ class _LogisticsTimelineState extends State<LogisticsTimeline>
           body: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
             builder: (context, state) {
               if (state is AdminApprovalLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator(color: Color(0xFF0097b2),));
               } else if (state is AdminApprovalLoaded) {
                 final camps = state.allCamps;
-
+                final waitingCamps = camps
+                    .where((camp) => camp['campStatus'] == 'Approved')
+                    .toList();
                 return RefreshIndicator(
+                  color: Color(0xFF0097b2),
                     onRefresh: () async {
                       context.read<AdminApprovalBloc>().add(FetchDataEvents());
                     },
-                    child: ListView.builder(
+                    child: waitingCamps.isEmpty
+                        ? SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Center(
+                        child: Container(
+                          padding: EdgeInsets.only(top: screenHeight / 4),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Lottie.asset(
+                                'assets/no_data.json',
+                                width: screenWidth * 0.35,
+                                height: screenHeight * 0.25,
+                              ),
+                              const SizedBox(height: 10),
+                              const Text(
+                                "No Camps found",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'LeagueSpartan',
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                        : ListView.builder(
                       itemCount: camps.length,
                       itemBuilder: (context, index) {
                         final camp = camps[index];
@@ -365,7 +394,7 @@ class _LogisticsTimelineState extends State<LogisticsTimeline>
                                                         backgroundColor:
                                                             MaterialStateProperty
                                                                 .all(Colors
-                                                                    .tealAccent),
+                                                                    .green),
                                                         foregroundColor:
                                                             MaterialStateProperty
                                                                 .all(Colors

@@ -130,7 +130,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -140,13 +140,9 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
         drawer: Drawer(
           child: Container(
             padding: EdgeInsets.zero,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  Colors.blue,
-                  Colors.lightBlueAccent,
-                  Colors.lightBlue
-                ], // Same gradient as AppBar
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],// Same gradient as AppBar
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -159,12 +155,12 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                     child: Container(
                       width: double.maxFinite,
                       height: double.maxFinite,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage('assets/logo3.png'),
                         ),
                         gradient: LinearGradient(
-                          colors: [Colors.blue, Colors.lightBlueAccent],
+                          colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -270,7 +266,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                               return Center(
                                 key: ValueKey('loading'),
                                 child: CircularProgressIndicator(
-                                  color: Colors.blue,
+                                  color: Color(0xFF0097b2),
                                 ),
                               );
                             } else if (state is AdminApprovalLoaded) {
@@ -380,7 +376,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                             return Center(
                               key: ValueKey('empty'),
                               child: CircularProgressIndicator(
-                                color: Colors.blue,
+                            color:     Color(0xFF0097b2),
                               ),
                             );
                           }(),

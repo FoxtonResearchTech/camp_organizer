@@ -126,9 +126,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Container(
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -138,13 +138,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
         drawer: Drawer(
           child: Container(
             padding: EdgeInsets.zero,
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  Colors.blue,
-                  Colors.lightBlueAccent,
-                  Colors.lightBlue
-                ], // Same gradient as AppBar
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -157,12 +153,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                     child: Container(
                       width: double.maxFinite,
                       height: double.maxFinite,
-                      decoration: const BoxDecoration(
+                      decoration:  BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage('assets/logo3.png'),
                         ),
                         gradient: LinearGradient(
-                          colors: [Colors.blue, Colors.lightBlueAccent],
+                          colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -172,7 +168,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                   leading: const Icon(Icons.create, color: Colors.white),
                   title: const Text('Create Employee',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.white,fontWeight: FontWeight.bold,
                         fontFamily: 'LeagueSpartan',
                       )),
                   onTap: () {
@@ -188,7 +184,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                       const Icon(Icons.manage_accounts, color: Colors.white),
                   title: const Text('Manage Employee',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.white,fontWeight: FontWeight.bold,
                         fontFamily: 'LeagueSpartan',
                       )),
                   onTap: () {
@@ -259,15 +255,15 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                     child: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
                       builder: (context, state) {
                         return AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 500),
+                          duration: Duration(milliseconds: 500),
                           switchInCurve: Curves.easeIn,
                           switchOutCurve: Curves.easeOut,
                           child: () {
                             if (state is StatusLoading) {
-                              return const Center(
+                              return Center(
                                 key: ValueKey('loading'),
                                 child: CircularProgressIndicator(
-                                  color: Colors.blue,
+                                color:     Color(0xFF0097b2)
                                 ),
                               );
                             } else if (state is AdminApprovalLoaded) {
@@ -377,7 +373,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                             return const Center(
                               key: ValueKey('empty'),
                               child: CircularProgressIndicator(
-                                color: Colors.blue,
+                                color: Color(0xFF0097b2),
                               ),
                             );
                           }(),

@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../bloc/AddEvent/incharge_report_event.dart';
 import '../../../bloc/Employee/employee_update_event.dart';
@@ -20,6 +21,7 @@ import '../../notification/notification.dart';
 import 'camp_incharge_reporting.dart';
 import 'incharge_details_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 class CampInchargeTimeline extends StatefulWidget {
   const CampInchargeTimeline({super.key});
 
@@ -38,11 +40,7 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
         InchargeReportBloc(firestore: FirebaseFirestore.instance)
           ..add(FetchInchargeReport(employeeId: '', campId: ''));
     fetchEmployeeName();
-
   }
-
-
-
 
   @override
   void dispose() {
@@ -51,6 +49,7 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
   }
 
   String? employeeName;
+
   Future<void> fetchEmployeeName() async {
     try {
       // Get the current user's UID from FirebaseAuth
@@ -69,14 +68,13 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
       // Fetch the document for the current employee using their UID
-      DocumentSnapshot employeeDoc = await firestore
-          .collection('employees')
-          .doc(currentEmployeeId)
-          .get();
+      DocumentSnapshot employeeDoc =
+          await firestore.collection('employees').doc(currentEmployeeId).get();
 
       if (employeeDoc.exists) {
         // Safely cast the document data to Map<String, dynamic>
-        Map<String, dynamic>? data = employeeDoc.data() as Map<String, dynamic>?;
+        Map<String, dynamic>? data =
+            employeeDoc.data() as Map<String, dynamic>?;
 
         if (data != null) {
           // Access the 'firstName' field
@@ -156,13 +154,9 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
             backgroundColor: Colors.transparent,
             elevation: 0,
             flexibleSpace: Container(
-              decoration: const BoxDecoration(
+              decoration:  BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Colors.blue,
-                    Colors.lightBlueAccent,
-                    Colors.lightBlue
-                  ],
+                  colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -172,280 +166,273 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
           body: BlocBuilder<OnsiteApprovalBloc, OnsiteApprovalState>(
             builder: (context, state) {
               if (state is OnsiteApprovalLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator(
+                  color: Color(0xFF0097b2),
+                ));
               } else if (state is OnsiteApprovalLoaded) {
                 final camps = state.allCamps;
 
+                // Filter camps to only include those where the condition is true
+                final filteredCamps = camps
+                    .where((camp) => employeeName == camp['incharge'])
+                    .toList();
+
+                // Check if there are no camps meeting the condition
+                if (filteredCamps.isEmpty) {
+                  return  Center(
+                    child: Container(
+
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Lottie.asset(
+                            'assets/no_data.json',
+                            width: screenWidth * 0.35,
+                            height: screenHeight * 0.25,
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            "No Camps found",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'LeagueSpartan',
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
                 return RefreshIndicator(
-                    onRefresh: () async {
-                      context
-                          .read<OnsiteApprovalBloc>()
-                          .add(FetchOnsiteApprovalData());
-                    },
-                    child: ListView.builder(
-                      itemCount: camps.length,
-                      itemBuilder: (context, index) {
-                        final camp = camps[index];
-                        return GestureDetector(
-                          onTap: () async {
-                            // Add debug logs to check the employee data and IDs being passed
-                            print('Employee: ${camps[index]}');
-                            print(
-                                'Employee Doc ID: ${state.employeeDocId[index]}');
-                            print('Camp Doc ID: ${state.campDocIds[index]}');
+                  color: Color(0xFF0097b2),
+                  onRefresh: () async {
+                    context
+                        .read<OnsiteApprovalBloc>()
+                        .add(FetchOnsiteApprovalData());
+                  },
+                  child: ListView.builder(
+                    itemCount: filteredCamps.length,
+                    itemBuilder: (context, index) {
+                      final camp = filteredCamps[index];
+                      return GestureDetector(
+                        onTap: () async {
+                          // Debug logs
+                          print('Employee: ${camp}');
+                          print(
+                              'Employee Doc ID: ${state.employeeDocId[index]}');
+                          print('Camp Doc ID: ${state.campDocIds[index]}');
 
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EventDetailsPage(
-                                  employee: camps[index],
-                                  employeedocId: camps[index]['EmployeeDocId'],
-                                  campId: state.campDocIds[index],
-                                ),
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EventDetailsPage(
+                                employee: camp,
+                                employeedocId: camp['EmployeeDocId'],
+                                campId: state.campDocIds[index],
                               ),
-                            );
-                          },
-                          child: employeeName == camps[index]['incharge']
-                              ? Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        height: screenHeight /
-                                            3.2, // Responsive height
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                                  Colors.black.withOpacity(0.1),
-                                              spreadRadius: 2,
-                                              blurRadius: 10,
-                                              offset: const Offset(0, 4),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(12),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                            ),
+                          );
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                height: screenHeight / 3.2,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      spreadRadius: 2,
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Display camp details
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
                                             children: [
-                                              Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Icon(
-                                                        Icons.date_range,
-                                                        size:
-                                                            screenWidth * 0.07,
-                                                        color: Colors.orange,
-                                                      ),
-                                                      const SizedBox(width: 8),
-                                                      Text(
-                                                        camps[index]
-                                                            ['campDate'],
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: Colors.black54,
-                                                          fontSize:
-                                                              screenWidth *
-                                                                  0.05,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Icon(
-                                                        Icons.watch_later,
-                                                        size:
-                                                            screenWidth * 0.07,
-                                                        color: Colors.orange,
-                                                      ),
-                                                      const SizedBox(width: 8),
-                                                      Text(
-                                                        camps[index]
-                                                            ['campTime'],
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: Colors.black54,
-                                                          fontSize:
-                                                              screenWidth *
-                                                                  0.05,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
+                                              Icon(
+                                                Icons.date_range,
+                                                size: screenWidth * 0.07,
+                                                color: Colors.orange,
                                               ),
-                                              const SizedBox(height: 5),
-                                              ..._buildInfoText(
-                                                screenWidth,
-                                                camps[index]['campName'],
-                                              ),
-                                              ..._buildInfoText(
-                                                screenWidth,
-                                                camps[index]['address'],
-                                              ),
-                                              ..._buildInfoText(
-                                                screenWidth,
-                                                camps[index]['name'],
-                                              ),
-                                              ..._buildInfoText(
-                                                screenWidth,
-                                                camps[index]['phoneNumber1'],
-                                              ),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              // Horizontal Timeline Container
-
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    child: ElevatedButton(
-                                                      onPressed: () {
-                                                        final documentId =
-                                                            camp['documentId'];
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                CampInchargeReporting(
-                                                              documentId:
-                                                                  documentId,
-                                                              campData: camp,
-                                                            ),
-                                                          ),
-                                                        );
-                                                      },
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        backgroundColor: Colors
-                                                            .lightBlueAccent,
-                                                        elevation: 5,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(20),
-                                                        ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                vertical: 15),
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: const [
-                                                          Icon(Icons.add_chart,
-                                                              color: Colors
-                                                                  .white), // Add icon
-                                                          SizedBox(width: 8),
-                                                          Text(
-                                                            'Add Reports',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 18,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(width: 10),
-                                                  Expanded(
-                                                    child: ElevatedButton(
-                                                      onPressed: () {
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                InchargeDetailsPage(
-                                                                    inchargeData:
-                                                                        camp),
-                                                          ),
-                                                        );
-                                                        print(camp);
-                                                      },
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        backgroundColor: Colors
-                                                            .deepOrangeAccent, // Vibrant orange color
-                                                        elevation: 5,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(20),
-                                                        ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                vertical: 15),
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: const [
-                                                          Icon(Icons.view_list,
-                                                              color: Colors
-                                                                  .white), // View icon
-                                                          SizedBox(width: 8),
-                                                          Text(
-                                                            'View Reports',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 18,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
+                                              const SizedBox(width: 8),
+                                              Text(
+                                                camp['campDate'],
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.black54,
+                                                  fontSize: screenWidth * 0.05,
+                                                ),
                                               ),
                                             ],
                                           ),
-                                        ),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.watch_later,
+                                                size: screenWidth * 0.07,
+                                                color: Colors.orange,
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Text(
+                                                camp['campTime'],
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.black54,
+                                                  fontSize: screenWidth * 0.05,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
-                                )
-                              : Center(),
-                        );
-                      },
-                    ));
+                                      const SizedBox(height: 5),
+                                      ..._buildInfoText(
+                                          screenWidth, camp['campName']),
+                                      ..._buildInfoText(
+                                          screenWidth, camp['address']),
+                                      ..._buildInfoText(
+                                          screenWidth, camp['name']),
+                                      ..._buildInfoText(
+                                          screenWidth, camp['phoneNumber1']),
+                                      const SizedBox(height: 20),
+                                      // Buttons for actions
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                final documentId =
+                                                    camp['documentId'];
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CampInchargeReporting(
+                                                      documentId: documentId,
+                                                      campData: camp,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    Colors.lightBlueAccent,
+                                                elevation: 5,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 15),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: const [
+                                                  Icon(Icons.add_chart,
+                                                      color: Colors.white),
+                                                  SizedBox(width: 8),
+                                                  Text(
+                                                    'Add Reports',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        InchargeDetailsPage(
+                                                      inchargeData: camp,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    Colors.deepOrangeAccent,
+                                                elevation: 5,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 15),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: const [
+                                                  Icon(Icons.view_list,
+                                                      color: Colors.white),
+                                                  SizedBox(width: 8),
+                                                  Text(
+                                                    'View Reports',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
               } else if (state is AdminApprovalError) {
                 return Center(
                   child: Text(
-                    '$state.errorMessage',
+                    'Error',
                     style: const TextStyle(color: Colors.red, fontSize: 16),
                   ),
                 );

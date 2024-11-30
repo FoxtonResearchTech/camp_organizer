@@ -56,9 +56,9 @@ class _CampInchargeProfile extends State<CampInchargeProfile>
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -72,13 +72,9 @@ class _CampInchargeProfile extends State<CampInchargeProfile>
             AnimatedContainer(
               duration: const Duration(seconds: 1),
               height: 250,
-              decoration: const BoxDecoration(
+              decoration:  BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Colors.blue,
-                    Colors.lightBlueAccent,
-                    Colors.lightBlue
-                  ],
+                  colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -322,12 +318,12 @@ class ProfileInfoTile extends StatelessWidget {
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.blueAccent.withOpacity(0.1),
+            color:Color(0xFF0097b2).withOpacity(0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
             icon,
-            color: Colors.blueAccent,
+            color: Color(0xFF0097b2)
           ),
         ),
         title: Text(

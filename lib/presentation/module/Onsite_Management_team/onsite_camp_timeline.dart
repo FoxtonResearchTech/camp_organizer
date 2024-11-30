@@ -4,6 +4,7 @@ import 'package:camp_organizer/presentation/module/Onsite_Management_team/onsite
 import 'package:camp_organizer/widgets/button/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../bloc/AddEvent/onsite_add_team_bloc.dart';
 import '../../../bloc/AddEvent/onsite_add_team_event.dart';
@@ -98,15 +99,48 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
           body: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
             builder: (context, state) {
               if (state is AdminApprovalLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator(color: Color(0xFF0097b2),));
               } else if (state is AdminApprovalLoaded) {
                 final camps = state.allCamps;
-
+                final waitingCamps = camps
+                    .where((camp) => camp['campStatus'] == 'Approved')
+                    .toList();
                 return RefreshIndicator(
+                    color: Color(0xFF0097b2),
                     onRefresh: () async {
+                      // Trigger the refresh event in your bloc or reload the data here
                       context.read<AdminApprovalBloc>().add(FetchDataEvents());
                     },
-                    child: ListView.builder(
+                    child: waitingCamps.isEmpty
+                        ? SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Center(
+                        child: Container(
+                          padding: EdgeInsets.only(top: screenHeight / 4),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Lottie.asset(
+                                'assets/no_data.json',
+                                width: screenWidth * 0.35,
+                                height: screenHeight * 0.25,
+                              ),
+                              const SizedBox(height: 10),
+                              const Text(
+                                "No Camps found",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'LeagueSpartan',
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                        : ListView.builder(
                       itemCount: camps.length,
                       itemBuilder: (context, index) {
                         final camp = camps[index];

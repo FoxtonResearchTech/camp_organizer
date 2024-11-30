@@ -131,9 +131,9 @@ class _SuperCommutativeReportsSearchScreen
           //   },
           // ),
           flexibleSpace: Container(
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -608,7 +608,7 @@ class _SuperCommutativeReportsSearchScreen
     return Column(
       children: [
         Container(
-          height: screenHeight / 3.75,
+          height: screenHeight / 3.4,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),

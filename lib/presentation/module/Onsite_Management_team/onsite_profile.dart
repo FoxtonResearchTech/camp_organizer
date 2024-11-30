@@ -92,7 +92,7 @@ class _OnsiteProfile extends State<OnsiteProfile>
               child: BlocBuilder<OnsiteProfileBloc, OnsiteProfileState>(
                 builder: (context, state) {
                   if (state is OnsiteProfileLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator(color: Color(0xFF0097b2),));
                   } else if (state is OnsiteProfileLoaded) {
                     final employee = state.employee;
                     return Column(

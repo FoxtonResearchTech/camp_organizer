@@ -130,9 +130,9 @@ class _CommutativeReportsSearchScreen
             },
           ),
           flexibleSpace: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -598,7 +598,7 @@ class _CommutativeReportsSearchScreen
     return Column(
       children: [
         Container(
-          height: screenHeight / 5,
+          height: screenHeight / 4.5,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
