@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.settings, color: Colors.black),
             onPressed: () {
-              print('sujin');
+              print('sujin1');
             },
           ),
         ],

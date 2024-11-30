@@ -93,10 +93,7 @@ class _LogisticsInwardState extends State<LogisticsInward> {
 
   void saveData(BuildContext context, String documentId) {
     final Map<String, dynamic> data = {
-      'campPlace': campPlaceController.text.trim(),
-      'date': dateController.text.trim(),
       'Inward_cameraIn': cameraInController.text.trim(),
-      'Inward_cameraOut': cameraOutController.text.trim(),
       'Inward_inChargeName': inChargeNameController.text.trim(),
       'Inward_dutyInCharge1': dutyInCharge1Controller.text.trim(),
       'Inward_dutyInCharge2': dutyInCharge2Controller.text.trim(),
@@ -139,6 +136,34 @@ class _LogisticsInwardState extends State<LogisticsInward> {
         );
       }).toList(),
     );
+  }
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize form fields from the passed campData
+    cameraInController.text = widget.campData['Inward_cameraIn'] ?? '';
+    inChargeNameController.text = widget.campData['Inward_inChargeName'] ?? '';
+    dutyInCharge1Controller.text =
+        widget.campData['Inward_dutyInCharge1'] ?? '';
+    dutyInCharge2Controller.text =
+        widget.campData['Inward_dutyInCharge2'] ?? '';
+    remarksController.text = widget.campData['Inward_remarks'] ?? '';
+
+    // Initialize checklist values from the passed campData
+    doctorRoomThings = Map<String, bool>.from(
+        widget.campData['Inward_doctorRoomThings'] ?? {});
+    visionRoomThings = Map<String, bool>.from(
+        widget.campData['Inward_visionRoomThings'] ?? {});
+    crRoomThings =
+    Map<String, bool>.from(widget.campData['Inward_crRoomThings'] ?? {});
+    tnDuctThings =
+    Map<String, bool>.from(widget.campData['Inward_tnDuctThings'] ?? {});
+    opticalThings =
+    Map<String, bool>.from(widget.campData['Inward_opticalThings'] ?? {});
+    fittingThings =
+    Map<String, bool>.from(widget.campData['Inward_fittingThings'] ?? {});
+    others = Map<String, bool>.from(widget.campData['Inward_others'] ?? {});
   }
 
   @override
@@ -188,20 +213,7 @@ class _LogisticsInwardState extends State<LogisticsInward> {
           child: ListView(
             children: [
               // Input for camp place and date
-              SizedBox(
-                height: 20,
-              ),
-              CustomTextFormField(
-                labelText: "Camp Place",
-                controller: campPlaceController,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              CustomTextFormField(
-                labelText: "Date",
-                controller: dateController,
-              ),
+
 
               SizedBox(height: 20),
 
@@ -221,12 +233,6 @@ class _LogisticsInwardState extends State<LogisticsInward> {
                 labelText: 'Camera In',
                 controller: cameraInController,
               ),
-              SizedBox(height: 20),
-              CustomTextFormField(
-                labelText: 'Camera Out',
-                controller: cameraOutController,
-              ),
-
               SizedBox(height: 20),
 
               // Input for in-charge names
