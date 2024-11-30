@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../../../bloc/approval/adminapproval_bloc.dart';
 import '../../../bloc/approval/adminapproval_event.dart';
@@ -18,7 +20,40 @@ class FinanceDetails extends StatefulWidget {
 class _FinanceDetailsState extends State<FinanceDetails> {
   @override
   Widget build(BuildContext context) {
+    String formattedCreatedOn = _formatCreatedOn(widget.campData['CreatedOn']);
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Camp Expenses',
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'LeagueSpartan',
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: false,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(
+            CupertinoIcons.back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -87,9 +122,7 @@ class _FinanceDetailsState extends State<FinanceDetails> {
                 _buildInfoCard('Number of Patients Expected',
                     widget.campData['noOfPatientExpected']),
                 _buildInfoCard('Position', widget.campData['position']),
-                _buildInfoCard('Created On',
-                    widget.campData['CreatedOn']?.toString() ?? 'N/A'),
-                _buildInfoCard('Document ID', widget.campData['documentId']),
+                _buildInfoCard('Created On', formattedCreatedOn),
                 _buildInfoCard('AR', widget.campData['ar'] ?? 'N?A'),
               ],
             ),
@@ -154,6 +187,18 @@ class _FinanceDetailsState extends State<FinanceDetails> {
     );
   }
 
+  // Helper method to format the 'Created On' timestamp to a readable date format
+  String _formatCreatedOn(dynamic createdOn) {
+    if (createdOn == null) return 'N/A';
+    try {
+      int timestampSeconds = createdOn.seconds; // Assuming 'seconds' is the field name for timestamp
+      DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestampSeconds * 1000);
+      return DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime); // Format as desired
+    } catch (e) {
+      return 'Invalid Date'; // Handle any parsing issues
+    }
+  }
+
   // Helper method to build section titles with animation
   Widget _buildAnimatedSection(BuildContext context,
       {required String sectionTitle, required List<Widget> children}) {
@@ -176,7 +221,7 @@ class _FinanceDetailsState extends State<FinanceDetails> {
             },
           ),
           ...children.map(
-            (child) => TweenAnimationBuilder(
+                (child) => TweenAnimationBuilder(
               tween: Tween<double>(begin: 0, end: 1),
               duration: const Duration(milliseconds: 300),
               builder: (context, value, _) {
@@ -237,7 +282,7 @@ class _FinanceDetailsState extends State<FinanceDetails> {
         ),
         child: ListTile(
           contentPadding:
-              const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+          const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
           title: Text(
             label,
             style: const TextStyle(
