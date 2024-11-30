@@ -32,6 +32,7 @@ class _AddEventState extends State<AddEvent>
     'Individual Campevent'
   ];
   final List<String> lastCampDone = [
+    'None',
     'below 1 month',
     '1 month above',
     '2 month above',
