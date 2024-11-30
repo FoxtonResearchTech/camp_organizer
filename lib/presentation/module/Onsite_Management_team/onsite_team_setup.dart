@@ -71,6 +71,19 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
   void initState() {
     fetchEmployees();
     super.initState();
+    // Initialize text controllers with data passed to the page
+    dateController.text = widget.campData['campDate'] ?? ''; // if no value, set empty string
+    timeController.text = widget.campData['campTime'] ?? '';
+    doctorController.text = widget.campData['doctor'] ?? '';
+    driverController.text = widget.campData['driver'] ?? '';
+    inchargeController.text = widget.campData['incharge'] ?? '';
+    vnRegController.text = widget.campData['vnReg'] ?? '';
+    arController.text = widget.campData['ar'] ?? '';
+    regnterController.text = widget.campData['regnter'] ?? '';
+    drRoomController.text = widget.campData['drRoom'] ?? '';
+    counsellingController.text = widget.campData['counselling'] ?? '';
+    selectedOpticals = widget.campData['optical']; // If available
+    selectedEmployee = widget.campData['incharge'];
   }
 
   @override

@@ -44,7 +44,7 @@ class LogisticsOutwardPage extends StatelessWidget {
               context,
               title: 'Outward Doctor Room Things',
               content:
-                  _buildCheckList(campData['Outward_doctorRoomThings'] ?? {}),
+              _buildCheckList(campData['Outward_doctorRoomThings'] ?? {}),
             ),
             _buildGradientCard(
               context,
@@ -65,7 +65,7 @@ class LogisticsOutwardPage extends StatelessWidget {
               context,
               title: 'Outward Vision Room Things',
               content:
-                  _buildCheckList(campData['Outward_visionRoomThings'] ?? {}),
+              _buildCheckList(campData['Outward_visionRoomThings'] ?? {}),
             ),
             _buildGradientCard(
               context,
@@ -80,8 +80,21 @@ class LogisticsOutwardPage extends StatelessWidget {
             SizedBox(
               height: 30,
             ),
+            _buildAnimatedSection(
+              context,
+              sectionTitle: 'More Outward Details',
+              children: [
+                _buildInfoCard('Camera Out', campData['Outward_cameraOut']),
+                _buildInfoCard('In-Charge Name', campData['Outward_inChargeName']),
+                _buildInfoCard('Duty Incharge 1', campData['Outward_dutyInCharge1']),
+                _buildInfoCard('Duty Incharge 2', campData['Outward_dutyInCharge2']),
+                _buildInfoCard('Remarks', campData['Outward_remarks']),
+              ],
+            ),
             Center(
-              child: CustomButton(text: 'Submit', onPressed: () {}),
+              child: CustomButton(text: 'Done', onPressed: () {
+                Navigator.pop(context); // Go back to the previous page
+              }),
             ),
             SizedBox(
               height: 20,
@@ -97,6 +110,7 @@ class LogisticsOutwardPage extends StatelessWidget {
       {required String title, required List<Widget> content}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10.0),
+      width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [Colors.cyan[100]!, Colors.cyan[50]!],
@@ -150,5 +164,103 @@ class LogisticsOutwardPage extends StatelessWidget {
         },
       );
     }).toList();
+  }
+  // Helper method to build section titles with animation
+  Widget _buildAnimatedSection(BuildContext context,
+      {required String sectionTitle, required List<Widget> children}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TweenAnimationBuilder(
+            tween: Tween<double>(begin: 0, end: 1),
+            duration: const Duration(milliseconds: 500),
+            builder: (context, value, child) {
+              return Opacity(
+                opacity: value,
+                child: Transform.translate(
+                  offset: Offset(0, 20 * (1 - value)),
+                  child: _buildSectionTitle(sectionTitle),
+                ),
+              );
+            },
+          ),
+          ...children.map(
+                (child) => TweenAnimationBuilder(
+              tween: Tween<double>(begin: 0, end: 1),
+              duration: const Duration(milliseconds: 300),
+              builder: (context, value, _) {
+                return Opacity(
+                  opacity: value,
+                  child: Transform.translate(
+                    offset: Offset(0, 20 * (1 - value)),
+                    child: child,
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  // Helper method to build section titles
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontFamily: 'LeagueSpartan',
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: Colors.lightBlue[800],
+        ),
+      ),
+    );
+  }
+
+  // Helper method to build information cards
+  Widget _buildInfoCard(String label, dynamic value) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 7.0),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.cyan[100]!,
+            Colors.cyan[50]!,
+          ],
+          begin: Alignment.bottomRight,
+          end: Alignment.topLeft,
+        ),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.cyan[200]!.withOpacity(0.5),
+            blurRadius: 5,
+            offset: const Offset(2, 3),
+          ),
+        ],
+      ),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+        title: Text(
+          label,
+          style: const TextStyle(
+            fontFamily: 'LeagueSpartan',
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        subtitle: Text(
+          value?.toString() ?? 'N/A',
+          style: const TextStyle(
+            color: Colors.black54,
+            fontFamily: 'LeagueSpartan',
+          ),
+        ),
+      ),
+    );
   }
 }

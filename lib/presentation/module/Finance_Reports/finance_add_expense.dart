@@ -32,7 +32,7 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
   final TextEditingController placeController = TextEditingController();
   final TextEditingController otherExpensesController = TextEditingController();
   final TextEditingController vehicleExpensesController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController staffSalaryController = TextEditingController();
   final TextEditingController otController = TextEditingController();
   final TextEditingController catController = TextEditingController();
@@ -74,6 +74,28 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
         ),
       );
     }
+  }
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
+
+  void _initializeData() {
+    final data = widget.campData;
+
+    dateController.text = data['date'] ?? '';
+    timeController.text = data['time'] ?? '';
+    campNameController.text = data['campName'] ?? '';
+    organizationController.text = data['organization'] ?? '';
+    placeController.text = data['place'] ?? '';
+    otherExpensesController.text = data['otherExpenses'] ?? '';
+    vehicleExpensesController.text = data['vehicleExpenses'] ?? '';
+    staffSalaryController.text = data['staffSalary'] ?? '';
+    otController.text = data['ot'] ?? '';
+    catController.text = data['cat'] ?? '';
+    gpPayingCaseController.text = data['gpPayingCase'] ?? '';
+    remarksController.text = data['remarks'] ?? '';
   }
 
   @override
@@ -136,52 +158,6 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
             key: _formKey,
             child: Column(
               children: [
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextFormField(
-                        labelText: 'Date',
-                        controller: dateController,
-                        validator: (value) => value == null || value.isEmpty
-                            ? 'Enter date'
-                            : null,
-                      ),
-                    ),
-                    const SizedBox(width: 15),
-                    Expanded(
-                      child: CustomTextFormField(
-                        labelText: 'Time',
-                        controller: timeController,
-                        validator: (value) => value == null || value.isEmpty
-                            ? 'Enter time'
-                            : null,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                CustomTextFormField(
-                  labelText: 'Camp Name',
-                  controller: campNameController,
-                  validator: (value) =>
-                      value == null || value.isEmpty ? 'Enter camp name' : null,
-                ),
-                const SizedBox(height: 20),
-                CustomTextFormField(
-                  labelText: 'Organization',
-                  controller: organizationController,
-                  validator: (value) => value == null || value.isEmpty
-                      ? 'Enter organization'
-                      : null,
-                ),
-                const SizedBox(height: 20),
-                CustomTextFormField(
-                  labelText: 'Place',
-                  controller: placeController,
-                  validator: (value) =>
-                      value == null || value.isEmpty ? 'Enter place' : null,
-                ),
                 const SizedBox(height: 20),
                 const Text(
                   'Camp Expenses',

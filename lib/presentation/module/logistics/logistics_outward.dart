@@ -92,9 +92,6 @@ class _LogisticsOutwardState extends State<LogisticsOutward> {
 
   void saveData(BuildContext context, String documentId) {
     final Map<String, dynamic> data = {
-      'campPlace': campPlaceController.text.trim(),
-      'date': dateController.text.trim(),
-      'Outward_cameraIn': cameraInController.text.trim(),
       'Outward_cameraOut': cameraOutController.text.trim(),
       'Outward_inChargeName': inChargeNameController.text.trim(),
       'Outward_dutyInCharge1': dutyInCharge1Controller.text.trim(),
@@ -142,6 +139,36 @@ class _LogisticsOutwardState extends State<LogisticsOutward> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
+
+  void _initializeData() {
+    // Fetch data from `widget.campData` (or an API call)
+    final data = widget.campData;
+
+    // Initialize controllers with existing data
+    cameraOutController.text = data['Outward_cameraOut'] ?? '';
+    inChargeNameController.text = data['Outward_inChargeName'] ?? '';
+    dutyInCharge1Controller.text = data['Outward_dutyInCharge1'] ?? '';
+    dutyInCharge2Controller.text = data['Outward_dutyInCharge2'] ?? '';
+    remarksController.text = data['Outward_remarks'] ?? '';
+
+    // Initialize checkbox states
+    doctorRoomThings = Map<String, bool>.from(data['Outward_doctorRoomThings'] ?? doctorRoomThings);
+    visionRoomThings = Map<String, bool>.from(data['Outward_visionRoomThings'] ?? visionRoomThings);
+    crRoomThings = Map<String, bool>.from(data['Outward_crRoomThings'] ?? crRoomThings);
+    tnDuctThings = Map<String, bool>.from(data['Outward_tnDuctThings'] ?? tnDuctThings);
+    opticalThings = Map<String, bool>.from(data['Outward_opticalThings'] ?? opticalThings);
+    fittingThings = Map<String, bool>.from(data['Outward_fittingThings'] ?? fittingThings);
+    others = Map<String, bool>.from(data['Outward_others'] ?? others);
+
+    setState(() {});
+  }
+
+
+  @override
   void dispose() {
     // Dispose controllers to release resources
     campPlaceController.dispose();
@@ -187,16 +214,7 @@ class _LogisticsOutwardState extends State<LogisticsOutward> {
           key: _formKey,
           child: ListView(
             children: [
-              SizedBox(height: 20),
-              CustomTextFormField(
-                controller: campPlaceController,
-                labelText: "Camp Place",
-              ),
-              SizedBox(height: 20),
-              CustomTextFormField(
-                controller: dateController,
-                labelText: "Date",
-              ),
+
               SizedBox(height: 20),
 
               // Checklists for each category
@@ -208,12 +226,7 @@ class _LogisticsOutwardState extends State<LogisticsOutward> {
               buildChecklistCategory("Fitting Things", fittingThings),
               buildChecklistCategory("Others", others),
 
-              SizedBox(height: 20),
 
-              CustomTextFormField(
-                controller: cameraInController,
-                labelText: 'Camera In',
-              ),
               SizedBox(height: 20),
               CustomTextFormField(
                 controller: cameraOutController,
