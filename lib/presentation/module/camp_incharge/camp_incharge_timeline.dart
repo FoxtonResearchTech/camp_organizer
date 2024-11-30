@@ -38,12 +38,7 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
         InchargeReportBloc(firestore: FirebaseFirestore.instance)
           ..add(FetchInchargeReport(employeeId: '', campId: ''));
     fetchEmployeeName();
-
   }
-
-
-
-
   @override
   void dispose() {
     _inchargeReportBloc.close();
@@ -175,12 +170,16 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
                 return const Center(child: CircularProgressIndicator());
               } else if (state is OnsiteApprovalLoaded) {
                 final camps = state.allCamps;
+                final waitingCamps = camps
+                    .where((camp) => camp['campStatus'] == 'Approved')
+                    .toList();
 
                 return RefreshIndicator(
                     onRefresh: () async {
                       context
                           .read<OnsiteApprovalBloc>()
                           .add(FetchOnsiteApprovalData());
+
                     },
                     child: ListView.builder(
                       itemCount: camps.length,

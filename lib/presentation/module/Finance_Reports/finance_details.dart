@@ -38,7 +38,7 @@ class _FinanceDetailsState extends State<FinanceDetails> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -265,8 +265,8 @@ class _FinanceDetailsState extends State<FinanceDetails> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.cyan[100]!,
-              Colors.cyan[50]!,
+              Color(0xff0097b2),
+              Color(0xff0097b2).withOpacity(0.5)!,
             ],
             begin: Alignment.bottomRight,
             end: Alignment.topLeft,
@@ -288,13 +288,14 @@ class _FinanceDetailsState extends State<FinanceDetails> {
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontFamily: 'LeagueSpartan',
-              color: Colors.black87,
+              color: Colors.white,
             ),
           ),
           subtitle: Text(
             value?.toString() ?? 'N/A',
             style: const TextStyle(
-              color: Colors.black54,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
               fontFamily: 'LeagueSpartan',
             ),
           ),
