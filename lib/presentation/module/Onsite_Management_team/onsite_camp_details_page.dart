@@ -1,5 +1,6 @@
 import 'package:camp_organizer/widgets/button/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class OnsiteCampDetailsPage extends StatelessWidget {
   final Map<String, dynamic> campData;
@@ -9,6 +10,7 @@ class OnsiteCampDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String formattedCreatedOn = _formatCreatedOn(campData['CreatedOn']);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -103,17 +105,35 @@ class OnsiteCampDetailsPage extends StatelessWidget {
                 _buildInfoCard('Number of Patients Expected',
                     campData['noOfPatientExpected']),
                 _buildInfoCard('Position', campData['position']),
-                _buildInfoCard(
-                    'Created On', campData['CreatedOn']?.toString() ?? 'N/A'),
-                _buildInfoCard('Document ID', campData['documentId']),
+                _buildInfoCard('Created On', formattedCreatedOn),
                 _buildInfoCard('AR', campData['ar'] ?? 'N?A'),
+                _buildInfoCard('VN Reg', campData['vnReg'] ?? 'N?A'),
+                _buildInfoCard('Regnter', campData['regnter'] ?? 'N?A'),
+                _buildInfoCard('Dr.Room', campData['drRoom'] ?? 'N?A'),
+                _buildInfoCard('Counselling', campData['counselling'] ?? 'N?A'),
+                _buildInfoCard('Incharge', campData['incharge'] ?? 'N?A'),
               ],
             ),
-            Center(child: CustomButton(text: 'Approve', onPressed: () {})),
+            Center(child: CustomButton(text: 'Done', onPressed: () {
+
+              Navigator.pop(context);
+            })),
           ],
         ),
       ),
     );
+  }
+
+  // Helper method to format the 'Created On' timestamp to a readable date format
+  String _formatCreatedOn(dynamic createdOn) {
+    if (createdOn == null) return 'N/A';
+    try {
+      int timestampSeconds = createdOn.seconds; // Assuming 'seconds' is the field name for timestamp
+      DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestampSeconds * 1000);
+      return DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime); // Format as desired
+    } catch (e) {
+      return 'Invalid Date'; // Handle any parsing issues
+    }
   }
 
   // Helper method to build section titles with animation
@@ -138,7 +158,7 @@ class OnsiteCampDetailsPage extends StatelessWidget {
             },
           ),
           ...children.map(
-            (child) => TweenAnimationBuilder(
+                (child) => TweenAnimationBuilder(
               tween: Tween<double>(begin: 0, end: 1),
               duration: const Duration(milliseconds: 300),
               builder: (context, value, _) {
