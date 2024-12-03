@@ -229,7 +229,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
                   SizedBox(height: 30),
                   SizedBox(width: 20),
                   CustomTextFormField(
-                    labelText: 'VN Reg',
+                    labelText: 'VN Reference',
                     controller: vnRegController,
                   ),
                   SizedBox(height: 20),

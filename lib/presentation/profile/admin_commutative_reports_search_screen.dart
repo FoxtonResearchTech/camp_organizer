@@ -296,7 +296,7 @@ class _CommutativeReportsSearchScreen
               child: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
                 builder: (context, state) {
                   if (state is AdminApprovalLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator(color:   Color(0xFF0097b2),));
                   } else if (state is AdminApprovalLoaded) {
                     // Use a post-frame callback to update filtered data after the build.
                     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -310,6 +310,7 @@ class _CommutativeReportsSearchScreen
                     });
 
                     return RefreshIndicator(
+                      color:   Color(0xFF0097b2),
                       onRefresh: () async {
                         context
                             .read<AdminApprovalBloc>()
