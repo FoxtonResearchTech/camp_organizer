@@ -106,7 +106,7 @@ class _FinanceTimelineState extends State<FinanceTimeline>
                 // Check if there are no camps with status "Waiting"
 
                 return Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(8),
                     child: RefreshIndicator(
                         onRefresh: () async {
                           // Trigger the refresh event in your bloc or reload the data here

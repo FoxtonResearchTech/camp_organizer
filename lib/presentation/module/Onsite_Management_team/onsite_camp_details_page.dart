@@ -106,6 +106,11 @@ class OnsiteCampDetailsPage extends StatelessWidget {
              //   _buildInfoCard('Created On', campData['CreatedOn']?.toString() ?? 'N/A'),
             //    _buildInfoCard('Document ID', campData['documentId']),
                 _buildInfoCard('AR', campData['ar'] ?? 'N?A'),
+                _buildInfoCard('Vn Reg', campData['vnReg'] ?? 'N?A'),
+                _buildInfoCard('Registration', campData['regnter'] ?? 'N?A'),
+                _buildInfoCard('Dr. Room', campData['drRoom'] ?? 'N?A'),
+                _buildInfoCard('Counselling', campData['counselling'] ?? 'N?A'),
+                _buildInfoCard('Opticals', campData['optical'] ?? 'N?A'),
               ],
             ),
             Center(child:SizedBox()

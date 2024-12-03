@@ -84,21 +84,7 @@ class InchargeDetailsPage extends StatelessWidget {
                 _buildInfoCard('Vehicle Number', inchargeData['vehicleNumber']),
               ],
             ),
-            _buildAnimatedSection(
-              context,
-              sectionTitle: 'Team & Organization',
-              children: [
-                _buildInfoCard('Driver', inchargeData['driver']),
-                _buildInfoCard(
-                    'Teams', inchargeData['teams']?.join(', ') ?? 'N/A'),
-                _buildInfoCard('Organization', inchargeData['organization']),
-                _buildInfoCard('Position 2', inchargeData['position2']),
-                _buildInfoCard('Regnter', inchargeData['regnter']),
-                _buildInfoCard('Counselling', inchargeData['counselling']),
-                _buildInfoCard('Doctor Room', inchargeData['drRoom']),
-                _buildInfoCard('Optical', inchargeData['optical']),
-              ],
-            ),
+
             _buildAnimatedSection(
               context,
               sectionTitle: 'Contact Details',
@@ -130,13 +116,9 @@ class InchargeDetailsPage extends StatelessWidget {
                 _buildInfoCard('Number of Glasses Supplied',
                     inchargeData['glassesSupplied']),
                 _buildInfoCard('Km Run', inchargeData['kmRun']),
-                _buildInfoCard('Date', inchargeData['date']),
-                _buildInfoCard('Time', inchargeData['time']),
                 _buildInfoCard('Patient Follow-ups',
                     inchargeData['patientFollowUps']?.join(', ') ?? 'N/A'),
-                _buildInfoCard('AR', inchargeData['ar'] ?? 'N/A'),
-                _buildInfoCard('VN Reg', inchargeData['vnReg'] ?? 'N/A'),
-                _buildInfoCard('Name 2', inchargeData['name2']),
+
               ],
             ),
             Center(

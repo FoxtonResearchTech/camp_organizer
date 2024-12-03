@@ -57,11 +57,18 @@ dependencies:
   bloc: ^8.1.4
   animated_text_kit: ^4.2.2
   url_launcher: ^6.3.1
+  flutter_launcher_icons: ^0.13.1
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  image_path: "assets/icon.png"
+  min_sdk_android: 21
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -85,6 +92,7 @@ flutter:
   assets:
      - assets/
      - assets/no_records.json
+     - assets/icon/icon.png
 
 
   #   - images/a_dot_ham.jpeg
