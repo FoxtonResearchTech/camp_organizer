@@ -283,13 +283,9 @@ class _PostCampProfile extends State<PostCampProfile>
                     );
                   }
                   return const Center(
-                    child: Text(
-                      "No data available",
-                      style: TextStyle(
-                        fontFamily: 'LeagueSpartan',
-                      ),
-                    ),
-                  );
+                      child: CircularProgressIndicator(
+                    color: Color(0xFF0097b2),
+                  ));
                 },
               ),
             ),

@@ -12,26 +12,30 @@ import 'package:lottie/lottie.dart';
 import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
 import 'package:camp_organizer/bloc/approval/adminapproval_state.dart';
 import 'package:camp_organizer/bloc/approval/adminapproval_event.dart';
+
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-class AdminCommutativeReportsSearchScreen extends StatefulWidget {
+class SuperAdminSelectedEmployeeCommutativeReport extends StatefulWidget {
   final String name;
   final String position;
   final String empCode;
-  const AdminCommutativeReportsSearchScreen({
+  final String employeeName;
+
+  const SuperAdminSelectedEmployeeCommutativeReport({
     Key? key,
     required this.name,
     required this.position,
     required this.empCode,
+    required this.employeeName,
   }) : super(key: key);
   @override
-  State<AdminCommutativeReportsSearchScreen> createState() =>
-      _CommutativeReportsSearchScreen();
+  State<SuperAdminSelectedEmployeeCommutativeReport> createState() =>
+      _SuperAdminSelectedEmployeeCommutativeReport();
 }
 
-class _CommutativeReportsSearchScreen
-    extends State<AdminCommutativeReportsSearchScreen> {
+class _SuperAdminSelectedEmployeeCommutativeReport
+    extends State<SuperAdminSelectedEmployeeCommutativeReport> {
   late AdminApprovalBloc _AdminApprovalBloc;
   late TextEditingController _startDateController;
   late TextEditingController _endDateController;
@@ -45,7 +49,8 @@ class _CommutativeReportsSearchScreen
     super.initState();
     _startDateController = TextEditingController();
     _endDateController = TextEditingController();
-    _AdminApprovalBloc = AdminApprovalBloc()..add(FetchDataEvents());
+    _AdminApprovalBloc = AdminApprovalBloc()
+      ..add(SelectedEmployeeFetchEvent(widget.employeeName));
   }
 
   @override
@@ -111,24 +116,24 @@ class _CommutativeReportsSearchScreen
           title: const Text(
             "Cumulative Reports",
             style: TextStyle(
+              fontFamily: 'LeagueSpartan',
               color: Colors.white,
               fontSize: 22,
               fontWeight: FontWeight.bold,
-              fontFamily: 'LeagueSpartan',
             ),
           ),
           centerTitle: true,
           backgroundColor: Colors.blue,
           elevation: 0,
-          leading: IconButton(
-            icon: const Icon(
-              CupertinoIcons.back,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+          // leading: IconButton(
+          //   icon: const Icon(
+          //     CupertinoIcons.back,
+          //     color: Colors.white,
+          //   ),
+          //   onPressed: () {
+          //     Navigator.pop(context);
+          //   },
+          // ),
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -141,6 +146,15 @@ class _CommutativeReportsSearchScreen
                 end: Alignment.bottomRight,
               ),
             ),
+          ),
+          leading: IconButton(
+            icon: const Icon(
+              CupertinoIcons.back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
           actions: [
             IconButton(
@@ -167,7 +181,7 @@ class _CommutativeReportsSearchScreen
                       final endingDate = _endDateController.text;
                       final timestamp = DateTime.now().millisecondsSinceEpoch;
                       final path =
-                          "${directory.path}/AdminCumulativeReports_${startingDate.isEmpty ? 0 : startingDate}_to_${endingDate.isEmpty ? 0 : endingDate}_$timestamp.pdf";
+                          "${directory.path}/SuperAdminCumulativeReports_${startingDate.isEmpty ? 0 : startingDate}_to_${endingDate.isEmpty ? 0 : endingDate}_$timestamp.pdf";
                       final file = File(path);
                       await file.writeAsBytes(await pdf.save());
 
@@ -308,16 +322,15 @@ class _CommutativeReportsSearchScreen
                         }
                       });
                     });
-
                     return RefreshIndicator(
                       onRefresh: () async {
-                        context
-                            .read<AdminApprovalBloc>()
-                            .add(FetchDataEvents());
+                        context.read<AdminApprovalBloc>().add(
+                            SelectedEmployeeFetchEvent(widget.employeeName));
                       },
                       child:
                           _buildEmployeeList(state, screenWidth, screenHeight),
                     );
+                    // return _buildEmployeeList(state, screenWidth, screenHeight);
                   } else if (state is AdminApprovalError) {
                     return const Center(
                       child: Text(
@@ -703,8 +716,8 @@ class _CommutativeReportsSearchScreen
                   "No matching record found",
                   style: TextStyle(
                     fontSize: 18,
-                    fontFamily: 'LeagueSpartan',
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'LeagueSpartan',
                     color: Colors.grey,
                   ),
                 ),
@@ -742,7 +755,7 @@ class _CommutativeReportsSearchScreen
     return Column(
       children: [
         Container(
-          height: screenHeight / 4.5,
+          height: screenHeight / 3.4,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
@@ -821,6 +834,97 @@ class _CommutativeReportsSearchScreen
                 ..._buildInfoText(
                   screenWidth,
                   _filteredEmployees[index]['phoneNumber1'],
+                ),
+                SizedBox(height: 10),
+                Container(
+                  padding: EdgeInsets.only(
+                      left: screenWidth / 10, right: screenWidth / 10),
+                  width: double.maxFinite,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () async {
+                      bool? confirmDelete = await showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text(
+                              'Delete Camp',
+                              style: TextStyle(
+                                fontFamily: 'LeagueSpartan',
+                              ),
+                            ),
+                            content: const Text(
+                              'Are you sure you want to delete this camp?',
+                              style: TextStyle(
+                                fontFamily: 'LeagueSpartan',
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: Text('Cancel',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontFamily: 'LeagueSpartan',
+                                    )),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                child: Text('Delete',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontFamily: 'LeagueSpartan',
+                                    )),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      if (confirmDelete == true) {
+                        try {
+                          final employeeId =
+                              _filteredEmployees[index]['employeeDocId'];
+                          final campDocId =
+                              _filteredEmployees[index]['documentId'];
+
+                          context.read<AdminApprovalBloc>().add(DeleteCampEvent(
+                                employeeId: employeeId,
+                                campDocId: campDocId,
+                              ));
+                          setState(() {
+                            _filteredEmployees.removeAt(index);
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Center(
+                                  child: Text("Camp Deleted Successfully")),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Center(
+                                  child: Text("Failed to delete the camp")),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white),
+                    label: Text(
+                      "Delete",
+                      style: TextStyle(
+                        fontFamily: 'LeagueSpartan',
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

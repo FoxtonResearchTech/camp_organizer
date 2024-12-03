@@ -58,7 +58,11 @@ class _LogisticsProfile extends State<LogisticsProfile>
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -74,7 +78,11 @@ class _LogisticsProfile extends State<LogisticsProfile>
               height: 250,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                  colors: [
+                    Color(0xFF0097b2),
+                    Color(0xFF0097b2).withOpacity(1),
+                    Color(0xFF0097b2).withOpacity(0.8)
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -279,13 +287,9 @@ class _LogisticsProfile extends State<LogisticsProfile>
                     );
                   }
                   return const Center(
-                    child: Text(
-                      "No data available",
-                      style: TextStyle(
-                        fontFamily: 'LeagueSpartan',
-                      ),
-                    ),
-                  );
+                      child: CircularProgressIndicator(
+                    color: Color(0xFF0097b2),
+                  ));
                 },
               ),
             ),

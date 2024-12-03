@@ -110,7 +110,7 @@ class _SuperCommutativeReportsSearchScreen
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            "Commutative Reports",
+            "Cumulative Reports",
             style: TextStyle(
               fontFamily: 'LeagueSpartan',
               color: Colors.white,
@@ -131,9 +131,13 @@ class _SuperCommutativeReportsSearchScreen
           //   },
           // ),
           flexibleSpace: Container(
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -150,60 +154,58 @@ class _SuperCommutativeReportsSearchScreen
           ),
           actions: [
             IconButton(
-                onPressed: () async {
-                  final pdf = pw.Document();
-                  final rows = await _generatePdfRows();
+              onPressed: () async {
+                final pdf = pw.Document();
+                final rows = await _generatePdfRows();
 
-                  // Adding the content to the PDF
-                  pdf.addPage(
-                    pw.Page(
-                      pageFormat: PdfPageFormat.a4,
-                      build: (context) {
-                        return pw.Column(
-                          crossAxisAlignment: pw.CrossAxisAlignment.start,
-                          children: rows,
-                        );
-                      },
-                    ),
-                  );
+                // Adding the content to the PDF
+                pdf.addPage(
+                  pw.MultiPage(
+                    pageFormat: PdfPageFormat.a4,
+                    build: (context) {
+                      return [...rows];
+                    },
+                  ),
+                );
 
-                  // Save the file to the Downloads folder
-                  try {
-                    // Get the Downloads folder directory
-                    final directory = Directory('/storage/emulated/0/Download');
-                    if (await directory.exists()) {
-                      final startingDate = _startDateController.text;
-                      final endingDate = _endDateController.text;
-                      final timestamp = DateTime.now().millisecondsSinceEpoch;
-                      final path =
-                          "${directory.path}/SuperAdminCommutativeReports_${startingDate.isEmpty ? 0 : startingDate}_to_${endingDate.isEmpty ? 0 : endingDate}_$timestamp.pdf";
-                      final file = File(path);
-                      await file.writeAsBytes(await pdf.save());
+                // Save the file to the Downloads folder
+                try {
+                  // Get the Downloads folder directory
+                  final directory = Directory('/storage/emulated/0/Download');
+                  if (await directory.exists()) {
+                    final startingDate = _startDateController.text;
+                    final endingDate = _endDateController.text;
+                    final timestamp = DateTime.now().millisecondsSinceEpoch;
+                    final path =
+                        "${directory.path}/SuperAdminCumulativeReports_${startingDate.isEmpty ? 0 : startingDate}_to_${endingDate.isEmpty ? 0 : endingDate}_$timestamp.pdf";
+                    final file = File(path);
+                    await file.writeAsBytes(await pdf.save());
 
-                      print("PDF saved at $path");
+                    print("PDF saved at $path");
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Center(child: Text("PDF saved at $path")),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                    } else {
-                      throw Exception("Downloads folder not found.");
-                    }
-                  } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Center(child: Text("Failed to save PDF")),
-                        backgroundColor: Colors.red,
+                        content: Center(child: Text("PDF saved at $path")),
+                        backgroundColor: Colors.green,
                       ),
                     );
+                  } else {
+                    throw Exception("Downloads folder not found.");
                   }
-                },
-                icon: const Icon(
-                  Icons.file_download_outlined,
-                  color: Colors.white,
-                ))
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Center(child: Text("Failed to save PDF")),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              icon: const Icon(
+                Icons.file_download_outlined,
+                color: Colors.white,
+              ),
+            )
           ],
         ),
         body: Column(
@@ -413,6 +415,91 @@ class _SuperCommutativeReportsSearchScreen
     );
   }
 
+  int _otherExpenses() {
+    return _filteredEmployees.fold<int>(
+      0,
+      (sum, employee) {
+        // Safely handle non-integer values
+        var value = employee['otherExpenses'];
+        if (value == null) return sum;
+        if (value is String) {
+          value = int.tryParse(value) ?? 0; // Try to parse string as integer
+        }
+        return sum + (value as int);
+      },
+    );
+  }
+
+  int _vehicleExpenses() {
+    return _filteredEmployees.fold<int>(
+      0,
+      (sum, employee) {
+        var value = employee['vehicleExpenses'];
+        if (value == null) return sum; // Handle null
+        if (value is String) {
+          value = int.tryParse(value) ?? 0;
+        }
+        return sum + (value as int);
+      },
+    );
+  }
+
+  int _staffSalary() {
+    return _filteredEmployees.fold<int>(
+      0,
+      (sum, employee) {
+        var value = employee['staffSalary'];
+        if (value == null) return sum; // Handle null
+        if (value is String) {
+          value = int.tryParse(value) ?? 0;
+        }
+        return sum + (value as int);
+      },
+    );
+  }
+
+  int _OTx750() {
+    return _filteredEmployees.fold<int>(
+      0,
+      (sum, employee) {
+        var value = employee['ot'];
+        if (value == null) return sum; // Handle null
+        if (value is String) {
+          value = int.tryParse(value) ?? 0;
+        }
+        return sum + (value as int);
+      },
+    );
+  }
+
+  int _CATx2000() {
+    return _filteredEmployees.fold<int>(
+      0,
+      (sum, employee) {
+        var value = employee['cat'];
+        if (value == null) return sum; // Handle null
+        if (value is String) {
+          value = int.tryParse(value) ?? 0;
+        }
+        return sum + (value as int);
+      },
+    );
+  }
+
+  int _gpPayingCase() {
+    return _filteredEmployees.fold<int>(
+      0,
+      (sum, employee) {
+        var value = employee['gpPayingCase'];
+        if (value == null) return sum; // Handle null
+        if (value is String) {
+          value = int.tryParse(value) ?? 0;
+        }
+        return sum + (value as int);
+      },
+    );
+  }
+
   Future<List<pw.Widget>> _generatePdfRows() async {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -435,20 +522,20 @@ class _SuperCommutativeReportsSearchScreen
           ),
         ),
       ),
-      pw.SizedBox(height: 20),
+      pw.SizedBox(height: 10),
       pw.Container(
         child: pw.Row(
           mainAxisAlignment: pw.MainAxisAlignment.center,
           // crossAxisAlignment: pw.CrossAxisAlignment.center,
           children: [
-            pw.Text("Commutative Report",
+            pw.Text("Cumulative Report",
                 style: pw.TextStyle(
                     fontWeight: pw.FontWeight.bold,
-                    fontSize: screenHeight / 50)),
+                    fontSize: screenHeight / 40)),
           ],
         ),
       ),
-      pw.SizedBox(height: 25),
+      pw.SizedBox(height: 15),
       pw.Container(
           child: pw.Row(
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -457,22 +544,28 @@ class _SuperCommutativeReportsSearchScreen
           _buildPdfRow("To : ", endDateString),
         ],
       )),
-      pw.SizedBox(height: 20),
-      _buildPdfRow("Name: ", widget.name),
       pw.SizedBox(height: 10),
-      pw.Container(
-        child: pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-          children: [
-            _buildPdfRow("Position : ", widget.position),
-            _buildPdfRow("EmpCode: ", widget.empCode),
-          ],
-        ),
-      ),
-      pw.SizedBox(height: 20),
       pw.Container(
         child: pw.Column(
           children: [
+            _buildPdfRow("Name: ", widget.name),
+            pw.SizedBox(height: 5),
+            _buildPdfRow("Position : ", widget.position),
+            pw.SizedBox(height: 5),
+            _buildPdfRow("EmpCode: ", widget.empCode),
+            pw.SizedBox(height: 5),
+          ],
+        ),
+      ),
+      pw.Container(
+        child: pw.Column(
+          children: [
+            pw.Column(
+                mainAxisAlignment: pw.MainAxisAlignment.center,
+                children: [
+                  pw.Text("Basic Details ",
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                ]),
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
@@ -482,7 +575,7 @@ class _SuperCommutativeReportsSearchScreen
                     "No Of Camp Rejected: ", _noOfCampsRejected().toString()),
               ],
             ),
-            pw.SizedBox(height: 20),
+            pw.SizedBox(height: 10),
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
@@ -492,7 +585,7 @@ class _SuperCommutativeReportsSearchScreen
                     "No Of Camp Completed: ", _noOfCampsCompleted().toString()),
               ],
             ),
-            pw.SizedBox(height: 20),
+            pw.SizedBox(height: 10),
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
@@ -503,22 +596,74 @@ class _SuperCommutativeReportsSearchScreen
           ],
         ),
       ),
-      pw.SizedBox(height: 20),
-      _buildPdfRow("Camp results ", ""),
-      pw.SizedBox(height: 15),
-      _buildPdfRow("No Of OP : ", _noOfPatientsAttended().toString()),
-      pw.SizedBox(height: 10),
-      _buildPdfRow(
-          "No Of Cataract Patients : ", _noOfCataractPatients().toString()),
-      pw.SizedBox(height: 10),
-      _buildPdfRow("No Of Patients Selected For Surgery : ",
-          _noOfPatientsSelectedForSurgery().toString()),
-      pw.SizedBox(height: 10),
-      _buildPdfRow(
-          "No Of Diabetics Patients : ", _noOfDiabeticsPatients().toString()),
-      pw.SizedBox(height: 10),
-      _buildPdfRow(
-          "No Of Glasses Supplied : ", _noOfGlassesSupplied().toString()),
+      pw.Container(
+        child: pw.Column(
+          children: [
+            pw.Column(
+              children: [
+                pw.Text("Camp Results ",
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(
+                  height: 5,
+                ),
+                pw.Column(children: [
+                  _buildPdfRow(
+                      "No Of OP : ", _noOfPatientsAttended().toString()),
+                  pw.SizedBox(height: 15),
+                  _buildPdfRow("No Of Cataract Patients : ",
+                      _noOfCataractPatients().toString()),
+                  pw.SizedBox(height: 15),
+                  _buildPdfRow("No Of Patients Selected For Surgery : ",
+                      _noOfPatientsSelectedForSurgery().toString()),
+                  pw.SizedBox(height: 15),
+                  _buildPdfRow("No Of Diabetics Patients : ",
+                      _noOfDiabeticsPatients().toString()),
+                  pw.SizedBox(height: 15),
+                  _buildPdfRow("No Of Glasses Supplied : ",
+                      _noOfGlassesSupplied().toString()),
+                ])
+              ],
+            )
+          ],
+        ),
+      ),
+      pw.Container(
+        child: pw.Column(
+          children: [
+            pw.Column(children: [
+              pw.Text("Camp Expenses ",
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
+            ]),
+            pw.SizedBox(
+              height: 5,
+            ),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow("Other Expense : ", _otherExpenses().toString()),
+                _buildPdfRow(
+                    "Vehicle Expense : ", _vehicleExpenses().toString()),
+              ],
+            ),
+            pw.SizedBox(height: 15),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow("Staff Salary: ", _staffSalary().toString()),
+                _buildPdfRow("OTx750 Expense: ", _OTx750().toString()),
+              ],
+            ),
+            pw.SizedBox(height: 15),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow("CATx2000 Expense: ", _CATx2000().toString()),
+                _buildPdfRow(" GP Paying Case : ", _gpPayingCase().toString()),
+              ],
+            ),
+          ],
+        ),
+      ),
       pw.SizedBox(height: 30),
       pw.Container(
         child: pw.Column(

@@ -84,18 +84,18 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
   void _initializeData() {
     final data = widget.campData;
 
-    dateController.text = data['date'] ?? '';
-    timeController.text = data['time'] ?? '';
-    campNameController.text = data['campName'] ?? '';
-    organizationController.text = data['organization'] ?? '';
-    placeController.text = data['place'] ?? '';
-    otherExpensesController.text = data['otherExpenses'] ?? '';
-    vehicleExpensesController.text = data['vehicleExpenses'] ?? '';
-    staffSalaryController.text = data['staffSalary'] ?? '';
-    otController.text = data['ot'] ?? '';
-    catController.text = data['cat'] ?? '';
-    gpPayingCaseController.text = data['gpPayingCase'] ?? '';
-    remarksController.text = data['remarks'] ?? '';
+    dateController.text = widget.campData['date'] ?? '';
+    timeController.text = widget.campData['time'] ?? '';
+    campNameController.text = widget.campData['campName'] ?? '';
+    organizationController.text = widget.campData['organization'] ?? '';
+    placeController.text = widget.campData['place'] ?? '';
+    otherExpensesController.text = widget.campData['otherExpenses'] ?? '';
+    vehicleExpensesController.text = widget.campData['vehicleExpenses'] ?? '';
+    staffSalaryController.text = widget.campData['staffSalary'] ?? '';
+    otController.text = widget.campData['ot'] ?? '';
+    catController.text = widget.campData['cat'] ?? '';
+    gpPayingCaseController.text = widget.campData['gpPayingCase'] ?? '';
+    remarksController.text = widget.campData['remarks'] ?? '';
   }
 
   @override

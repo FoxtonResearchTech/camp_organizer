@@ -128,9 +128,13 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
           },
         ),
         flexibleSpace: Container(
-          decoration:  BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+              colors: [
+                Color(0xFF0097b2),
+                Color(0xFF0097b2).withOpacity(1),
+                Color(0xFF0097b2).withOpacity(0.8)
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -204,13 +208,10 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
 
                 // Adding the content to the PDF
                 pdf.addPage(
-                  pw.Page(
+                  pw.MultiPage(
                     pageFormat: PdfPageFormat.a4,
                     build: (context) {
-                      return pw.Column(
-                        crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        children: rows,
-                      );
+                      return [...rows];
                     },
                   ),
                 );
@@ -322,9 +323,13 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
         ],
       )),
       pw.SizedBox(height: 10),
-      _buildPdfRow("Camp Name : ", employeeName ?? "N/A"),
-      pw.SizedBox(height: 5),
-      _buildPdfRow("Camp Name : ", widget.employee['campName'] ?? "N/A"),
+      pw.Container(
+        child: pw.Column(
+          children: [
+            _buildPdfRow("Camp Name : ", employeeName ?? "N/A"),
+          ],
+        ),
+      ),
       pw.SizedBox(height: 5),
       _buildPdfRow("Organization : ", widget.employee['organization'] ?? "N/A"),
       pw.SizedBox(height: 5),
@@ -341,85 +346,121 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
         ),
       ),
       pw.SizedBox(height: 15),
-      pw.Text("Concern Person 1 Details : ",
-          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-      pw.SizedBox(height: 10),
       pw.Container(
-        child: pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+        child: pw.Column(
           children: [
-            _buildPdfRow("Name : ", widget.employee['name'] ?? "N/A"),
-            _buildPdfRow("Position : ", widget.employee['position'] ?? "N/A"),
+            pw.Column(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Text("Concern Person 1 Details",
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+              ],
+            ),
+            pw.SizedBox(height: 10),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow("Name : ", widget.employee['name'] ?? "N/A"),
+                _buildPdfRow(
+                    "Position : ", widget.employee['position'] ?? "N/A"),
+              ],
+            ),
+            pw.SizedBox(height: 10),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow("Phone Number 1 : ",
+                    widget.employee['phoneNumber1'] ?? "N/A"),
+                _buildPdfRow("Phone Number 2 : ",
+                    widget.employee['phoneNumber1_2'] ?? "N/A"),
+              ],
+            ),
           ],
         ),
       ),
-      pw.SizedBox(height: 10),
-      pw.Container(
-        child: pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-          children: [
-            _buildPdfRow(
-                "Phone Number 1 : ", widget.employee['phoneNumber1'] ?? "N/A"),
-            _buildPdfRow("Phone Number 2 : ",
-                widget.employee['phoneNumber1_2'] ?? "N/A"),
-          ],
-        ),
-      ),
-      pw.SizedBox(height: 15),
-      pw.Text("Concern Person 2 Details : ",
-          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-      pw.SizedBox(height: 10),
-      pw.Container(
-        child: pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-          children: [
-            _buildPdfRow("Name : ", widget.employee['name2'] ?? "N/A"),
-            _buildPdfRow("Position : ", widget.employee['position2'] ?? "N/A"),
-          ],
-        ),
-      ),
-      pw.SizedBox(height: 10),
-      pw.Container(
-        child: pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-          children: [
-            _buildPdfRow(
-                "Phone Number 1 : ", widget.employee['phoneNumber2'] ?? "N/A"),
-            _buildPdfRow("Phone Number 2 : ",
-                widget.employee['phoneNumber2_2'] ?? "N/A"),
-          ],
-        ),
-      ),
-      pw.SizedBox(height: 15),
-      pw.Text("Event Planning : ",
-          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-      pw.SizedBox(height: 10),
-      _buildPdfRow(
-          "Camp Plan Type : ", widget.employee['campPlanType'] ?? "N/A"),
-      pw.SizedBox(height: 5),
-      pw.Container(
-        child: pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-          children: [
-            _buildPdfRow(
-                "Road Access : ", widget.employee['roadAccess'] ?? "N/A"),
-            _buildPdfRow("Total Square Feet : ",
-                widget.employee['totalSquareFeet'] ?? "N/A"),
-            _buildPdfRow("Water Availability : ",
-                widget.employee['waterAvailability'] ?? "N/A"),
-          ],
-        ),
-      ),
-      pw.SizedBox(height: 5),
-      _buildPdfRow("No Of Patients Expected : ",
-          widget.employee['noOfPatientExpected'] ?? "N/A"),
-      pw.SizedBox(height: 5),
-      _buildPdfRow(
-          "Last Camp Done : ", widget.employee['lastCampDone'] ?? "N/A"),
       pw.SizedBox(height: 10),
       pw.Container(
         child: pw.Column(
           children: [
+            pw.Column(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Text("Concern Person 2 Details",
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+              ],
+            ),
+            pw.SizedBox(height: 10),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow("Name : ", widget.employee['name2'] ?? "N/A"),
+                _buildPdfRow(
+                    "Position : ", widget.employee['position2'] ?? "N/A"),
+              ],
+            ),
+            pw.SizedBox(height: 10),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow("Phone Number 1 : ",
+                    widget.employee['phoneNumber2'] ?? "N/A"),
+                _buildPdfRow("Phone Number 2 : ",
+                    widget.employee['phoneNumber2_2'] ?? "N/A"),
+              ],
+            ),
+          ],
+        ),
+      ),
+      pw.SizedBox(height: 15),
+      pw.Container(
+        child: pw.Column(
+          children: [
+            pw.Column(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Text("Event Planning",
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+              ],
+            ),
+            pw.SizedBox(height: 10),
+            _buildPdfRow(
+                "Camp Plan Type : ", widget.employee['campPlanType'] ?? "N/A"),
+            pw.SizedBox(height: 10),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow(
+                    "Road Access : ", widget.employee['roadAccess'] ?? "N/A"),
+                _buildPdfRow("Total Square Feet : ",
+                    widget.employee['totalSquareFeet'] ?? "N/A"),
+                _buildPdfRow("Water Availability : ",
+                    widget.employee['waterAvailability'] ?? "N/A"),
+              ],
+            ),
+            pw.SizedBox(height: 10),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow("No Of Patients Expected : ",
+                    widget.employee['noOfPatientExpected'] ?? "N/A"),
+                _buildPdfRow("Last Camp Done : ",
+                    widget.employee['lastCampDone'] ?? "N/A"),
+              ],
+            ),
+          ],
+        ),
+      ),
+      pw.SizedBox(height: 15),
+      pw.Container(
+        child: pw.Column(
+          children: [
+            pw.Column(
+                mainAxisAlignment: pw.MainAxisAlignment.center,
+                children: [
+                  pw.Text("Team",
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                ]),
+            pw.SizedBox(height: 10),
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
@@ -428,7 +469,7 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
                 _buildPdfRow("AR : ", widget.employee['ar'] ?? "N/A"),
               ],
             ),
-            pw.SizedBox(height: 5),
+            pw.SizedBox(height: 10),
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
@@ -437,15 +478,683 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
                 _buildPdfRow("VnReg : ", widget.employee['vnReg'] ?? "N/A"),
               ],
             ),
-            pw.SizedBox(height: 5),
-            _buildPdfRow("Regnter : ", widget.employee['regnter'] ?? "N/A"),
-            pw.SizedBox(height: 5),
-            _buildPdfRow(
-                "Camp Organizer : ", widget.employee['campOrganizer'] ?? "N/A"),
+            pw.SizedBox(height: 10),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow("Regnter : ", widget.employee['regnter'] ?? "N/A"),
+                _buildPdfRow("Camp Organizer : ",
+                    widget.employee['campOrganizer'] ?? "N/A"),
+              ],
+            ),
+            pw.SizedBox(height: 10),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow(
+                    "Counselling : ", widget.employee['counselling'] ?? "N/A"),
+              ],
+            ),
           ],
         ),
       ),
       pw.SizedBox(height: 15),
+      pw.Container(
+        child: pw.Column(
+          children: [
+            pw.Column(
+              children: [
+                pw.Text("Camp Results ",
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(
+                  height: 5,
+                ),
+                pw.Column(
+                  children: [
+                    _buildPdfRow(
+                        "No Of OP : ",
+                        widget.employee['patientsAttended'].toString() ??
+                            "N/A"),
+                    pw.SizedBox(height: 15),
+                    _buildPdfRow(
+                        "No Of Cataract Patients : ",
+                        widget.employee['cataractPatients'].toString() ??
+                            "N/A"),
+                    pw.SizedBox(height: 15),
+                    _buildPdfRow(
+                        "No Of Patients Selected For Surgery : ",
+                        widget.employee['patientsSelectedForSurgery']
+                                .toString() ??
+                            "N/A"),
+                    pw.SizedBox(height: 15),
+                    _buildPdfRow(
+                        "No Of Diabetics Patients : ",
+                        widget.employee['diabeticPatients'].toString() ??
+                            "N/A"),
+                    pw.SizedBox(height: 15),
+                    _buildPdfRow("No Of Glasses Supplied : ",
+                        widget.employee['glassesSupplied'].toString() ?? "N/A"),
+                    pw.SizedBox(height: 15),
+                    _buildPdfRow(
+                        "Vehicle NO and KM Run : ",
+                        widget.employee['vehicleNumber'].toString() +
+                                " & " +
+                                widget.employee['kmRun'].toString() ??
+                            "N/A"),
+                    pw.SizedBox(height: 15),
+                    _buildPdfRow(
+                        "Patients FollowUps : ",
+                        widget.employee['patientFollowUps'].toString() ??
+                            "N/A"),
+                  ],
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+      pw.SizedBox(height: 15),
+      pw.Container(
+        child: pw.Column(
+          children: [
+            pw.Column(
+                mainAxisAlignment: pw.MainAxisAlignment.center,
+                children: [
+                  pw.Text("Camp Expenses ",
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                ]),
+            pw.SizedBox(
+              height: 5,
+            ),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow("Other Expense : ",
+                    widget.employee['otherExpenses'].toString() ?? "N/A"),
+                _buildPdfRow("Vehicle Expense : ",
+                    widget.employee['vehicleExpenses'].toString() ?? "N/A"),
+              ],
+            ),
+            pw.SizedBox(height: 15),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow("Staff Salary: ",
+                    widget.employee['staffSalary'].toString() ?? "N/A"),
+                _buildPdfRow("OTx750 Expense: ",
+                    widget.employee['ot'].toString() ?? "N/A"),
+              ],
+            ),
+            pw.SizedBox(height: 15),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow("CATx2000 Expense: ",
+                    widget.employee['cat'].toString() ?? "N/A"),
+                _buildPdfRow(" GP Paying Case : ",
+                    widget.employee['gpPayingCase'].toString() ?? "N/A"),
+              ],
+            ),
+            pw.SizedBox(height: 15),
+            pw.Column(
+                mainAxisAlignment: pw.MainAxisAlignment.center,
+                children: [
+                  _buildPdfRow("Remarks : ",
+                      widget.employee['remarks'].toString() ?? "N/A"),
+                ]),
+          ],
+        ),
+      ),
+      pw.SizedBox(height: 15),
+      pw.Container(
+        child: pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            pw.Column(
+              children: [
+                pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                  children: [
+                    pw.Text("Out Ward ",
+                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                    pw.SizedBox(height: 15),
+                    pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text("Doctor Room Things : ",
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(height: 10),
+                        _buildPdfRow(
+                            "Bastin : ",
+                            widget.employee['Outward_doctorRoomThings']
+                                        ['Bastin']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Glass Pad : ",
+                            widget.employee['Outward_doctorRoomThings']
+                                        ['Glass Pad']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Head Loupe : ",
+                            widget.employee['Outward_doctorRoomThings']
+                                        ['Head Loupe']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Medicine : ",
+                            widget.employee['Outward_doctorRoomThings']
+                                        ['Medicine']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Medicine Things : ",
+                            widget.employee['Outward_doctorRoomThings']
+                                        ['Medicine Things']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Ophthalmoscope : ",
+                            widget.employee['Outward_doctorRoomThings']
+                                        ['Ophthalmoscope']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Record Things : ",
+                            widget.employee['Outward_doctorRoomThings']
+                                        ['Record Things']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Torch Light : ",
+                            widget.employee['Outward_doctorRoomThings']
+                                        ['Torch Light']
+                                    ?.toString() ??
+                                "N/A"),
+                      ],
+                    ),
+                    pw.SizedBox(height: 15),
+                    pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text("Vision Room Things : ",
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(height: 10),
+                        _buildPdfRow(
+                            "NV Chart : ",
+                            widget.employee['Outward_visionRoomThings']
+                                        ['NV Chart']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Occluder 1 : ",
+                            widget.employee['Outward_visionRoomThings']
+                                        ['Occluder1']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Occluder 2 : ",
+                            widget.employee['Outward_visionRoomThings']
+                                        ['Occluder2']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Pinhole 1 : ",
+                            widget.employee['Outward_visionRoomThings']
+                                        ['Pinhole1']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Pinhole 2 : ",
+                            widget.employee['Outward_visionRoomThings']
+                                        ['Pinhole2']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Snellen Chart : ",
+                            widget.employee['Outward_visionRoomThings']
+                                        ['Snellen Chart']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Trial Frame 1 : ",
+                            widget.employee['Outward_visionRoomThings']
+                                        ['Trial Frame1']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Trial Frame 2: ",
+                            widget.employee['Outward_visionRoomThings']
+                                        ['Trial Frame2']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Trial Set 1 : ",
+                            widget.employee['Outward_visionRoomThings']
+                                        ['Trial Set1']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Trial Set 2 : ",
+                            widget.employee['Outward_visionRoomThings']
+                                        ['Trial Set2']
+                                    ?.toString() ??
+                                "N/A"),
+                      ],
+                    ),
+                    pw.SizedBox(height: 15),
+                    pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text("CR Room Things : ",
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(height: 10),
+                        _buildPdfRow(
+                            "CR Machine No 1 : ",
+                            widget.employee['Outward_crRoomThings']
+                                        ['CR Machine No 1']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "CR Machine No 2 : ",
+                            widget.employee['Outward_crRoomThings']
+                                        ['CR Machine No 2']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "CR Machine No 3 : ",
+                            widget.employee['Outward_crRoomThings']
+                                        ['CR Machine No 3']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Junction Box Wire : ",
+                            widget.employee['Outward_crRoomThings']
+                                        ['Junction Box Wire']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Rollin Chair : ",
+                            widget.employee['Outward_crRoomThings']
+                                        ['Rollin Chair']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Stabilizer : ",
+                            widget.employee['Outward_crRoomThings']
+                                        ['Stabilizer']
+                                    ?.toString() ??
+                                "N/A"),
+                      ],
+                    ),
+                    pw.SizedBox(height: 15),
+                    pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text("Optical Things : ",
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(height: 10),
+                        _buildPdfRow(
+                            "Bill Machine : ",
+                            widget.employee['Outward_opticalThings']
+                                        ['Bill Machine']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Frame Bag : ",
+                            widget.employee['Outward_opticalThings']
+                                        ['Frame Bag']
+                                    ?.toString() ??
+                                "N/A"),
+                      ],
+                    ),
+                    pw.SizedBox(height: 15),
+                    pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text("Other Things : ",
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(height: 10),
+                        _buildPdfRow(
+                            "Banner : ",
+                            widget.employee['Outward_others']['Banner']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Camera : ",
+                            widget.employee['Outward_others']['Camera']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Register Note : ",
+                            widget.employee['Outward_others']['Register Note']
+                                    ?.toString() ??
+                                "N/A"),
+                      ],
+                    ),
+                    pw.SizedBox(height: 15),
+                    pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildPdfRow(
+                            "Camera Out : ",
+                            widget.employee['Outward_cameraOut'].toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "InCharge Name : ",
+                            widget.employee['Outward_inChargeName']
+                                    .toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Duty InCharge 1 : ",
+                            widget.employee['Outward_dutyInCharge1']
+                                    .toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Duty InCharge 2 : ",
+                            widget.employee['Outward_dutyInCharge2']
+                                    .toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Remarks : ",
+                            widget.employee['Outward_remarks'].toString() ??
+                                "N/A"),
+                      ],
+                    ),
+                    pw.SizedBox(height: 15),
+                  ],
+                ),
+              ],
+            ),
+            pw.Column(
+              children: [
+                pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                  children: [
+                    pw.Text("In Ward ",
+                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                    pw.SizedBox(height: 15),
+                    pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text("Doctor Room Things : ",
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(height: 10),
+                        _buildPdfRow(
+                            "Bastin : ",
+                            widget.employee['Inward_doctorRoomThings']['Bastin']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Glass Pad : ",
+                            widget.employee['Inward_doctorRoomThings']
+                                        ['Glass Pad']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Head Loupe : ",
+                            widget.employee['Inward_doctorRoomThings']
+                                        ['Head Loupe']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Medicine : ",
+                            widget.employee['Inward_doctorRoomThings']
+                                        ['Medicine']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Medicine Things : ",
+                            widget.employee['Inward_doctorRoomThings']
+                                        ['Medicine Things']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Ophthalmoscope : ",
+                            widget.employee['Inward_doctorRoomThings']
+                                        ['Ophthalmoscope']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Record Things : ",
+                            widget.employee['Inward_doctorRoomThings']
+                                        ['Record Things']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Torch Light : ",
+                            widget.employee['Inward_doctorRoomThings']
+                                        ['Torch Light']
+                                    ?.toString() ??
+                                "N/A"),
+                      ],
+                    ),
+                    pw.SizedBox(height: 15),
+                    pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text("Vision Room Things : ",
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(height: 10),
+                        _buildPdfRow(
+                            "NV Chart : ",
+                            widget.employee['Inward_visionRoomThings']
+                                        ['NV Chart']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Occluder 1 : ",
+                            widget.employee['Inward_visionRoomThings']
+                                        ['Occluder1']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Occluder 2 : ",
+                            widget.employee['Inward_visionRoomThings']
+                                        ['Occluder2']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Pinhole 1 : ",
+                            widget.employee['Inward_visionRoomThings']
+                                        ['Pinhole1']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Pinhole 2 : ",
+                            widget.employee['Inward_visionRoomThings']
+                                        ['Pinhole2']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Snellen Chart : ",
+                            widget.employee['Inward_visionRoomThings']
+                                        ['Snellen Chart']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Trial Frame 1 : ",
+                            widget.employee['Inward_visionRoomThings']
+                                        ['Trial Frame1']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Trial Frame 2: ",
+                            widget.employee['Inward_visionRoomThings']
+                                        ['Trial Frame2']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Trial Set 1 : ",
+                            widget.employee['Inward_visionRoomThings']
+                                        ['Trial Set1']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Trial Set 2 : ",
+                            widget.employee['Inward_visionRoomThings']
+                                        ['Trial Set2']
+                                    ?.toString() ??
+                                "N/A"),
+                      ],
+                    ),
+                    pw.SizedBox(height: 15),
+                    pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text("CR Room Things : ",
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(height: 10),
+                        _buildPdfRow(
+                            "CR Machine No 1 : ",
+                            widget.employee['Inward_crRoomThings']
+                                        ['CR Machine No 1']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "CR Machine No 2 : ",
+                            widget.employee['Inward_crRoomThings']
+                                        ['CR Machine No 2']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "CR Machine No 3 : ",
+                            widget.employee['Inward_crRoomThings']
+                                        ['CR Machine No 3']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Junction Box Wire : ",
+                            widget.employee['Inward_crRoomThings']
+                                        ['Junction Box Wire']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Rollin Chair : ",
+                            widget.employee['Inward_crRoomThings']
+                                        ['Rollin Chair']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Stabilizer : ",
+                            widget.employee['Inward_crRoomThings']['Stabilizer']
+                                    ?.toString() ??
+                                "N/A"),
+                      ],
+                    ),
+                    pw.SizedBox(height: 15),
+                    pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text("Optical Things : ",
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(height: 10),
+                        _buildPdfRow(
+                            "Bill Machine : ",
+                            widget.employee['Inward_opticalThings']
+                                        ['Bill Machine']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Frame Bag : ",
+                            widget.employee['Inward_opticalThings']['Frame Bag']
+                                    ?.toString() ??
+                                "N/A"),
+                      ],
+                    ),
+                    pw.SizedBox(height: 15),
+                    pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text("Other Things : ",
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(height: 10),
+                        _buildPdfRow(
+                            "Banner : ",
+                            widget.employee['Inward_others']['Banner']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Camera : ",
+                            widget.employee['Inward_others']['Camera']
+                                    ?.toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Register Note : ",
+                            widget.employee['Inward_others']['Register Note']
+                                    ?.toString() ??
+                                "N/A"),
+                      ],
+                    ),
+                    pw.SizedBox(height: 15),
+                    pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildPdfRow(
+                            "Camera Out : ",
+                            widget.employee['Inward_cameraIn'].toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "InCharge Name : ",
+                            widget.employee['Inward_inChargeName'].toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Duty InCharge 1 : ",
+                            widget.employee['Inward_dutyInCharge1']
+                                    .toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Duty InCharge 2 : ",
+                            widget.employee['Inward_dutyInCharge2']
+                                    .toString() ??
+                                "N/A"),
+                        _buildPdfRow(
+                            "Remarks : ",
+                            widget.employee['Inward_remarks'].toString() ??
+                                "N/A"),
+                      ],
+                    ),
+                    pw.SizedBox(height: 15),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      pw.SizedBox(height: 15),
+      pw.Container(
+        child: pw.Column(
+          children: [
+            pw.Column(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Text(
+                  "Follow up ",
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                ),
+                pw.SizedBox(
+                  height: 10,
+                ),
+                _buildPdfRow("Remarks : ",
+                    widget.employee['followRemark'].toString() ?? "N/A"),
+              ],
+            ),
+          ],
+        ),
+      ),
+      pw.SizedBox(height: 30),
       pw.Container(
         child: pw.Column(
           mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,

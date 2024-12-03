@@ -58,7 +58,11 @@ class _FinanceProfile extends State<FinanceProfile>
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -74,7 +78,11 @@ class _FinanceProfile extends State<FinanceProfile>
               height: 250,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                  colors: [
+                    Color(0xFF0097b2),
+                    Color(0xFF0097b2).withOpacity(1),
+                    Color(0xFF0097b2).withOpacity(0.8)
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -92,7 +100,10 @@ class _FinanceProfile extends State<FinanceProfile>
               child: BlocBuilder<FinanceProfileBloc, FinanceProfileState>(
                 builder: (context, state) {
                   if (state is FinanceProfileLoading) {
-                    return const Center(child: CircularProgressIndicator(color: Color(0xFF0097b2),));
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      color: Color(0xFF0097b2),
+                    ));
                   } else if (state is FinanceProfileLoaded) {
                     final employee = state.employee;
                     return Column(
@@ -279,13 +290,9 @@ class _FinanceProfile extends State<FinanceProfile>
                     );
                   }
                   return const Center(
-                    child: Text(
-                      "No data available",
-                      style: TextStyle(
-                        fontFamily: 'LeagueSpartan',
-                      ),
-                    ),
-                  );
+                      child: CircularProgressIndicator(
+                    color: Color(0xFF0097b2),
+                  ));
                 },
               ),
             ),

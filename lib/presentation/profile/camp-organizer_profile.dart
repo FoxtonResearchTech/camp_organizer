@@ -56,9 +56,13 @@ class _UserProfilePageState extends State<UserProfilePage>
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Container(
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -70,13 +74,15 @@ class _UserProfilePageState extends State<UserProfilePage>
           children: [
             // Header Background with transition animation
             AnimatedContainer(
-
               duration: const Duration(seconds: 1),
               height: 250,
               decoration: BoxDecoration(
-
                 gradient: LinearGradient(
-                  colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                  colors: [
+                    Color(0xFF0097b2),
+                    Color(0xFF0097b2).withOpacity(1),
+                    Color(0xFF0097b2).withOpacity(0.8)
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -94,7 +100,10 @@ class _UserProfilePageState extends State<UserProfilePage>
               child: BlocBuilder<ProfileBloc, ProfileState>(
                 builder: (context, state) {
                   if (state is ProfileLoading) {
-                    return const Center(child: CircularProgressIndicator( color: Color(0xff0097b2),));
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      color: Color(0xff0097b2),
+                    ));
                   } else if (state is ProfileLoaded) {
                     final employee = state.employee;
                     return Column(
@@ -312,13 +321,9 @@ class _UserProfilePageState extends State<UserProfilePage>
                     );
                   }
                   return const Center(
-                    child: Text(
-                      "No data available",
-                      style: TextStyle(
-                        fontFamily: 'LeagueSpartan',
-                      ),
-                    ),
-                  );
+                      child: CircularProgressIndicator(
+                    color: Color(0xFF0097b2),
+                  ));
                 },
               ),
             ),
@@ -350,12 +355,12 @@ class ProfileInfoTile extends StatelessWidget {
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color:  Color(0xff0097b2).withOpacity(0.1),
+            color: Color(0xff0097b2).withOpacity(0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
             icon,
-              color: Color(0xff0097b2),
+            color: Color(0xff0097b2),
           ),
         ),
         title: Text(

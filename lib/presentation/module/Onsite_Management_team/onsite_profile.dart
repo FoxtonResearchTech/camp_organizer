@@ -56,9 +56,13 @@ class _OnsiteProfile extends State<OnsiteProfile>
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Container(
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -72,9 +76,13 @@ class _OnsiteProfile extends State<OnsiteProfile>
             AnimatedContainer(
               duration: const Duration(seconds: 1),
               height: 250,
-              decoration:  BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                  colors: [
+                    Color(0xFF0097b2),
+                    Color(0xFF0097b2).withOpacity(1),
+                    Color(0xFF0097b2).withOpacity(0.8)
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -92,7 +100,10 @@ class _OnsiteProfile extends State<OnsiteProfile>
               child: BlocBuilder<OnsiteProfileBloc, OnsiteProfileState>(
                 builder: (context, state) {
                   if (state is OnsiteProfileLoading) {
-                    return const Center(child: CircularProgressIndicator(color: Color(0xFF0097b2),));
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      color: Color(0xFF0097b2),
+                    ));
                   } else if (state is OnsiteProfileLoaded) {
                     final employee = state.employee;
                     return Column(
@@ -279,13 +290,9 @@ class _OnsiteProfile extends State<OnsiteProfile>
                     );
                   }
                   return const Center(
-                    child: Text(
-                      "No data available",
-                      style: TextStyle(
-                        fontFamily: 'LeagueSpartan',
-                      ),
-                    ),
-                  );
+                      child: CircularProgressIndicator(
+                    color: Color(0xFF0097b2),
+                  ));
                 },
               ),
             ),

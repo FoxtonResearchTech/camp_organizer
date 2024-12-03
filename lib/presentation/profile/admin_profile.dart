@@ -5,9 +5,13 @@ import 'package:camp_organizer/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../admin_add_employee.dart';
 import '../../bloc/Profile/admin_profile_bloc.dart';
 import '../../bloc/Profile/admin_profile_state.dart';
 import '../../utils/app_colors.dart';
+import '../module/admin/AdminCampReports.dart';
+import '../module/super_admin/camps_reports.dart';
+import '../module/admin/manage_employee_account.dart';
 import 'admin_commutative_reports_search_screen.dart';
 import 'commutative_reports_search_screen.dart';
 import '../../bloc/Profile/admin_profile_event.dart';
@@ -59,9 +63,13 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Container(
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -75,9 +83,13 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
             AnimatedContainer(
               duration: const Duration(seconds: 1),
               height: 250,
-              decoration:  BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                  colors: [
+                    Color(0xFF0097b2),
+                    Color(0xFF0097b2).withOpacity(1),
+                    Color(0xFF0097b2).withOpacity(0.8)
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -95,7 +107,10 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
               child: BlocBuilder<AdminProfileBloc, AdminProfileState>(
                 builder: (context, state) {
                   if (state is ProfileLoading) {
-                    return const Center(child: CircularProgressIndicator(color: Color(0xFF0097b2),));
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      color: Color(0xFF0097b2),
+                    ));
                   } else if (state is AdminProfileLoaded) {
                     final employee = state.employee;
                     return Column(
@@ -201,6 +216,63 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
+                                              AdminAddEmployee(),
+                                        ),
+                                      );
+                                    },
+                                    child: ProfileInfoTile(
+                                      icon: Icons.create,
+                                      title: 'Create Employee',
+                                      subtitle: 'Accounts',
+                                      slideAnimation: _slideAnimation,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ManageEmployeeAccount(),
+                                        ),
+                                      );
+                                    },
+                                    child: ProfileInfoTile(
+                                      icon: Icons.manage_accounts,
+                                      title: 'Manage Employee',
+                                      subtitle: 'Accounts',
+                                      slideAnimation: _slideAnimation,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              AdminCampsReportsPage(
+                                            name:
+                                                '${employee['firstName']} ${employee['lastName']}',
+                                            position: employee['role'] ?? 'N/A',
+                                            empCode:
+                                                employee['empCode'] ?? 'N/A',
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: ProfileInfoTile(
+                                      icon: Icons.search,
+                                      title: 'Camp organizers Reports',
+                                      subtitle: 'Reports',
+                                      slideAnimation: _slideAnimation,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
                                               AdminCampSearchScreen(),
                                         ),
                                       );
@@ -231,7 +303,7 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
                                     },
                                     child: ProfileInfoTile(
                                       icon: Icons.copy,
-                                      title: 'Commutative Reports',
+                                      title: 'Cumulative Reports',
                                       subtitle: 'Search',
                                       slideAnimation: _slideAnimation,
                                     ),
@@ -310,8 +382,9 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
                     );
                   }
                   return const Center(
-                    child: Text("No data available"),
-                  );
+                      child: CircularProgressIndicator(
+                    color: Color(0xFF0097b2),
+                  ));
                 },
               ),
             ),

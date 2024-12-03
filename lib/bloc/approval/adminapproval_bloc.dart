@@ -167,5 +167,55 @@ class AdminApprovalBloc extends Bloc<AdminApprovalEvent, AdminApprovalState> {
         emit(AdminApprovalError("Failed to delete camp: ${e.toString()}"));
       }
     });
+    on<SelectedEmployeeFetchEvent>((event, emit) async {
+      emit(AdminApprovalLoading());
+
+      try {
+        final employeesSnapshot =
+            await FirebaseFirestore.instance.collection('employees').get();
+
+        List<Map<String, dynamic>> allCamps = [];
+        List<String> campDocIds = [];
+        List<String> employeeDocIds = [];
+
+        // Loop through employees
+        for (var employeeDoc in employeesSnapshot.docs) {
+          final employeeId = employeeDoc.id;
+          final employeeData = employeeDoc.data();
+          final firstName = employeeData['firstName'] ?? '';
+          final lastName = employeeData['lastName'] ?? '';
+          final employeeFullName = '$firstName $lastName';
+
+          // Check if the employee name matches the passed name
+          if (employeeFullName == event.employeeName) {
+            employeeDocIds.add(employeeId);
+
+            final campsSnapshot = await FirebaseFirestore.instance
+                .collection('employees')
+                .doc(employeeId)
+                .collection('camps')
+                .get();
+
+            final camps = campsSnapshot.docs.map((doc) {
+              final data = doc.data();
+              data['documentId'] =
+                  doc.id; // Add the camp document ID to the data
+              data['employeeDocId'] =
+                  employeeId; // Add employeeDocId to the data
+              campDocIds.add(doc.id); // Store the camp document IDs
+              return data;
+            }).toList();
+
+            allCamps.addAll(camps);
+          }
+        }
+
+        // Emit the AdminApprovalLoaded state with the camps, employeeDocIds, and campDocIds
+        emit(AdminApprovalLoaded(allCamps, employeeDocIds, campDocIds));
+      } catch (e) {
+        print("Error in fetching camps: $e");
+        emit(AdminApprovalError(e.toString()));
+      }
+    });
   }
 }

@@ -37,3 +37,9 @@ class DeleteCampEvent extends AdminApprovalEvent {
   @override
   List<Object> get props => [employeeId, campDocId];
 }
+
+class SelectedEmployeeFetchEvent extends FetchDataEvents {
+  final String employeeName;
+
+  SelectedEmployeeFetchEvent(this.employeeName);
+}

@@ -2,8 +2,20 @@
 class Assets {
   Assets._();
 
+  static const String assetsApp = 'assets/app.png';
+  static const String assetsEmptyCamp = 'assets/empty_camp.json';
+  static const String assetsEyeIcon = 'assets/eye_icon.png';
+  static const String assetsIconIcon = 'assets/icon/icon.png';
   static const String assetsLoading = 'assets/loading.json';
+  static const String assetsLogo = 'assets/logo.png';
+  static const String assetsLogo1 = 'assets/logo1.png';
+  static const String assetsLogo2 = 'assets/logo2.png';
+  static const String assetsLogo3 = 'assets/logo3.png';
+  static const String assetsLogoIcon = 'assets/logo_icon.png';
+  static const String assetsNoData = 'assets/no_data.json';
   static const String assetsNoRecords = 'assets/no_records.json';
+  static const String assetsPreloader = 'assets/preloader.json';
   static const String assetsSuccess = 'assets/success.json';
   static const String campOrganizerAssetsNoRecords = 'assets/no_records.json';
+  static const String iconIcon = 'assets/icon/icon.png';
 }

@@ -15,23 +15,26 @@ import 'package:camp_organizer/bloc/approval/adminapproval_event.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-class AdminCommutativeReportsSearchScreen extends StatefulWidget {
+class AdminSelectedEmployeeCommutativeReport extends StatefulWidget {
   final String name;
   final String position;
   final String empCode;
-  const AdminCommutativeReportsSearchScreen({
+  final String employeeName;
+
+  const AdminSelectedEmployeeCommutativeReport({
     Key? key,
     required this.name,
     required this.position,
     required this.empCode,
+    required this.employeeName,
   }) : super(key: key);
   @override
-  State<AdminCommutativeReportsSearchScreen> createState() =>
-      _CommutativeReportsSearchScreen();
+  State<AdminSelectedEmployeeCommutativeReport> createState() =>
+      _AdminSelectedEmployeeCommutativeReport();
 }
 
-class _CommutativeReportsSearchScreen
-    extends State<AdminCommutativeReportsSearchScreen> {
+class _AdminSelectedEmployeeCommutativeReport
+    extends State<AdminSelectedEmployeeCommutativeReport> {
   late AdminApprovalBloc _AdminApprovalBloc;
   late TextEditingController _startDateController;
   late TextEditingController _endDateController;
@@ -45,7 +48,8 @@ class _CommutativeReportsSearchScreen
     super.initState();
     _startDateController = TextEditingController();
     _endDateController = TextEditingController();
-    _AdminApprovalBloc = AdminApprovalBloc()..add(FetchDataEvents());
+    _AdminApprovalBloc = AdminApprovalBloc()
+      ..add(SelectedEmployeeFetchEvent(widget.employeeName));
   }
 
   @override
@@ -311,9 +315,8 @@ class _CommutativeReportsSearchScreen
 
                     return RefreshIndicator(
                       onRefresh: () async {
-                        context
-                            .read<AdminApprovalBloc>()
-                            .add(FetchDataEvents());
+                        context.read<AdminApprovalBloc>().add(
+                            SelectedEmployeeFetchEvent(widget.employeeName));
                       },
                       child:
                           _buildEmployeeList(state, screenWidth, screenHeight),

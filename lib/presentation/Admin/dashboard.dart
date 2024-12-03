@@ -126,79 +126,83 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Container(
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
             ),
           ),
         ),
-        drawer: Drawer(
-          child: Container(
-            padding: EdgeInsets.zero,
-            decoration:  BoxDecoration(
-              gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                DrawerHeader(
-                    padding: EdgeInsets.zero,
-                    child: Container(
-                      width: double.maxFinite,
-                      height: double.maxFinite,
-                      decoration:  BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/logo3.png'),
-                        ),
-                        gradient: LinearGradient(
-                          colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                      ),
-                    )),
-                ListTile(
-                  leading: const Icon(Icons.create, color: Colors.white),
-                  title: const Text('Create Employee',
-                      style: TextStyle(
-                        color: Colors.white,fontWeight: FontWeight.bold,
-                        fontFamily: 'LeagueSpartan',
-                      )),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AdminAddEmployee()),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading:
-                      const Icon(Icons.manage_accounts, color: Colors.white),
-                  title: const Text('Manage Employee',
-                      style: TextStyle(
-                        color: Colors.white,fontWeight: FontWeight.bold,
-                        fontFamily: 'LeagueSpartan',
-                      )),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ManageEmployeeAccount()),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
+        // drawer: Drawer(
+        //   child: Container(
+        //     padding: EdgeInsets.zero,
+        //     decoration:  BoxDecoration(
+        //       gradient: LinearGradient(
+        //         colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+        //         begin: Alignment.topLeft,
+        //         end: Alignment.bottomRight,
+        //       ),
+        //     ),
+        //     child: ListView(
+        //       padding: EdgeInsets.zero,
+        //       children: [
+        //         DrawerHeader(
+        //             padding: EdgeInsets.zero,
+        //             child: Container(
+        //               width: double.maxFinite,
+        //               height: double.maxFinite,
+        //               decoration:  BoxDecoration(
+        //                 image: DecorationImage(
+        //                   image: AssetImage('assets/logo3.png'),
+        //                 ),
+        //                 gradient: LinearGradient(
+        //                   colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+        //                   begin: Alignment.topLeft,
+        //                   end: Alignment.bottomRight,
+        //                 ),
+        //               ),
+        //             )),
+        //         ListTile(
+        //           leading: const Icon(Icons.create, color: Colors.white),
+        //           title: const Text('Create Employee',
+        //               style: TextStyle(
+        //                 color: Colors.white,fontWeight: FontWeight.bold,
+        //                 fontFamily: 'LeagueSpartan',
+        //               )),
+        //           onTap: () {
+        //             Navigator.push(
+        //               context,
+        //               MaterialPageRoute(
+        //                   builder: (context) => AdminAddEmployee()),
+        //             );
+        //           },
+        //         ),
+        //         ListTile(
+        //           leading:
+        //               const Icon(Icons.manage_accounts, color: Colors.white),
+        //           title: const Text('Manage Employee',
+        //               style: TextStyle(
+        //                 color: Colors.white,fontWeight: FontWeight.bold,
+        //                 fontFamily: 'LeagueSpartan',
+        //               )),
+        //           onTap: () {
+        //             Navigator.push(
+        //               context,
+        //               MaterialPageRoute(
+        //                   builder: (context) => ManageEmployeeAccount()),
+        //             );
+        //           },
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
         body: LayoutBuilder(
           builder: (context, constraints) {
             final pieChartRadius = constraints.maxWidth < 600 ? 120.0 : 180.0;
@@ -263,8 +267,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                               return Center(
                                 key: ValueKey('loading'),
                                 child: CircularProgressIndicator(
-                                color:     Color(0xFF0097b2)
-                                ),
+                                    color: Color(0xFF0097b2)),
                               );
                             } else if (state is AdminApprovalLoaded) {
                               final employees = state.allCamps;
