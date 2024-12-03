@@ -45,13 +45,15 @@ class _AdminSelectedEmployeeCampSearchScreen
     _AdminApprovalBloc.close();
     super.dispose();
   }
+
   void _filterEmployees(List<Map<String, dynamic>> employees) {
     setState(() {
       if (_searchQuery.isEmpty) {
         _filteredEmployees = employees;
       } else {
         // Check if _searchQuery is a valid date format
-        final isDateQuery = RegExp(r'^\d{2}-\d{2}-\d{4}$').hasMatch(_searchQuery);
+        final isDateQuery =
+            RegExp(r'^\d{2}-\d{2}-\d{4}$').hasMatch(_searchQuery);
 
         _filteredEmployees = employees.where((employee) {
           if (isDateQuery) {
@@ -63,9 +65,9 @@ class _AdminSelectedEmployeeCampSearchScreen
           } else {
             // Otherwise, match other fields
             return employee['campName']
-                .toString()
-                .toLowerCase()
-                .contains(_searchQuery.toLowerCase()) ||
+                    .toString()
+                    .toLowerCase()
+                    .contains(_searchQuery.toLowerCase()) ||
                 employee['campDate']
                     .toString()
                     .toLowerCase()
@@ -75,7 +77,6 @@ class _AdminSelectedEmployeeCampSearchScreen
       }
     });
   }
-
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -248,7 +249,7 @@ class _AdminSelectedEmployeeCampSearchScreen
                             child: Column(
                               children: [
                                 Container(
-                                  height: screenHeight / 4.5,
+                                  height: screenHeight / 4.3,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),

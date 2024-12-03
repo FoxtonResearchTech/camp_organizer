@@ -753,7 +753,7 @@ class _SuperCommutativeReportsSearchScreen
     return Column(
       children: [
         Container(
-          height: screenHeight / 3.4,
+          height: screenHeight / 3.3,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),

@@ -117,9 +117,13 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Container(
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -158,15 +162,16 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
         body: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
           builder: (context, state) {
             if (state is AdminApprovalLoading) {
-              return const Center(child: CircularProgressIndicator(color:
-              Color(0xFF0097b2),));
+              return const Center(
+                  child: CircularProgressIndicator(
+                color: Color(0xFF0097b2),
+              ));
             } else if (state is AdminApprovalLoaded) {
               if (_searchQuery.isEmpty) {
                 _filteredEmployees = state.allCamps;
               }
               return RefreshIndicator(
-                color:
-                Color(0xFF0097b2),
+                color: Color(0xFF0097b2),
                 onRefresh: () async {
                   context.read<AdminApprovalBloc>().add(FetchDataEvents());
                 },
@@ -220,7 +225,7 @@ class _SuperAdminCampSearchScreenState extends State<SuperAdminCampSearchScreen>
                             child: Column(
                               children: [
                                 Container(
-                                  height: screenHeight / 3.6,
+                                  height: screenHeight / 3.5,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),

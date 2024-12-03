@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/Admin/admin_approval.dart';
 import 'package:camp_organizer/presentation/Admin/approved_camps.dart';
 import 'package:camp_organizer/presentation/Analytics/dashboard_analytics.dart';
@@ -20,7 +21,7 @@ class _AdminBottomNavigationBarState extends State<AdminBottomNavigationBar> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-   AdminDashboardScreen(),
+    AdminDashboardScreen(),
     AddEvent(),
     AdminApproval(),
     ApprovedCamps(),
@@ -29,7 +30,8 @@ class _AdminBottomNavigationBarState extends State<AdminBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       body: _pages[_currentIndex],
       bottomNavigationBar: CurvedNavigationBar(
         index: _currentIndex,
@@ -62,6 +64,6 @@ class _AdminBottomNavigationBarState extends State<AdminBottomNavigationBar> {
           });
         },
       ),
-    );
+    ));
   }
 }

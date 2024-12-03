@@ -126,9 +126,8 @@ class _SuperAdminUserProfilePageState extends State<SuperAdminUserProfilePage>
                             color: Colors.white,
                           ),
                           child: Text(
-                            employee['firstName'] +
-                                    " " +
-                                    employee['lastName'] ??
+                            employee['firstName'] ??
+                                "N/A" + " " + employee['lastName'] ??
                                 'N/A',
                             style: TextStyle(
                               fontFamily: 'LeagueSpartan',
@@ -320,13 +319,12 @@ class _SuperAdminUserProfilePageState extends State<SuperAdminUserProfilePage>
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                 SuperAdminManageAccount())
-                                      );
+                                                  SuperAdminManageAccount()));
                                     },
                                     child: ProfileInfoTile(
                                       icon: Icons.how_to_reg,
                                       title: 'Manage Employee',
-                                      subtitle:'Manage account',
+                                      subtitle: 'Manage account',
                                       slideAnimation: _slideAnimation,
                                     ),
                                   ),
@@ -336,13 +334,12 @@ class _SuperAdminUserProfilePageState extends State<SuperAdminUserProfilePage>
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  AdminAddEmployee())
-                                      );
+                                                  AdminAddEmployee()));
                                     },
                                     child: ProfileInfoTile(
                                       icon: Icons.add_to_queue,
                                       title: 'Add Employee',
-                                      subtitle:'Create employee',
+                                      subtitle: 'Create employee',
                                       slideAnimation: _slideAnimation,
                                     ),
                                   ),

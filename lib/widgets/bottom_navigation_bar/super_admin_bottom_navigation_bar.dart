@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/Admin/admin_approval.dart';
 import 'package:camp_organizer/presentation/Analytics/dashboard_analytics.dart';
 import 'package:camp_organizer/presentation/Event/add_event.dart';
@@ -31,7 +32,8 @@ class _SuperAdminBottomNavigationBarState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       body: _pages[_currentIndex],
       bottomNavigationBar: CurvedNavigationBar(
         index: _currentIndex,
@@ -58,6 +60,6 @@ class _SuperAdminBottomNavigationBarState
           });
         },
       ),
-    );
+    ));
   }
 }

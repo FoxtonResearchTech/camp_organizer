@@ -1,4 +1,5 @@
 import 'package:camp_organizer/bloc/auth/auth_bloc.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/widgets/bottom_navigation_bar/camp_incharge_nav_bar.dart';
 import 'package:camp_organizer/widgets/bottom_navigation_bar/finance_nav_bar.dart';
 import 'package:camp_organizer/widgets/bottom_navigation_bar/fluid_bottom_navigation_bar.dart';
@@ -64,7 +65,8 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       backgroundColor: Colors.white,
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -178,8 +180,8 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
                         Image.asset("assets/logo1.png").animate().scale(
                             duration: const Duration(milliseconds: 1200),
                             curve: Curves.elasticOut),
-                    //    SizedBox(height: 40),
-            
+                        //    SizedBox(height: 40),
+
                         // Username Field
                         TextField(
                           controller: _emailController,
@@ -202,7 +204,7 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
                             duration: const Duration(milliseconds: 1000),
                             curve: Curves.easeInOut),
                         SizedBox(height: 20),
-            
+
                         // Password Field
                         TextField(
                           controller: _passwordController,
@@ -227,7 +229,7 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
                             duration: const Duration(milliseconds: 1000),
                             curve: Curves.easeInOut),
                         SizedBox(height: 30),
-            
+
                         // Login Button
                         CustomButton(
                                 text: "Login",
@@ -243,7 +245,7 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
                                 delay: const Duration(milliseconds: 400),
                                 duration: const Duration(milliseconds: 1000),
                                 curve: Curves.easeInOut),
-            
+
                         // Forgot Password Link
                         SizedBox(height: 20),
                       ],
@@ -255,6 +257,6 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
           );
         },
       ),
-    );
+    ));
   }
 }

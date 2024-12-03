@@ -20,6 +20,7 @@ import 'bloc/AddEvent/patient_follow_ups_bloc.dart';
 import 'bloc/Employee_registration/employee_registration_bloc.dart';
 import 'bloc/Status/status_bloc.dart';
 import 'bloc/auth/auth_bloc.dart';
+import 'connectivity_checker.dart';
 import 'firebase_options.dart';
 import 'presentation/module/Finance_Reports/finance_timeline.dart';
 import 'presentation/module/camp_incharge/camp_incharge_timeline.dart';
@@ -101,8 +102,9 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        home:
-           CampOrganizerLoginPage(), // Starting screen is the splash screen
+        home: ConnectivityChecker(
+          child: CampOrganizerLoginPage(), // Your app's home page
+        ), // Starting screen is the splash screen
 
         //  home: PdfPage(),
       ),

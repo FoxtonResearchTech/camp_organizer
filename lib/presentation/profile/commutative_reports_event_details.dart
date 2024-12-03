@@ -630,49 +630,49 @@ class _CommutativeReportsEventDetails
                         _buildPdfRow(
                             "Bastin : ",
                             widget.employee['Outward_doctorRoomThings']
-                                        ['Bastin']
+                                        ?['Bastin']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Glass Pad : ",
                             widget.employee['Outward_doctorRoomThings']
-                                        ['Glass Pad']
+                                        ?['Glass Pad']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Head Loupe : ",
                             widget.employee['Outward_doctorRoomThings']
-                                        ['Head Loupe']
+                                        ?['Head Loupe']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Medicine : ",
                             widget.employee['Outward_doctorRoomThings']
-                                        ['Medicine']
+                                        ?['Medicine']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Medicine Things : ",
                             widget.employee['Outward_doctorRoomThings']
-                                        ['Medicine Things']
+                                        ?['Medicine Things']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Ophthalmoscope : ",
                             widget.employee['Outward_doctorRoomThings']
-                                        ['Ophthalmoscope']
+                                        ?['Ophthalmoscope']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Record Things : ",
                             widget.employee['Outward_doctorRoomThings']
-                                        ['Record Things']
+                                        ?['Record Things']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Torch Light : ",
                             widget.employee['Outward_doctorRoomThings']
-                                        ['Torch Light']
+                                        ?['Torch Light']
                                     ?.toString() ??
                                 "N/A"),
                       ],
@@ -688,61 +688,61 @@ class _CommutativeReportsEventDetails
                         _buildPdfRow(
                             "NV Chart : ",
                             widget.employee['Outward_visionRoomThings']
-                                        ['NV Chart']
+                                        ?['NV Chart']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Occluder 1 : ",
                             widget.employee['Outward_visionRoomThings']
-                                        ['Occluder1']
+                                        ?['Occluder1']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Occluder 2 : ",
                             widget.employee['Outward_visionRoomThings']
-                                        ['Occluder2']
+                                        ?['Occluder2']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Pinhole 1 : ",
                             widget.employee['Outward_visionRoomThings']
-                                        ['Pinhole1']
+                                        ?['Pinhole1']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Pinhole 2 : ",
                             widget.employee['Outward_visionRoomThings']
-                                        ['Pinhole2']
+                                        ?['Pinhole2']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Snellen Chart : ",
                             widget.employee['Outward_visionRoomThings']
-                                        ['Snellen Chart']
+                                        ?['Snellen Chart']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Trial Frame 1 : ",
                             widget.employee['Outward_visionRoomThings']
-                                        ['Trial Frame1']
+                                        ?['Trial Frame1']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Trial Frame 2: ",
                             widget.employee['Outward_visionRoomThings']
-                                        ['Trial Frame2']
+                                        ?['Trial Frame2']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Trial Set 1 : ",
                             widget.employee['Outward_visionRoomThings']
-                                        ['Trial Set1']
+                                        ?['Trial Set1']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Trial Set 2 : ",
                             widget.employee['Outward_visionRoomThings']
-                                        ['Trial Set2']
+                                        ?['Trial Set2']
                                     ?.toString() ??
                                 "N/A"),
                       ],
@@ -758,37 +758,37 @@ class _CommutativeReportsEventDetails
                         _buildPdfRow(
                             "CR Machine No 1 : ",
                             widget.employee['Outward_crRoomThings']
-                                        ['CR Machine No 1']
+                                        ?['CR Machine No 1']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "CR Machine No 2 : ",
                             widget.employee['Outward_crRoomThings']
-                                        ['CR Machine No 2']
+                                        ?['CR Machine No 2']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "CR Machine No 3 : ",
                             widget.employee['Outward_crRoomThings']
-                                        ['CR Machine No 3']
+                                        ?['CR Machine No 3']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Junction Box Wire : ",
                             widget.employee['Outward_crRoomThings']
-                                        ['Junction Box Wire']
+                                        ?['Junction Box Wire']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Rollin Chair : ",
                             widget.employee['Outward_crRoomThings']
-                                        ['Rollin Chair']
+                                        ?['Rollin Chair']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Stabilizer : ",
                             widget.employee['Outward_crRoomThings']
-                                        ['Stabilizer']
+                                        ?['Stabilizer']
                                     ?.toString() ??
                                 "N/A"),
                       ],
@@ -804,13 +804,13 @@ class _CommutativeReportsEventDetails
                         _buildPdfRow(
                             "Bill Machine : ",
                             widget.employee['Outward_opticalThings']
-                                        ['Bill Machine']
+                                        ?['Bill Machine']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Frame Bag : ",
                             widget.employee['Outward_opticalThings']
-                                        ['Frame Bag']
+                                        ?['Frame Bag']
                                     ?.toString() ??
                                 "N/A"),
                       ],
@@ -825,17 +825,17 @@ class _CommutativeReportsEventDetails
                         pw.SizedBox(height: 10),
                         _buildPdfRow(
                             "Banner : ",
-                            widget.employee['Outward_others']['Banner']
+                            widget.employee['Outward_others']?['Banner']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Camera : ",
-                            widget.employee['Outward_others']['Camera']
+                            widget.employee['Outward_others']?['Camera']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Register Note : ",
-                            widget.employee['Outward_others']['Register Note']
+                            widget.employee['Outward_others']?['Register Note']
                                     ?.toString() ??
                                 "N/A"),
                       ],
@@ -891,49 +891,50 @@ class _CommutativeReportsEventDetails
                         pw.SizedBox(height: 10),
                         _buildPdfRow(
                             "Bastin : ",
-                            widget.employee['Inward_doctorRoomThings']['Bastin']
+                            widget.employee['Inward_doctorRoomThings']
+                                        ?['Bastin']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Glass Pad : ",
                             widget.employee['Inward_doctorRoomThings']
-                                        ['Glass Pad']
+                                        ?['Glass Pad']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Head Loupe : ",
                             widget.employee['Inward_doctorRoomThings']
-                                        ['Head Loupe']
+                                        ?['Head Loupe']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Medicine : ",
                             widget.employee['Inward_doctorRoomThings']
-                                        ['Medicine']
+                                        ?['Medicine']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Medicine Things : ",
                             widget.employee['Inward_doctorRoomThings']
-                                        ['Medicine Things']
+                                        ?['Medicine Things']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Ophthalmoscope : ",
                             widget.employee['Inward_doctorRoomThings']
-                                        ['Ophthalmoscope']
+                                        ?['Ophthalmoscope']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Record Things : ",
                             widget.employee['Inward_doctorRoomThings']
-                                        ['Record Things']
+                                        ?['Record Things']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Torch Light : ",
                             widget.employee['Inward_doctorRoomThings']
-                                        ['Torch Light']
+                                        ?['Torch Light']
                                     ?.toString() ??
                                 "N/A"),
                       ],
@@ -949,61 +950,61 @@ class _CommutativeReportsEventDetails
                         _buildPdfRow(
                             "NV Chart : ",
                             widget.employee['Inward_visionRoomThings']
-                                        ['NV Chart']
+                                        ?['NV Chart']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Occluder 1 : ",
                             widget.employee['Inward_visionRoomThings']
-                                        ['Occluder1']
+                                        ?['Occluder1']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Occluder 2 : ",
                             widget.employee['Inward_visionRoomThings']
-                                        ['Occluder2']
+                                        ?['Occluder2']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Pinhole 1 : ",
                             widget.employee['Inward_visionRoomThings']
-                                        ['Pinhole1']
+                                        ?['Pinhole1']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Pinhole 2 : ",
                             widget.employee['Inward_visionRoomThings']
-                                        ['Pinhole2']
+                                        ?['Pinhole2']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Snellen Chart : ",
                             widget.employee['Inward_visionRoomThings']
-                                        ['Snellen Chart']
+                                        ?['Snellen Chart']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Trial Frame 1 : ",
                             widget.employee['Inward_visionRoomThings']
-                                        ['Trial Frame1']
+                                        ?['Trial Frame1']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Trial Frame 2: ",
                             widget.employee['Inward_visionRoomThings']
-                                        ['Trial Frame2']
+                                        ?['Trial Frame2']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Trial Set 1 : ",
                             widget.employee['Inward_visionRoomThings']
-                                        ['Trial Set1']
+                                        ?['Trial Set1']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Trial Set 2 : ",
                             widget.employee['Inward_visionRoomThings']
-                                        ['Trial Set2']
+                                        ?['Trial Set2']
                                     ?.toString() ??
                                 "N/A"),
                       ],
@@ -1019,36 +1020,37 @@ class _CommutativeReportsEventDetails
                         _buildPdfRow(
                             "CR Machine No 1 : ",
                             widget.employee['Inward_crRoomThings']
-                                        ['CR Machine No 1']
+                                        ?['CR Machine No 1']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "CR Machine No 2 : ",
                             widget.employee['Inward_crRoomThings']
-                                        ['CR Machine No 2']
+                                        ?['CR Machine No 2']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "CR Machine No 3 : ",
                             widget.employee['Inward_crRoomThings']
-                                        ['CR Machine No 3']
+                                        ?['CR Machine No 3']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Junction Box Wire : ",
                             widget.employee['Inward_crRoomThings']
-                                        ['Junction Box Wire']
+                                        ?['Junction Box Wire']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Rollin Chair : ",
                             widget.employee['Inward_crRoomThings']
-                                        ['Rollin Chair']
+                                        ?['Rollin Chair']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Stabilizer : ",
-                            widget.employee['Inward_crRoomThings']['Stabilizer']
+                            widget.employee['Inward_crRoomThings']
+                                        ?['Stabilizer']
                                     ?.toString() ??
                                 "N/A"),
                       ],
@@ -1064,12 +1066,13 @@ class _CommutativeReportsEventDetails
                         _buildPdfRow(
                             "Bill Machine : ",
                             widget.employee['Inward_opticalThings']
-                                        ['Bill Machine']
+                                        ?['Bill Machine']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Frame Bag : ",
-                            widget.employee['Inward_opticalThings']['Frame Bag']
+                            widget.employee['Inward_opticalThings']
+                                        ?['Frame Bag']
                                     ?.toString() ??
                                 "N/A"),
                       ],
@@ -1084,17 +1087,17 @@ class _CommutativeReportsEventDetails
                         pw.SizedBox(height: 10),
                         _buildPdfRow(
                             "Banner : ",
-                            widget.employee['Inward_others']['Banner']
+                            widget.employee['Inward_others']?['Banner']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Camera : ",
-                            widget.employee['Inward_others']['Camera']
+                            widget.employee['Inward_others']?['Camera']
                                     ?.toString() ??
                                 "N/A"),
                         _buildPdfRow(
                             "Register Note : ",
-                            widget.employee['Inward_others']['Register Note']
+                            widget.employee['Inward_others']?['Register Note']
                                     ?.toString() ??
                                 "N/A"),
                       ],

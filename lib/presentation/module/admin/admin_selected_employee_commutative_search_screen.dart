@@ -780,7 +780,7 @@ class _AdminSelectedEmployeeCommutativeReport
     return Column(
       children: [
         Container(
-          height: screenHeight / 4.5,
+          height: screenHeight / 4.3,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),

@@ -154,9 +154,13 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
             backgroundColor: Colors.transparent,
             elevation: 0,
             flexibleSpace: Container(
-              decoration:  BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                  colors: [
+                    Color(0xFF0097b2),
+                    Color(0xFF0097b2).withOpacity(1),
+                    Color(0xFF0097b2).withOpacity(0.8)
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -166,7 +170,8 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
           body: BlocBuilder<OnsiteApprovalBloc, OnsiteApprovalState>(
             builder: (context, state) {
               if (state is OnsiteApprovalLoading) {
-                return const Center(child: CircularProgressIndicator(
+                return const Center(
+                    child: CircularProgressIndicator(
                   color: Color(0xFF0097b2),
                 ));
               } else if (state is OnsiteApprovalLoaded) {
@@ -179,9 +184,8 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
 
                 // Check if there are no camps meeting the condition
                 if (filteredCamps.isEmpty) {
-                  return  Center(
+                  return Center(
                     child: Container(
-
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -242,7 +246,7 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
-                                height: screenHeight / 3.2,
+                                height: screenHeight / 3,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),

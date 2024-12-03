@@ -295,7 +295,10 @@ class _CommutativeReportsSearchScreen
               child: BlocBuilder<StatusBloc, StatusState>(
                 builder: (context, state) {
                   if (state is StatusLoading) {
-                    return const Center(child: CircularProgressIndicator(color:Color(0xFF0097b2) ,));
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      color: Color(0xFF0097b2),
+                    ));
                   } else if (state is StatusLoaded) {
                     // Use a post-frame callback to update filtered data after the build.
                     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -739,7 +742,7 @@ class _CommutativeReportsSearchScreen
     return Column(
       children: [
         Container(
-          height: screenHeight / 4.6,
+          height: screenHeight / 4.2,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),

@@ -245,7 +245,7 @@ class _SuperAdminSelectedEmployeeCampSearchScreen
                             child: Column(
                               children: [
                                 Container(
-                                  height: screenHeight / 3.6,
+                                  height: screenHeight / 3.5,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
