@@ -3,6 +3,7 @@ import 'package:camp_organizer/presentation/module/post_camp_followup/post_camp_
 import 'package:camp_organizer/presentation/module/post_camp_followup/post_camp_follow_completed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../bloc/AddEvent/onsite_add_team_bloc.dart';
 import '../../../bloc/AddEvent/onsite_add_team_state.dart';
@@ -71,7 +72,7 @@ class _PostCampTimelineState extends State<PostCampTimeline>
         child: Scaffold(
           appBar: AppBar(
             title: const Text(
-              'FollowUp Camp Timeline',
+              'FollowUp Camp Status',
               style: TextStyle(
                   fontFamily: 'LeagueSpartan',
                   color: Colors.white,
@@ -82,13 +83,9 @@ class _PostCampTimelineState extends State<PostCampTimeline>
             backgroundColor: Colors.transparent,
             elevation: 0,
             flexibleSpace: Container(
-              decoration: const BoxDecoration(
+              decoration:  BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Colors.blue,
-                    Colors.lightBlueAccent,
-                    Colors.lightBlue
-                  ],
+                  colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -98,15 +95,48 @@ class _PostCampTimelineState extends State<PostCampTimeline>
           body: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
             builder: (context, state) {
               if (state is AdminApprovalLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator(color:Color(0xFF0097b2) ,));
               } else if (state is AdminApprovalLoaded) {
                 final camps = state.allCamps;
-
+                final waitingCamps = camps
+                    .where((camp) => camp['campStatus'] == 'Approved')
+                    .toList();
                 return RefreshIndicator(
+
+                  color: Color(0xFF0097b2),
                   onRefresh: () async {
                     context.read<AdminApprovalBloc>().add(FetchDataEvents());
                   },
-                  child: ListView.builder(
+                  child: waitingCamps.isEmpty
+                      ? SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Center(
+                      child: Container(
+                        padding: EdgeInsets.only(top: screenHeight / 4),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Lottie.asset(
+                              'assets/no_data.json',
+                              width: screenWidth * 0.35,
+                              height: screenHeight * 0.25,
+                            ),
+                            const SizedBox(height: 10),
+                            const Text(
+                              "No Camps found",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'LeagueSpartan',
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                      : ListView.builder(
                     itemCount: camps.length,
                     itemBuilder: (context, index) {
                       final camp = camps[index];

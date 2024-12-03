@@ -112,32 +112,38 @@ class _LogisticsInwardState extends State<LogisticsInward> {
         AddLogisticsWithDocumentId(documentId: widget.documentId, data: data));
   }
 
-  // Function to build a checklist
   Widget buildChecklistCategory(String title, Map<String, bool> items) {
-    return ExpansionTile(
-      title: Text(title,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'LeagueSpartan',
-          )),
-      children: items.keys.map((item) {
-        return CheckboxListTile(
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return ExpansionTile(
           title: Text(
-            item,
+            title,
             style: TextStyle(
+              fontWeight: FontWeight.bold,
               fontFamily: 'LeagueSpartan',
             ),
           ),
-          value: items[item],
-          onChanged: (bool? value) {
-            setState(() {
-              items[item] = value!;
-            });
-          },
+          children: items.keys.map((item) {
+            return CheckboxListTile(
+              title: Text(
+                item,
+                style: TextStyle(
+                  fontFamily: 'LeagueSpartan',
+                ),
+              ),
+              value: items[item],
+              onChanged: (bool? value) {
+                setState(() {
+                  items[item] = value!;
+                });
+              },
+            );
+          }).toList(),
         );
-      }).toList(),
+      },
     );
   }
+
   @override
   void initState() {
     super.initState();
@@ -151,20 +157,13 @@ class _LogisticsInwardState extends State<LogisticsInward> {
         widget.campData['Inward_dutyInCharge2'] ?? '';
     remarksController.text = widget.campData['Inward_remarks'] ?? '';
 
-    // Initialize checklist values from the passed campData
-    doctorRoomThings = Map<String, bool>.from(
-        widget.campData['Inward_doctorRoomThings'] ?? {});
-    visionRoomThings = Map<String, bool>.from(
-        widget.campData['Inward_visionRoomThings'] ?? {});
-    crRoomThings =
-    Map<String, bool>.from(widget.campData['Inward_crRoomThings'] ?? {});
-    tnDuctThings =
-    Map<String, bool>.from(widget.campData['Inward_tnDuctThings'] ?? {});
-    opticalThings =
-    Map<String, bool>.from(widget.campData['Inward_opticalThings'] ?? {});
-    fittingThings =
-    Map<String, bool>.from(widget.campData['Inward_fittingThings'] ?? {});
-    others = Map<String, bool>.from(widget.campData['Inward_others'] ?? {});
+    print('Initializing doctorRoomThings: $doctorRoomThings');
+    print('Initializing visionRoomThings: $visionRoomThings');
+    print('Initializing crRoomThings: $crRoomThings');
+    print('Initializing tnDuctThings: $tnDuctThings');
+    print('Initializing opticalThings: $opticalThings');
+    print('Initializing fittingThings: $fittingThings');
+    print('Initializing others: $others');
   }
 
   @override

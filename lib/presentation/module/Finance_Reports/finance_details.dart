@@ -155,25 +155,32 @@ class _FinanceDetailsState extends State<FinanceDetails> {
                       ),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.green, // Set the background color to green
                         content: Center(
-                          child: Text('Status changed to Completed',
+                          child: Text('This Camp Completed Successfully',
                               style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500)),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'LeagueSpartan',
+                                color: Colors.white,
+                              ),
+                          ),
                         ),
                       ),
                     );
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
+                       SnackBar(
                         content: Center(
                           child: Text('Failed to update status ',
                               style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500)),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'LeagueSpartan',
+                                color: Colors.lightBlue[800],
+                              ),
+                          ),
                         ),
                       ),
                     );
