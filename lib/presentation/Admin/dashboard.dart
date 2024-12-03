@@ -39,6 +39,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
       approvedCount.toDouble(),
       waitingQueueCount.toDouble(),
       rejectedCount.toDouble(),
+      completedCount.toDouble()
     ];
   }
 
@@ -47,7 +48,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
     Colors.blueAccent,
     Colors.purpleAccent,
     Colors.orangeAccent,
-
+    Colors.green,
     // Colors.redAccent,
   ];
   final List<String> titles = [
@@ -55,7 +56,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
     'Total Camp Initiated',
     'Total Camp Confirmed',
     'Waiting Queue',
-    'Total Camp Rejected'
+    'Total Camp Rejected',
+        'Completed Camp'
   ];
 
   @override
@@ -87,6 +89,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
           waitingQueueCount = employees
               .where((employee) => employee["campStatus"] == "Waiting")
               .length;
+        completedCount = employees
+              .where((employee) => employee["campStatus"] == "Completed")
+              .length;
           initiatedCount = employees.length;
         });
       }
@@ -104,6 +109,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
   int rejectedCount = 0;
   int waitingQueueCount = 0;
   int initiatedCount = 0;
+  int completedCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -126,9 +132,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Container(
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -138,9 +148,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
         drawer: Drawer(
           child: Container(
             padding: EdgeInsets.zero,
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -153,12 +167,16 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                     child: Container(
                       width: double.maxFinite,
                       height: double.maxFinite,
-                      decoration:  BoxDecoration(
+                      decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage('assets/logo3.png'),
                         ),
                         gradient: LinearGradient(
-                          colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                          colors: [
+                            Color(0xFF0097b2),
+                            Color(0xFF0097b2).withOpacity(1),
+                            Color(0xFF0097b2).withOpacity(0.8)
+                          ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -168,7 +186,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                   leading: const Icon(Icons.create, color: Colors.white),
                   title: const Text('Create Employee',
                       style: TextStyle(
-                        color: Colors.white,fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
                         fontFamily: 'LeagueSpartan',
                       )),
                   onTap: () {
@@ -184,7 +203,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                       const Icon(Icons.manage_accounts, color: Colors.white),
                   title: const Text('Manage Employee',
                       style: TextStyle(
-                        color: Colors.white,fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
                         fontFamily: 'LeagueSpartan',
                       )),
                   onTap: () {
@@ -263,8 +283,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                               return Center(
                                 key: ValueKey('loading'),
                                 child: CircularProgressIndicator(
-                                color:     Color(0xFF0097b2)
-                                ),
+                                    color: Color(0xFF0097b2)),
                               );
                             } else if (state is AdminApprovalLoaded) {
                               final employees = state.allCamps;
@@ -280,6 +299,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                               waitingQueueCount = employees
                                   .where((employee) =>
                                       employee["campStatus"] == "Waiting")
+                                  .length;
+                             completedCount = employees
+                                  .where((employee) =>
+                              employee["campStatus"] == "Completed")
                                   .length;
 
                               return Column(
@@ -361,6 +384,30 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                       ),
                                     ],
                                   ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      // Waiting Queue Card
+
+                                      // Initiated Card
+                                      Expanded(
+                                        child: _buildStatusCard(
+                                          count: completedCount,
+                                          label: 'Completed Camp',
+                                          icon: Icons.verified,
+                                          gradient: const LinearGradient(
+                                            colors: [
+                                              Color(0xFF66BB6A), // Light Green
+                                              Color(0xFF388E3C), // Dark Green
+                                            ],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               );
                             } else if (state is StatusError) {
@@ -412,10 +459,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                     milliseconds: 150), // Adjust speed here
                               ),
                             ],
-                            totalRepeatCount:
-                                1, // Set to `1` for single loop, or `0` for infinite
-                            pause: const Duration(
-                                milliseconds: 500), // Pause between loops
+                            totalRepeatCount: 1,
+                            // Set to `1` for single loop, or `0` for infinite
+                            pause: const Duration(milliseconds: 500),
+                            // Pause between loops
                             displayFullTextOnTap: true,
                           ),
                         );

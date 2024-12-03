@@ -7,6 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'presentation/authentication/login_screen.dart';
+import 'repository/auth_repository.dart';
+
 class AdminAddEmployee extends StatefulWidget {
   const AdminAddEmployee({super.key});
 
@@ -118,6 +121,12 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
 
       // Show success snackbar
       _showSnackBar("Employee Registered Successfully!");
+      AuthRepository().signOut();
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  CampOrganizerLoginPage()));
     } catch (e) {
       // Catch and display errors
       _showSnackBar("Error: ${e.toString()}");

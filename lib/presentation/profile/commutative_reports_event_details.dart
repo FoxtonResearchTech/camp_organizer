@@ -105,6 +105,7 @@ class _CommutativeReportsEventDetails
 
     return Scaffold(
       appBar: AppBar(
+
         title: const Text(
           'Camp Details',
           style: TextStyle(
@@ -127,9 +128,9 @@ class _CommutativeReportsEventDetails
           },
         ),
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration:  BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -196,7 +197,7 @@ class _CommutativeReportsEventDetails
             _buildAnimatedButton(
               label: "Save as Pdf",
               icon: Icons.save,
-              color: AppColors.accentBlue,
+              color: Color(0xFF0097b2),
               onPressed: () async {
                 final pdf = pw.Document();
                 final rows = await _generatePdfRows();

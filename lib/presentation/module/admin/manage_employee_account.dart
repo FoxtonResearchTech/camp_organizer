@@ -1,6 +1,7 @@
 import 'package:camp_organizer/bloc/Employee/employee_update_bloc.dart';
 import 'package:camp_organizer/bloc/Employee/employee_update_event.dart';
 import 'package:camp_organizer/bloc/Employee/employee_update_state.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +15,7 @@ class ManageEmployeeAccount extends StatefulWidget {
 
 class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
   late EmployeeUpdateBloc _employeeUpdateBloc;
-  Map<String, bool> employeeActiveStatus = {}; // Local state for isActive
+  Map<String, bool> employeeActiveStatus = {}; // Correctly initialize map
 
   @override
   void initState() {
@@ -80,7 +81,7 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
 
               // Initialize local isActive state for each employee
               for (var employee in employees) {
-                employeeActiveStatus.putIfAbsent(employee['isActive'], () => true);
+                employeeActiveStatus.putIfAbsent(employee['empCode'], () => employee['isActive'] ?? false);
               }
 
               return RefreshIndicator(
@@ -143,20 +144,30 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
                                 Switch(
                                   value: employeeActiveStatus[employee['empCode']] ?? false,
                                   onChanged: (value) async {
+                                    // Debug print to check if value is toggling
+                                    print('Toggling status for ${employee['empCode']}: $value');
+
                                     setState(() {
+                                      // Update the value in the local map
                                       employeeActiveStatus[employee['empCode']] = value;
                                     });
+
+                                    // Debug print to check the map status after update
+                                    print('Updated employeeActiveStatus: $employeeActiveStatus');
 
                                     // Call your update function to change status
                                     await _updateUserStatus(
                                       employee['empCode'] ?? '',
-                                      value,
+                                      value,  // value is a bool, which is correct
                                     );
+
+                                    // You can also print after calling the update function to check Firestore update status
+                                    print('User status updated in Firestore for ${employee['empCode']} to $value');
                                   },
                                   activeColor: Colors.green,
                                   inactiveThumbColor: Colors.red,
                                   inactiveTrackColor: Colors.red.withOpacity(0.3),
-                                ),
+                                )
                               ],
                             ),
                             const Divider(height: 20),
@@ -217,9 +228,33 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
     );
   }
 
-  Future<void> _updateUserStatus(String empCode, bool isActive) async {
-    // Add your Firebase Auth or database logic here
-    print('Employee $empCode status updated to ${isActive ? "Active" : "Inactive"}');
-    // Example: Update status in the database or authentication
+  Future<void> _updateUserStatus(String empCode, bool status) async {
+    try {
+      // Query the Firestore collection to find the employee document by empCode
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('employees')
+          .where('empCode', isEqualTo: empCode) // Use empCode to find the document
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        // Get the document ID of the first document in the snapshot
+        String docId = snapshot.docs.first.id;
+
+        // Update the employee's isActive status using the document ID
+        await FirebaseFirestore.instance
+            .collection('employees')
+            .doc(docId)
+            .update({'isActive': status});
+
+        // Optionally, handle success message or other logic
+        print('Status updated for $empCode to $status');
+      } else {
+        // Handle case if no employee document is found with the given empCode
+        print('Employee with empCode $empCode not found');
+      }
+    } catch (e) {
+      // Handle any errors that occur
+      print('Error updating status: $e');
+    }
   }
 }
