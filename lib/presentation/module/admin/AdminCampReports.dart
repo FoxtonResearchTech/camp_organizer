@@ -157,30 +157,64 @@ class _AdminCampsReportsPage extends State<AdminCampsReportsPage> {
                   fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            DropdownButton<String>(
-              value: selectedEmployee,
-              isExpanded: true,
-              hint: const Text(
-                'Choose an employee',
-                style: TextStyle(
-                  fontFamily: 'LeagueSpartan',
-                ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    spreadRadius: 2,
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+                border: Border.all(color: Colors.blueAccent, width: 1),
               ),
-              items: employeeNames.map((name) {
-                return DropdownMenuItem(
-                  value: name,
-                  child: Text(name),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedEmployee = value;
-                });
-              },
-            ),
+              child: DropdownButton<String>(
+                value: selectedEmployee,
+                isExpanded: true,
+                underline: Container(), // Removes default underline
+                dropdownColor: Colors.white,
+                hint: const Text(
+                  'Choose an employee',
+                  style: TextStyle(
+                    fontFamily: 'LeagueSpartan',
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
+                ),
+                items: employeeNames.map((name) {
+                  return DropdownMenuItem(
+                    value: name,
+                    child: Text(
+                      name,
+                      style: const TextStyle(
+                        fontFamily: 'LeagueSpartan',
+                        fontSize: 16,
+                        color: Colors.black,fontWeight: FontWeight.w500
+                      ),
+                    ),
+                  );
+                }).toList(),
+                icon: const Icon(
+                  Icons.arrow_drop_down,
+                  color: Colors.blueAccent,
+                  size: 24,
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    selectedEmployee = value;
+                  });
+                },
+              ),
+            )
+
+
 
             // Report Type Selection
-            const SizedBox(height: 20),
+         ,   const SizedBox(height: 20),
             const Text(
               'Select Report Type:',
               style: TextStyle(
@@ -206,7 +240,7 @@ class _AdminCampsReportsPage extends State<AdminCampsReportsPage> {
                       ),
                       const Text(
                         'Individual reports',
-                        style: TextStyle(fontFamily: 'LeagueSpartan'),
+                        style: TextStyle(fontFamily: 'LeagueSpartan',fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
@@ -226,7 +260,7 @@ class _AdminCampsReportsPage extends State<AdminCampsReportsPage> {
                       ),
                       const Text(
                         'Cumulative Report',
-                        style: TextStyle(fontFamily: 'LeagueSpartan'),
+                        style: TextStyle(fontFamily: 'LeagueSpartan',fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),

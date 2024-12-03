@@ -17,7 +17,14 @@ class _InwardDetailsState extends State<InwardDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+            )),
         title: const Text(
           'Logistics Inward Details',
           style: TextStyle(
@@ -33,7 +40,11 @@ class _InwardDetailsState extends State<InwardDetails> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+              colors: [
+                Color(0xFF0097b2),
+                Color(0xFF0097b2).withOpacity(1),
+                Color(0xFF0097b2).withOpacity(0.8)
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -55,7 +66,7 @@ class _InwardDetailsState extends State<InwardDetails> {
               context,
               title: 'Inward CR Room Things',
               content:
-              _buildCheckList(widget.campData['Inward_crRoomThings'] ?? {}),
+                  _buildCheckList(widget.campData['Inward_crRoomThings'] ?? {}),
             ),
             _buildGradientCard(
               context,
@@ -79,7 +90,7 @@ class _InwardDetailsState extends State<InwardDetails> {
               context,
               title: 'Inward T&Duct Things',
               content:
-              _buildCheckList(widget.campData['Inward_tnDuctThings'] ?? {}),
+                  _buildCheckList(widget.campData['Inward_tnDuctThings'] ?? {}),
             ),
             _buildGradientCard(
               context,
@@ -91,12 +102,16 @@ class _InwardDetailsState extends State<InwardDetails> {
             ),
             _buildAnimatedSection(
               context,
-              sectionTitle: 'More Outward Details',
+              sectionTitle: 'More Inward Details',
               children: [
-                _buildInfoCard('Camera Out', widget.campData['Inward_cameraIn']),
-                _buildInfoCard('In-Charge Name', widget.campData['Inward_inChargeName']),
-                _buildInfoCard('Duty Incharge 1', widget.campData['Inward_dutyInCharge1']),
-                _buildInfoCard('Duty Incharge 2', widget.campData['Inward_dutyInCharge2']),
+                _buildInfoCard(
+                    'Camera Out', widget.campData['Inward_cameraIn']),
+                _buildInfoCard(
+                    'In-Charge Name', widget.campData['Inward_inChargeName']),
+                _buildInfoCard(
+                    'Duty Incharge 1', widget.campData['Inward_dutyInCharge1']),
+                _buildInfoCard(
+                    'Duty Incharge 2', widget.campData['Inward_dutyInCharge2']),
                 _buildInfoCard('Remarks', widget.campData['Inward_remarks']),
               ],
             ),
@@ -104,9 +119,11 @@ class _InwardDetailsState extends State<InwardDetails> {
               height: 30,
             ),
             Center(
-              child: CustomButton(text: 'Done', onPressed: () {
-                Navigator.pop(context); // Go back to the previous page
-              }),
+              child: CustomButton(
+                  text: 'Done',
+                  onPressed: () {
+                    Navigator.pop(context); // Go back to the previous page
+                  }),
             ),
             SizedBox(
               height: 20,
@@ -124,8 +141,10 @@ class _InwardDetailsState extends State<InwardDetails> {
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xff0097b2),
-            Color(0xff0097b2).withOpacity(0.5)!,],
+          colors: [
+            Color(0xff0097b2),
+            Color(0xff0097b2).withOpacity(0.5)!,
+          ],
           begin: Alignment.bottomRight,
           end: Alignment.topLeft,
         ),
@@ -167,8 +186,9 @@ class _InwardDetailsState extends State<InwardDetails> {
         title: Text(
           entry.key,
           style: TextStyle(
-            fontFamily: 'LeagueSpartan',fontWeight: FontWeight.bold,color: Colors.white
-          ),
+              fontFamily: 'LeagueSpartan',
+              fontWeight: FontWeight.bold,
+              color: Colors.white),
         ),
         value: entry.value,
         onChanged: (bool? value) {
@@ -177,6 +197,7 @@ class _InwardDetailsState extends State<InwardDetails> {
       );
     }).toList();
   }
+
   // Helper method to build section titles with animation
   Widget _buildAnimatedSection(BuildContext context,
       {required String sectionTitle, required List<Widget> children}) {
@@ -199,7 +220,7 @@ class _InwardDetailsState extends State<InwardDetails> {
             },
           ),
           ...children.map(
-                (child) => TweenAnimationBuilder(
+            (child) => TweenAnimationBuilder(
               tween: Tween<double>(begin: 0, end: 1),
               duration: const Duration(milliseconds: 300),
               builder: (context, value, _) {
@@ -217,6 +238,7 @@ class _InwardDetailsState extends State<InwardDetails> {
       ),
     );
   }
+
   // Helper method to build section titles
   Widget _buildSectionTitle(String title) {
     return Padding(
@@ -268,7 +290,8 @@ class _InwardDetailsState extends State<InwardDetails> {
         subtitle: Text(
           value?.toString() ?? 'N/A',
           style: const TextStyle(
-            color: Colors.white,fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
             fontFamily: 'LeagueSpartan',
           ),
         ),

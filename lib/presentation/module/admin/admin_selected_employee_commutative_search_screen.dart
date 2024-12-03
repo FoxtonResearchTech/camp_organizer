@@ -28,6 +28,7 @@ class AdminSelectedEmployeeCommutativeReport extends StatefulWidget {
     required this.empCode,
     required this.employeeName,
   }) : super(key: key);
+
   @override
   State<AdminSelectedEmployeeCommutativeReport> createState() =>
       _AdminSelectedEmployeeCommutativeReport();
@@ -40,14 +41,19 @@ class _AdminSelectedEmployeeCommutativeReport
   late TextEditingController _endDateController;
 
   List<Map<String, dynamic>> _filteredEmployees = [];
+
   DateTime? _startDate;
   DateTime? _endDate;
+  bool _isDateRangeSelected =
+      false; // Track if the date range has been selected
 
   @override
   void initState() {
     super.initState();
     _startDateController = TextEditingController();
     _endDateController = TextEditingController();
+
+    // Initialize the BLoC and fetch the employee data
     _AdminApprovalBloc = AdminApprovalBloc()
       ..add(SelectedEmployeeFetchEvent(widget.employeeName));
   }
@@ -58,22 +64,6 @@ class _AdminSelectedEmployeeCommutativeReport
     _endDateController.dispose();
     _AdminApprovalBloc.close();
     super.dispose();
-  }
-
-  void _filterEmployees(List<Map<String, dynamic>> employees) {
-    setState(() {
-      if (_startDate == null || _endDate == null) {
-        _filteredEmployees = employees;
-      } else {
-        _filteredEmployees = employees.where((employee) {
-          DateTime campDate =
-              DateFormat('dd-MM-yyyy').parse(employee['campDate']);
-          return campDate
-                  .isAfter(_startDate!.subtract(const Duration(days: 1))) &&
-              campDate.isBefore(_endDate!.add(const Duration(days: 1)));
-        }).toList();
-      }
-    });
   }
 
   Future<void> _selectDateRange(BuildContext context, bool isStartDate) async {
@@ -94,13 +84,52 @@ class _AdminSelectedEmployeeCommutativeReport
           _endDate = picked;
           _endDateController.text = formattedDate;
         }
+
+        // Check if both start and end dates are selected
+        _isDateRangeSelected = _startDate != null && _endDate != null;
       });
 
-      if (_AdminApprovalBloc.state is AdminApprovalLoaded) {
-        _filterEmployees(
-            (_AdminApprovalBloc.state as AdminApprovalLoaded).allCamps);
+      // Trigger filtering when both start and end dates are selected and state is loaded
+      if (_isDateRangeSelected &&
+          _AdminApprovalBloc.state is AdminApprovalLoaded) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _filterEmployees(
+              (_AdminApprovalBloc.state as AdminApprovalLoaded).allCamps);
+        });
       }
     }
+  }
+
+  void _filterEmployees(List<Map<String, dynamic>> employees) {
+    print("Filtering employees based on dates");
+
+    setState(() {
+      if (_startDate == null || _endDate == null) {
+        _filteredEmployees = employees; // No date range filter applied
+      } else {
+        _filteredEmployees = employees.where((employee) {
+          // Ensure 'campDate' exists and is in the correct format
+          if (employee['campDate'] != null) {
+            try {
+              DateTime campDate =
+                  DateFormat('dd-MM-yyyy').parse(employee['campDate']);
+              print(
+                  "Checking date for employee: ${employee['campDate']} - Camp Date: $campDate");
+
+              // Apply the date filtering - inclusive of the start and end date
+              return campDate
+                      .isAfter(_startDate!.subtract(const Duration(days: 1))) &&
+                  campDate.isBefore(_endDate!.add(const Duration(days: 1)));
+            } catch (e) {
+              // If parsing fails, log the error (optional)
+              print('Error parsing campDate: ${employee['campDate']}');
+              return false;
+            }
+          }
+          return false; // If 'campDate' is null, exclude the employee
+        }).toList();
+      }
+    });
   }
 
   @override
@@ -302,15 +331,14 @@ class _AdminSelectedEmployeeCommutativeReport
                   if (state is AdminApprovalLoading) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is AdminApprovalLoaded) {
-                    // Use a post-frame callback to update filtered data after the build.
+                    // Only apply the filter when the data is loaded for the first time
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      setState(() {
-                        if (_startDate != null || _endDate != null) {
-                          _filterEmployees(state.allCamps);
-                        } else {
-                          _filteredEmployees = state.allCamps;
-                        }
-                      });
+                      if (_filteredEmployees.isEmpty ||
+                          _startDate != null ||
+                          _endDate != null) {
+                        _filterEmployees(state
+                            .allCamps); // Filter employees only when necessary
+                      }
                     });
 
                     return RefreshIndicator(
@@ -325,19 +353,16 @@ class _AdminSelectedEmployeeCommutativeReport
                     return const Center(
                       child: Text(
                         'Failed to load camps. Please try again.',
-                        style: TextStyle(
-                          fontFamily: 'LeagueSpartan',
-                        ),
+                        style: TextStyle(fontFamily: 'LeagueSpartan'),
                       ),
                     );
                   }
                   return const Center(
-                      child: Text(
-                    'No data available.',
-                    style: TextStyle(
-                      fontFamily: 'LeagueSpartan',
+                    child: Text(
+                      'No data available.',
+                      style: TextStyle(fontFamily: 'LeagueSpartan'),
                     ),
-                  ));
+                  );
                 },
               ),
             ),
@@ -687,6 +712,7 @@ class _AdminSelectedEmployeeCommutativeReport
 
   Widget _buildEmployeeList(
       AdminApprovalLoaded state, double screenWidth, double screenHeight) {
+    // Check if there are no filtered employees
     if (_filteredEmployees.isEmpty) {
       return SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -717,19 +743,29 @@ class _AdminSelectedEmployeeCommutativeReport
         ),
       );
     }
+
+    // Otherwise, return the ListView of employees
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
+      shrinkWrap: true, // Added for better performance
       itemCount: _filteredEmployees.length,
       itemBuilder: (context, index) {
+        // Ensure that the employee data and camp IDs are valid
+        var employee = _filteredEmployees[index];
+        var campId = state.campDocIds[index];
+
         return GestureDetector(
           onTap: () async {
+            // Debugging: log data being passed
+            print('Employee tapped: ${employee['name']}, Camp ID: $campId');
+
+            // Navigate to the details screen with the correct data
             await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => CommutativeReportsEventDetails(
-                  employee: _filteredEmployees[index],
-                  // employeedocId: state.employeeDocId[1],
-                  campId: state.campDocIds[index],
+                  employee: employee,
+                  campId: campId, // Ensure campId is correctly passed
                 ),
               ),
             );

@@ -163,89 +163,91 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
               ),
             );
           }
-          return Center(
-            child: FadeTransition(
-              opacity: _fadeInAnimation,
-              child: SlideTransition(
-                position: _slideInAnimation,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Logo and Title
-                      Image.asset("assets/logo3.png").animate().scale(
-                          duration: const Duration(milliseconds: 1200),
-                          curve: Curves.elasticOut),
-                      SizedBox(height: 40),
-
-                      // Username Field
-                      TextField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          prefixIcon:
-                              Icon(Icons.person, color: Color(0xff0097b2)),
-                          labelText: 'Employee Code',
-                          labelStyle: TextStyle(
-                            color: Color(0xff0097b2),
-                            fontFamily: 'LeagueSpartan',
+          return SingleChildScrollView(
+            child: Center(
+              child: FadeTransition(
+                opacity: _fadeInAnimation,
+                child: SlideTransition(
+                  position: _slideInAnimation,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Logo and Title
+                        Image.asset("assets/logo1.png").animate().scale(
+                            duration: const Duration(milliseconds: 1200),
+                            curve: Curves.elasticOut),
+                    //    SizedBox(height: 40),
+            
+                        // Username Field
+                        TextField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            prefixIcon:
+                                Icon(Icons.person, color: Color(0xff0097b2)),
+                            labelText: 'Employee Code',
+                            labelStyle: TextStyle(
+                              color: Color(0xff0097b2),
+                              fontFamily: 'LeagueSpartan',
+                            ),
+                            filled: true,
+                            fillColor: Colors.blue[50],
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none,
+                            ),
                           ),
-                          filled: true,
-                          fillColor: Colors.blue[50],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
+                        ).animate().fade(
+                            duration: const Duration(milliseconds: 1000),
+                            curve: Curves.easeInOut),
+                        SizedBox(height: 20),
+            
+                        // Password Field
+                        TextField(
+                          controller: _passwordController,
+                          decoration: InputDecoration(
+                            prefixIcon:
+                                Icon(Icons.lock, color: Color(0xff0097b2)),
+                            labelText: 'Password',
+                            labelStyle: TextStyle(
+                              color: Color(0xff0097b2),
+                              fontFamily: 'LeagueSpartan',
+                            ),
+                            filled: true,
+                            fillColor: Colors.blue[50],
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none,
+                            ),
                           ),
-                        ),
-                      ).animate().fade(
-                          duration: const Duration(milliseconds: 1000),
-                          curve: Curves.easeInOut),
-                      SizedBox(height: 20),
-
-                      // Password Field
-                      TextField(
-                        controller: _passwordController,
-                        decoration: InputDecoration(
-                          prefixIcon:
-                              Icon(Icons.lock, color: Color(0xff0097b2)),
-                          labelText: 'Password',
-                          labelStyle: TextStyle(
-                            color: Color(0xff0097b2),
-                            fontFamily: 'LeagueSpartan',
-                          ),
-                          filled: true,
-                          fillColor: Colors.blue[50],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                        obscureText: true,
-                      ).animate().fade(
-                          delay: const Duration(milliseconds: 200),
-                          duration: const Duration(milliseconds: 1000),
-                          curve: Curves.easeInOut),
-                      SizedBox(height: 30),
-
-                      // Login Button
-                      CustomButton(
-                              text: "Login",
-                              onPressed: () {
-                                final email = _emailController.text;
-                                final password = _passwordController.text;
-                                BlocProvider.of<AuthBloc>(context).add(
-                                  SignInRequested(email, password),
-                                );
-                              })
-                          .animate()
-                          .move(
-                              delay: const Duration(milliseconds: 400),
-                              duration: const Duration(milliseconds: 1000),
-                              curve: Curves.easeInOut),
-
-                      // Forgot Password Link
-                      SizedBox(height: 20),
-                    ],
+                          obscureText: true,
+                        ).animate().fade(
+                            delay: const Duration(milliseconds: 200),
+                            duration: const Duration(milliseconds: 1000),
+                            curve: Curves.easeInOut),
+                        SizedBox(height: 30),
+            
+                        // Login Button
+                        CustomButton(
+                                text: "Login",
+                                onPressed: () {
+                                  final email = _emailController.text;
+                                  final password = _passwordController.text;
+                                  BlocProvider.of<AuthBloc>(context).add(
+                                    SignInRequested(email, password),
+                                  );
+                                })
+                            .animate()
+                            .move(
+                                delay: const Duration(milliseconds: 400),
+                                duration: const Duration(milliseconds: 1000),
+                                curve: Curves.easeInOut),
+            
+                        // Forgot Password Link
+                        SizedBox(height: 20),
+                      ],
+                    ),
                   ),
                 ),
               ),
