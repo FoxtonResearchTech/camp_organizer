@@ -6,14 +6,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ManageEmployeeAccount extends StatefulWidget {
-  const ManageEmployeeAccount({super.key});
+import '../../utils/app_colors.dart';
+
+class SuperAdminManageAccount extends StatefulWidget {
+  const SuperAdminManageAccount({super.key});
 
   @override
-  State<ManageEmployeeAccount> createState() => _ManageEmployeeAccountState();
+  State<SuperAdminManageAccount> createState() => _SuperAdminManageAccountState();
 }
 
-class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
+class _SuperAdminManageAccountState extends State<SuperAdminManageAccount> {
   late EmployeeUpdateBloc _employeeUpdateBloc;
   Map<String, bool> employeeActiveStatus = {}; // Correctly initialize map
 
@@ -140,6 +142,16 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
                                         ),
                                         const SizedBox(height: 8),
                                         Text(
+                                          'Password: ${employee['password'] ?? "N/A"}',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: 'LeagueSpartan',
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
                                           'Designation: ${employee['role'] ?? "N/A"}',
                                           style: const TextStyle(
                                             fontSize: 14,
@@ -179,6 +191,25 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
                               _buildInfoRow(Icons.cake, employee['dob'] ?? "No DOB Provided"),
                               const SizedBox(height: 10),
                               _buildInfoRow(Icons.email, '${employee['empCode']}@gmail.com'),
+                              const SizedBox(height: 10),
+                              // The delete button with infinity width
+                              Container(
+                                width: double.infinity,  // This ensures the button takes up the entire width
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    _deleteEmployee(employee['empCode']);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12), // No rounded corners
+                                    ),
+                                    backgroundColor: Colors.redAccent, // Red color for the delete button
+                                    padding: EdgeInsets.symmetric(vertical: 16),
+                                    textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                  ),
+                                  child: const Text('Delete',style: TextStyle(fontWeight:FontWeight.bold,color: Colors.white,fontSize: 15),),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -250,10 +281,86 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
             .update({'isActive': status});
         print('Status updated for $empCode to $status');
       } else {
-        print('Employee with empCode $empCode not found');
+        print('Employee not found');
       }
     } catch (e) {
       print('Error updating status: $e');
     }
   }
+
+  // A function to delete an employee
+// A function to delete an employee with a confirmation dialog
+  Future<void> _deleteEmployee(String empCode) async {
+    // Show a confirmation dialog before deleting
+    bool? isConfirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Employee'),
+          content: const Text('Are you sure you want to delete this employee account? All data associated with this employee will be permanently lost.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false); // User cancels deletion
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true); // User confirms deletion
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+
+    // If confirmed, proceed with deletion
+    if (isConfirmed == true) {
+      try {
+        // Query to find the employee document
+        QuerySnapshot snapshot = await FirebaseFirestore.instance
+            .collection('employees')
+            .where('empCode', isEqualTo: empCode)
+            .get();
+
+        if (snapshot.docs.isNotEmpty) {
+          String docId = snapshot.docs.first.id;
+
+          // Get the reference to the employee's sub-collection (e.g., 'camps')
+          CollectionReference campsCollection = FirebaseFirestore.instance
+              .collection('employees')
+              .doc(docId)
+              .collection('camps');
+
+          // Get all documents in the 'camps' sub-collection
+          QuerySnapshot campsSnapshot = await campsCollection.get();
+
+          // Delete each document in the 'camps' sub-collection
+          for (var doc in campsSnapshot.docs) {
+            await doc.reference.delete();
+          }
+
+          // Now delete the employee document itself
+          await FirebaseFirestore.instance
+              .collection('employees')
+              .doc(docId)
+              .delete();
+          print('Employee and all associated camps deleted: $empCode');
+
+          // Refresh the employee list after deletion
+          _employeeUpdateBloc.add(FetchDataEvent());
+        } else {
+          print('Employee not found');
+        }
+      } catch (e) {
+        print('Error deleting employee: $e');
+      }
+    } else {
+      print('Employee deletion canceled');
+    }
+  }
+
+
 }

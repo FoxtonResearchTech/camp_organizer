@@ -51,7 +51,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } on FirebaseAuthException catch (e) {
       emit(AuthError(_mapFirebaseErrorToMessage(e)));
     } catch (e) {
-      emit(AuthError('Please check the username and password.'));
+      emit(AuthError(
+          'Please check the username and password / Your account is inactive.'));
     }
   }
 

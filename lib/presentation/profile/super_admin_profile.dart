@@ -1,5 +1,8 @@
+import 'package:camp_organizer/admin_add_employee.dart';
 import 'package:camp_organizer/bloc/Profile/profile_state.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
+import 'package:camp_organizer/presentation/module/admin/manage_employee_account.dart';
+import 'package:camp_organizer/presentation/superAdmin/super_admin_accounts.dart';
 import 'package:camp_organizer/presentation/superAdmin/super_admin_camp_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -239,6 +242,38 @@ class _SuperAdminUserProfilePageState extends State<SuperAdminUserProfilePage>
                                       icon: Icons.copy,
                                       title: 'Commutative Reports',
                                       subtitle: 'Search',
+                                      slideAnimation: _slideAnimation,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                 SuperAdminManageAccount())
+                                      );
+                                    },
+                                    child: ProfileInfoTile(
+                                      icon: Icons.how_to_reg,
+                                      title: 'Manage Employee',
+                                      subtitle:'Manage account',
+                                      slideAnimation: _slideAnimation,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AdminAddEmployee())
+                                      );
+                                    },
+                                    child: ProfileInfoTile(
+                                      icon: Icons.add_to_queue,
+                                      title: 'Add Employee',
+                                      subtitle:'Create employee',
                                       slideAnimation: _slideAnimation,
                                     ),
                                   ),

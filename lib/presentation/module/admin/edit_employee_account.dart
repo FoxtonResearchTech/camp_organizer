@@ -296,5 +296,4 @@ class _EditEmployeeAccountState extends State<EditEmployeeAccount> {
     );
   }
 }
-
- */
+*/

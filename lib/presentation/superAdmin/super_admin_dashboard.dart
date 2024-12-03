@@ -145,71 +145,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
             ),
           ),
         ),
-        drawer: Drawer(
-          child: Container(
-            padding: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],// Same gradient as AppBar
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                DrawerHeader(
-                    padding: EdgeInsets.zero,
-                    child: Container(
-                      width: double.maxFinite,
-                      height: double.maxFinite,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/logo3.png'),
-                        ),
-                        gradient: LinearGradient(
-                          colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                      ),
-                    )),
-                ListTile(
-                  leading: const Icon(Icons.create, color: Colors.white),
-                  title: const Text('Create Employee',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'LeagueSpartan',
-                      )),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AdminAddEmployee()),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading:
-                      const Icon(Icons.manage_accounts, color: Colors.white),
-                  title: const Text('Manage Employee',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'LeagueSpartan',
-                      )),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              SuperAdminManageEmployeeAccount()),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
+
         body: LayoutBuilder(
           builder: (context, constraints) {
             final pieChartRadius = constraints.maxWidth < 600 ? 120.0 : 180.0;
