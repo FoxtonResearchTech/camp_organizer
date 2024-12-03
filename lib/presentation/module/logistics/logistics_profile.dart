@@ -100,7 +100,7 @@ class _LogisticsProfile extends State<LogisticsProfile>
               child: BlocBuilder<LogisticsProfileBloc, LogisticsProfileState>(
                 builder: (context, state) {
                   if (state is LogisticsProfileLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator(   color: Color(0xFF0097b2),));
                   } else if (state is LogisticsProfileLoaded) {
                     final employee = state.employee;
                     return Column(

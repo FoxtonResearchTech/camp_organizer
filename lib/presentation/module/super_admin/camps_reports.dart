@@ -23,6 +23,8 @@ class SuperAdminCampsReportsPage extends StatefulWidget {
 class _SuperAdminCampsReportsPage extends State<SuperAdminCampsReportsPage> {
   List<String> employeeNames = [];
   String? selectedEmployee;
+  String?
+      selectedEmployeeEmail; // Add this to store the selected employee's email
   String? reportType;
   List<Map<String, dynamic>> camps = [];
   bool isLoading = true;
@@ -50,55 +52,43 @@ class _SuperAdminCampsReportsPage extends State<SuperAdminCampsReportsPage> {
     }
   }
 
-  Future<void> fetchCamps() async {
+  Future<void> fetchEmployeeEmail() async {
     try {
-      List<String>? nameParts = selectedEmployee?.split(' ');
-      String? firstName = nameParts?[0];
-      String? lastName = nameParts!.length > 1 ? nameParts[1] : null;
+      if (selectedEmployee != null) {
+        List<String>? nameParts = selectedEmployee?.split(' ');
+        String? firstName = nameParts?[0];
+        String? lastName = nameParts!.length > 1 ? nameParts[1] : null;
 
-      QuerySnapshot employeeSnapshot;
+        QuerySnapshot employeeSnapshot;
 
-      if (lastName != null) {
-        // Query for both firstName and lastName
-        employeeSnapshot = await FirebaseFirestore.instance
-            .collection('employees')
-            .where('firstName', isEqualTo: firstName)
-            .where('lastName', isEqualTo: lastName)
-            .get();
-      } else {
-        // Query only for firstName
-        employeeSnapshot = await FirebaseFirestore.instance
-            .collection('employees')
-            .where('firstName', isEqualTo: firstName)
-            .get();
-      }
+        if (lastName != null) {
+          // Query for both firstName and lastName
+          employeeSnapshot = await FirebaseFirestore.instance
+              .collection('employees')
+              .where('firstName', isEqualTo: firstName)
+              .where('lastName', isEqualTo: lastName)
+              .get();
+        } else {
+          // Query only for firstName
+          employeeSnapshot = await FirebaseFirestore.instance
+              .collection('employees')
+              .where('firstName', isEqualTo: firstName)
+              .get();
+        }
 
-      if (employeeSnapshot.docs.isNotEmpty) {
-        String employeeId = employeeSnapshot.docs.first.id;
-
-        QuerySnapshot campsSnapshot = await FirebaseFirestore.instance
-            .collection('employees')
-            .doc(employeeId)
-            .collection('camps')
-            .get();
-
-        setState(() {
-          campDocIds = campsSnapshot.docs.map((doc) => doc.id).toList();
-          camps = campsSnapshot.docs
-              .map((doc) => doc.data() as Map<String, dynamic>)
-              .toList();
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          isLoading = false;
-        });
+        if (employeeSnapshot.docs.isNotEmpty) {
+          // Fetch and store the email of the selected employee
+          setState(() {
+            selectedEmployeeEmail = employeeSnapshot.docs.first['email'];
+          });
+        } else {
+          setState(() {
+            selectedEmployeeEmail = null;
+          });
+        }
       }
     } catch (e) {
-      print('Error fetching camps: $e');
-      setState(() {
-        isLoading = false;
-      });
+      print('Error fetching employee email: $e');
     }
   }
 
@@ -156,26 +146,61 @@ class _SuperAdminCampsReportsPage extends State<SuperAdminCampsReportsPage> {
                   fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            DropdownButton<String>(
-              value: selectedEmployee,
-              isExpanded: true,
-              hint: const Text(
-                'Choose an employee',
-                style: TextStyle(
-                  fontFamily: 'LeagueSpartan',
-                ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    spreadRadius: 2,
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+                border: Border.all(color: Colors.blueAccent, width: 1),
               ),
-              items: employeeNames.map((name) {
-                return DropdownMenuItem(
-                  value: name,
-                  child: Text(name),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedEmployee = value;
-                });
-              },
+              child: DropdownButton<String>(
+                value: selectedEmployee,
+                isExpanded: true,
+                underline: Container(), // Removes default underline
+                dropdownColor: Colors.white,
+                hint: const Text(
+                  'Choose an employee',
+                  style: TextStyle(
+                    fontFamily: 'LeagueSpartan',
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
+                ),
+                items: employeeNames.map((name) {
+                  return DropdownMenuItem(
+                    value: name,
+                    child: Text(
+                      name,
+                      style: const TextStyle(
+                          fontFamily: 'LeagueSpartan',
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  );
+                }).toList(),
+                icon: const Icon(
+                  Icons.arrow_drop_down,
+                  color: Colors.blueAccent,
+                  size: 24,
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    selectedEmployee = value;
+                    selectedEmployeeEmail =
+                        null; // Reset email when selection changes
+                  });
+                  fetchEmployeeEmail(); // Fetch email for the selected employee
+                },
+              ),
             ),
 
             // Report Type Selection
@@ -244,11 +269,12 @@ class _SuperAdminCampsReportsPage extends State<SuperAdminCampsReportsPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                SuperAdminSelectedEmployeeCampSearchScreen(
-                                  employeeName: selectedEmployee!,
-                                  camps: camps,
-                                )),
+                          builder: (context) =>
+                              SuperAdminSelectedEmployeeCampSearchScreen(
+                            employeeName: selectedEmployee!,
+                            camps: camps,
+                          ),
+                        ),
                       );
                     } else if (reportType == 'Commutative') {
                       Navigator.push(
@@ -260,6 +286,7 @@ class _SuperAdminCampsReportsPage extends State<SuperAdminCampsReportsPage> {
                             position: widget.position,
                             empCode: widget.empCode,
                             employeeName: selectedEmployee!,
+                            employeeEmail: selectedEmployeeEmail!,
                           ),
                         ),
                       );

@@ -21,6 +21,7 @@ class SuperAdminSelectedEmployeeCommutativeReport extends StatefulWidget {
   final String position;
   final String empCode;
   final String employeeName;
+  final String employeeEmail;
 
   const SuperAdminSelectedEmployeeCommutativeReport({
     Key? key,
@@ -28,6 +29,7 @@ class SuperAdminSelectedEmployeeCommutativeReport extends StatefulWidget {
     required this.position,
     required this.empCode,
     required this.employeeName,
+    required this.employeeEmail,
   }) : super(key: key);
   @override
   State<SuperAdminSelectedEmployeeCommutativeReport> createState() =>
@@ -62,18 +64,30 @@ class _SuperAdminSelectedEmployeeCommutativeReport
   }
 
   void _filterEmployees(List<Map<String, dynamic>> employees) {
+    print("Filtering employees based on dates, firstName, and lastName");
     setState(() {
-      if (_startDate == null || _endDate == null) {
-        _filteredEmployees = employees;
-      } else {
-        _filteredEmployees = employees.where((employee) {
-          DateTime campDate =
-              DateFormat('dd-MM-yyyy').parse(employee['campDate']);
-          return campDate
-                  .isAfter(_startDate!.subtract(const Duration(days: 1))) &&
-              campDate.isBefore(_endDate!.add(const Duration(days: 1)));
-        }).toList();
-      }
+      _filteredEmployees = employees.where((employee) {
+        DateTime campDate =
+            DateFormat('dd-MM-yyyy').parse(employee['campDate']);
+
+        // Construct full name from firstName and lastName
+        final fullName =
+            "${employee['firstName']} ${employee['lastName']}".trim();
+
+        print(fullName);
+        print(widget.employeeName);
+        // Check date range
+        final matchesDate = (_startDate == null ||
+                campDate
+                    .isAfter(_startDate!.subtract(const Duration(days: 1)))) &&
+            (_endDate == null ||
+                campDate.isBefore(_endDate!.add(const Duration(days: 1))));
+
+        // Check employee name match
+        final matchesEmployee = widget.employeeEmail == employee['EmployeeId'];
+
+        return matchesDate && matchesEmployee;
+      }).toList();
     });
   }
 
@@ -97,6 +111,7 @@ class _SuperAdminSelectedEmployeeCommutativeReport
         }
       });
 
+      // Re-apply the filtering when date range is selected.
       if (_AdminApprovalBloc.state is AdminApprovalLoaded) {
         _filterEmployees(
             (_AdminApprovalBloc.state as AdminApprovalLoaded).allCamps);
@@ -314,14 +329,13 @@ class _SuperAdminSelectedEmployeeCommutativeReport
                   } else if (state is AdminApprovalLoaded) {
                     // Use a post-frame callback to update filtered data after the build.
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      setState(() {
-                        if (_startDate != null || _endDate != null) {
-                          _filterEmployees(state.allCamps);
-                        } else {
-                          _filteredEmployees = state.allCamps;
-                        }
-                      });
+                      if (_filteredEmployees.isEmpty ||
+                          _startDate != null ||
+                          _endDate != null) {
+                        _filterEmployees(state.allCamps);
+                      }
                     });
+
                     return RefreshIndicator(
                       onRefresh: () async {
                         context.read<AdminApprovalBloc>().add(

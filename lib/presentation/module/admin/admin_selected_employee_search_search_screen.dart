@@ -12,9 +12,11 @@ import 'package:lottie/lottie.dart';
 class AdminSelectedEmployeeCampSearchScreen extends StatefulWidget {
   final List<Map<String, dynamic>> camps;
   final String employeeName;
+
   const AdminSelectedEmployeeCampSearchScreen(
       {Key? key, required this.camps, required this.employeeName})
       : super(key: key);
+
   @override
   State<AdminSelectedEmployeeCampSearchScreen> createState() =>
       _AdminSelectedEmployeeCampSearchScreen();
@@ -43,26 +45,37 @@ class _AdminSelectedEmployeeCampSearchScreen
     _AdminApprovalBloc.close();
     super.dispose();
   }
-
   void _filterEmployees(List<Map<String, dynamic>> employees) {
     setState(() {
       if (_searchQuery.isEmpty) {
         _filteredEmployees = employees;
       } else {
-        _filteredEmployees = employees
-            .where((employee) =>
-                employee['campName']
-                    .toString()
-                    .toLowerCase()
-                    .contains(_searchQuery.toLowerCase()) ||
+        // Check if _searchQuery is a valid date format
+        final isDateQuery = RegExp(r'^\d{2}-\d{2}-\d{4}$').hasMatch(_searchQuery);
+
+        _filteredEmployees = employees.where((employee) {
+          if (isDateQuery) {
+            // If the query is a date, match only the campDate field
+            return employee['campDate']
+                .toString()
+                .toLowerCase()
+                .contains(_searchQuery.toLowerCase());
+          } else {
+            // Otherwise, match other fields
+            return employee['campName']
+                .toString()
+                .toLowerCase()
+                .contains(_searchQuery.toLowerCase()) ||
                 employee['campDate']
                     .toString()
                     .toLowerCase()
-                    .contains(_searchQuery.toLowerCase()))
-            .toList();
+                    .contains(_searchQuery.toLowerCase());
+          }
+        }).toList();
       }
     });
   }
+
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -170,11 +183,13 @@ class _AdminSelectedEmployeeCampSearchScreen
           builder: (context, state) {
             if (state is AdminApprovalLoading) {
               return const Center(
-                  child: CircularProgressIndicator(
-                color: Color(0xFF0097b2),
-              ));
+                child: CircularProgressIndicator(
+                  color: Color(0xFF0097b2),
+                ),
+              );
             } else if (state is AdminApprovalLoaded) {
-              if (_searchQuery.isEmpty) {
+              // Only update _filteredEmployees if no search query is active
+              if (_searchQuery.isEmpty && _filteredEmployees.isEmpty) {
                 _filteredEmployees = state.allCamps;
               }
               return RefreshIndicator(
@@ -225,7 +240,6 @@ class _AdminSelectedEmployeeCampSearchScreen
                                   builder: (context) =>
                                       CampSearchEventDetailsPage(
                                     employee: _filteredEmployees[index],
-                                    // employeedocId: state.employeeDocId[1],
                                     campId: state.campDocIds[index],
                                   ),
                                 ),
@@ -344,12 +358,13 @@ class _AdminSelectedEmployeeCampSearchScreen
               );
             }
             return const Center(
-                child: Text(
-              'No data available.',
-              style: TextStyle(
-                fontFamily: 'LeagueSpartan',
+              child: Text(
+                'No data available.',
+                style: TextStyle(
+                  fontFamily: 'LeagueSpartan',
+                ),
               ),
-            ));
+            );
           },
         ),
       ),

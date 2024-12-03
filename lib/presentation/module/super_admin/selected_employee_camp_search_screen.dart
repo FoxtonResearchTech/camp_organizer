@@ -49,17 +49,29 @@ class _SuperAdminSelectedEmployeeCampSearchScreen
       if (_searchQuery.isEmpty) {
         _filteredEmployees = employees;
       } else {
-        _filteredEmployees = employees
-            .where((employee) =>
-                employee['campName']
+        // Check if _searchQuery is a valid date format
+        final isDateQuery =
+            RegExp(r'^\d{2}-\d{2}-\d{4}$').hasMatch(_searchQuery);
+
+        _filteredEmployees = employees.where((employee) {
+          if (isDateQuery) {
+            // If the query is a date, match only the campDate field
+            return employee['campDate']
+                .toString()
+                .toLowerCase()
+                .contains(_searchQuery.toLowerCase());
+          } else {
+            // Otherwise, match other fields
+            return employee['campName']
                     .toString()
                     .toLowerCase()
                     .contains(_searchQuery.toLowerCase()) ||
                 employee['campDate']
                     .toString()
                     .toLowerCase()
-                    .contains(_searchQuery.toLowerCase()))
-            .toList();
+                    .contains(_searchQuery.toLowerCase());
+          }
+        }).toList();
       }
     });
   }
@@ -81,7 +93,6 @@ class _SuperAdminSelectedEmployeeCampSearchScreen
       setState(() {
         _searchQuery = formattedDate;
       });
-
       // Filter employees based on the formatted date
       if (_AdminApprovalBloc.state is AdminApprovalLoaded) {
         _filterEmployees(
@@ -174,7 +185,7 @@ class _SuperAdminSelectedEmployeeCampSearchScreen
                 color: Color(0xFF0097b2),
               ));
             } else if (state is AdminApprovalLoaded) {
-              if (_searchQuery.isEmpty) {
+              if (_searchQuery.isEmpty && _filteredEmployees.isEmpty) {
                 _filteredEmployees = state.allCamps;
               }
               return RefreshIndicator(
