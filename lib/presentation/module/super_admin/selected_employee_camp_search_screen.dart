@@ -270,7 +270,8 @@ class _SuperAdminSelectedEmployeeCampSearchScreen
                                                 const SizedBox(width: 8),
                                                 Text(
                                                   _filteredEmployees[index]
-                                                      ['campDate'],
+                                                          ['campDate'] ??
+                                                      "N/A",
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.black54,
@@ -291,7 +292,8 @@ class _SuperAdminSelectedEmployeeCampSearchScreen
                                                 const SizedBox(width: 8),
                                                 Text(
                                                   _filteredEmployees[index]
-                                                      ['campTime'],
+                                                          ['campTime'] ??
+                                                      "N/A",
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     fontFamily: 'LeagueSpartan',
@@ -307,20 +309,26 @@ class _SuperAdminSelectedEmployeeCampSearchScreen
                                         const SizedBox(height: 5),
                                         ..._buildInfoText(
                                           screenWidth,
-                                          _filteredEmployees[index]['campName'],
-                                        ),
-                                        ..._buildInfoText(
-                                          screenWidth,
-                                          _filteredEmployees[index]['address'],
-                                        ),
-                                        ..._buildInfoText(
-                                          screenWidth,
-                                          _filteredEmployees[index]['name'],
+                                          _filteredEmployees[index]
+                                                  ['campName'] ??
+                                              "N/A",
                                         ),
                                         ..._buildInfoText(
                                           screenWidth,
                                           _filteredEmployees[index]
-                                              ['phoneNumber1'],
+                                                  ['address'] ??
+                                              "N/A",
+                                        ),
+                                        ..._buildInfoText(
+                                          screenWidth,
+                                          _filteredEmployees[index]['name'] ??
+                                              "N/A",
+                                        ),
+                                        ..._buildInfoText(
+                                          screenWidth,
+                                          _filteredEmployees[index]
+                                                  ['phoneNumber1'] ??
+                                              "N/A",
                                         ),
                                         Container(
                                           padding: EdgeInsets.only(

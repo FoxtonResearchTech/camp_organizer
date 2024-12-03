@@ -35,12 +35,14 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
   late AdminApprovalBloc _StatusBloc;
   final List<double> valuess = [];
 
+
   List<double> get values {
     return [
       initiatedCount.toDouble(),
       approvedCount.toDouble(),
       waitingQueueCount.toDouble(),
       rejectedCount.toDouble(),
+      completedCount.toDouble()
     ];
   }
 
@@ -49,7 +51,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
     Colors.blueAccent,
     Colors.purpleAccent,
     Colors.orangeAccent,
-
+    Colors.green,
     // Colors.redAccent,
   ];
   final List<String> titles = [
@@ -57,7 +59,8 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
     'Total Camp Initiated',
     'Total Camp Confirmed',
     'Waiting Queue',
-    'Total Camp Rejected'
+    'Total Camp Rejected',
+    'Completed Camp'
   ];
 
   @override
@@ -90,6 +93,10 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
               .where((employee) => employee["campStatus"] == "Waiting")
               .length;
           initiatedCount = employees.length;
+          completedCount = employees
+              .where((employee) => employee["campStatus"] == "Completed")
+              .length;
+          initiatedCount = employees.length;
         });
       }
     });
@@ -106,6 +113,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
   int rejectedCount = 0;
   int waitingQueueCount = 0;
   int initiatedCount = 0;
+  int completedCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -130,82 +138,14 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  Color(0xFF0097b2),
-                  Color(0xFF0097b2).withOpacity(1),
-                  Color(0xFF0097b2).withOpacity(0.8)
-                ],
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
             ),
           ),
         ),
-        // drawer: Drawer(
-        //   child: Container(
-        //     padding: EdgeInsets.zero,
-        //     decoration: BoxDecoration(
-        //       gradient: LinearGradient(
-        //         colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],// Same gradient as AppBar
-        //         begin: Alignment.topLeft,
-        //         end: Alignment.bottomRight,
-        //       ),
-        //     ),
-        //     child: ListView(
-        //       padding: EdgeInsets.zero,
-        //       children: [
-        //         DrawerHeader(
-        //             padding: EdgeInsets.zero,
-        //             child: Container(
-        //               width: double.maxFinite,
-        //               height: double.maxFinite,
-        //               decoration: BoxDecoration(
-        //                 image: DecorationImage(
-        //                   image: AssetImage('assets/logo3.png'),
-        //                 ),
-        //                 gradient: LinearGradient(
-        //                   colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
-        //                   begin: Alignment.topLeft,
-        //                   end: Alignment.bottomRight,
-        //                 ),
-        //               ),
-        //             )),
-        //         ListTile(
-        //           leading: const Icon(Icons.create, color: Colors.white),
-        //           title: const Text('Create Employee',
-        //               style: TextStyle(
-        //                 color: Colors.white,
-        //                 fontFamily: 'LeagueSpartan',
-        //               )),
-        //           onTap: () {
-        //             Navigator.push(
-        //               context,
-        //               MaterialPageRoute(
-        //                   builder: (context) => AdminAddEmployee()),
-        //             );
-        //           },
-        //         ),
-        //         ListTile(
-        //           leading:
-        //               const Icon(Icons.manage_accounts, color: Colors.white),
-        //           title: const Text('Manage Employee',
-        //               style: TextStyle(
-        //                 color: Colors.white,
-        //                 fontFamily: 'LeagueSpartan',
-        //               )),
-        //           onTap: () {
-        //             Navigator.push(
-        //               context,
-        //               MaterialPageRoute(
-        //                   builder: (context) =>
-        //                       SuperAdminManageEmployeeAccount()),
-        //             );
-        //           },
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
+
         body: LayoutBuilder(
           builder: (context, constraints) {
             final pieChartRadius = constraints.maxWidth < 600 ? 120.0 : 180.0;
@@ -288,6 +228,10 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                                   .where((employee) =>
                                       employee["campStatus"] == "Waiting")
                                   .length;
+                              completedCount = employees
+                                  .where((employee) =>
+                              employee["campStatus"] == "Completed")
+                                  .length;
 
                               return Column(
                                 key: ValueKey('loaded'),
@@ -368,6 +312,30 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                                       ),
                                     ],
                                   ),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      // Waiting Queue Card
+
+                                      // Initiated Card
+                                      Expanded(
+                                        child: _buildStatusCard(
+                                          count: completedCount,
+                                          label: 'Completed Camp',
+                                          icon: Icons.verified,
+                                          gradient: const LinearGradient(
+                                            colors: [
+                                              Color(0xFF66BB6A), // Light Green
+                                              Color(0xFF388E3C), // Dark Green
+                                            ],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               );
                             } else if (state is StatusError) {
@@ -380,7 +348,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                             return Center(
                               key: ValueKey('empty'),
                               child: CircularProgressIndicator(
-                                color: Color(0xFF0097b2),
+                            color:     Color(0xFF0097b2),
                               ),
                             );
                           }(),

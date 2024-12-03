@@ -172,13 +172,13 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
                       children: [
                         _buildIconRow(
                           icon: Icons.date_range,
-                          text: widget.employee['campDate'],
+                          text: widget.employee['campDate'] ?? "N/A",
                           color: Colors.orange,
                           screenWidth: screenWidth,
                         ),
                         _buildIconRow(
                           icon: Icons.watch_later,
-                          text: widget.employee['campTime'],
+                          text: widget.employee['campTime'] ?? "N/A",
                           color: Colors.orange,
                           screenWidth: screenWidth,
                         ),
@@ -1242,10 +1242,34 @@ class _CampSearchEventDetailsPage extends State<CampSearchEventDetailsPage>
           widget.employee['noOfPatientExpected'] ?? "N/A", screenWidth),
       _buildDetailRow('Last Camp Done',
           widget.employee['lastCampDone'] ?? "N/A", screenWidth),
+      _buildDetailRow('Staff Salary for this Camp',
+          widget.employee['staffSalary'] ?? "N/A", screenWidth),
+      _buildDetailRow('Vehicle Expenses',
+          widget.employee['vehicleExpenses'] ?? "N/A", screenWidth),
+      _buildDetailRow('Patients Expected',
+          widget.employee['noOfPatientExpected'] ?? "N/A", screenWidth),
+      //_buildDetailRow('Patients Attended for this Camp',
+      //widget.employee['patientsAttended'] ?? "N/A", screenWidth),
+      _buildDetailRow(
+          'Patients Selected for Surgery',
+          widget.employee['patientsSelectedForSurgery'].toString() ?? "N/A",
+          screenWidth),
+      _buildDetailRow('Caterat Patients from this Camp',
+          widget.employee['cataractPatients'].toString() ?? "N/A", screenWidth),
+      _buildDetailRow('Diabetic Patients from this Camp',
+          widget.employee['diabeticPatients'].toString() ?? "N/A", screenWidth),
+      _buildDetailRow('Other Expenses',
+          widget.employee['otherExpenses'].toString() ?? "N/A", screenWidth),
+      _buildDetailRow('Doctor Assigned for this Camp',
+          widget.employee['doctor'] ?? "N/A", screenWidth),
+      _buildDetailRow('Inward Duty Incharge1',
+          widget.employee['Inward_dutyInCharge1'] ?? "N/A", screenWidth),
+      _buildDetailRow('Outward Duty Incharge1',
+          widget.employee['Outward_inChargeName'] ?? "N/A", screenWidth),
     ];
   }
 
-  Widget _buildDetailRow(String title, String data, double screenWidth) {
+  Widget _buildDetailRow(String title, dynamic data, double screenWidth) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

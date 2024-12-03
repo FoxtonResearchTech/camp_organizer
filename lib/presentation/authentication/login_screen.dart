@@ -185,7 +185,7 @@ class _CampOrganizerLoginPageState extends State<CampOrganizerLoginPage>
                         decoration: InputDecoration(
                           prefixIcon:
                               Icon(Icons.person, color: Color(0xff0097b2)),
-                          labelText: 'Username',
+                          labelText: 'Employee Code',
                           labelStyle: TextStyle(
                             color: Color(0xff0097b2),
                             fontFamily: 'LeagueSpartan',

@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
+
 part 'auth_event.dart';
+
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -36,10 +38,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
     try {
       // Concatenate email with @gmail.com if not already present
-      String email = event.email.contains('@') ? event.email : '${event.email}@gmail.com';
+      String email =
+          event.email.contains('@') ? event.email : '${event.email}@gmail.com';
 
-      final user = await authRepository.signInWithEmailPassword(
-          email, event.password);
+      final user =
+          await authRepository.signInWithEmailPassword(email, event.password);
       if (user != null) {
         await _fetchUserRole(user.uid); // Fetch role after successful sign-in
       } else {
@@ -48,7 +51,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } on FirebaseAuthException catch (e) {
       emit(AuthError(_mapFirebaseErrorToMessage(e)));
     } catch (e) {
-      emit(AuthError('An unexpected error occurred. Please try again.'));
+      emit(AuthError(
+          'Please check the username and password / Your account is inactive.'));
     }
   }
 

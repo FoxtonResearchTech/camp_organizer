@@ -34,6 +34,7 @@ class _AnimatedRotatingPieChartWithGridState
       approvedCount.toDouble(),
       waitingQueueCount.toDouble(),
       rejectedCount.toDouble(),
+      completedCount.toDouble()
     ];
   }
 
@@ -42,7 +43,7 @@ class _AnimatedRotatingPieChartWithGridState
     Colors.blueAccent,
     Colors.purpleAccent,
     Colors.orangeAccent,
-
+    Colors.green,
     // Colors.redAccent,
   ];
   final List<String> titles = [
@@ -50,9 +51,9 @@ class _AnimatedRotatingPieChartWithGridState
     'Total Camp Initiated',
     'Total Camp Confirmed',
     'Waiting Queue',
-    'Total Camp Rejected'
+    'Total Camp Rejected',
+    'Completed Camp'
   ];
-
   @override
   void initState() {
     _StatusBloc = StatusBloc()..add(FetchDataEvent());
@@ -83,6 +84,10 @@ class _AnimatedRotatingPieChartWithGridState
               .where((employee) => employee["campStatus"] == "Waiting")
               .length;
           initiatedCount = employees.length;
+          completedCount = employees
+              .where((employee) => employee["campStatus"] == "Completed")
+              .length;
+          initiatedCount = employees.length;
         });
       }
     });
@@ -99,6 +104,7 @@ class _AnimatedRotatingPieChartWithGridState
   int rejectedCount = 0;
   int waitingQueueCount = 0;
   int initiatedCount = 0;
+  int completedCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +219,10 @@ class _AnimatedRotatingPieChartWithGridState
                                   .where((employee) =>
                                       employee["campStatus"] == "Waiting")
                                   .length;
-
+                              completedCount = employees
+                                  .where((employee) =>
+                              employee["campStatus"] == "Completed")
+                                  .length;
                               return Column(
                                 key: ValueKey('loaded'),
                                 children: [
@@ -285,6 +294,30 @@ class _AnimatedRotatingPieChartWithGridState
                                             colors: [
                                               Colors.tealAccent,
                                               Colors.teal
+                                            ],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      // Waiting Queue Card
+
+                                      // Initiated Card
+                                      Expanded(
+                                        child: _buildStatusCard(
+                                          count: completedCount,
+                                          label: 'Completed Camp',
+                                          icon: Icons.verified,
+                                          gradient: const LinearGradient(
+                                            colors: [
+                                              Color(0xFF66BB6A), // Light Green
+                                              Color(0xFF388E3C), // Dark Green
                                             ],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,

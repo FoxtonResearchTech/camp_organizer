@@ -42,11 +42,6 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
   void submitExpenseData(BuildContext context, String documentId) {
     if (_formKey.currentState?.validate() ?? false) {
       final Map<String, dynamic> expenseData = {
-        'date': dateController.text.trim(),
-        'time': timeController.text.trim(),
-        'campName': campNameController.text.trim(),
-        'organization': organizationController.text.trim(),
-        'place': placeController.text.trim(),
         'otherExpenses': otherExpensesController.text.trim(),
         'vehicleExpenses': vehicleExpensesController.text.trim(),
         'staffSalary': staffSalaryController.text.trim(),
@@ -60,12 +55,12 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
       context.read<AddFinanceBloc>().add(AddFinanceWithDocumentId(
           documentId: widget.documentId, data: expenseData));
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Center(child: Text('Expense data submitted successfully')),
-          backgroundColor: Colors.green,
-        ),
-      );
+      //ScaffoldMessenger.of(context).showSnackBar(
+        //const SnackBar(
+        //  content: Center(child: Text('Expense data submitted successfully')),
+        //  backgroundColor: Colors.green,
+        //),
+      //);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -167,34 +162,41 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                CustomTextFormField(
-                  labelText: 'Other Expenses',
-                  controller: otherExpensesController,
-                ),
-                const SizedBox(height: 20),
+
                 CustomTextFormField(
                   labelText: 'Vehicle Expenses',
                   controller: vehicleExpensesController,
+                  keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 20),
                 CustomTextFormField(
                   labelText: 'Staff Salary',
                   controller: staffSalaryController,
+                  keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 20),
                 CustomTextFormField(
                   labelText: 'OT X 750',
                   controller: otController,
+                  keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 20),
                 CustomTextFormField(
                   labelText: 'CAT X 2000',
                   controller: catController,
+                  keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 20),
                 CustomTextFormField(
                   labelText: 'GP Paying Case',
                   controller: gpPayingCaseController,
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 20),
+                CustomTextFormField(
+                  labelText: 'Other Expenses',
+                  controller: otherExpensesController,
+                  keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 20),
                 CustomTextFormField(
@@ -206,6 +208,7 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
                   text: 'Submit Expenses',
                   onPressed: () {
                     submitExpenseData(context, widget.documentId);
+
                   },
                 ),
               ],

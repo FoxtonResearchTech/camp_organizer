@@ -26,6 +26,7 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
         title: const Text(
           'Completed Followup',
           style: TextStyle(
@@ -40,14 +41,14 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
           ),
         ),
       ),
-      body: widget.campData['patientsFollowUps'] == null
+      body: widget.campData['followInfo'] == null
           ? Container(
               padding: EdgeInsets.only(top: screenHeight / 6),
               child: Center(
@@ -85,8 +86,8 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
                       children: [
                         _buildInfoCard(
                             'Camp Name', widget.campData['campName']),
-                        _buildInfoCard('phone', widget.campData['phone']),
-                        _buildInfoCard('Status', widget.campData['status']),
+                        _buildInfoCard('Camp Date', widget.campData['campDate']),
+                        _buildInfoCard('Camp Place', widget.campData['place']),
                       ],
                     ),
                     // Section for Patient Follow-Ups
@@ -107,7 +108,7 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
                       ],
                     ),
                     SizedBox(height: 20),
-                    CustomButton(text: 'Submit', onPressed: () {})
+                    CustomButton(text: 'Done', onPressed: () {Navigator.pop(context);})
                   ],
                 ),
               ),
@@ -143,8 +144,8 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.cyan[100]!,
-              Colors.cyan[50]!,
+              Color(0xff0097b2),
+              Color(0xff0097b2).withOpacity(0.5)!,
             ],
             begin: Alignment.bottomRight,
             end: Alignment.topLeft,
@@ -166,7 +167,7 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
             style: const TextStyle(
               fontFamily: 'LeagueSpartan',
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Colors.white,
             ),
           ),
           subtitle: Column(
@@ -176,7 +177,7 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
               Text(
                 'Phone: ${patient['phone'] ?? 'N/A'}',
                 style: const TextStyle(
-                  color: Colors.black54,
+                  color: Colors.white,fontWeight: FontWeight.bold,
                   fontFamily: 'LeagueSpartan',
                 ),
               ),
@@ -184,7 +185,7 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
               Text(
                 'Status: ${patient['status'] ?? 'N/A'}',
                 style: const TextStyle(
-                  color: Colors.black54,
+                  color: Colors.white,fontWeight: FontWeight.bold,
                   fontFamily: 'LeagueSpartan',
                 ),
               ),
@@ -259,8 +260,8 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.cyan[100]!,
-            Colors.cyan[50]!,
+            Color(0xff0097b2),
+            Color(0xff0097b2).withOpacity(0.5)!,
           ],
           begin: Alignment.bottomRight,
           end: Alignment.topLeft,
@@ -281,13 +282,13 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
           style: const TextStyle(
             fontFamily: 'LeagueSpartan',
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: Colors.white,
           ),
         ),
         subtitle: Text(
           value?.toString() ?? 'N/A',
           style: const TextStyle(
-            color: Colors.black54,
+            color: Colors.white,fontWeight: FontWeight.bold,
             fontFamily: 'LeagueSpartan',
           ),
         ),

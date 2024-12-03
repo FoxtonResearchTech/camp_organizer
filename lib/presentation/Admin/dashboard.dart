@@ -39,6 +39,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
       approvedCount.toDouble(),
       waitingQueueCount.toDouble(),
       rejectedCount.toDouble(),
+      completedCount.toDouble()
     ];
   }
 
@@ -47,7 +48,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
     Colors.blueAccent,
     Colors.purpleAccent,
     Colors.orangeAccent,
-
+    Colors.green,
     // Colors.redAccent,
   ];
   final List<String> titles = [
@@ -55,7 +56,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
     'Total Camp Initiated',
     'Total Camp Confirmed',
     'Waiting Queue',
-    'Total Camp Rejected'
+    'Total Camp Rejected',
+    'Completed Camp'
   ];
 
   @override
@@ -87,6 +89,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
           waitingQueueCount = employees
               .where((employee) => employee["campStatus"] == "Waiting")
               .length;
+          completedCount = employees
+              .where((employee) => employee["campStatus"] == "Completed")
+              .length;
           initiatedCount = employees.length;
         });
       }
@@ -104,6 +109,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
   int rejectedCount = 0;
   int waitingQueueCount = 0;
   int initiatedCount = 0;
+  int completedCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -139,70 +145,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
             ),
           ),
         ),
-        // drawer: Drawer(
-        //   child: Container(
-        //     padding: EdgeInsets.zero,
-        //     decoration:  BoxDecoration(
-        //       gradient: LinearGradient(
-        //         colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
-        //         begin: Alignment.topLeft,
-        //         end: Alignment.bottomRight,
-        //       ),
-        //     ),
-        //     child: ListView(
-        //       padding: EdgeInsets.zero,
-        //       children: [
-        //         DrawerHeader(
-        //             padding: EdgeInsets.zero,
-        //             child: Container(
-        //               width: double.maxFinite,
-        //               height: double.maxFinite,
-        //               decoration:  BoxDecoration(
-        //                 image: DecorationImage(
-        //                   image: AssetImage('assets/logo3.png'),
-        //                 ),
-        //                 gradient: LinearGradient(
-        //                   colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
-        //                   begin: Alignment.topLeft,
-        //                   end: Alignment.bottomRight,
-        //                 ),
-        //               ),
-        //             )),
-        //         ListTile(
-        //           leading: const Icon(Icons.create, color: Colors.white),
-        //           title: const Text('Create Employee',
-        //               style: TextStyle(
-        //                 color: Colors.white,fontWeight: FontWeight.bold,
-        //                 fontFamily: 'LeagueSpartan',
-        //               )),
-        //           onTap: () {
-        //             Navigator.push(
-        //               context,
-        //               MaterialPageRoute(
-        //                   builder: (context) => AdminAddEmployee()),
-        //             );
-        //           },
-        //         ),
-        //         ListTile(
-        //           leading:
-        //               const Icon(Icons.manage_accounts, color: Colors.white),
-        //           title: const Text('Manage Employee',
-        //               style: TextStyle(
-        //                 color: Colors.white,fontWeight: FontWeight.bold,
-        //                 fontFamily: 'LeagueSpartan',
-        //               )),
-        //           onTap: () {
-        //             Navigator.push(
-        //               context,
-        //               MaterialPageRoute(
-        //                   builder: (context) => ManageEmployeeAccount()),
-        //             );
-        //           },
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
         body: LayoutBuilder(
           builder: (context, constraints) {
             final pieChartRadius = constraints.maxWidth < 600 ? 120.0 : 180.0;
@@ -284,6 +226,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                   .where((employee) =>
                                       employee["campStatus"] == "Waiting")
                                   .length;
+                              completedCount = employees
+                                  .where((employee) =>
+                                      employee["campStatus"] == "Completed")
+                                  .length;
 
                               return Column(
                                 key: const ValueKey('loaded'),
@@ -364,6 +310,30 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                       ),
                                     ],
                                   ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      // Waiting Queue Card
+
+                                      // Initiated Card
+                                      Expanded(
+                                        child: _buildStatusCard(
+                                          count: completedCount,
+                                          label: 'Completed Camp',
+                                          icon: Icons.verified,
+                                          gradient: const LinearGradient(
+                                            colors: [
+                                              Color(0xFF66BB6A), // Light Green
+                                              Color(0xFF388E3C), // Dark Green
+                                            ],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               );
                             } else if (state is StatusError) {
@@ -415,10 +385,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                     milliseconds: 150), // Adjust speed here
                               ),
                             ],
-                            totalRepeatCount:
-                                1, // Set to `1` for single loop, or `0` for infinite
-                            pause: const Duration(
-                                milliseconds: 500), // Pause between loops
+                            totalRepeatCount: 1,
+                            // Set to `1` for single loop, or `0` for infinite
+                            pause: const Duration(milliseconds: 500),
+                            // Pause between loops
                             displayFullTextOnTap: true,
                           ),
                         );

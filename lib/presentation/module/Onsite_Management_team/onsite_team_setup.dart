@@ -240,7 +240,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
                   ),
                   SizedBox(height: 30),
                   CustomTextFormField(
-                    labelText: 'Regnter',
+                    labelText: 'Register',
                     controller: regnterController,
                     //  obscureText: true,
                   ),
@@ -263,7 +263,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
                     value: selectedOpticals,
                     onChanged: (newValue) {
                       setState(() {
-                        var selectedopticals = newValue;
+                         selectedOpticals = newValue;
                       });
                     },
                     validator: (value) {
