@@ -86,8 +86,8 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
                       children: [
                         _buildInfoCard(
                             'Camp Name', widget.campData['campName']),
-                        _buildInfoCard('phone', widget.campData['phone']),
-                        _buildInfoCard('Status', widget.campData['status']),
+                        _buildInfoCard('Camp Date', widget.campData['campDate']),
+                        _buildInfoCard('Camp Place', widget.campData['place']),
                       ],
                     ),
                     // Section for Patient Follow-Ups

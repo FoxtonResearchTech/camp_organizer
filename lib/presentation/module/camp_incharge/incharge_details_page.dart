@@ -80,7 +80,6 @@ class InchargeDetailsPage extends StatelessWidget {
                     'Water Availability', inchargeData['waterAvailability']),
                 _buildInfoCard(
                     'Total Square Feet', inchargeData['totalSquareFeet']),
-                _buildInfoCard('Place', inchargeData['place']),
                 _buildInfoCard('Vehicle Number', inchargeData['vehicleNumber']),
               ],
             ),

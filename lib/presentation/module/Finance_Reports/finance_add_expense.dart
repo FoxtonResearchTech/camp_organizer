@@ -42,8 +42,6 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
   void submitExpenseData(BuildContext context, String documentId) {
     if (_formKey.currentState?.validate() ?? false) {
       final Map<String, dynamic> expenseData = {
-
-        'place': placeController.text.trim(),
         'otherExpenses': otherExpensesController.text.trim(),
         'vehicleExpenses': vehicleExpensesController.text.trim(),
         'staffSalary': staffSalaryController.text.trim(),
@@ -164,12 +162,7 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                CustomTextFormField(
-                  labelText: 'Other Expenses',
-                  controller: otherExpensesController,
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 20),
+
                 CustomTextFormField(
                   labelText: 'Vehicle Expenses',
                   controller: vehicleExpensesController,
@@ -201,9 +194,14 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
                 ),
                 const SizedBox(height: 20),
                 CustomTextFormField(
+                  labelText: 'Other Expenses',
+                  controller: otherExpensesController,
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 20),
+                CustomTextFormField(
                   labelText: 'Remarks',
                   controller: remarksController,
-                  keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 30),
                 CustomButton(

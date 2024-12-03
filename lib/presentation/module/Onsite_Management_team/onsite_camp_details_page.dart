@@ -81,7 +81,6 @@ class OnsiteCampDetailsPage extends StatelessWidget {
                 _buildInfoCard('In-Charge', campData['incharge']),
                 _buildInfoCard('Doctor', campData['doctor']),
                 _buildInfoCard('Driver', campData['driver']),
-                _buildInfoCard('Teams', campData['teams']?.join(', ') ?? 'N/A'),
                 _buildInfoCard('Organization', campData['organization']),
               ],
             ),
