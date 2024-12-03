@@ -18,6 +18,8 @@ import '../../bloc/approval/adminapproval_state.dart';
 import '../Event/admin_event_details.dart';
 import 'package:http/http.dart' as http;
 
+import 'admin_completed_dashboard.dart';
+
 class ApprovedCamps extends StatefulWidget {
   @override
   State<ApprovedCamps> createState() => _ApprovedCampsState();
@@ -572,8 +574,7 @@ class _ApprovedCampsState extends State<ApprovedCamps>
                                                         context,
                                                         MaterialPageRoute(
                                                           builder:
-                                                              (context) =>
-                                                              AdminEventDetailsPage(
+                                                              (context) => AdminCompletedDashboard(
                                                                 employeemail:
                                                                 camps[index]['EmployeeId'],
                                                                 campDate:

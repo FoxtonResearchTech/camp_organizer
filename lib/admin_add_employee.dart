@@ -113,6 +113,7 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
         'state': stateController.text,
         'pinCode': pinCodeController.text,
         'password': passwordController.text,
+        'isActive': true, // Add the isActive field and set to true
       });
 
       // Show success snackbar

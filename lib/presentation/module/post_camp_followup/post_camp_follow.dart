@@ -37,8 +37,23 @@ class _PostCampFollowState extends State<PostCampFollow> {
     context.read<PatientFollowUpsBloc>().add(AddPatientFollowUpsWithDocumentId(
         documentId: widget.documentId, data: data));
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Follow up data submitted successfully')),
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(Icons.check_circle, color: Colors.white),
+            SizedBox(width: 10),
+            Expanded(child: Text('Follow up data submitted successfully')),
+          ],
+        ),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        duration: Duration(seconds: 3),
+      ),
     );
+
   }
 
   @override
@@ -50,6 +65,7 @@ class _PostCampFollowState extends State<PostCampFollow> {
           PatientFollowUpsBloc(firestore: FirebaseFirestore.instance),
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
           title: const Text(
             'Post Camp Follow UP',
             style: TextStyle(
@@ -64,38 +80,14 @@ class _PostCampFollowState extends State<PostCampFollow> {
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue, Colors.lightBlueAccent, Colors.lightBlue],
+                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
             ),
           ),
         ),
-        body: widget.campData['patientsFollowUps'] == null
-            ? Container(
-                padding: EdgeInsets.only(top: screenHeight / 6),
-                child: Center(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                      Lottie.asset(
-                        'assets/no_records.json',
-                        width: screenWidth * 0.6,
-                        height: screenHeight * 0.4,
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        "No FollowUps found",
-                        style: TextStyle(
-                          fontFamily: 'LeagueSpartan',
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ])),
-              )
-            : BlocListener<PatientFollowUpsBloc, PatientFollowUpsState>(
+        body:  BlocListener<PatientFollowUpsBloc, PatientFollowUpsState>(
                 listener: (context, state) {
                   if (state is PatientFollowUpsSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -114,7 +106,7 @@ class _PostCampFollowState extends State<PostCampFollow> {
                     );
                   }
                 },
-                child: SingleChildScrollView(
+                child:  widget.campData['patientFollowUps'] != null ? SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -165,6 +157,33 @@ class _PostCampFollowState extends State<PostCampFollow> {
                       ],
                     ),
                   ),
+                ):SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Center(
+                    child: Container(
+                      padding: EdgeInsets.only(top: screenHeight / 4),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Lottie.asset(
+                            'assets/no_data.json',
+                            width: screenWidth * 0.35,
+                            height: screenHeight * 0.25,
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            "Camp Incharge not submitted the data",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'LeagueSpartan',
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
       ),
@@ -199,8 +218,8 @@ class _PostCampFollowState extends State<PostCampFollow> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.cyan[100]!,
-              Colors.cyan[50]!,
+              Color(0xff0097b2),
+              Color(0xff0097b2).withOpacity(0.5)!,
             ],
             begin: Alignment.bottomRight,
             end: Alignment.topLeft,
@@ -222,7 +241,7 @@ class _PostCampFollowState extends State<PostCampFollow> {
             style: const TextStyle(
               fontFamily: 'LeagueSpartan',
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Colors.white,
             ),
           ),
           subtitle: Column(
@@ -232,7 +251,7 @@ class _PostCampFollowState extends State<PostCampFollow> {
               Text(
                 'Phone: ${patient['phone'] ?? 'N/A'}',
                 style: const TextStyle(
-                  color: Colors.black54,
+                  color: Colors.white70,fontWeight: FontWeight.bold,
                   fontFamily: 'LeagueSpartan',
                 ),
               ),
@@ -240,7 +259,7 @@ class _PostCampFollowState extends State<PostCampFollow> {
               Text(
                 'Status: ${patient['status'] ?? 'N/A'}',
                 style: const TextStyle(
-                  color: Colors.black54,
+                  color: Colors.white70,fontWeight: FontWeight.bold,
                   fontFamily: 'LeagueSpartan',
                 ),
               ),
@@ -315,8 +334,8 @@ class _PostCampFollowState extends State<PostCampFollow> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.cyan[100]!,
-            Colors.cyan[50]!,
+            Color(0xff0097b2),
+            Color(0xff0097b2).withOpacity(0.5)!,
           ],
           begin: Alignment.bottomRight,
           end: Alignment.topLeft,
@@ -337,13 +356,13 @@ class _PostCampFollowState extends State<PostCampFollow> {
           style: const TextStyle(
             fontFamily: 'LeagueSpartan',
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: Colors.white,
           ),
         ),
         subtitle: Text(
           value?.toString() ?? 'N/A',
           style: const TextStyle(
-            color: Colors.black54,
+            color: Colors.white,fontWeight: FontWeight.bold,
             fontFamily: 'LeagueSpartan',
           ),
         ),
