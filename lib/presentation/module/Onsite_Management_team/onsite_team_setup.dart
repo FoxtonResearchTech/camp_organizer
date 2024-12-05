@@ -35,6 +35,8 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
   final TextEditingController regnterController = TextEditingController();
   final TextEditingController drRoomController = TextEditingController();
   final TextEditingController counsellingController = TextEditingController();
+  final TextEditingController opticalIncharge1Controller = TextEditingController();
+  final TextEditingController opticalIncharge2Controller = TextEditingController();
 
   final List<String> Opticals = [
     'Bejansingh_Opticals',
@@ -48,6 +50,8 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
       // 'time': timeController.text.trim(),
       // 'campName': campNameController.text.trim(),
       //  'organization': organizationController.text.trim(),
+      'opticalIncharge1':opticalIncharge1Controller.text.trim(),
+      'opticalIncharge2':opticalIncharge2Controller.text.trim(),
       'doctor': doctorController.text.trim(),
       'driver': driverController.text.trim(),
       'incharge': selectedEmployee,
@@ -82,8 +86,30 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
     regnterController.text = widget.campData['regnter'] ?? '';
     drRoomController.text = widget.campData['drRoom'] ?? '';
     counsellingController.text = widget.campData['counselling'] ?? '';
-    selectedOpticals = widget.campData['optical']; // If available
-    selectedEmployee = widget.campData['incharge'];
+    //selectedOpticals = widget.campData['optical']; // If available
+    //selectedEmployee = widget.campData['incharge'];
+    opticalIncharge2Controller.text = widget.campData['opticalIncharge2']?? '';
+    opticalIncharge1Controller.text = widget.campData['opticalIncharge1']?? '';
+  }
+
+  @override
+  void dispose() {
+    // Dispose all controllers to free memory
+    dateController.dispose();
+    timeController.dispose();
+    campNameController.dispose();
+    organizationController.dispose();
+    doctorController.dispose();
+    driverController.dispose();
+    inchargeController.dispose();
+    vnRegController.dispose();
+    arController.dispose();
+    regnterController.dispose();
+    drRoomController.dispose();
+    counsellingController.dispose();
+    opticalIncharge1Controller.dispose();
+    opticalIncharge2Controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -229,7 +255,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
                   SizedBox(height: 30),
                   SizedBox(width: 20),
                   CustomTextFormField(
-                    labelText: 'VN Reg',
+                    labelText: 'VN Reference',
                     controller: vnRegController,
                   ),
                   SizedBox(height: 20),
@@ -257,7 +283,19 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
                     //  obscureText: true,
                   ),
                   SizedBox(height: 30),
-                  CustomDropdownFormField(
+
+                  CustomTextFormField(
+                    labelText: 'Optical Incharge-1',
+                    controller: opticalIncharge1Controller,
+                    //  obscureText: true,
+                  ),
+                  SizedBox(height: 30),
+                  CustomTextFormField(
+                    labelText: 'Optical Incharge-2',
+                    controller: opticalIncharge2Controller,
+                    //  obscureText: true,
+                  ),
+                  /*CustomDropdownFormField(
                     labelText: "Select Opticals",
                     items: Opticals,
                     value: selectedOpticals,
@@ -272,7 +310,7 @@ class _OnsiteTeamSetupState extends State<OnsiteTeamSetup> {
                       }
                       return null;
                     },
-                  ),
+                  ),*/
                   SizedBox(height: 30),
                   CustomButton(
                     text: 'Setup',
