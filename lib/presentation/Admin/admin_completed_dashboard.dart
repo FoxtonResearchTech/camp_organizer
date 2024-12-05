@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -18,20 +19,23 @@ class AdminCompletedDashboard extends StatefulWidget {
   final String? campDate;
   final String? employeemail;
 
-  const AdminCompletedDashboard( {Key? key,
-    required this.employee,
-    this.campID,
-    this.employeeID,
-    this.campDate,
-    this.campName,
-    this.employeemail})
+  const AdminCompletedDashboard(
+      {Key? key,
+      required this.employee,
+      this.campID,
+      this.employeeID,
+      this.campDate,
+      this.campName,
+      this.employeemail})
       : super(key: key);
 
   @override
-  State<AdminCompletedDashboard> createState() => _AdminCompletedDashboardState();
+  State<AdminCompletedDashboard> createState() =>
+      _AdminCompletedDashboardState();
 }
 
-class _AdminCompletedDashboardState extends State<AdminCompletedDashboard> with SingleTickerProviderStateMixin {
+class _AdminCompletedDashboardState extends State<AdminCompletedDashboard>
+    with SingleTickerProviderStateMixin {
   late final TextEditingController _reason;
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
@@ -79,7 +83,8 @@ class _AdminCompletedDashboardState extends State<AdminCompletedDashboard> with 
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       appBar: AppBar(
         title: const Text(
           'Camp Completed Details',
@@ -103,9 +108,13 @@ class _AdminCompletedDashboardState extends State<AdminCompletedDashboard> with 
           },
         ),
         flexibleSpace: Container(
-          decoration:  BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+              colors: [
+                Color(0xFF0097b2),
+                Color(0xFF0097b2).withOpacity(1),
+                Color(0xFF0097b2).withOpacity(0.8)
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -200,12 +209,10 @@ class _AdminCompletedDashboardState extends State<AdminCompletedDashboard> with 
           width: screenWidth / 2.5,
           height: screenHeight / 17.5,
           child: ElevatedButton.icon(
-
-            onPressed: ()  {
+            onPressed: () {
               Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(
-
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               backgroundColor: Color(0xFF0097b2),
               shape: RoundedRectangleBorder(
@@ -223,7 +230,7 @@ class _AdminCompletedDashboardState extends State<AdminCompletedDashboard> with 
           ),
         ),
       ),
-    );
+    ));
   }
 
   List<Widget> _buildDetailRows(double screenWidth) {
@@ -293,7 +300,7 @@ class _AdminCompletedDashboardState extends State<AdminCompletedDashboard> with 
               color: Colors.black87,
               fontFamily: 'LeagueSpartan',
               fontSize:
-              screenWidth * 0.045, // Adjust the font size responsively
+                  screenWidth * 0.045, // Adjust the font size responsively
             ),
           ),
           SizedBox(width: screenWidth / 10),
@@ -304,7 +311,7 @@ class _AdminCompletedDashboardState extends State<AdminCompletedDashboard> with 
                 color: Colors.black54, fontWeight: FontWeight.w500,
                 fontFamily: 'LeagueSpartan',
                 fontSize:
-                screenWidth * 0.045, // Adjust the font size responsively
+                    screenWidth * 0.045, // Adjust the font size responsively
               ),
               overflow: TextOverflow.ellipsis, // Handle long text overflow
               maxLines: 1, // Optional: limit the number of lines
@@ -316,11 +323,11 @@ class _AdminCompletedDashboardState extends State<AdminCompletedDashboard> with 
   }
 
   Future<void> sendAcceptEmail(
-      String employeeId,
-      List<dynamic> destId,
-      String campName,
-      String campDate,
-      ) async {
+    String employeeId,
+    List<dynamic> destId,
+    String campName,
+    String campDate,
+  ) async {
     const String serviceId = 'service_m66gp4c'; // Your EmailJS Service ID
     const String templateId = 'template_gmya15j'; // Your EmailJS Template ID
     const String user_id = 'zA3pjW03a2sLLo51c'; // Public Key (user_id)
@@ -334,7 +341,7 @@ class _AdminCompletedDashboardState extends State<AdminCompletedDashboard> with 
         headers: {
           'Content-Type': 'application/json',
           'Authorization':
-          'Bearer $privateKey', // Send the private key as Bearer token
+              'Bearer $privateKey', // Send the private key as Bearer token
         },
         body: jsonEncode({
           'service_id': serviceId,

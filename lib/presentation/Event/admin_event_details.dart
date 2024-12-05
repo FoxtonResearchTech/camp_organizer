@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -84,7 +85,8 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       appBar: AppBar(
         title: const Text(
           'Camp Details',
@@ -108,9 +110,13 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
           },
         ),
         flexibleSpace: Container(
-          decoration:  BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+              colors: [
+                Color(0xFF0097b2),
+                Color(0xFF0097b2).withOpacity(1),
+                Color(0xFF0097b2).withOpacity(0.8)
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -284,7 +290,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
           ),
         ),
       ),
-    );
+    ));
   }
 
   List<Widget> _buildDetailRows(double screenWidth) {

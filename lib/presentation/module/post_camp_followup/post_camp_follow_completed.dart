@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -24,9 +25,17 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+            )),
         title: const Text(
           'Completed Followup',
           style: TextStyle(
@@ -41,7 +50,11 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+              colors: [
+                Color(0xFF0097b2),
+                Color(0xFF0097b2).withOpacity(1),
+                Color(0xFF0097b2).withOpacity(0.8)
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -86,7 +99,8 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
                       children: [
                         _buildInfoCard(
                             'Camp Name', widget.campData['campName']),
-                        _buildInfoCard('Camp Date', widget.campData['campDate']),
+                        _buildInfoCard(
+                            'Camp Date', widget.campData['campDate']),
                         _buildInfoCard('Camp Place', widget.campData['place']),
                       ],
                     ),
@@ -108,12 +122,16 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
                       ],
                     ),
                     SizedBox(height: 20),
-                    CustomButton(text: 'Done', onPressed: () {Navigator.pop(context);})
+                    CustomButton(
+                        text: 'Done',
+                        onPressed: () {
+                          Navigator.pop(context);
+                        })
                   ],
                 ),
               ),
             ),
-    );
+    ));
   }
 
   List<Widget> _buildPatientFollowUpCards(List<dynamic> patientFollowUps) {
@@ -177,7 +195,8 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
               Text(
                 'Phone: ${patient['phone'] ?? 'N/A'}',
                 style: const TextStyle(
-                  color: Colors.white,fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                   fontFamily: 'LeagueSpartan',
                 ),
               ),
@@ -185,7 +204,8 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
               Text(
                 'Status: ${patient['status'] ?? 'N/A'}',
                 style: const TextStyle(
-                  color: Colors.white,fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                   fontFamily: 'LeagueSpartan',
                 ),
               ),
@@ -288,7 +308,8 @@ class _PostCampFollowCompletedState extends State<PostCampFollowCompleted> {
         subtitle: Text(
           value?.toString() ?? 'N/A',
           style: const TextStyle(
-            color: Colors.white,fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
             fontFamily: 'LeagueSpartan',
           ),
         ),

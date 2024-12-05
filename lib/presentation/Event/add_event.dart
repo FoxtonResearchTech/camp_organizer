@@ -1,6 +1,7 @@
 import 'package:camp_organizer/bloc/AddEvent/event_bloc.dart';
 import 'package:camp_organizer/bloc/AddEvent/event_event.dart';
 import 'package:camp_organizer/bloc/AddEvent/event_state.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:camp_organizer/utils/app_colors.dart';
 import 'package:camp_organizer/widgets/Dropdown/custom_dropdown.dart';
@@ -132,7 +133,8 @@ class _AddEventState extends State<AddEvent>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       appBar: AppBar(
         title: const Text(
           'Create Camp',
@@ -149,7 +151,11 @@ class _AddEventState extends State<AddEvent>
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+              colors: [
+                Color(0xFF0097b2),
+                Color(0xFF0097b2).withOpacity(1),
+                Color(0xFF0097b2).withOpacity(0.8)
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -231,7 +237,7 @@ class _AddEventState extends State<AddEvent>
           ),
         ),
       ),
-    );
+    ));
   }
 
   List<Widget> _buildFormFields() {

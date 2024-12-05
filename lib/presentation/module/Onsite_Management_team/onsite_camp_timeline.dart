@@ -1,4 +1,5 @@
 import 'package:camp_organizer/bloc/Status/status_event.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:camp_organizer/presentation/module/Onsite_Management_team/onsite_camp_details_page.dart';
 import 'package:camp_organizer/widgets/button/custom_button.dart';
@@ -45,7 +46,8 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
     double screenWidths = MediaQuery.of(context).size.width;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return BlocListener<AddTeamBloc, AddTeamState>(
+    return ConnectivityChecker(
+        child: BlocListener<AddTeamBloc, AddTeamState>(
       listener: (context, state) {
         if (state is AddTeamLoading) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -490,7 +492,7 @@ class _OnsiteCampTimelineState extends State<OnsiteCampTimeline>
           ),
         ),
       ),
-    );
+    ));
   }
 
   void _showAddCampTeamDialog(BuildContext context, String documentId) {

@@ -1,4 +1,5 @@
 import 'package:camp_organizer/bloc/Profile/profile_state.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
 import 'package:camp_organizer/presentation/dashboard/CampSearchScreen.dart';
 import 'package:camp_organizer/repository/auth_repository.dart';
@@ -40,7 +41,8 @@ class _UserProfilePageState extends State<UserProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (context) => _ProfileBloc,
       child: Scaffold(
         appBar: AppBar(
@@ -330,7 +332,7 @@ class _UserProfilePageState extends State<UserProfilePage>
           ],
         ),
       ),
-    );
+    ));
   }
 }
 

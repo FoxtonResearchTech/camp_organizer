@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:flutter/material.dart';
 
 import '../../../widgets/button/custom_button.dart';
@@ -15,7 +16,8 @@ class InwardDetails extends StatefulWidget {
 class _InwardDetailsState extends State<InwardDetails> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
@@ -131,7 +133,7 @@ class _InwardDetailsState extends State<InwardDetails> {
           ],
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildGradientCard(BuildContext context,

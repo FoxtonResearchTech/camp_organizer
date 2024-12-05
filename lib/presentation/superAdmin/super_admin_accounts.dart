@@ -1,6 +1,7 @@
 import 'package:camp_organizer/bloc/Employee/employee_update_bloc.dart';
 import 'package:camp_organizer/bloc/Employee/employee_update_event.dart';
 import 'package:camp_organizer/bloc/Employee/employee_update_state.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,8 @@ class SuperAdminManageAccount extends StatefulWidget {
   const SuperAdminManageAccount({super.key});
 
   @override
-  State<SuperAdminManageAccount> createState() => _SuperAdminManageAccountState();
+  State<SuperAdminManageAccount> createState() =>
+      _SuperAdminManageAccountState();
 }
 
 class _SuperAdminManageAccountState extends State<SuperAdminManageAccount> {
@@ -34,7 +36,8 @@ class _SuperAdminManageAccountState extends State<SuperAdminManageAccount> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<EmployeeUpdateBloc>(
+    return ConnectivityChecker(
+        child: BlocProvider<EmployeeUpdateBloc>(
       create: (context) => _employeeUpdateBloc,
       child: Scaffold(
         appBar: AppBar(
@@ -83,7 +86,8 @@ class _SuperAdminManageAccountState extends State<SuperAdminManageAccount> {
 
               // Initialize local isActive state for each employee
               for (var employee in employees) {
-                employeeActiveStatus.putIfAbsent(employee['empCode'], () => employee['isActive'] ?? false);
+                employeeActiveStatus.putIfAbsent(
+                    employee['empCode'], () => employee['isActive'] ?? false);
               }
 
               return RefreshIndicator(
@@ -95,7 +99,8 @@ class _SuperAdminManageAccountState extends State<SuperAdminManageAccount> {
                   itemBuilder: (context, index) {
                     final employee = employees[index];
                     return AnimatedPadding(
-                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 16),
                       duration: const Duration(milliseconds: 300),
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
@@ -116,11 +121,13 @@ class _SuperAdminManageAccountState extends State<SuperAdminManageAccount> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           'Name: ${employee['firstName'] ?? "N/A"} ${employee['lastName'] ?? "N/A"}',
@@ -166,10 +173,13 @@ class _SuperAdminManageAccountState extends State<SuperAdminManageAccount> {
                                   AnimatedSwitcher(
                                     duration: const Duration(milliseconds: 300),
                                     child: Switch(
-                                      value: employeeActiveStatus[employee['empCode']] ?? false,
+                                      value: employeeActiveStatus[
+                                              employee['empCode']] ??
+                                          false,
                                       onChanged: (value) async {
                                         setState(() {
-                                          employeeActiveStatus[employee['empCode']] = value;
+                                          employeeActiveStatus[
+                                              employee['empCode']] = value;
                                         });
                                         await _updateUserStatus(
                                           employee['empCode'] ?? '',
@@ -178,36 +188,52 @@ class _SuperAdminManageAccountState extends State<SuperAdminManageAccount> {
                                       },
                                       activeColor: Colors.green,
                                       inactiveThumbColor: Colors.red,
-                                      inactiveTrackColor: Colors.red.withOpacity(0.3),
+                                      inactiveTrackColor:
+                                          Colors.red.withOpacity(0.3),
                                     ),
                                   )
                                 ],
                               ),
                               const Divider(height: 20),
-                              _buildInfoRow(Icons.home, employee['lane1'] ?? "No Address Provided"),
+                              _buildInfoRow(Icons.home,
+                                  employee['lane1'] ?? "No Address Provided"),
                               _buildInfoRow(null, employee['lane2'] ?? ""),
                               _buildInfoRow(null, employee['pinCode'] ?? ""),
-                              _buildInfoRow(Icons.location_city, employee['state'] ?? "No State Provided"),
-                              _buildInfoRow(Icons.cake, employee['dob'] ?? "No DOB Provided"),
+                              _buildInfoRow(Icons.location_city,
+                                  employee['state'] ?? "No State Provided"),
+                              _buildInfoRow(Icons.cake,
+                                  employee['dob'] ?? "No DOB Provided"),
                               const SizedBox(height: 10),
-                              _buildInfoRow(Icons.email, '${employee['empCode']}@gmail.com'),
+                              _buildInfoRow(Icons.email,
+                                  '${employee['empCode']}@gmail.com'),
                               const SizedBox(height: 10),
                               // The delete button with infinity width
                               Container(
-                                width: double.infinity,  // This ensures the button takes up the entire width
+                                width: double
+                                    .infinity, // This ensures the button takes up the entire width
                                 child: ElevatedButton(
                                   onPressed: () {
                                     _deleteEmployee(employee['empCode']);
                                   },
                                   style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12), // No rounded corners
+                                      borderRadius: BorderRadius.circular(
+                                          12), // No rounded corners
                                     ),
-                                    backgroundColor: Colors.redAccent, // Red color for the delete button
+                                    backgroundColor: Colors
+                                        .redAccent, // Red color for the delete button
                                     padding: EdgeInsets.symmetric(vertical: 16),
-                                    textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                    textStyle: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                  child: const Text('Delete',style: TextStyle(fontWeight:FontWeight.bold,color: Colors.white,fontSize: 15),),
+                                  child: const Text(
+                                    'Delete',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: 15),
+                                  ),
                                 ),
                               ),
                             ],
@@ -239,7 +265,7 @@ class _SuperAdminManageAccountState extends State<SuperAdminManageAccount> {
           },
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildInfoRow(IconData? icon, String text) {
@@ -297,7 +323,8 @@ class _SuperAdminManageAccountState extends State<SuperAdminManageAccount> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Delete Employee'),
-          content: const Text('Are you sure you want to delete this employee account? All data associated with this employee will be permanently lost.'),
+          content: const Text(
+              'Are you sure you want to delete this employee account? All data associated with this employee will be permanently lost.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -361,6 +388,4 @@ class _SuperAdminManageAccountState extends State<SuperAdminManageAccount> {
       print('Employee deletion canceled');
     }
   }
-
-
 }

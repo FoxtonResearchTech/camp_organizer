@@ -1,6 +1,7 @@
 import 'package:camp_organizer/bloc/Status/status_bloc.dart';
 import 'package:camp_organizer/bloc/Status/status_event.dart';
 import 'package:camp_organizer/bloc/Status/status_state.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:camp_organizer/utils/app_colors.dart';
@@ -110,7 +111,8 @@ class _AnimatedRotatingPieChartWithGridState
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (context) => _StatusBloc,
       child: Scaffold(
         appBar: AppBar(
@@ -129,7 +131,11 @@ class _AnimatedRotatingPieChartWithGridState
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -221,7 +227,7 @@ class _AnimatedRotatingPieChartWithGridState
                                   .length;
                               completedCount = employees
                                   .where((employee) =>
-                              employee["campStatus"] == "Completed")
+                                      employee["campStatus"] == "Completed")
                                   .length;
                               return Column(
                                 key: ValueKey('loaded'),
@@ -304,7 +310,7 @@ class _AnimatedRotatingPieChartWithGridState
                                   ),
                                   Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       // Waiting Queue Card
 
@@ -598,7 +604,7 @@ class _AnimatedRotatingPieChartWithGridState
           },
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildStatusCard({

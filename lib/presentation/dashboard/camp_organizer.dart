@@ -1,6 +1,7 @@
 import 'package:camp_organizer/bloc/Status/status_bloc.dart';
 import 'package:camp_organizer/bloc/Status/status_event.dart';
 import 'package:camp_organizer/bloc/Status/status_state.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,8 @@ class _DashboardScreenState extends State<DashboardScreen>
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (context) => _StatusBloc,
       child: Scaffold(
           appBar: AppBar(
@@ -59,7 +61,7 @@ class _DashboardScreenState extends State<DashboardScreen>
             backgroundColor: Colors.transparent,
             elevation: 0,
             flexibleSpace: Container(
-              decoration:  BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
                     Color(0xFF0097b2),
@@ -86,20 +88,21 @@ class _DashboardScreenState extends State<DashboardScreen>
           body: BlocBuilder<StatusBloc, StatusState>(
             builder: (context, state) {
               if (state is StatusLoading) {
-                return Center(child: CircularProgressIndicator(
-                  color: Color(0xff0097b2),
-                ),);
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xff0097b2),
+                  ),
+                );
               } else if (state is StatusLoaded) {
                 final employees = state.employees;
 
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: RefreshIndicator(
-                    color:  Color(0xff0097b2),
+                    color: Color(0xff0097b2),
                     onRefresh: () async {
                       // Trigger the refresh event in your bloc or reload the data here
                       context.read<StatusBloc>().add(FetchDataEvent());
-
                     },
                     child: employees.isEmpty
                         ? SingleChildScrollView(
@@ -560,7 +563,7 @@ class _DashboardScreenState extends State<DashboardScreen>
               );
             },
           )),
-    );
+    ));
   }
 
   // Helper method to build timeline tile with responsive styles

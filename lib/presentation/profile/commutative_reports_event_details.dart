@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +104,8 @@ class _CommutativeReportsEventDetails
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       appBar: AppBar(
         title: const Text(
           'Camp Details',
@@ -256,7 +258,7 @@ class _CommutativeReportsEventDetails
           ],
         ),
       ),
-    );
+    ));
   }
 
   Row _buildIconRow(
@@ -355,7 +357,9 @@ class _CommutativeReportsEventDetails
               mainAxisAlignment: pw.MainAxisAlignment.center,
               children: [
                 pw.Text("Concern Person 1 Details",
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        decoration: pw.TextDecoration.underline)),
               ],
             ),
             pw.SizedBox(height: 10),
@@ -388,7 +392,9 @@ class _CommutativeReportsEventDetails
               mainAxisAlignment: pw.MainAxisAlignment.center,
               children: [
                 pw.Text("Concern Person 2 Details",
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        decoration: pw.TextDecoration.underline)),
               ],
             ),
             pw.SizedBox(height: 10),
@@ -421,7 +427,9 @@ class _CommutativeReportsEventDetails
               mainAxisAlignment: pw.MainAxisAlignment.center,
               children: [
                 pw.Text("Event Planning",
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        decoration: pw.TextDecoration.underline)),
               ],
             ),
             pw.SizedBox(height: 10),
@@ -460,7 +468,9 @@ class _CommutativeReportsEventDetails
                 mainAxisAlignment: pw.MainAxisAlignment.center,
                 children: [
                   pw.Text("Team",
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold,
+                          decoration: pw.TextDecoration.underline)),
                 ]),
             pw.SizedBox(height: 10),
             pw.Row(
@@ -507,7 +517,9 @@ class _CommutativeReportsEventDetails
             pw.Column(
               children: [
                 pw.Text("Camp Results ",
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        decoration: pw.TextDecoration.underline)),
                 pw.SizedBox(
                   height: 5,
                 ),
@@ -545,9 +557,9 @@ class _CommutativeReportsEventDetails
                             "N/A"),
                     pw.SizedBox(height: 15),
                     _buildPdfRow(
-                        "Patients FollowUps : ",
-                        widget.employee['patientFollowUps'].toString() ??
-                            "N/A"),
+                      "Patients FollowUps : ",
+                      widget.employee['patientFollowUps'].toString() ?? "N/A",
+                    ),
                   ],
                 )
               ],
@@ -560,50 +572,77 @@ class _CommutativeReportsEventDetails
         child: pw.Column(
           children: [
             pw.Column(
-                mainAxisAlignment: pw.MainAxisAlignment.center,
-                children: [
-                  pw.Text("Camp Expenses ",
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                ]),
-            pw.SizedBox(
-              height: 5,
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Text("Camp Income / Expenses ",
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        decoration: pw.TextDecoration.underline)),
+              ],
             ),
+            pw.SizedBox(height: 5),
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
-                _buildPdfRow("Other Expense : ",
-                    widget.employee['otherExpenses'].toString() ?? "N/A"),
                 _buildPdfRow("Vehicle Expense : ",
                     widget.employee['vehicleExpenses'].toString() ?? "N/A"),
-              ],
-            ),
-            pw.SizedBox(height: 15),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
                 _buildPdfRow("Staff Salary: ",
                     widget.employee['staffSalary'].toString() ?? "N/A"),
-                _buildPdfRow("OTx750 Expense: ",
-                    widget.employee['ot'].toString() ?? "N/A"),
               ],
             ),
             pw.SizedBox(height: 15),
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
+                _buildPdfRow("OTx750 Expense: ",
+                    widget.employee['ot'].toString() ?? "N/A"),
                 _buildPdfRow("CATx2000 Expense: ",
                     widget.employee['cat'].toString() ?? "N/A"),
+              ],
+            ),
+            pw.SizedBox(height: 15),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
                 _buildPdfRow(" GP Paying Case : ",
                     widget.employee['gpPayingCase'].toString() ?? "N/A"),
+                _buildPdfRow("Other Expense : ",
+                    widget.employee['otherExpenses'].toString() ?? "N/A"),
+              ],
+            ),
+          ],
+        ),
+      ),
+      pw.SizedBox(height: 15),
+      pw.Container(
+        child: pw.Column(
+          children: [
+            pw.Column(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Text("Opticals ",
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        decoration: pw.TextDecoration.underline)),
+              ],
+            ),
+            pw.SizedBox(height: 5),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow(" No Of Glasses Sold : ",
+                    widget.employee['noOfGlassesSold'].toString() ?? "N/A"),
+                _buildPdfRow("Amount collected : ",
+                    widget.employee['amountCollected'].toString() ?? "N/A"),
               ],
             ),
             pw.SizedBox(height: 15),
             pw.Column(
-                mainAxisAlignment: pw.MainAxisAlignment.center,
-                children: [
-                  _buildPdfRow("Remarks : ",
-                      widget.employee['remarks'].toString() ?? "N/A"),
-                ]),
+              children: [
+                _buildPdfRow("Remarks : ",
+                    widget.employee['remarks'].toString() ?? "N/A"),
+              ],
+            ),
           ],
         ),
       ),
@@ -618,14 +657,18 @@ class _CommutativeReportsEventDetails
                   mainAxisAlignment: pw.MainAxisAlignment.center,
                   children: [
                     pw.Text("Out Ward ",
-                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                            decoration: pw.TextDecoration.underline)),
                     pw.SizedBox(height: 15),
                     pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text("Doctor Room Things : ",
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                            style: pw.TextStyle(
+                                fontWeight: pw.FontWeight.bold,
+                                decoration: pw.TextDecoration.underline)),
                         pw.SizedBox(height: 10),
                         _buildPdfRow(
                             "Bastin : ",
@@ -679,11 +722,13 @@ class _CommutativeReportsEventDetails
                     ),
                     pw.SizedBox(height: 15),
                     pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text("Vision Room Things : ",
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                            style: pw.TextStyle(
+                                fontWeight: pw.FontWeight.bold,
+                                decoration: pw.TextDecoration.underline)),
                         pw.SizedBox(height: 10),
                         _buildPdfRow(
                             "NV Chart : ",
@@ -749,11 +794,13 @@ class _CommutativeReportsEventDetails
                     ),
                     pw.SizedBox(height: 15),
                     pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text("CR Room Things : ",
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                            style: pw.TextStyle(
+                                fontWeight: pw.FontWeight.bold,
+                                decoration: pw.TextDecoration.underline)),
                         pw.SizedBox(height: 10),
                         _buildPdfRow(
                             "CR Machine No 1 : ",
@@ -795,11 +842,13 @@ class _CommutativeReportsEventDetails
                     ),
                     pw.SizedBox(height: 15),
                     pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text("Optical Things : ",
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                            style: pw.TextStyle(
+                                fontWeight: pw.FontWeight.bold,
+                                decoration: pw.TextDecoration.underline)),
                         pw.SizedBox(height: 10),
                         _buildPdfRow(
                             "Bill Machine : ",
@@ -817,11 +866,13 @@ class _CommutativeReportsEventDetails
                     ),
                     pw.SizedBox(height: 15),
                     pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text("Other Things : ",
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                            style: pw.TextStyle(
+                                fontWeight: pw.FontWeight.bold,
+                                decoration: pw.TextDecoration.underline)),
                         pw.SizedBox(height: 10),
                         _buildPdfRow(
                             "Banner : ",
@@ -842,6 +893,7 @@ class _CommutativeReportsEventDetails
                     ),
                     pw.SizedBox(height: 15),
                     pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         _buildPdfRow(
@@ -880,14 +932,18 @@ class _CommutativeReportsEventDetails
                   mainAxisAlignment: pw.MainAxisAlignment.center,
                   children: [
                     pw.Text("In Ward ",
-                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                            decoration: pw.TextDecoration.underline)),
                     pw.SizedBox(height: 15),
                     pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text("Doctor Room Things : ",
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                            style: pw.TextStyle(
+                                fontWeight: pw.FontWeight.bold,
+                                decoration: pw.TextDecoration.underline)),
                         pw.SizedBox(height: 10),
                         _buildPdfRow(
                             "Bastin : ",
@@ -941,11 +997,13 @@ class _CommutativeReportsEventDetails
                     ),
                     pw.SizedBox(height: 15),
                     pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text("Vision Room Things : ",
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                            style: pw.TextStyle(
+                                fontWeight: pw.FontWeight.bold,
+                                decoration: pw.TextDecoration.underline)),
                         pw.SizedBox(height: 10),
                         _buildPdfRow(
                             "NV Chart : ",
@@ -1011,11 +1069,13 @@ class _CommutativeReportsEventDetails
                     ),
                     pw.SizedBox(height: 15),
                     pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text("CR Room Things : ",
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                            style: pw.TextStyle(
+                                fontWeight: pw.FontWeight.bold,
+                                decoration: pw.TextDecoration.underline)),
                         pw.SizedBox(height: 10),
                         _buildPdfRow(
                             "CR Machine No 1 : ",
@@ -1057,11 +1117,13 @@ class _CommutativeReportsEventDetails
                     ),
                     pw.SizedBox(height: 15),
                     pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text("Optical Things : ",
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                            style: pw.TextStyle(
+                                fontWeight: pw.FontWeight.bold,
+                                decoration: pw.TextDecoration.underline)),
                         pw.SizedBox(height: 10),
                         _buildPdfRow(
                             "Bill Machine : ",
@@ -1079,11 +1141,13 @@ class _CommutativeReportsEventDetails
                     ),
                     pw.SizedBox(height: 15),
                     pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text("Other Things : ",
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                            style: pw.TextStyle(
+                                fontWeight: pw.FontWeight.bold,
+                                decoration: pw.TextDecoration.underline)),
                         pw.SizedBox(height: 10),
                         _buildPdfRow(
                             "Banner : ",
@@ -1104,6 +1168,7 @@ class _CommutativeReportsEventDetails
                     ),
                     pw.SizedBox(height: 15),
                     pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         _buildPdfRow(
@@ -1147,7 +1212,9 @@ class _CommutativeReportsEventDetails
               children: [
                 pw.Text(
                   "Follow up ",
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold,
+                      decoration: pw.TextDecoration.underline),
                 ),
                 pw.SizedBox(
                   height: 10,

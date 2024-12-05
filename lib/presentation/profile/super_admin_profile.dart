@@ -1,5 +1,6 @@
 import 'package:camp_organizer/admin_add_employee.dart';
 import 'package:camp_organizer/bloc/Profile/profile_state.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
 import 'package:camp_organizer/presentation/module/admin/manage_employee_account.dart';
 import 'package:camp_organizer/presentation/superAdmin/super_admin_accounts.dart';
@@ -51,7 +52,8 @@ class _SuperAdminUserProfilePageState extends State<SuperAdminUserProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (context) => _AdminProfileBloc,
       child: Scaffold(
         appBar: AppBar(
@@ -431,7 +433,7 @@ class _SuperAdminUserProfilePageState extends State<SuperAdminUserProfilePage>
           ],
         ),
       ),
-    );
+    ));
   }
 }
 

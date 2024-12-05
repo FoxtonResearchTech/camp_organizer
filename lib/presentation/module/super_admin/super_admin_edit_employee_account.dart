@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -200,7 +201,8 @@ class _SuperAdminEditEmployeeAccountState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       appBar: AppBar(
         title: const Text(
           'Update User Account',
@@ -215,9 +217,13 @@ class _SuperAdminEditEmployeeAccountState
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
-          decoration:  BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+              colors: [
+                Color(0xFF0097b2),
+                Color(0xFF0097b2).withOpacity(1),
+                Color(0xFF0097b2).withOpacity(0.8)
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -279,7 +285,7 @@ class _SuperAdminEditEmployeeAccountState
           ],
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildCustomActionButton(IconData icon, String label, Color color,

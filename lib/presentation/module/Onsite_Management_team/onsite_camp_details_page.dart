@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/widgets/button/custom_button.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +10,8 @@ class OnsiteCampDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: IconButton(
@@ -35,7 +37,11 @@ class OnsiteCampDetailsPage extends StatelessWidget {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+              colors: [
+                Color(0xFF0097b2),
+                Color(0xFF0097b2).withOpacity(1),
+                Color(0xFF0097b2).withOpacity(0.8)
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -102,8 +108,8 @@ class OnsiteCampDetailsPage extends StatelessWidget {
                 _buildInfoCard('Number of Patients Expected',
                     campData['noOfPatientExpected']),
                 _buildInfoCard('Position', campData['position']),
-             //   _buildInfoCard('Created On', campData['CreatedOn']?.toString() ?? 'N/A'),
-            //    _buildInfoCard('Document ID', campData['documentId']),
+                //   _buildInfoCard('Created On', campData['CreatedOn']?.toString() ?? 'N/A'),
+                //    _buildInfoCard('Document ID', campData['documentId']),
                 _buildInfoCard('AR', campData['ar'] ?? 'N?A'),
                 _buildInfoCard('Vn Reg', campData['vnReg'] ?? 'N?A'),
                 _buildInfoCard('Registration', campData['regnter'] ?? 'N?A'),
@@ -112,14 +118,14 @@ class OnsiteCampDetailsPage extends StatelessWidget {
                 _buildInfoCard('Opticals', campData['optical'] ?? 'N?A'),
               ],
             ),
-            Center(child:SizedBox()
+            Center(child: SizedBox()
 
-       //     CustomButton(text: 'Approve', onPressed: () {})
-            ),
+                //     CustomButton(text: 'Approve', onPressed: () {})
+                ),
           ],
         ),
       ),
-    );
+    ));
   }
 
   // Helper method to build section titles with animation
@@ -186,8 +192,8 @@ class OnsiteCampDetailsPage extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-          Color(0xff0097b2),
-           Color(0xff0097b2).withOpacity(0.5)!,
+            Color(0xff0097b2),
+            Color(0xff0097b2).withOpacity(0.5)!,
           ],
           begin: Alignment.bottomRight,
           end: Alignment.topLeft,
@@ -214,7 +220,8 @@ class OnsiteCampDetailsPage extends StatelessWidget {
         subtitle: Text(
           value?.toString() ?? 'N/A',
           style: const TextStyle(
-            color: Colors.white,fontWeight: FontWeight.w500,
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
             fontFamily: 'LeagueSpartan',
           ),
         ),

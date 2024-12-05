@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/widgets/button/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -182,9 +183,17 @@ class _LogisticsInwardState extends State<LogisticsInward> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+            )),
         title: const Text(
           'Inward Checklist',
           style: TextStyle(
@@ -200,7 +209,11 @@ class _LogisticsInwardState extends State<LogisticsInward> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+              colors: [
+                Color(0xFF0097b2),
+                Color(0xFF0097b2).withOpacity(1),
+                Color(0xFF0097b2).withOpacity(0.8)
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -214,7 +227,6 @@ class _LogisticsInwardState extends State<LogisticsInward> {
           child: ListView(
             children: [
               // Input for camp place and date
-
 
               SizedBox(height: 20),
 
@@ -275,11 +287,10 @@ class _LogisticsInwardState extends State<LogisticsInward> {
                   },
                 ),
               )
-
             ],
           ),
         ),
       ),
-    );
+    ));
   }
 }

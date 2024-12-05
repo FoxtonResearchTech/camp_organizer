@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/profile/commutative_reports_event_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -105,7 +106,8 @@ class _SuperCommutativeReportsSearchScreen
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (context) => _AdminApprovalBloc,
       child: Scaffold(
         appBar: AppBar(
@@ -352,7 +354,7 @@ class _SuperCommutativeReportsSearchScreen
           ],
         ),
       ),
-    );
+    ));
   }
 
   int _noOfCampsApproved() {
@@ -500,6 +502,34 @@ class _SuperCommutativeReportsSearchScreen
     );
   }
 
+  int _noOfGlassesSold() {
+    return _filteredEmployees.fold<int>(
+      0,
+      (sum, employee) {
+        var value = employee['noOfGlassesSold'];
+        if (value == null) return sum; // Handle null
+        if (value is String) {
+          value = int.tryParse(value) ?? 0;
+        }
+        return sum + (value as int);
+      },
+    );
+  }
+
+  int _amountCollected() {
+    return _filteredEmployees.fold<int>(
+      0,
+      (sum, employee) {
+        var value = employee['amountCollected'];
+        if (value == null) return sum; // Handle null
+        if (value is String) {
+          value = int.tryParse(value) ?? 0;
+        }
+        return sum + (value as int);
+      },
+    );
+  }
+
   Future<List<pw.Widget>> _generatePdfRows() async {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -561,11 +591,16 @@ class _SuperCommutativeReportsSearchScreen
         child: pw.Column(
           children: [
             pw.Column(
-                mainAxisAlignment: pw.MainAxisAlignment.center,
-                children: [
-                  pw.Text("Basic Details ",
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                ]),
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Text(
+                  "Basic Details ",
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold,
+                      decoration: pw.TextDecoration.underline),
+                ),
+              ],
+            ),
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
@@ -602,7 +637,9 @@ class _SuperCommutativeReportsSearchScreen
             pw.Column(
               children: [
                 pw.Text("Camp Results ",
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        decoration: pw.TextDecoration.underline)),
                 pw.SizedBox(
                   height: 5,
                 ),
@@ -631,8 +668,10 @@ class _SuperCommutativeReportsSearchScreen
         child: pw.Column(
           children: [
             pw.Column(children: [
-              pw.Text("Camp Expenses ",
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
+              pw.Text("Camp Incomes / Expenses ",
+                  style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold,
+                      decoration: pw.TextDecoration.underline))
             ]),
             pw.SizedBox(
               height: 5,
@@ -640,42 +679,67 @@ class _SuperCommutativeReportsSearchScreen
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
-                _buildPdfRow("Other Expense : ", _otherExpenses().toString()),
                 _buildPdfRow(
                     "Vehicle Expense : ", _vehicleExpenses().toString()),
-              ],
-            ),
-            pw.SizedBox(height: 15),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
                 _buildPdfRow("Staff Salary: ", _staffSalary().toString()),
-                _buildPdfRow("OTx750 Expense: ", _OTx750().toString()),
               ],
             ),
             pw.SizedBox(height: 15),
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
+                _buildPdfRow("OTx750 Expense: ", _OTx750().toString()),
                 _buildPdfRow("CATx2000 Expense: ", _CATx2000().toString()),
+              ],
+            ),
+            pw.SizedBox(height: 15),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
                 _buildPdfRow(" GP Paying Case : ", _gpPayingCase().toString()),
+                _buildPdfRow("Other Expense : ", _otherExpenses().toString()),
               ],
             ),
           ],
         ),
       ),
-      pw.SizedBox(height: 30),
+      pw.Container(
+        child: pw.Column(
+          children: [
+            pw.Column(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Text("Opticals ",
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        decoration: pw.TextDecoration.underline)),
+              ],
+            ),
+            pw.SizedBox(height: 5),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                _buildPdfRow(" No Of Glasses Sold : ",
+                    _noOfGlassesSold().toString() ?? "N/A"),
+                _buildPdfRow("Amount collected : ",
+                    _amountCollected().toString() ?? "N/A"),
+              ],
+            ),
+          ],
+        ),
+      ),
+      pw.SizedBox(height: 20),
       pw.Container(
         child: pw.Column(
           mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
           children: [
             pw.Text("Bejan Singh Eye Hospital Private Limited"),
-            pw.SizedBox(height: 15),
+            pw.SizedBox(height: 10),
             pw.Text(
                 "2/313C - M.S Road, Vettoornimadam, Nagercoil, Kanyakumari District, Tamilnadu, India"),
-            pw.SizedBox(height: 15),
+            pw.SizedBox(height: 10),
             pw.Text("Info@bseh.org"),
-            pw.SizedBox(height: 15),
+            pw.SizedBox(height: 10),
             pw.Text("+91 9488409991 \n,+91 7871957881"),
           ],
         ),

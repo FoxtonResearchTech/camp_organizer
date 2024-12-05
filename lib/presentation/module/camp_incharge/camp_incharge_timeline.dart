@@ -2,6 +2,7 @@ import 'package:camp_organizer/bloc/AddEvent/incharge_report_bloc.dart';
 import 'package:camp_organizer/bloc/AddEvent/incharge_report_state.dart';
 import 'package:camp_organizer/bloc/Status/status_event.dart';
 import 'package:camp_organizer/bloc/approval/onsite_approval_event.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -112,7 +113,8 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return BlocListener<OnsiteApprovalBloc, OnsiteApprovalState>(
+    return ConnectivityChecker(
+        child: BlocListener<OnsiteApprovalBloc, OnsiteApprovalState>(
       listener: (context, state) {
         if (state is InchargeReportLoading) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -449,7 +451,7 @@ class _CampInchargeTimelineState extends State<CampInchargeTimeline>
           ),
         ),
       ),
-    );
+    ));
   }
 
   List<Widget> _buildInfoText(double screenWidth, String text) {

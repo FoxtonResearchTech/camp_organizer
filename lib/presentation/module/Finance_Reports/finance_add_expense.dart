@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,19 +26,22 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
   final _formKey = GlobalKey<FormState>();
 
   // Controllers for each input field
-  final TextEditingController dateController = TextEditingController();
-  final TextEditingController timeController = TextEditingController();
-  final TextEditingController campNameController = TextEditingController();
-  final TextEditingController organizationController = TextEditingController();
-  final TextEditingController placeController = TextEditingController();
+
   final TextEditingController otherExpensesController = TextEditingController();
   final TextEditingController vehicleExpensesController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController staffSalaryController = TextEditingController();
   final TextEditingController otController = TextEditingController();
   final TextEditingController catController = TextEditingController();
   final TextEditingController gpPayingCaseController = TextEditingController();
-  final TextEditingController remarksController = TextEditingController();
+  final TextEditingController expenseremarksController =
+      TextEditingController();
+  final TextEditingController incomeremarksController = TextEditingController();
+  final TextEditingController glassesTakenController = TextEditingController();
+  final TextEditingController glassesSoldController = TextEditingController();
+  final TextEditingController glassAmountController = TextEditingController();
+  final TextEditingController glassesReturnController = TextEditingController();
+  final TextEditingController glassremarksController = TextEditingController();
 
   void submitExpenseData(BuildContext context, String documentId) {
     if (_formKey.currentState?.validate() ?? false) {
@@ -48,7 +52,13 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
         'ot': otController.text.trim(),
         'cat': catController.text.trim(),
         'gpPayingCase': gpPayingCaseController.text.trim(),
-        'remarks': remarksController.text.trim(),
+        'expenseRemarks': expenseremarksController.text.trim(),
+        'incomeRemarks': incomeremarksController.text.trim(),
+        'glassesTaken': glassesTakenController.text.trim(),
+        'glassesSold': glassesSoldController.text.trim(),
+        'glassAmount': glassAmountController.text.trim(),
+        'glassesReturn': glassesReturnController.text.trim(),
+        'glassremarks': glassremarksController.text.trim(),
       };
 
       // Dispatch the data to the BLoC
@@ -56,10 +66,10 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
           documentId: widget.documentId, data: expenseData));
 
       //ScaffoldMessenger.of(context).showSnackBar(
-        //const SnackBar(
-        //  content: Center(child: Text('Expense data submitted successfully')),
-        //  backgroundColor: Colors.green,
-        //),
+      //const SnackBar(
+      //  content: Center(child: Text('Expense data submitted successfully')),
+      //  backgroundColor: Colors.green,
+      //),
       //);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -70,6 +80,7 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
       );
     }
   }
+
   @override
   void initState() {
     super.initState();
@@ -79,44 +90,47 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
   void _initializeData() {
     final data = widget.campData;
 
-    dateController.text = widget.campData['date'] ?? '';
-    timeController.text = widget.campData['time'] ?? '';
-    campNameController.text = widget.campData['campName'] ?? '';
-    organizationController.text = widget.campData['organization'] ?? '';
-    placeController.text = widget.campData['place'] ?? '';
     otherExpensesController.text = widget.campData['otherExpenses'] ?? '';
     vehicleExpensesController.text = widget.campData['vehicleExpenses'] ?? '';
     staffSalaryController.text = widget.campData['staffSalary'] ?? '';
     otController.text = widget.campData['ot'] ?? '';
     catController.text = widget.campData['cat'] ?? '';
     gpPayingCaseController.text = widget.campData['gpPayingCase'] ?? '';
-    remarksController.text = widget.campData['remarks'] ?? '';
+    expenseremarksController.text = widget.campData['expenseRemarks'] ?? '';
+    incomeremarksController.text = widget.campData['incomeRemarks'] ?? '';
+    glassesTakenController.text = widget.campData['glassesTaken'] ?? '';
+    glassesSoldController.text = widget.campData['glassesSold'] ?? '';
+    glassAmountController.text = widget.campData['glassAmount'] ?? '';
+    glassesReturnController.text = widget.campData['glassesReturn'] ?? '';
+    glassremarksController.text = widget.campData['glassremarks'] ?? '';
   }
 
   @override
   void dispose() {
     // Dispose controllers to avoid memory leaks
-    dateController.dispose();
-    timeController.dispose();
-    campNameController.dispose();
-    organizationController.dispose();
-    placeController.dispose();
     otherExpensesController.dispose();
     vehicleExpensesController.dispose();
     staffSalaryController.dispose();
     otController.dispose();
     catController.dispose();
     gpPayingCaseController.dispose();
-    remarksController.dispose();
+    expenseremarksController.dispose();
+    incomeremarksController.dispose();
+    glassesTakenController.dispose();
+    glassesSoldController.dispose();
+    glassAmountController.dispose();
+    glassesReturnController.dispose();
+    glassremarksController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Camp Expenses',
+          'Camp Income & Expenses',
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'LeagueSpartan',
@@ -130,7 +144,11 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+              colors: [
+                Color(0xFF0097b2),
+                Color(0xFF0097b2).withOpacity(1),
+                Color(0xFF0097b2).withOpacity(0.8)
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -162,7 +180,6 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
                   ),
                 ),
                 const SizedBox(height: 20),
-
                 CustomTextFormField(
                   labelText: 'Vehicle Expenses',
                   controller: vehicleExpensesController,
@@ -175,6 +192,27 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 20),
+                CustomTextFormField(
+                  labelText: 'Other Expenses',
+                  controller: otherExpensesController,
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 20),
+                CustomTextFormField(
+                  labelText: 'Remarks',
+                  controller: expenseremarksController,
+                ),
+                const SizedBox(height: 30),
+                const Text(
+                  'Camp Income',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'LeagueSpartan',
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 CustomTextFormField(
                   labelText: 'OT X 750',
                   controller: otController,
@@ -194,21 +232,51 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
                 ),
                 const SizedBox(height: 20),
                 CustomTextFormField(
-                  labelText: 'Other Expenses',
-                  controller: otherExpensesController,
-                  keyboardType: TextInputType.number,
+                  labelText: 'Remarks',
+                  controller: incomeremarksController,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Opticals Info',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'LeagueSpartan',
+                  ),
+                ),
+                const SizedBox(height: 20),
+                CustomTextFormField(
+                  labelText: 'Number of Glasses Taken',
+                  controller: glassesTakenController,
+                ),
+                const SizedBox(height: 20),
+                CustomTextFormField(
+                  labelText: 'Number of Glasses Sold',
+                  controller: glassesSoldController,
+                ),
+                const SizedBox(height: 20),
+                CustomTextFormField(
+                  labelText: 'Amount Collected',
+                  controller: glassAmountController,
+                ),
+                const SizedBox(height: 20),
+                CustomTextFormField(
+                  labelText: 'Number of Glasses Return',
+                  controller: glassesReturnController,
                 ),
                 const SizedBox(height: 20),
                 CustomTextFormField(
                   labelText: 'Remarks',
-                  controller: remarksController,
+                  controller: glassremarksController,
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(
+                  height: 20,
+                ),
                 CustomButton(
                   text: 'Submit Expenses',
                   onPressed: () {
                     submitExpenseData(context, widget.documentId);
-
                   },
                 ),
               ],
@@ -216,6 +284,6 @@ class _FinanceAddExpenseState extends State<FinanceAddExpense> {
           ),
         ),
       ),
-    );
+    ));
   }
 }

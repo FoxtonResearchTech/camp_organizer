@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:camp_organizer/presentation/module/post_camp_followup/post_camp_follow.dart';
 import 'package:camp_organizer/presentation/module/post_camp_followup/post_camp_follow_completed.dart';
@@ -42,7 +43,8 @@ class _PostCampTimelineState extends State<PostCampTimeline>
     //  double screenWidth = MediaQuery.of(context).size.width;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return BlocListener<AddTeamBloc, AddTeamState>(
+    return ConnectivityChecker(
+        child: BlocListener<AddTeamBloc, AddTeamState>(
       listener: (context, state) {
         if (state is AddTeamLoading) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -472,7 +474,7 @@ class _PostCampTimelineState extends State<PostCampTimeline>
           ),
         ),
       ),
-    );
+    ));
   }
 
   List<Widget> _buildInfoText(double screenWidth, String text) {

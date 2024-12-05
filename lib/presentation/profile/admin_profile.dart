@@ -1,5 +1,6 @@
 import 'package:camp_organizer/admin_add_employee.dart';
 import 'package:camp_organizer/bloc/Profile/profile_state.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/Admin/admin_camp_search_screen.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
 import 'package:camp_organizer/presentation/module/admin/manage_employee_account.dart';
@@ -48,7 +49,8 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (context) => _AdminProfileBloc,
       child: Scaffold(
         appBar: AppBar(
@@ -313,16 +315,15 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
                                   GestureDetector(
                                     onTap: () async {
                                       await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                              ManageEmployeeAccount())
-                                      );
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ManageEmployeeAccount()));
                                     },
                                     child: ProfileInfoTile(
                                       icon: Icons.how_to_reg,
                                       title: 'Manage Employee',
-                                      subtitle:'Manage account',
+                                      subtitle: 'Manage account',
                                       slideAnimation: _slideAnimation,
                                     ),
                                   ),
@@ -332,13 +333,12 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  AdminAddEmployee())
-                                      );
+                                                  AdminAddEmployee()));
                                     },
                                     child: ProfileInfoTile(
                                       icon: Icons.add_to_queue,
                                       title: 'Add Employee',
-                                      subtitle:'Create employee',
+                                      subtitle: 'Create employee',
                                       slideAnimation: _slideAnimation,
                                     ),
                                   ),
@@ -425,7 +425,7 @@ class _AdminUserProfilePageState extends State<AdminUserProfilePage>
           ],
         ),
       ),
-    );
+    ));
   }
 }
 

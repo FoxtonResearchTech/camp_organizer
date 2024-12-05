@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
 import 'package:camp_organizer/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,8 @@ class _PostCampProfile extends State<PostCampProfile>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (context) => _PostCampProfileBloc,
       child: Scaffold(
         appBar: AppBar(
@@ -56,9 +58,13 @@ class _PostCampProfile extends State<PostCampProfile>
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Container(
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -72,9 +78,13 @@ class _PostCampProfile extends State<PostCampProfile>
             AnimatedContainer(
               duration: const Duration(seconds: 1),
               height: 250,
-              decoration:  BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                  colors: [
+                    Color(0xFF0097b2),
+                    Color(0xFF0097b2).withOpacity(1),
+                    Color(0xFF0097b2).withOpacity(0.8)
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -92,8 +102,10 @@ class _PostCampProfile extends State<PostCampProfile>
               child: BlocBuilder<PostCampProfileBloc, PostCampProfileState>(
                 builder: (context, state) {
                   if (state is PostCampProfileLoading) {
-                    return const Center(child: CircularProgressIndicator(color:
-                    Color(0xFF0097b2),));
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      color: Color(0xFF0097b2),
+                    ));
                   } else if (state is PostCampProfileLoaded) {
                     final employee = state.employee;
                     return Column(
@@ -289,7 +301,7 @@ class _PostCampProfile extends State<PostCampProfile>
           ],
         ),
       ),
-    );
+    ));
   }
 }
 
@@ -314,15 +326,10 @@ class ProfileInfoTile extends StatelessWidget {
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color:
-            Color(0xFF0097b2).withOpacity(0.1),
+            color: Color(0xFF0097b2).withOpacity(0.1),
             shape: BoxShape.circle,
           ),
-          child: Icon(
-            icon,
-            color:
-            Color(0xFF0097b2)
-          ),
+          child: Icon(icon, color: Color(0xFF0097b2)),
         ),
         title: Text(
           title,

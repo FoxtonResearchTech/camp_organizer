@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
 import 'package:camp_organizer/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,8 @@ class _LogisticsProfile extends State<LogisticsProfile>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (context) => _LogisticsProfileBloc,
       child: Scaffold(
         appBar: AppBar(
@@ -100,7 +102,10 @@ class _LogisticsProfile extends State<LogisticsProfile>
               child: BlocBuilder<LogisticsProfileBloc, LogisticsProfileState>(
                 builder: (context, state) {
                   if (state is LogisticsProfileLoading) {
-                    return const Center(child: CircularProgressIndicator(   color: Color(0xFF0097b2),));
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      color: Color(0xFF0097b2),
+                    ));
                   } else if (state is LogisticsProfileLoaded) {
                     final employee = state.employee;
                     return Column(
@@ -296,7 +301,7 @@ class _LogisticsProfile extends State<LogisticsProfile>
           ],
         ),
       ),
-    );
+    ));
   }
 }
 

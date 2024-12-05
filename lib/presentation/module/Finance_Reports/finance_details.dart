@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +22,8 @@ class _FinanceDetailsState extends State<FinanceDetails> {
   @override
   Widget build(BuildContext context) {
     String formattedCreatedOn = _formatCreatedOn(widget.campData['CreatedOn']);
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       appBar: AppBar(
         title: const Text(
           'Camp Expenses',
@@ -38,7 +40,11 @@ class _FinanceDetailsState extends State<FinanceDetails> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+              colors: [
+                Color(0xFF0097b2),
+                Color(0xFF0097b2).withOpacity(1),
+                Color(0xFF0097b2).withOpacity(0.8)
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -156,30 +162,33 @@ class _FinanceDetailsState extends State<FinanceDetails> {
                     );
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        backgroundColor: Colors.green, // Set the background color to green
+                        backgroundColor:
+                            Colors.green, // Set the background color to green
                         content: Center(
-                          child: Text('This Camp Completed Successfully',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'LeagueSpartan',
-                                color: Colors.white,
-                              ),
+                          child: Text(
+                            'This Camp Completed Successfully',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'LeagueSpartan',
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
                     );
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                       SnackBar(
+                      SnackBar(
                         content: Center(
-                          child: Text('Failed to update status ',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'LeagueSpartan',
-                                color: Colors.lightBlue[800],
-                              ),
+                          child: Text(
+                            'Failed to update status ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'LeagueSpartan',
+                              color: Colors.lightBlue[800],
+                            ),
                           ),
                         ),
                       ),
@@ -191,16 +200,19 @@ class _FinanceDetailsState extends State<FinanceDetails> {
           ],
         ),
       ),
-    );
+    ));
   }
 
   // Helper method to format the 'Created On' timestamp to a readable date format
   String _formatCreatedOn(dynamic createdOn) {
     if (createdOn == null) return 'N/A';
     try {
-      int timestampSeconds = createdOn.seconds; // Assuming 'seconds' is the field name for timestamp
-      DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestampSeconds * 1000);
-      return DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime); // Format as desired
+      int timestampSeconds = createdOn
+          .seconds; // Assuming 'seconds' is the field name for timestamp
+      DateTime dateTime =
+          DateTime.fromMillisecondsSinceEpoch(timestampSeconds * 1000);
+      return DateFormat('yyyy-MM-dd HH:mm:ss')
+          .format(dateTime); // Format as desired
     } catch (e) {
       return 'Invalid Date'; // Handle any parsing issues
     }
@@ -228,7 +240,7 @@ class _FinanceDetailsState extends State<FinanceDetails> {
             },
           ),
           ...children.map(
-                (child) => TweenAnimationBuilder(
+            (child) => TweenAnimationBuilder(
               tween: Tween<double>(begin: 0, end: 1),
               duration: const Duration(milliseconds: 300),
               builder: (context, value, _) {
@@ -289,7 +301,7 @@ class _FinanceDetailsState extends State<FinanceDetails> {
         ),
         child: ListTile(
           contentPadding:
-          const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+              const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
           title: Text(
             label,
             style: const TextStyle(

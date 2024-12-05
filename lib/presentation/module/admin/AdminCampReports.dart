@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/module/super_admin/selected_employee_camp_search_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -94,7 +95,8 @@ class _AdminCampsReportsPage extends State<AdminCampsReportsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: IconButton(
@@ -269,6 +271,18 @@ class _AdminCampsReportsPage extends State<AdminCampsReportsPage> {
                 text: 'View Reports',
                 onPressed: () {
                   if (selectedEmployee != null && reportType != null) {
+                    if (selectedEmployeeEmail == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Center(
+                            child: Text(
+                                'Email not found for the selected employee.'),
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return; // Prevent navigation if email is null
+                    }
                     if (reportType == 'Individual') {
                       Navigator.push(
                         context,
@@ -276,6 +290,7 @@ class _AdminCampsReportsPage extends State<AdminCampsReportsPage> {
                             builder: (context) =>
                                 AdminSelectedEmployeeCampSearchScreen(
                                   employeeName: selectedEmployee!,
+                                  employeeEmail: selectedEmployeeEmail!,
                                   camps: camps,
                                 )),
                       );
@@ -309,6 +324,6 @@ class _AdminCampsReportsPage extends State<AdminCampsReportsPage> {
           ],
         ),
       ),
-    );
+    ));
   }
 }

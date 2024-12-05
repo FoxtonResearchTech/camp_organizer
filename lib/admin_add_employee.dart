@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:camp_organizer/widgets/Dropdown/custom_dropdown.dart';
 import 'package:camp_organizer/widgets/Text%20Form%20Field/custom_text_form_field.dart';
@@ -122,11 +123,8 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
       // Show success snackbar
       _showSnackBar("Employee Registered Successfully!");
       AuthRepository().signOut();
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  CampOrganizerLoginPage()));
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => CampOrganizerLoginPage()));
     } catch (e) {
       // Catch and display errors
       _showSnackBar("Error: ${e.toString()}");
@@ -165,7 +163,8 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
@@ -190,7 +189,11 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+              colors: [
+                Color(0xFF0097b2),
+                Color(0xFF0097b2).withOpacity(1),
+                Color(0xFF0097b2).withOpacity(0.8)
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -352,6 +355,6 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
           ),
         ),
       ),
-    );
+    ));
   }
 }

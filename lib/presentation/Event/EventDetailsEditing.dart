@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -278,7 +279,8 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
+    return ConnectivityChecker(
+        child: Scaffold(
       appBar: AppBar(
         title: const Text(
           'Camp Details',
@@ -572,7 +574,7 @@ class _EventDetailsEditingState extends State<EventDetailsEditing>
           ],
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildCustomTextFormField(

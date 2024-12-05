@@ -2,6 +2,7 @@ import 'package:camp_organizer/bloc/Status/status_bloc.dart';
 import 'package:camp_organizer/bloc/Status/status_event.dart';
 import 'package:camp_organizer/bloc/Status/status_state.dart';
 import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:camp_organizer/presentation/module/admin/manage_employee_account.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
@@ -115,7 +116,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (context) => AdminApprovalBloc()..add(FetchDataEvents()),
       child: Scaffold(
         appBar: AppBar(
@@ -614,7 +616,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
           },
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildStatusCard({

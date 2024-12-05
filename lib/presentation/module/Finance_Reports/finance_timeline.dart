@@ -1,4 +1,5 @@
 import 'package:camp_organizer/bloc/AddEvent/add_finance_bloc.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:camp_organizer/presentation/module/Finance_Reports/finance_details.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,8 @@ class _FinanceTimelineState extends State<FinanceTimeline>
     //double screenWidth = MediaQuery.of(context).size.width;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return BlocListener<AddFinanceBloc, AddFinanceState>(
+    return ConnectivityChecker(
+        child: BlocListener<AddFinanceBloc, AddFinanceState>(
       listener: (context, state) {
         if (state is AddFinanceLoading) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -476,7 +478,7 @@ class _FinanceTimelineState extends State<FinanceTimeline>
           ),
         ),
       ),
-    );
+    ));
   }
 
   void _showAddCampTeamDialog(BuildContext context, String documentId) {

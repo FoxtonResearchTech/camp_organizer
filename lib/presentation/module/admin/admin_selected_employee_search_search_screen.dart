@@ -12,9 +12,13 @@ import 'package:lottie/lottie.dart';
 class AdminSelectedEmployeeCampSearchScreen extends StatefulWidget {
   final List<Map<String, dynamic>> camps;
   final String employeeName;
+  final String employeeEmail;
 
   const AdminSelectedEmployeeCampSearchScreen(
-      {Key? key, required this.camps, required this.employeeName})
+      {Key? key,
+      required this.camps,
+      required this.employeeName,
+      required this.employeeEmail})
       : super(key: key);
 
   @override
@@ -37,6 +41,7 @@ class _AdminSelectedEmployeeCampSearchScreen
     _searchController = TextEditingController();
     _AdminApprovalBloc = AdminApprovalBloc()
       ..add(SelectedEmployeeFetchEvent(widget.employeeName));
+    _filteredEmployees = [];
   }
 
   @override
@@ -48,22 +53,28 @@ class _AdminSelectedEmployeeCampSearchScreen
 
   void _filterEmployees(List<Map<String, dynamic>> employees) {
     setState(() {
+      // Always filter camps based on EmployeeID
+      final employeeSpecificCamps = employees.where((employee) {
+        return employee['EmployeeId'].toString() == widget.employeeEmail;
+      }).toList();
+
       if (_searchQuery.isEmpty) {
-        _filteredEmployees = employees;
+        // If no search query, show only employee-specific camps
+        _filteredEmployees = employeeSpecificCamps;
       } else {
         // Check if _searchQuery is a valid date format
         final isDateQuery =
             RegExp(r'^\d{2}-\d{2}-\d{4}$').hasMatch(_searchQuery);
 
-        _filteredEmployees = employees.where((employee) {
+        _filteredEmployees = employeeSpecificCamps.where((employee) {
           if (isDateQuery) {
-            // If the query is a date, match only the campDate field
+            // Match only the campDate field for date queries
             return employee['campDate']
                 .toString()
                 .toLowerCase()
                 .contains(_searchQuery.toLowerCase());
           } else {
-            // Otherwise, match other fields
+            // Match campName or campDate for non-date queries
             return employee['campName']
                     .toString()
                     .toLowerCase()
@@ -190,8 +201,12 @@ class _AdminSelectedEmployeeCampSearchScreen
               );
             } else if (state is AdminApprovalLoaded) {
               // Only update _filteredEmployees if no search query is active
-              if (_searchQuery.isEmpty && _filteredEmployees.isEmpty) {
-                _filteredEmployees = state.allCamps;
+              if (_filteredEmployees.isEmpty && _searchQuery.isEmpty) {
+                _filteredEmployees = state.allCamps
+                    .where((employee) =>
+                        employee['EmployeeId'].toString() ==
+                        widget.employeeEmail)
+                    .toList();
               }
               return RefreshIndicator(
                 color: Color(0xFF0097b2),

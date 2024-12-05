@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/Analytics/app_resources.dart';
 import 'package:camp_organizer/presentation/Event/camp_search_event_details.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,8 +13,12 @@ import 'package:lottie/lottie.dart';
 class SuperAdminSelectedEmployeeCampSearchScreen extends StatefulWidget {
   final List<Map<String, dynamic>> camps;
   final String employeeName;
+  final String employeeEmail;
   const SuperAdminSelectedEmployeeCampSearchScreen(
-      {Key? key, required this.camps, required this.employeeName})
+      {Key? key,
+      required this.camps,
+      required this.employeeName,
+      required this.employeeEmail})
       : super(key: key);
   @override
   State<SuperAdminSelectedEmployeeCampSearchScreen> createState() =>
@@ -35,6 +40,7 @@ class _SuperAdminSelectedEmployeeCampSearchScreen
     _searchController = TextEditingController();
     _AdminApprovalBloc = AdminApprovalBloc()
       ..add(SelectedEmployeeFetchEvent(widget.employeeName));
+    _filteredEmployees = [];
   }
 
   @override
@@ -46,22 +52,28 @@ class _SuperAdminSelectedEmployeeCampSearchScreen
 
   void _filterEmployees(List<Map<String, dynamic>> employees) {
     setState(() {
+      // Always filter camps based on EmployeeID
+      final employeeSpecificCamps = employees.where((employee) {
+        return employee['EmployeeId'].toString() == widget.employeeEmail;
+      }).toList();
+
       if (_searchQuery.isEmpty) {
-        _filteredEmployees = employees;
+        // If no search query, show only employee-specific camps
+        _filteredEmployees = employeeSpecificCamps;
       } else {
         // Check if _searchQuery is a valid date format
         final isDateQuery =
             RegExp(r'^\d{2}-\d{2}-\d{4}$').hasMatch(_searchQuery);
 
-        _filteredEmployees = employees.where((employee) {
+        _filteredEmployees = employeeSpecificCamps.where((employee) {
           if (isDateQuery) {
-            // If the query is a date, match only the campDate field
+            // Match only the campDate field for date queries
             return employee['campDate']
                 .toString()
                 .toLowerCase()
                 .contains(_searchQuery.toLowerCase());
           } else {
-            // Otherwise, match other fields
+            // Match campName or campDate for non-date queries
             return employee['campName']
                     .toString()
                     .toLowerCase()
@@ -106,7 +118,8 @@ class _SuperAdminSelectedEmployeeCampSearchScreen
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (context) => _AdminApprovalBloc,
       child: Scaffold(
         appBar: AppBar(
@@ -185,8 +198,12 @@ class _SuperAdminSelectedEmployeeCampSearchScreen
                 color: Color(0xFF0097b2),
               ));
             } else if (state is AdminApprovalLoaded) {
-              if (_searchQuery.isEmpty && _filteredEmployees.isEmpty) {
-                _filteredEmployees = state.allCamps;
+              if (_filteredEmployees.isEmpty && _searchQuery.isEmpty) {
+                _filteredEmployees = state.allCamps
+                    .where((employee) =>
+                        employee['EmployeeId'].toString() ==
+                        widget.employeeEmail)
+                    .toList();
               }
               return RefreshIndicator(
                 color: Color(0xFF0097b2),
@@ -484,7 +501,7 @@ class _SuperAdminSelectedEmployeeCampSearchScreen
           },
         ),
       ),
-    );
+    ));
   }
 
   List<Widget> _buildInfoText(double screenWidth, String text) {

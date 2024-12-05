@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/Event/camp_search_event_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +87,8 @@ class _CampSearchScreenState extends State<CampSearchScreen>
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (context) => _statusBloc,
       child: Scaffold(
         appBar: AppBar(
@@ -116,7 +118,11 @@ class _CampSearchScreenState extends State<CampSearchScreen>
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -319,7 +325,7 @@ class _CampSearchScreenState extends State<CampSearchScreen>
           },
         ),
       ),
-    );
+    ));
   }
 
   List<Widget> _buildInfoText(double screenWidth, String text) {

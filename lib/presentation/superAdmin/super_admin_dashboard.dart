@@ -2,6 +2,7 @@ import 'package:camp_organizer/bloc/Status/status_bloc.dart';
 import 'package:camp_organizer/bloc/Status/status_event.dart';
 import 'package:camp_organizer/bloc/Status/status_state.dart';
 import 'package:camp_organizer/bloc/approval/adminapproval_bloc.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/Event/event_details.dart';
 import 'package:camp_organizer/presentation/module/super_admin/super_admin_manage_employee_account.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
@@ -34,7 +35,6 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
   double rotationAngle = 0;
   late AdminApprovalBloc _StatusBloc;
   final List<double> valuess = [];
-
 
   List<double> get values {
     return [
@@ -119,7 +119,8 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (context) => AdminApprovalBloc()..add(FetchDataEvents()),
       child: Scaffold(
         appBar: AppBar(
@@ -138,14 +139,17 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
             ),
           ),
         ),
-
         body: LayoutBuilder(
           builder: (context, constraints) {
             final pieChartRadius = constraints.maxWidth < 600 ? 120.0 : 180.0;
@@ -230,7 +234,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                                   .length;
                               completedCount = employees
                                   .where((employee) =>
-                              employee["campStatus"] == "Completed")
+                                      employee["campStatus"] == "Completed")
                                   .length;
 
                               return Column(
@@ -314,7 +318,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                                   ),
                                   Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       // Waiting Queue Card
 
@@ -348,7 +352,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
                             return Center(
                               key: ValueKey('empty'),
                               child: CircularProgressIndicator(
-                            color:     Color(0xFF0097b2),
+                                color: Color(0xFF0097b2),
                               ),
                             );
                           }(),
@@ -616,7 +620,7 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen>
           },
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildStatusCard({

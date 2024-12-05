@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/widgets/button/custom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -53,19 +54,26 @@ class _PostCampFollowState extends State<PostCampFollow> {
         duration: Duration(seconds: 3),
       ),
     );
-
   }
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (_) =>
           PatientFollowUpsBloc(firestore: FirebaseFirestore.instance),
       child: Scaffold(
         appBar: AppBar(
-          leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+              )),
           title: const Text(
             'Post Camp Follow UP',
             style: TextStyle(
@@ -80,33 +88,37 @@ class _PostCampFollowState extends State<PostCampFollow> {
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
             ),
           ),
         ),
-        body:  BlocListener<PatientFollowUpsBloc, PatientFollowUpsState>(
-                listener: (context, state) {
-                  if (state is PatientFollowUpsSuccess) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content:
-                            Center(child: Text('Data saved successfully!')),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                  } else if (state is PatientFollowUpsError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Center(child: Text('Error: ${state.message}')),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                },
-                child:  widget.campData['patientFollowUps'] != null ? SingleChildScrollView(
+        body: BlocListener<PatientFollowUpsBloc, PatientFollowUpsState>(
+          listener: (context, state) {
+            if (state is PatientFollowUpsSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Center(child: Text('Data saved successfully!')),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            } else if (state is PatientFollowUpsError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Center(child: Text('Error: ${state.message}')),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
+          child: widget.campData['patientFollowUps'] != null
+              ? SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -120,8 +132,10 @@ class _PostCampFollowState extends State<PostCampFollow> {
                           children: [
                             _buildInfoCard(
                                 'Camp Name', widget.campData['campName']),
-                            _buildInfoCard('Camp Date', widget.campData['campDate']),
-                            _buildInfoCard('Camp Place', widget.campData['place']),
+                            _buildInfoCard(
+                                'Camp Date', widget.campData['campDate']),
+                            _buildInfoCard(
+                                'Camp Place', widget.campData['place']),
                           ],
                         ),
                         // Section for Patient Follow-Ups
@@ -157,7 +171,8 @@ class _PostCampFollowState extends State<PostCampFollow> {
                       ],
                     ),
                   ),
-                ):SingleChildScrollView(
+                )
+              : SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   child: Center(
                     child: Container(
@@ -185,9 +200,9 @@ class _PostCampFollowState extends State<PostCampFollow> {
                     ),
                   ),
                 ),
-              ),
+        ),
       ),
-    );
+    ));
   }
 
   List<Widget> _buildPatientFollowUpCards(List<dynamic> patientFollowUps) {
@@ -251,7 +266,8 @@ class _PostCampFollowState extends State<PostCampFollow> {
               Text(
                 'Phone: ${patient['phone'] ?? 'N/A'}',
                 style: const TextStyle(
-                  color: Colors.white70,fontWeight: FontWeight.bold,
+                  color: Colors.white70,
+                  fontWeight: FontWeight.bold,
                   fontFamily: 'LeagueSpartan',
                 ),
               ),
@@ -259,7 +275,8 @@ class _PostCampFollowState extends State<PostCampFollow> {
               Text(
                 'Status: ${patient['status'] ?? 'N/A'}',
                 style: const TextStyle(
-                  color: Colors.white70,fontWeight: FontWeight.bold,
+                  color: Colors.white70,
+                  fontWeight: FontWeight.bold,
                   fontFamily: 'LeagueSpartan',
                 ),
               ),
@@ -362,7 +379,8 @@ class _PostCampFollowState extends State<PostCampFollow> {
         subtitle: Text(
           value?.toString() ?? 'N/A',
           style: const TextStyle(
-            color: Colors.white,fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
             fontFamily: 'LeagueSpartan',
           ),
         ),

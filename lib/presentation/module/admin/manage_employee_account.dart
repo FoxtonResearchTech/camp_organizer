@@ -1,6 +1,7 @@
 import 'package:camp_organizer/bloc/Employee/employee_update_bloc.dart';
 import 'package:camp_organizer/bloc/Employee/employee_update_event.dart';
 import 'package:camp_organizer/bloc/Employee/employee_update_state.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,8 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<EmployeeUpdateBloc>(
+    return ConnectivityChecker(
+        child: BlocProvider<EmployeeUpdateBloc>(
       create: (context) => _employeeUpdateBloc,
       child: Scaffold(
         appBar: AppBar(
@@ -81,7 +83,8 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
 
               // Initialize local isActive state for each employee
               for (var employee in employees) {
-                employeeActiveStatus.putIfAbsent(employee['empCode'], () => employee['isActive'] ?? false);
+                employeeActiveStatus.putIfAbsent(
+                    employee['empCode'], () => employee['isActive'] ?? false);
               }
 
               return RefreshIndicator(
@@ -93,7 +96,8 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
                   itemBuilder: (context, index) {
                     final employee = employees[index];
                     return AnimatedPadding(
-                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 16),
                       duration: const Duration(milliseconds: 300),
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
@@ -114,11 +118,13 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           'Name: ${employee['firstName'] ?? "N/A"} ${employee['lastName'] ?? "N/A"}',
@@ -154,10 +160,13 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
                                   AnimatedSwitcher(
                                     duration: const Duration(milliseconds: 300),
                                     child: Switch(
-                                      value: employeeActiveStatus[employee['empCode']] ?? false,
+                                      value: employeeActiveStatus[
+                                              employee['empCode']] ??
+                                          false,
                                       onChanged: (value) async {
                                         setState(() {
-                                          employeeActiveStatus[employee['empCode']] = value;
+                                          employeeActiveStatus[
+                                              employee['empCode']] = value;
                                         });
                                         await _updateUserStatus(
                                           employee['empCode'] ?? '',
@@ -166,19 +175,24 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
                                       },
                                       activeColor: Colors.green,
                                       inactiveThumbColor: Colors.red,
-                                      inactiveTrackColor: Colors.red.withOpacity(0.3),
+                                      inactiveTrackColor:
+                                          Colors.red.withOpacity(0.3),
                                     ),
                                   )
                                 ],
                               ),
                               const Divider(height: 20),
-                              _buildInfoRow(Icons.home, employee['lane1'] ?? "No Address Provided"),
+                              _buildInfoRow(Icons.home,
+                                  employee['lane1'] ?? "No Address Provided"),
                               _buildInfoRow(null, employee['lane2'] ?? ""),
                               _buildInfoRow(null, employee['pinCode'] ?? ""),
-                              _buildInfoRow(Icons.location_city, employee['state'] ?? "No State Provided"),
-                              _buildInfoRow(Icons.cake, employee['dob'] ?? "No DOB Provided"),
+                              _buildInfoRow(Icons.location_city,
+                                  employee['state'] ?? "No State Provided"),
+                              _buildInfoRow(Icons.cake,
+                                  employee['dob'] ?? "No DOB Provided"),
                               const SizedBox(height: 10),
-                              _buildInfoRow(Icons.email, '${employee['empCode']}@gmail.com'),
+                              _buildInfoRow(Icons.email,
+                                  '${employee['empCode']}@gmail.com'),
                             ],
                           ),
                         ),
@@ -208,7 +222,7 @@ class _ManageEmployeeAccountState extends State<ManageEmployeeAccount> {
           },
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildInfoRow(IconData? icon, String text) {

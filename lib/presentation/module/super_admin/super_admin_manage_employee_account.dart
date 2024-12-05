@@ -1,5 +1,6 @@
 import 'package:camp_organizer/bloc/Employee/employee_update_bloc.dart';
 import 'package:camp_organizer/bloc/Employee/employee_update_state.dart';
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/module/super_admin/super_admin_edit_employee_account.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,8 @@ class _SuperAdminManageEmployeeAccountState
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<EmployeeUpdateBloc>(
+    return ConnectivityChecker(
+        child: BlocProvider<EmployeeUpdateBloc>(
       create: (context) => _employeeUpdateBloc,
       child: Scaffold(
         appBar: AppBar(
@@ -68,7 +70,11 @@ class _SuperAdminManageEmployeeAccountState
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -263,6 +269,6 @@ class _SuperAdminManageEmployeeAccountState
           },
         ),
       ),
-    );
+    ));
   }
 }

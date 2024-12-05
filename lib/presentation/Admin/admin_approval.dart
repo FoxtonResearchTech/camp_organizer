@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/Admin/admin_camp_search_screen.dart';
 import 'package:camp_organizer/presentation/notification/notification.dart';
 import 'package:camp_organizer/utils/app_colors.dart';
@@ -97,7 +98,8 @@ class _AdminApprovalState extends State<AdminApproval>
     // Screen size parameters
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (context) => AdminApprovalBloc()..add(FetchDataEvents()),
       child: Scaffold(
         appBar: AppBar(
@@ -116,7 +118,11 @@ class _AdminApprovalState extends State<AdminApproval>
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -137,9 +143,8 @@ class _AdminApprovalState extends State<AdminApproval>
         body: BlocBuilder<AdminApprovalBloc, AdminApprovalState>(
           builder: (context, state) {
             if (state is AdminApprovalLoading) {
-              return const Center(child: CircularProgressIndicator(
-                color:   Color(0xFF0097b2)
-              ));
+              return const Center(
+                  child: CircularProgressIndicator(color: Color(0xFF0097b2)));
             } else if (state is AdminApprovalLoaded) {
               final camps = state.allCamps;
 
@@ -666,7 +671,7 @@ class _AdminApprovalState extends State<AdminApproval>
           },
         ),
       ),
-    );
+    ));
   }
 
   // Helper method to build timeline tile with responsive styles

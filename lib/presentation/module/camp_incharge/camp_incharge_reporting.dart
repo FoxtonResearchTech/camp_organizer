@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -195,7 +196,8 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (_) => InchargeReportBloc(firestore: FirebaseFirestore.instance),
       child: Scaffold(
         appBar: AppBar(
@@ -222,7 +224,11 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [ Color(0xFF0097b2),  Color(0xFF0097b2).withOpacity(1), Color(0xFF0097b2).withOpacity(0.8)],
+                colors: [
+                  Color(0xFF0097b2),
+                  Color(0xFF0097b2).withOpacity(1),
+                  Color(0xFF0097b2).withOpacity(0.8)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -405,7 +411,7 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   // Helper method to build section titles with animation
@@ -500,7 +506,8 @@ class _CampInchargeReportingState extends State<CampInchargeReporting> {
         subtitle: Text(
           value?.toString() ?? 'N/A',
           style: const TextStyle(
-            color: Colors.white,    fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
             fontFamily: 'LeagueSpartan',
           ),
         ),

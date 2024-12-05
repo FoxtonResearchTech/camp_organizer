@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/authentication/login_screen.dart';
 import 'package:camp_organizer/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,8 @@ class _CampInchargeProfile extends State<CampInchargeProfile>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (context) => _CampInChargeProfileBloc,
       child: Scaffold(
         appBar: AppBar(
@@ -297,7 +299,7 @@ class _CampInchargeProfile extends State<CampInchargeProfile>
           ],
         ),
       ),
-    );
+    ));
   }
 }
 

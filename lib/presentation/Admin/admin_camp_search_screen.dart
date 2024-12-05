@@ -1,3 +1,4 @@
+import 'package:camp_organizer/connectivity_checker.dart';
 import 'package:camp_organizer/presentation/Event/camp_search_event_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +88,8 @@ class _AdminCampSearchScreenState extends State<AdminCampSearchScreen>
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return BlocProvider(
+    return ConnectivityChecker(
+        child: BlocProvider(
       create: (context) => _AdminApprovalBloc,
       child: Scaffold(
         appBar: AppBar(
@@ -343,7 +345,7 @@ class _AdminCampSearchScreenState extends State<AdminCampSearchScreen>
           },
         ),
       ),
-    );
+    ));
   }
 
   List<Widget> _buildInfoText(double screenWidth, String text) {
