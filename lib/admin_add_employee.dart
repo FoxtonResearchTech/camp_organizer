@@ -104,13 +104,13 @@ class _AdminAddEmployeeState extends State<AdminAddEmployee> {
           .collection('employees')
           .doc(userCredential.user?.uid)
           .set({
-        'firstName': firstNameController.text,
-        'lastName': lastNameController.text,
+        'firstName': firstNameController.text.toLowerCase().trim(),
+        'lastName': lastNameController.text.toLowerCase().trim(),
         'dob': dobController.text,
         'gender': selectedValue,
         'notification': positionController.text,
-        'empCode': empCodeController.text,
-        'email': email, // Use the constructed email
+        'empCode': empCodeController.text.toLowerCase().trim(),
+        'email': email.toLowerCase().trim(), // Use the constructed email
         'lane1': lane1Controller.text,
         'lane2': lane2Controller.text,
         'role': selectedrole,

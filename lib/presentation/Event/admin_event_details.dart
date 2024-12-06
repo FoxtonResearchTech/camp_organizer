@@ -218,7 +218,7 @@ class _AdminEventDetailsPageState extends State<AdminEventDetailsPage>
             onPressed: () async {
               final employeeId = widget.employeemail;
 
-              final dest1 = 'foxton.rt@gmail.com';
+              final dest1 = 'bejansingheyehospitals@gmail.com';
               final dest2 = widget.employeemail;
               final destId = [dest1, dest2];
 

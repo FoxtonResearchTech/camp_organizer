@@ -432,9 +432,9 @@ class _AdminApprovalState extends State<AdminApproval>
                                                                             final campDocId =
                                                                                 state.campDocIds[index];
                                                                             final dest1 =
-                                                                                'foxton.rt@gmail.com';
+                                                                                'bejansingheyehospitals@gmail.com';
                                                                             final dest2 =
-                                                                                camps[index]['EmployeeId'];
+                                                                                camps[index]['notification'];
                                                                             final destId =
                                                                                 [
                                                                               dest1,
@@ -580,7 +580,7 @@ class _AdminApprovalState extends State<AdminApproval>
                                                                           (context) =>
                                                                               AdminEventDetailsPage(
                                                                         employeemail:
-                                                                            camps[index]['EmployeeId'],
+                                                                            camps[index]['notification'],
                                                                         campDate:
                                                                             camps[index]['campDate'],
                                                                         campName:
